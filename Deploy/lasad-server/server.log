@@ -29291,3 +29291,127 @@ ACTION:
 Waiting...size of ActionPackage list is 0 
 Thu Jun 04 11:57:57 EDT 2015: PushServlet call failed, error code: 404
 
+Configuration Home: /Users/kevin/LASAD-git/Deploy/lasad-server/conf/default
+first-----dropSQLString.appendlasad.actions-----
+else-----dropSQLString.appendlasad.element_parent_mapping-----
+else-----dropSQLString.appendlasad.elements-----
+else-----dropSQLString.appendlasad.map_to_user_restriction-----
+else-----dropSQLString.appendlasad.maps-----
+else-----dropSQLString.appendlasad.ontologies-----
+else-----dropSQLString.appendlasad.revisions-----
+else-----dropSQLString.appendlasad.templates-----
+else-----dropSQLString.appendlasad.users-----
+-----Clear All executed-----
+-----Create Table-----
+Waiting...size of ActionPackage list is 0 
+Server successfully started!
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Login" CATEGORY="Management">
+    <Parameter NAME="USERNAME" VALUE="t1" />
+    <Parameter NAME="PW" VALUE="t1" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="7587DBE956F6E302F839556D04ECF35A-1792812191" />
+</ActionPackage>
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="GetTemplates" CATEGORY="Management" />
+  <Parameter NAME="SESSION-ID" VALUE="7587DBE956F6E302F839556D04ECF35A-1792812191" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Allgemeine Argumentation (Einzelnutzer)
+	Parameter: Template : Allgemeine Argumentation (Einzelnutzer)
+	Parameter: TemplateId : 0
+	Parameter: TemplateMaxId : 8
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Allgemeine Argumentation (Gruppennutzung)
+	Parameter: Template : Allgemeine Argumentation (Gruppennutzung)
+	Parameter: TemplateId : 1
+	Parameter: TemplateMaxId : 8
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Argunaut
+	Parameter: Template : argunaut
+	Parameter: TemplateId : 2
+	Parameter: TemplateMaxId : 8
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Belvedere
+	Parameter: Template : belvedere
+	Parameter: TemplateId : 3
+	Parameter: TemplateMaxId : 8
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Harrell_DiagrammingOntology
+	Parameter: Template : Harrell_DiagrammingOntologyTemplate
+	Parameter: TemplateId : 4
+	Parameter: TemplateMaxId : 8
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Metafora
+	Parameter: Template : Metafora
+	Parameter: TemplateId : 5
+	Parameter: TemplateMaxId : 8
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : NewFeaturesOntology
+	Parameter: Template : NewFeaturesOntology
+	Parameter: TemplateId : 6
+	Parameter: TemplateMaxId : 8
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Toulmin (Multi user)
+	Parameter: Template : toulmin_multiuser
+	Parameter: TemplateId : 7
+	Parameter: TemplateMaxId : 8
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Toulmin (Single user)
+	Parameter: Template : toulmin_singleuser
+	Parameter: TemplateId : 8
+	Parameter: TemplateMaxId : 8
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="List" CATEGORY="Management" />
+  <Parameter NAME="SESSION-ID" VALUE="7587DBE956F6E302F839556D04ECF35A-1792812191" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: ListMap
+	Parameter: Status : END
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Logout" CATEGORY="Management">
+    <Parameter NAME="USERNAME" VALUE="t1" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="7587DBE956F6E302F839556D04ECF35A-1792812191" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Auth
+	Command: Logout
+	Parameter: Status : OK
+Waiting...size of ActionPackage list is 0 

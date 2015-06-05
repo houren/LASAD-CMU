@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#TODO Change the filepath in quotations to the Tomcat directory to be used on your server
-tomcatDir="/Users/kevin/LASAD-8/Deploy/apache-tomcat-8.0.23"
+#TODO You MIGHT need to change the filepath in quotations to the Tomcat directory to be used on your server
+tomcatDir="${PWD}/apache-tomcat-8.0.23"
 tomcatStartupScript="/bin/./startup.sh"
 
 lasadServerPid=$(ps ax | grep '[L]ASAD-Server.jar' | awk '{print $1}')
@@ -10,8 +10,8 @@ if [[ "$lasadServerPid"  =~ ^[0-9]+$ ]]
 then
 echo "Server already running, ID: $lasadServerPid"
 else
-#TODO Change the filepath to lasad-server on your server (not in quotations)
-cd /Users/kevin/LASAD-8/Deploy/lasad-server
+#TODO You MIGHT need to change the filepath in quotations to the lasad-server directory on your server
+cd ${PWD}/lasad-server
 echo "Starting server from dir: $pwd"
 
 echo "Starting server"

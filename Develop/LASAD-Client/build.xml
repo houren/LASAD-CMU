@@ -54,7 +54,10 @@
 		</javac>
 	</target>
 	<target name="server-jar" depends="compile-shared,compile-server">
-		<jar destfile="../LASAD-Server/LASAD-Server.jar" filesetmanifest="mergewithoutmain">
+        
+        <!-- Kevin Loughlin changed jar production location -->
+		<jar destfile="../../Deploy/lasad-server/LASAD-Server.jar" filesetmanifest="mergewithoutmain">
+            
 			<manifest>
 				<attribute name="Main-Class" value="lasad.Server" />
 			</manifest>
@@ -82,7 +85,11 @@
 	<target name="client-war" depends="compile-shared,compile-client,gwtc">
 		<available file="war/lasad_client/lasad_client.nocache.js" property="gwt_compiled" />
 		<fail unless="gwt_compiled">GWT must be compiled first!</fail>
-		<zip destfile="lasad.war">
+        
+        <!-- Kevin Loughlin changed war production location.  Be mindful of Tomcat version. -->
+        <delete dir="../../Deploy/apache-tomcat-8.0.23/webapps/lasad"/>
+		<zip destfile="../../Deploy/apache-tomcat-8.0.23/webapps/lasad.war">
+            
 			<zipfileset dir="../LASAD-shared/bin" prefix="WEB-INF/classes/" />
 			<zipfileset dir="war" />
 			<zipfileset dir="src/" includes="eventservice.properties" prefix="WEB-INF/classes/" />

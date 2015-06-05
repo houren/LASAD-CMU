@@ -76,14 +76,14 @@
             <uisettings width="120" height="200" background-color="red" linewidth="2px" linecolor="red"/>
             <childelements/>
         </element>
-        <element elementtype="relation" elementid="Link" minquantity="0" maxquantity="0" quantity="0">
-            <elementoptions heading="Link" endings="false" details="false"/>
-            <uisettings width="120" height="200" background-color="yellow" linewidth="2px" linecolor="blue"/>
+        <element elementtype="relation" elementid="Group" minquantity="0" maxquantity="0" quantity="0">
+            <elementoptions heading="Group" endings="false" details="false"/>
+            <uisettings width="120" height="200" background-color="blue" linewidth="2px" linecolor="blue"/>
             <childelements/>
         </element>
         <element elementtype="relation" elementid="Instructor-Pointer" minquantity="0" maxquantity="0" quantity="0">
             <elementoptions heading="Instructor-Pointer" endings="true" details="false"/>
-            <uisettings width="120" height="200" background-color="yellow" linewidth="2px" linecolor="#000000"/>
+            <uisettings width="120" height="200" background-color="#000000" linewidth="2px" linecolor="#000000"/>
             <childelements/>
         </element>
     </elements>
