@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="all" name="LASAD">
+
+	<!-- Configure path to GWT SDK -->
+	<property name="GWT_HOME" value="../gwt-2.5.1"/>
+
+	<property name="gwt.sdk" location="${GWT_HOME}/" />
+    
+	<target name="all" depends="server-jar,client-war" />
+	<target name="compile" depends="compile-server,compile-client" />
+    
+    <!-- Target Java Version changed to 1.8 by Kevin Loughlin.
+         Note that the return value of a method used in LASAD changed between Java 7 and 8, meaning
+         that an attempt to mix the two versions will generate a NoSuchMethod Exception -->
+	<property name="target.java.version" value="1.8" />
+    
+	<target name="compile-shared" description="Compiles the shared source">
+		<mkdir dir="../LASAD-shared/bin" />
+		<javac destdir="../LASAD-shared/bin" srcdir="../LASAD-shared/src" source="${target.java.version}" target="${target.java.version}" includeantruntime="false" />
+	</target>
+	<target name="compile-server" description="Compiles the server source" depends="compile-shared">
+		<mkdir dir="../LASAD-Server/bin" />
+		<javac destdir="../LASAD-Server/bin" srcdir="../LASAD-Server/src" classpath="../LASAD-shared/bin" source="${target.java.version}" target="${target.java.version}" includeantruntime="false">
+			<classpath>
+				<pathelement location="../LASAD-Server/lib/jdom.jar" />
+				<pathelement location="../LASAD-Server/lib/xmppbridge.jar" />
+			</classpath>
+		</javac>
+	</target>
+	<path id="client.class.path">
+				<pathelement location="src"/>
+				<pathelement location="../LASAD-shared/src"/>
+				<pathelement location="../LASAD-shared/bin"/>
+				<pathelement location="war/WEB-INF/lib/jdom.jar" />
+				<pathelement location="war/WEB-INF/lib/commons-fileupload-1.2.1.jar" />
+				<pathelement location="war/WEB-INF/lib/eventservice-1.2.1-SNAPSHOT.jar" />
+				<pathelement location="war/WEB-INF/lib/eventservice-rpc-1.2.1-SNAPSHOT.jar" />
+				<pathelement location="war/WEB-INF/lib/gwt-servlet.jar" />
+				<pathelement location="lib/gwteventservice-1.2.1-SNAPSHOT.jar" />
+				<pathelement location="lib/gxt-2.2.4-gwt22.jar" />
+				<pathelement location="lib/Rocket-TextSelection-Hack-0_56.jar" />
+				<!-- GWT SDK -->
+				<pathelement location="${GWT_HOME}/gwt-user.jar"/>
+				<pathelement location="${GWT_HOME}/gwt-dev.jar"/>
+				<pathelement location="${GWT_HOME}/validation-api-1.0.0.GA-sources.jar"/>
+				<pathelement location="${GWT_HOME}/validation-api-1.0.0.GA.jar"/>
+	</path>
+	<target name="compile-client" description="Compiles the client source" depends="compile-shared">
+		<mkdir dir="war/WEB-INF/classes" />
+		<javac destdir="war/WEB-INF/classes" srcdir="src" source="${target.java.version}" target="${target.java.version}" includeantruntime="false">
+			<classpath>
+				<path refid="client.class.path"/>
+			</classpath>
+		</javac>
+	</target>
+	<target name="server-jar" depends="compile-shared,compile-server">
+		<jar destfile="../LASAD-Server/LASAD-Server.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="lasad.Server" />
+			</manifest>
+			<fileset dir="../LASAD-Server/bin" />
+			<zipfileset excludes="META-INF/*.SF" src="../LASAD-Server/lib/jdom.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="../LASAD-Server/lib/mysql-connector-java-5.1.14-bin.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="../LASAD-Server/lib/xmppbridge.jar" />
+			<fileset dir="../LASAD-shared/bin" />
+		</jar>
+	</target>
+	<target name="gwtc" description="GWT compile to JavaScript (production mode)">
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+			<classpath>
+				<path refid="client.class.path"/>
+			</classpath>
+			<!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+			<jvmarg value="-Xmx512M"/>
+			<arg line="-war"/>
+			<arg value="war"/>
+			<!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+			<!--<arg line="${gwt.args}"/>-->
+			<arg value="lasad.gwt.LASAD_Client"/>
+		</java>
+	</target>
+	<target name="client-war" depends="compile-shared,compile-client,gwtc">
+		<available file="war/lasad_client/lasad_client.nocache.js" property="gwt_compiled" />
+		<fail unless="gwt_compiled">GWT must be compiled first!</fail>
+		<zip destfile="lasad.war">
+			<zipfileset dir="../LASAD-shared/bin" prefix="WEB-INF/classes/" />
+			<zipfileset dir="war" />
+			<zipfileset dir="src/" includes="eventservice.properties" prefix="WEB-INF/classes/" />
+			<zipfileset dir="src/" includes="META-INF" prefix="WEB-INF/classes/" />
+		</zip>
+	</target>
+    
+    <!-- Added by Kevin Loughlin on 4 June 2015 for permitting easy recompile -->
+    <!-- Remember to enter "ant clean" before attempting to recompile -->
+    <target name="clean">
+        <delete dir="../LASAD-shared/bin"/>
+        <delete dir="../LASAD-Server/bin"/>
+        <delete dir="war/WEB-INF/classes"/>
+        <delete dir="war/WEB-INF/deploy"/>
+        <delete dir="war/lasad_client"/>
+        <delete dir="gwt-unitCache"/>
+        <delete file="../LASAD-Server/LASAD-Server.jar"/>
+        <delete file="lasad.war"/>
+    </target>
+    <!-- End of content added by Kevin Loughlin -->
+</project>
