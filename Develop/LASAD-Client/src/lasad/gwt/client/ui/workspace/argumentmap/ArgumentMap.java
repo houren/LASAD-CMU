@@ -22,6 +22,10 @@ import lasad.gwt.client.ui.workspace.transcript.TranscriptLinkData;
 import com.extjs.gxt.ui.client.widget.Component;
 import com.google.gwt.core.client.GWT;
 
+/**
+ * Documentation?
+ */
+
 public class ArgumentMap extends GraphMap {
 	
 	protected LASADActionSender communicator = LASADActionSender.getInstance();

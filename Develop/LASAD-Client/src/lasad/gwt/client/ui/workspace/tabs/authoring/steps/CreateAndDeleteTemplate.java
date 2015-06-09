@@ -52,7 +52,7 @@ public class CreateAndDeleteTemplate extends ContentPanel {
 
 	private static FieldSet collaborativeSet, transcriptSet, additionalSet;
 	// private CheckBox selectionDetails;
-	private static CheckBox userList, miniMap, trackCursor, chat, onlyAuthor, commitByEnter, straightLink, autoGrow;
+	private static CheckBox userList, miniMap, trackCursor, chat, onlyAuthor, commitByEnter, straightLink, autoOrganize, autoGrow;
 	private static Slider maxUsers;
 	private final static int MAX_USERS_VALUE = 5;
 	private SliderField sf;
@@ -368,6 +368,11 @@ public class CreateAndDeleteTemplate extends ContentPanel {
 		commitByEnter.setFieldLabel("\"Enter\" key commits text (\"Shift\" + \"Enter\" for new line)");
 		additionalSet.add(commitByEnter);
 
+		// Added by Kevin Loughlin for auto-organize support
+		autoOrganize = new CheckBox();
+		autoOrganize.setFieldLabel("Automatically organize argument map");
+		additionalSet.add(autoOrganize);
+
 		addTemplateFormPanel.add(additionalSet);
 		// ************ End - Additional options *************/
 
@@ -401,7 +406,7 @@ public class CreateAndDeleteTemplate extends ContentPanel {
 
 		// MODIFICATION BY BM-------------------------------------------------------------------
 		autoGrow = new CheckBox();
-		autoGrow.setFieldLabel("Autoresize Textarea");
+		autoGrow.setFieldLabel("Auto resize TextArea");
 
 		ToolTipConfig config = new ToolTipConfig();
 		config.setDismissDelay(10000);
@@ -453,11 +458,13 @@ public class CreateAndDeleteTemplate extends ContentPanel {
 
 				// start - additional options
 
-				boolean useOnlyAuthorCanModify = false, useCommitTextByEnter = false, useStraightLink = false;
+				// Kevin Loughlin added autoOrganize 8 June 2015
+				boolean useOnlyAuthorCanModify = false, useCommitTextByEnter = false, useStraightLink = false, useAutoOrganize = false;
 				if (additionalSet.isExpanded()) {
 					useOnlyAuthorCanModify = onlyAuthor.getValue();
 					useCommitTextByEnter = commitByEnter.getValue();
 					useStraightLink = straightLink.getValue();
+					useAutoOrganize = autoOrganize.getValue();
 				}
 				// end - additional options
 
@@ -474,7 +481,7 @@ public class CreateAndDeleteTemplate extends ContentPanel {
 
 				ActionPackage p = ActionFactory.getInstance().createTemplate(useTemplateName, useTemplateDescription, useOntologyWithName,
 						false, maxUserCount, useChat, useUserList, useMiniMap, useCursorTracking, useTranscript, transcriptText,
-						useOnlyAuthorCanModify, useCommitTextByEnter, useStraightLink, autoGrowTextArea);
+						useOnlyAuthorCanModify, useCommitTextByEnter, useStraightLink, useAutoOrganize, autoGrowTextArea);
 				// ActionPackage p =
 				// ActionFactory.getInstance().createTemplate(useTemplateName,
 				// useTemplateDescription, useOntologyWithName,

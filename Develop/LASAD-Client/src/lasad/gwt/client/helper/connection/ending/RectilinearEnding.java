@@ -25,7 +25,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * 
+ * OK, what does it do?  Where are the comments?
  * @author Michał Baliński (michal.balinski@gmail.com)
  */
 public class RectilinearEnding extends ConnectionEnding {

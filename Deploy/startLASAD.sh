@@ -12,7 +12,7 @@ echo "Server already running, ID: $lasadServerPid"
 else
 #TODO You MIGHT need to change the filepath in quotations to the lasad-server directory on your server
 cd ${PWD}/lasad-server
-echo "Starting server from dir: $pwd"
+echo "Starting server from dir: ${PWD}"
 
 echo "Starting server"
 java -Djava.security.policy=java.policy -jar LASAD-Server.jar server.cfg >> server.log 2>&1&

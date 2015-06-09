@@ -7,6 +7,11 @@ import com.extjs.gxt.ui.client.widget.BoxComponent;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 
+/**
+ * Yet again, little to no documentation/commenting of any sort provided.
+ * @author ???
+ */
+
 public class ShowFeedbackTextWindow extends BoxComponent implements FocusableInterface {
 
 	private GraphMap myMap;

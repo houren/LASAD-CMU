@@ -17,6 +17,10 @@ import lasad.gwt.client.ui.workspace.graphmap.elements.AbstractCreateLinkDialog;
 import lasad.gwt.client.ui.workspace.transcript.TranscriptLinkData;
 import lasad.shared.communication.objects.ActionPackage;
 
+/**
+ * Where is the documentation?
+ */
+
 public class BoxArgument extends AbstractBox {
 	
 	private final LASADActionSender communicator = LASADActionSender.getInstance();

@@ -6,6 +6,10 @@ import java.util.Vector;
 
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 
+/**
+ *  Thanks for the extensive documentation
+ */
+
 public abstract class AbstractUnspecifiedElementModel {
 
 	private int id;

@@ -23,7 +23,10 @@ import com.extjs.gxt.ui.client.widget.BoxComponent;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 
-
+/**
+ * SimpleLinkPanel is INSERT DESCRIPTION
+ * @author ???
+ */
 
 public class SimpleLinkPanel extends BoxComponent implements ExtendedElementContainerMasterInterface, ExtendedElementContainerInterface {
 

@@ -12,7 +12,7 @@ import lasad.gwt.client.ui.workspace.tutorial.TutorialConfig;
 public class GraphMapInfo {
 	private int maxUser;
 	private String mapID;
-	private boolean feedback = false, tutorial = false, userList = false, miniMap = false, chatSystem = false, trackCursor = false, groupPointer = false, selectionDetails = false, directLinkingDenied = false,sentenceopener=false,straightLink=false,onlyAuthorCanModify=false,commitTextByEnter=false,autoGrowTextArea=false;
+	private boolean feedback = false, tutorial = false, userList = false, miniMap = false, chatSystem = false, trackCursor = false, groupPointer = false, selectionDetails = false, directLinkingDenied = false,sentenceopener=false,straightLink=false,onlyAuthorCanModify=false,commitTextByEnter=false,autoOrganize=false,autoGrowTextArea=false;
 	private String title, ontologyName, templateName, templateTitle, xmlOntology, xmlTemplate, description, xmlTranscriptConfiguration,sentenceOpenerConfig;
 	private LinkedHashMap<Integer, String> transcriptLines;
 	private TutorialConfig tutorialConfig = null;
@@ -252,6 +252,18 @@ public String getSentenceOpenerConfig(){
 	public void setCommitTextByEnter(boolean commitTextByEnter) {
 		this.commitTextByEnter = commitTextByEnter;
 	}
+
+	// Next two methods added by Kevin Loughlin for autoOrganize support
+	public boolean isAutoOrganize()
+	{
+		return autoOrganize;
+	}
+
+	public void setAutoOrganize(boolean autoOrganize)
+	{
+		this.autoOrganize = autoOrganize;
+	}
+
 	/**
 	 * 
 	 * @author BM

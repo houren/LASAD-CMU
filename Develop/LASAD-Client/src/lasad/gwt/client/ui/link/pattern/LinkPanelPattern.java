@@ -15,6 +15,10 @@ import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.ElementVariable
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FATDebug;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 
+/**
+ * Documentation!?
+ */
+
 public class LinkPanelPattern extends AbstractLinkPanel {
 	
 	PatternController myController;

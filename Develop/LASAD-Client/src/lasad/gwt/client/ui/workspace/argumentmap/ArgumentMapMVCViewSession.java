@@ -249,7 +249,6 @@ public class ArgumentMapMVCViewSession extends MVCViewSession {
 		}
 
 		else if (model.getType().equalsIgnoreCase("relation") || model.getType().equalsIgnoreCase("emptyrelation")) {
-			// Create a new Relation between some elements
 
 			if (!this.modelMapped2ViewRecipient.containsKey(model) || this.modelMapped2ViewRecipient.get(model).size() == 0) {
 

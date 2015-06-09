@@ -36,8 +36,11 @@ public enum ParameterTypes {
 			"configbutton"), Reason("Reason"), Succeeded("Succeeded"), OnlyAuthorCanModify("onlyauthorcanmodify"), CommitTextByEnter(
 			"committextbyenter"), StraightLink("straightlink"), UseMiniMap("USE-MINIMAP"), ServerVersion("serverVersion"),
 	// MODIFIED BY BM
-	AutoGrowTextArea("USE-AUTOGROW");
-	// MODIFIED BY BM END;
+	AutoGrowTextArea("USE-AUTOGROW"),
+	// MODIFIED BY BM END
+
+	//Kevin Loughlin is adding autoorganize for support for the cleanup function
+	AutoOrganize("autoorganize");
 
 	private String oldParameter;
 

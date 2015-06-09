@@ -21,7 +21,7 @@ import lasad.gwt.client.helper.connection.Connection;
 import lasad.gwt.client.helper.connection.data.Point;
 
 /**
- * Interface representing connector (object which can be connected two another
+ * Interface representing connector (object which can be connected to another
  * through connection).
  * 
  * @author Michał Baliński (michal.balinski@gmail.com)

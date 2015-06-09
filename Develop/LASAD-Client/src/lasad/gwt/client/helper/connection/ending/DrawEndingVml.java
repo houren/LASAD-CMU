@@ -5,6 +5,10 @@ import lasad.gwt.client.helper.connection.data.Point;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 
+/**
+ *  Where is the documentation?  What is a VML?
+ */
+
 public class DrawEndingVml extends DrawEnding {
 
 	private Element div = DOM.createDiv();

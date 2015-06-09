@@ -27,7 +27,10 @@ import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 
-
+/**
+ * No documentation
+ * @author ???
+ */
 
 public class SimpleLink extends BezierTwoEndedConnection implements ExtendedElementContainerInterface {
 
