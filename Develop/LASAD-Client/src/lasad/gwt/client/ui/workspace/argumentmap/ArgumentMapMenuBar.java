@@ -61,6 +61,9 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.xml.client.impl.DOMParseException;
 
+// Added by Kevin Loughlin for auto organize
+import lasad.gwt.client.communication.AutoOrganizer;
+
 public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
 	private final LASADActionSender communicator = LASADActionSender.getInstance();
@@ -193,6 +196,13 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		Menu extramenu = new Menu();
 		MenuItem screenshot = screenshotAction();
 		extramenu.add(screenshot);
+
+		// Added by Kevin Loughlin
+		//if (myMapInfo.isAutoOrganize() )
+		//{
+			MenuItem autoOrganizeItem = autoOrganizeAction();
+			extramenu.add(autoOrganizeItem);
+		//}
 
 		// MenuItem rearchBox = createRearchBox();
 		// extramenu.add(rearchBox);
@@ -414,6 +424,26 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
 		return screenshot;
 
+	}
+
+	// Added By Kevin Loughlin for autoOrganize Menu functionality
+	private MenuItem autoOrganizeAction()
+	{
+		final MenuItem autoOrganizeItem = new MenuItem("Auto organize this map");
+
+		autoOrganizeItem.addSelectionListener(new SelectionListener<MenuEvent>()
+		{
+			@Override
+			public void componentSelected(MenuEvent ce)
+			{
+				Logger.log("[lasad.gwt.client.ui.workspace.argumentmap.ArgumentMapMenuBar][autoOrganizeAction] Starting autoOrganize...", Logger.DEBUG);
+				AutoOrganizer autoOrganizer = new AutoOrganizer(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap() );
+				autoOrganizer.run();
+				Logger.log("[lasad.gwt.client.ui.workspace.argumentmap.ArgumentMapMenuBar][autoOrganizeAction] Completed autoOrganize...", Logger.DEBUG);
+			}
+		});
+
+		return autoOrganizeItem;
 	}
 
 	@Override

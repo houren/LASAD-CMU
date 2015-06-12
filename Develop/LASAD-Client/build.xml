@@ -16,11 +16,20 @@
     
 	<target name="compile-shared" description="Compiles the shared source">
 		<mkdir dir="../LASAD-shared/bin" />
-		<javac destdir="../LASAD-shared/bin" srcdir="../LASAD-shared/src" source="${target.java.version}" target="${target.java.version}" includeantruntime="false" />
+		<javac destdir="../LASAD-shared/bin" srcdir="../LASAD-shared/src" source="${target.java.version}" target="${target.java.version}" includeantruntime="false">
+            <!-- If you want to see lines causing compiler warnings.  The code runs fine though.
+            <compilerarg value="-Xlint:deprecation"/>
+            <compilerarg value="-Xlint:unchecked" />
+            End of "see compiler warning lines" -->
+        </javac>
 	</target>
 	<target name="compile-server" description="Compiles the server source" depends="compile-shared">
 		<mkdir dir="../LASAD-Server/bin" />
 		<javac destdir="../LASAD-Server/bin" srcdir="../LASAD-Server/src" classpath="../LASAD-shared/bin" source="${target.java.version}" target="${target.java.version}" includeantruntime="false">
+            <!-- If you want to see lines causing compiler warnings.  The code runs fine though.
+            <compilerarg value="-Xlint:deprecation"/>
+            <compilerarg value="-Xlint:unchecked" />
+            End of "see compiler warning lines" -->
 			<classpath>
 				<pathelement location="../LASAD-Server/lib/jdom.jar" />
 				<pathelement location="../LASAD-Server/lib/xmppbridge.jar" />
@@ -48,6 +57,10 @@
 	<target name="compile-client" description="Compiles the client source" depends="compile-shared">
 		<mkdir dir="war/WEB-INF/classes" />
 		<javac destdir="war/WEB-INF/classes" srcdir="src" source="${target.java.version}" target="${target.java.version}" includeantruntime="false">
+            <!-- If you want to see lines causing compiler warnings.  The code runs fine though.
+             <compilerarg value="-Xlint:deprecation"/>
+             <compilerarg value="-Xlint:unchecked" />
+             End of "see compiler warning lines" -->
 			<classpath>
 				<path refid="client.class.path"/>
 			</classpath>

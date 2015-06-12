@@ -18,6 +18,10 @@ import com.google.gwt.user.client.Timer;
 
 /*
  * refactoring of AbstractArgumentMap
+ *
+ *
+ * Super: ContentPanel
+ * Sub: GraphMap
  */
 public abstract class AbstractGraphMap extends ContentPanel implements FocusableInterface, HighlightableElementInterface {
 

@@ -32,6 +32,12 @@ import com.google.gwt.user.client.Timer;
 
 /*
  * refactoring of argumentmap.ArgumentMap
+ * This is the basis for the argument map, that will later be inherited by Argument Map.
+ * This class contains some of the tools for modifying the graph, such as dragging and dropping
+ * graph nodes, connecting graph nodes, clickable functionality, etc.
+ *
+ * Super: AbstractGraphMap
+ * Sub(s): ArgumentMap
  */
 public abstract class GraphMap extends AbstractGraphMap{
 
@@ -183,6 +189,7 @@ public abstract class GraphMap extends AbstractGraphMap{
 					
 				}
 
+				// This creates the link between two nodes
 				@Override
 				protected void onDragEnter(DNDEvent e) {
 				
