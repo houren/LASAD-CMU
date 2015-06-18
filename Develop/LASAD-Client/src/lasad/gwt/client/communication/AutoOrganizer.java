@@ -20,11 +20,20 @@ import lasad.gwt.client.ui.link.AbstractLinkPanel;
 import java.util.HashMap;
 import java.util.Set;
 
+import lasad.shared.communication.objects.Action;
+import lasad.shared.communication.objects.ActionPackage;
+import lasad.gwt.client.model.argument.MVController;
+import lasad.gwt.client.model.AbstractUnspecifiedElementModel;
+import lasad.gwt.client.LASAD_Client;
+import lasad.shared.communication.objects.Parameter;
+import lasad.gwt.client.model.argument.UnspecifiedElementModelArgument;
+
 /**
  * An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update group links
  * in ArgumentMap representations where a type of relation is listed as "group" (not case sensitive). The overall map organizing function,
  * accordingly called organizeMap(), is only called when the user clicks the corresponding button on the ArgumentMapMenuBar. Though originally
  * built for maps using Mara Harrell's template, this class can be applied to any map from any template.
+ * TODO: I could look into having a model update one element with each action, rather than running the whole organization process from scratch.
  * @author Kevin Loughlin
  * @since 12 June 2015, Updated 18 June 2015
  */
@@ -51,7 +60,7 @@ public class AutoOrganizer
 	private Vector<LinkedBox> rootBoxes = new Vector<LinkedBox>();
 
 	private Vector<OrganizerLink> links = new Vector<OrganizerLink>();
-	private Vector<OrganizerLink> groupLinks = new Vector<OrganizerLink>();
+	//private Vector<OrganizerLink> groupLinks = new Vector<OrganizerLink>();
 
 	// For sending map updates to the server
 	private LASADActionSender communicator = LASADActionSender.getInstance();
@@ -99,19 +108,164 @@ public class AutoOrganizer
 		createConnectionRelationships();
 		Logger.log("Created Relationships", Logger.DEBUG);
 
-		// Essentially, we want the the "minor" group box to have all the same children as the "major" group box
-		//TODO Might need to look into just getting which has more children and telling the other to add the missing ones
-		for (LinkedBox majorGroupBox : groupBoxes)
+/*
+		HashMap<LinkedBox, OrganizerLink> majorChildConnections;
+		HashMap<LinkedBox, OrganizerLink> minorChildConnections;
+
+		for (LinkedBox alphaGroupBox : groupBoxes)
 		{
 			Logger.log("FIRST", Logger.DEBUG);
 
-			HashMap<LinkedBox, OrganizerLink> majorChildConnections = majorGroupBox.getChildConnections();
-			HashMap<LinkedBox, OrganizerLink> minorGroupConnections = majorGroupBox.getChildGroupConnections();
-
-			for (HashMap.Entry<LinkedBox, OrganizerLink> minorGroupConnection : minorGroupConnections.entrySet())
+			for (HashMap.Entry<LinkedBox, OrganizerLink> betaGroupConnection : betaGroupConnections.entrySet())
 			{
 				Logger.log("second", Logger.DEBUG);
-				HashMap<LinkedBox, OrganizerLink> minorChildConnections = minorGroupConnection.getKey().getChildConnections(); //getChildConnections();
+				HashMap<LinkedBox, OrganizerLink> betaChildConnections = betaGroupConnection.getKey().getChildConnections(); //getChildConnections();
+				
+				HashMap<LinkedBox, OrganizerLink> majorChildConnections;
+				HashMap<LinkedBox, OrganizerLink> minorChildConnections;
+
+
+				if (alphaChildConnections.size() >= betaChildConnections.size() )
+				{
+					majorChildConnections = alphaChildConnections;
+					minorChildConnections = betaChildConnections;
+				}
+				else // if (alphaChildConnections.size() < betaChildConnections.size() )
+				{
+					majorChildConnections = betaChildConnections;
+					minorChildConnections = alphaChildConnections;
+				}
+			}
+		}
+		*/
+
+		// Essentially, we want the the group box with fewer children to add a link to all the missing children from the greater group box
+		//TODO Might need to look into just getting which has more children and telling the other to add the missing ones
+		for (LinkedBox alphaGroupBox : groupBoxes)
+		{
+			Logger.log("FIRST", Logger.DEBUG);
+
+			HashMap<LinkedBox, OrganizerLink> alphaChildConnections = alphaGroupBox.getChildConnections();
+			HashMap<LinkedBox, OrganizerLink> betaGroupConnections = alphaGroupBox.getAllGroupConnections();
+
+			for (HashMap.Entry<LinkedBox, OrganizerLink> betaGroupConnection : betaGroupConnections.entrySet())
+			{
+				Logger.log("second", Logger.DEBUG);
+				HashMap<LinkedBox, OrganizerLink> betaChildConnections = betaGroupConnection.getKey().getChildConnections(); //getChildConnections();
+				
+				HashMap<LinkedBox, OrganizerLink> greaterChildConnections;
+				HashMap<LinkedBox, OrganizerLink> fewerChildConnections;
+				LinkedBox newStartBox;
+
+				if (alphaChildConnections.size() >= betaChildConnections.size() )
+				{
+					greaterChildConnections = alphaChildConnections;
+					fewerChildConnections = betaChildConnections;
+					newStartBox = betaGroupConnection.getKey();
+				}
+				else // if (alphaChildConnections.size() < betaChildConnections.size() )
+				{
+					greaterChildConnections = betaChildConnections;
+					fewerChildConnections = alphaChildConnections;
+					newStartBox = alphaGroupBox;
+				}
+
+				for (HashMap.Entry<LinkedBox, OrganizerLink> greaterChildConnection : greaterChildConnections.entrySet())
+				{
+					LinkedBox greaterChildBox = greaterChildConnection.getKey();
+					if (!(fewerChildConnections.containsKey(greaterChildBox)))
+					{
+						OrganizerLink newLink = greaterChildConnection.getValue();
+						newLink.setStartBoxID(newStartBox.getBoxID());
+						newLink.setStartBoxRootID(newStartBox.getRootID());
+
+						greaterChildBox.addParentConnection(newStartBox, newLink);
+						newStartBox.addChildConnection(greaterChildBox, newLink);
+
+						sendUpdateGroupLinkToServer(newLink);
+					}
+
+				}
+
+
+
+
+/*
+				HashMap<LinkedBox, OrganizerLink> allChildConnections = new HashMap<LinkedBox, OrganizerLink>();
+				allChildConnections.putAll(alphaChildConnections);
+				allChildConnections.putAll(betaChildConnections);
+
+				for (HashMap.Entry<LinkedBox, OrganizerLink> childConnection : allChildConnections.entrySet())
+				{
+					if (!(alphaChildConnections.containsKey(childConnection.getKey())))
+					{
+						Logger.log("Inside final if", Logger.DEBUG);
+						LinkedBox minorGroupBox = minorGroupConnection.getKey();
+						OrganizerLink newLink = majorChildConnection.getValue().copy();
+
+						newLink.setStartBoxID(minorGroupBox.getBoxID());
+						newLink.setStartBoxRootID(minorGroupBox.getRootID());
+
+						majorChildBox.addParentConnection(minorGroupBox, newLink);
+						minorGroupBox.addChildConnection(majorChildBox, newLink);
+
+						sendUpdateGroupLinkToServer(newLink);
+					}
+					else if (!(betaChildConnections.containsKey(childConnection.getKey())))
+					{
+
+					}
+				}
+
+
+
+
+
+				HashMap<LinkedBox, OrganizerLink> majorChildConnections;
+				HashMap<LinkedBox, OrganizerLink> minorChildConnections;
+
+
+
+				if (alphaChildConnections.size() >= betaChildConnections.size() )
+				{
+					majorChildConnections = alphaChildConnections;
+					minorChildConnections = betaChildConnections;
+				}
+				else // if (alphaChildConnections.size() < betaChildConnections.size() )
+				{
+					majorChildConnections = betaChildConnections;
+					minorChildConnections = alphaChildConnections;
+				}
+
+				for (HashMap.Entry<LinkedBox, OrganizerLink> majorChildConnection : majorChildConnections.entrySet())
+				{
+					Logger.log("tHiRd", Logger.DEBUG);
+					LinkedBox majorChildBox = majorChildConnection.getKey();
+
+					for (HashMap.Entry<LinkedBox, OrganizerLink> minorChildConnection : minorChildConnections.entrySet())
+					if (!(minorChildConnections.containsKey(majorChildBox)))
+					{
+						Logger.log("Inside final if", Logger.DEBUG);
+						LinkedBox minorGroupBox = minorGroupConnection.getKey();
+						OrganizerLink newLink = majorChildConnection.getValue().copy();
+
+						newLink.setStartBoxID(minorGroupBox.getBoxID());
+						newLink.setStartBoxRootID(minorGroupBox.getRootID());
+
+						majorChildBox.addParentConnection(minorGroupBox, newLink);
+						minorGroupBox.addChildConnection(majorChildBox, newLink);
+
+						sendUpdateGroupLinkToServer(newLink);
+					}
+				}
+
+				/*
+				else
+				{
+					continue;
+				}
+				*/
+/*
 				for (HashMap.Entry<LinkedBox, OrganizerLink> majorChildConnection : majorChildConnections.entrySet())
 				{
 					Logger.log("tHiRd", Logger.DEBUG);
@@ -130,7 +284,9 @@ public class AutoOrganizer
 
 						sendUpdateGroupLinkToServer(newLink);
 					}
+
 				}
+				*/
 			}
 
 		}
@@ -148,8 +304,8 @@ public class AutoOrganizer
 			if (mapComponent instanceof AbstractBox)
 			{
 				AbstractBox abstractBox = (AbstractBox) mapComponent;
-				LinkedBox new_box = new LinkedBox(abstractBox.getConnectedModel().getId(), Integer.parseInt(abstractBox.getConnectedModel().getValue(ParameterTypes.RootElementId)) );
-				boxes.add(new_box);
+				LinkedBox newBox = new LinkedBox(abstractBox.getConnectedModel().getId(), Integer.parseInt(abstractBox.getConnectedModel().getValue(ParameterTypes.RootElementId)) );
+				boxes.add(newBox);
 
 			}
 			else if (mapComponent instanceof AbstractLinkPanel)
@@ -164,6 +320,8 @@ public class AutoOrganizer
 			String endBoxRootString;
 			int startBoxRootID;
 			int endBoxRootID;
+
+			// Shuts the compiler up
 			int startBoxID = -1;
 			int endBoxID = -1;
 
@@ -184,6 +342,8 @@ public class AutoOrganizer
 			startBoxRootID = Integer.parseInt(startBoxRootString);
 			endBoxRootID = Integer.parseInt(endBoxRootString);
 
+			/* For every link, there must be a corresponding start and end box (invariant).  So even if the compiler thinks startBoxID
+				and endBoxID might not be changed from -1, they always will be. */
 			for (LinkedBox box : boxes)
 			{
 				if(box.getRootID() == startBoxRootID)
@@ -203,8 +363,57 @@ public class AutoOrganizer
 	}
 
 	// Helper method that associates each LinkedBox to LinkedBox connection with a corresponding OrganizerLink
+	// Might be able to optimize speed by removing a link if match is found
+	// My checks for contain are probably not necessary now that I flipped the nesting of the loops
 	private void createConnectionRelationships()
 	{
+		for (LinkedBox box : boxes)
+		{
+			for (OrganizerLink link : links)
+			{
+				int startBoxID = link.getStartBoxID();
+				int endBoxID = link.getEndBoxID();
+				int startBoxRootID = link.getStartBoxRootID();
+				int endBoxRootID = link.getEndBoxRootID();
+
+				LinkedBox startBox = new LinkedBox(startBoxID, startBoxRootID);
+				LinkedBox endBox = new LinkedBox(endBoxID, endBoxRootID);
+
+				boolean isGroup = link.getType().equalsIgnoreCase("Group");
+
+				if (box.equals(startBox) )
+				{
+					if (isGroup)
+					{
+						box.addChildGroupConnection(endBox, link);
+						if (!(groupBoxes.contains(box) ) )
+						{
+							groupBoxes.add(box);
+						}
+					}
+					else
+					{
+						box.addChildConnection(endBox, link);
+					}
+				}
+				else if (box.equals(endBox) )
+				{
+					if (isGroup)
+					{
+						box.addParentGroupConnection(startBox, link);
+						if (!(groupBoxes.contains(box) ) )
+						{
+							groupBoxes.add(box);
+						}
+					}
+					else
+					{
+						box.addParentConnection(startBox, link);
+					}
+				}
+			}
+		}
+		/*
 		for (OrganizerLink link : links)
 		{
 			int startBoxID = link.getStartBoxID();
@@ -255,6 +464,7 @@ public class AutoOrganizer
 				}
 			}
 		}
+		*/
 	}
 
 	// Not in use right now
@@ -273,6 +483,7 @@ public class AutoOrganizer
 	// Adds necessary connections from a groupLink
 	private void sendUpdateGroupLinkToServer(OrganizerLink link)
 	{
+		
 		ElementInfo linkInfo = new ElementInfo();
 		linkInfo.setElementType("relation");
 		linkInfo.setElementID(link.getType());
@@ -280,6 +491,62 @@ public class AutoOrganizer
 		String startBoxStringID = Integer.toString(link.getStartBoxID());
 		String endBoxStringID = Integer.toString(link.getEndBoxID());
 
-		communicator.sendActionPackage(actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID));
+		//communicator.sendActionPackage(actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID));
+		
+
+		ActionPackage myPackage = actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID);
+
+		for (Action a : myPackage.getActions())
+		{
+			String mapIDString = a.getParameterValue(ParameterTypes.MapId);
+
+			MVController controller = null;
+			if (mapIDString != null) {
+				controller = LASAD_Client.getMVCController(mapIDString);
+			}
+			if (controller != null)
+			{
+		// Currently feedback engines count as "element", thus we have
+				// to filter them here...
+				String elementType = a.getParameterValue(ParameterTypes.Type);
+				String elementIDString = a.getParameterValue(ParameterTypes.Id);
+				int elementID = -1;
+				if (elementIDString != null) {
+					elementID = Integer.parseInt(elementIDString);
+				}
+
+				String username = a.getParameterValue(ParameterTypes.UserName);
+
+				AbstractUnspecifiedElementModel elementModel = new UnspecifiedElementModelArgument(elementID, elementType, username);
+				
+				if (a.getParameterValue(ParameterTypes.ReplayTime) != null) {
+					elementModel.setIsReplay(true);
+				}
+
+				// Needed to enable the add and del buttons in box header
+				if (a.getParameterValue(ParameterTypes.ElementId) != null) {
+					elementModel.setElementId(a.getParameterValue(ParameterTypes.ElementId));
+				}
+
+				// Add more specific data to the model
+				for (Parameter param : a.getParameters()) {
+					if (!param.getType().equals(ParameterTypes.Parent))
+						elementModel.setValue(param.getType(), param.getValue());
+				}
+
+				// Work on parent relations
+				if (a.getParameterValues(ParameterTypes.Parent) != null) {
+
+					for (String parentID : a.getParameterValues(ParameterTypes.Parent)) {
+						controller.setParent(elementModel, controller.getElement(Integer.parseInt(parentID)));
+
+						Logger.log("[lasad.gwt.client.communication.LASADActionReceiver] Added ParentElement: " + parentID, Logger.DEBUG);
+					}
+				}
+
+				// Now Register new Element to the Model
+				controller.addElementModel(elementModel);
+			}
+		}
 	}
 }
