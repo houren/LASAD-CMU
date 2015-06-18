@@ -13,6 +13,10 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 
+// Kevin Loughlin
+import lasad.gwt.client.logger.Logger;
+import lasad.gwt.client.communication.AutoOrganizer;
+
 public abstract class AbstractCreateLinkDialogListener implements EventListener {
 
 //    private final LASADActionSender communicator = LASADActionSender.getInstance();
@@ -46,7 +50,24 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 	    handleMouseOut(be);
 
 	}
-	be.stopPropagation();
+		be.stopPropagation();
+
+		// Added by Kevin Loughlin to update Group Links, location not ideal, investigate where to best put it
+		if (be.getTypeInt() == Events.OnClick.getEventCode())
+		{
+			Logger.log("Arrived at new code", Logger.DEBUG_DETAILS);
+		// Kevin Loughlin, to get all the nonGroupRelations in the event of a group link, to create the necessary new links
+		//if (info.getElementID().equalsIgnoreCase("Group") )
+		//{
+			//Logger.log("Entered first if", Logger.DEBUG_DETAILS);
+			AutoOrganizer autoOrganizer = new AutoOrganizer(myMap);
+			autoOrganizer.updateGroupLinks();
+			Logger.log("AutoOrganizer successfully returned", Logger.DEBUG_DETAILS);
+		//}
+		}
+		//End of added by Kevin Loughlin
+
+		myDialogue.removeFromParent();
     }
 
     private void handleOnClick(Event be) {
@@ -63,7 +84,6 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 				}
 		    }
 		}
-		myDialogue.removeFromParent();
     }
     protected abstract Collection<ElementInfo> getElementsByType(String type);
     protected abstract void onClickSendUpdateToServer(ElementInfo info, String mapId, String firstElemId, String secondElemId);

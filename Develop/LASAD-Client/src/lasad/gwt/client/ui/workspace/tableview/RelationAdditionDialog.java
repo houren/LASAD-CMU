@@ -19,7 +19,11 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
-
+/*
+ * While this class is intended for creating an "Add relation dialog" for when the user selects add relation from the Argument Map menu,
+ * it appears that this class is not in use and is replaced by AbstractCreateSpecialLinkDialog, unless I'm missing something.
+ * - Noted by Kevin Loughlin, 16 June 2015
+ */
 
 public class RelationAdditionDialog extends Dialog {
 

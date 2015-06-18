@@ -68,22 +68,22 @@
         </element>
         <element elementtype="relation" elementid="Support" minquantity="0" maxquantity="0" quantity="0">
             <elementoptions heading="Support" endings="true" details="false"/>
-            <uisettings width="120" height="200" background-color="green" linewidth="2px" linecolor="green"/>
+            <uisettings width="120" height="200" background-color="green" linewidth="4px" linecolor="green"/>
             <childelements/>
         </element>
         <element elementtype="relation" elementid="Objection" minquantity="0" maxquantity="0" quantity="0">
             <elementoptions heading="Objection" endings="true" details="false"/>
-            <uisettings width="120" height="200" background-color="red" linewidth="2px" linecolor="red"/>
+            <uisettings width="120" height="200" background-color="red" linewidth="4px" linecolor="red"/>
             <childelements/>
         </element>
         <element elementtype="relation" elementid="Group" minquantity="0" maxquantity="0" quantity="0">
             <elementoptions heading="Group" endings="false" details="false"/>
-            <uisettings width="120" height="200" background-color="blue" linewidth="2px" linecolor="blue"/>
+            <uisettings width="120" height="200" background-color="blue" linewidth="6px" linecolor="blue"/>
             <childelements/>
         </element>
         <element elementtype="relation" elementid="Instructor-Pointer" minquantity="0" maxquantity="0" quantity="0">
             <elementoptions heading="Instructor-Pointer" endings="true" details="false"/>
-            <uisettings width="120" height="200" background-color="#000000" linewidth="2px" linecolor="#000000"/>
+            <uisettings width="120" height="200" background-color="#000000" linewidth="4px" linecolor="#000000"/>
             <childelements/>
         </element>
     </elements>

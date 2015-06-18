@@ -438,7 +438,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			{
 				Logger.log("[lasad.gwt.client.ui.workspace.argumentmap.ArgumentMapMenuBar][autoOrganizeAction] Starting autoOrganize...", Logger.DEBUG);
 				AutoOrganizer autoOrganizer = new AutoOrganizer(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap() );
-				autoOrganizer.run();
+				autoOrganizer.organizeMap();
 				Logger.log("[lasad.gwt.client.ui.workspace.argumentmap.ArgumentMapMenuBar][autoOrganizeAction] Completed autoOrganize...", Logger.DEBUG);
 			}
 		});

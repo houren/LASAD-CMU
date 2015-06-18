@@ -57,9 +57,11 @@ public class OntologyReader {
 							//mapInfo.setChatSystem(((getAttribute(mapDetailsNode, "chatsystem").equalsIgnoreCase("true")) ? true : false));
 							
 							// Modified by Kevin Loughlin to add autoorganize
+							/*
 							if(getAttribute(mapDetailsNode, ParameterTypes.AutoOrganize.name()).equalsIgnoreCase("true")){
 								mapInfo.setAutoOrganize(true);
 							}
+							*/
 
 							// MODIFIED BY BM!!!
 							// get the autogrowstatement from the XML

@@ -799,7 +799,7 @@ public class ActionFactory {
 		return p;
 	}
 
-	// Kevin Loughlin added autoOrganize capability
+	// Kevin Loughlin added autoOrganize capability, boolean autoOrganize,
 	public ActionPackage createTemplate(
 			String useTemplateName, 
 			String useTemplateDescription, 
@@ -815,7 +815,6 @@ public class ActionFactory {
 			boolean onlyAuthorCanModify,
 			boolean commitTextByEnter,
 			boolean straightLink,
-			boolean autoOrganize,
 			boolean useAutoGrowTextArea) 
 	{
 		ActionPackage p = new ActionPackage();
@@ -844,7 +843,7 @@ public class ActionFactory {
 		a.addParameter(ParameterTypes.OnlyAuthorCanModify, onlyAuthorCanModify + "");
 		a.addParameter(ParameterTypes.CommitTextByEnter, commitTextByEnter + "");
 		a.addParameter(ParameterTypes.StraightLink, straightLink + "");
-		a.addParameter(ParameterTypes.AutoOrganize, autoOrganize + "");
+		//a.addParameter(ParameterTypes.AutoOrganize, autoOrganize + "");
 
 		// Transcript
 		if (useTranscript) {

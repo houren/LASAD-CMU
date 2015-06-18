@@ -28,7 +28,9 @@ import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.AccordionLayout;
 import com.extjs.gxt.ui.client.widget.menu.ColorMenu;
 
-
+/**
+ * This file is for adding a type of relation when creating an ontology via the authoring tool.
+ */
 
 public class StepCreateModifyAndDeleteRelation extends ContentPanel {
 

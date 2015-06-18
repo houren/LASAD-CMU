@@ -7,7 +7,8 @@ import java.util.Vector;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 
 /**
- *  Thanks for the extensive documentation
+ *  The model for a single element (i.e. link or box, not sure if text boxes/awareness are included).
+ *  With this, you can find an element's children, parents, etc.
  */
 
 public abstract class AbstractUnspecifiedElementModel {

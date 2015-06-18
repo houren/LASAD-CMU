@@ -38,6 +38,7 @@ public class CreateBoxLinkDialogListenerPattern extends
 		String agentId = ((PatternGraphMap)myMap).getMyViewSession().getController().getMapInfo().getAgentId();
 		FeedbackAuthoringTabContent.getInstance().getPatternServerManager().
 				createBoxAndLink(boxInfo, linkInfo, agentId, mapID, x, y, start, end);
+	}
 
 //		public ActionPackage createBoxAndLink(ElementInfo boxInfo, ElementInfo linkInfo, int mapID, int x, int y, String start, String end) {
 //			ActionPackage p = new ActionPackage();
@@ -60,8 +61,6 @@ public class CreateBoxLinkDialogListenerPattern extends
 //
 //			return p;
 //		}
-		
-	}
 	
 //	private Vector<Action> createBoxElementsAction(ElementInfo currentElement, int mapID) {
 //

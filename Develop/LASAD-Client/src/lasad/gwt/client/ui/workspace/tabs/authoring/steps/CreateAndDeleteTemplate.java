@@ -52,7 +52,7 @@ public class CreateAndDeleteTemplate extends ContentPanel {
 
 	private static FieldSet collaborativeSet, transcriptSet, additionalSet;
 	// private CheckBox selectionDetails;
-	private static CheckBox userList, miniMap, trackCursor, chat, onlyAuthor, commitByEnter, straightLink, autoOrganize, autoGrow;
+	private static CheckBox userList, miniMap, trackCursor, chat, onlyAuthor, commitByEnter, straightLink, autoGrow; //autoOrganize, 
 	private static Slider maxUsers;
 	private final static int MAX_USERS_VALUE = 5;
 	private SliderField sf;
@@ -369,9 +369,11 @@ public class CreateAndDeleteTemplate extends ContentPanel {
 		additionalSet.add(commitByEnter);
 
 		// Added by Kevin Loughlin for auto-organize support
+		/*
 		autoOrganize = new CheckBox();
 		autoOrganize.setFieldLabel("Automatically organize argument map");
 		additionalSet.add(autoOrganize);
+		*/
 
 		addTemplateFormPanel.add(additionalSet);
 		// ************ End - Additional options *************/
@@ -459,12 +461,12 @@ public class CreateAndDeleteTemplate extends ContentPanel {
 				// start - additional options
 
 				// Kevin Loughlin added autoOrganize 8 June 2015
-				boolean useOnlyAuthorCanModify = false, useCommitTextByEnter = false, useStraightLink = false, useAutoOrganize = false;
+				boolean useOnlyAuthorCanModify = false, useCommitTextByEnter = false, useStraightLink = false; //useAutoOrganize = false
 				if (additionalSet.isExpanded()) {
 					useOnlyAuthorCanModify = onlyAuthor.getValue();
 					useCommitTextByEnter = commitByEnter.getValue();
 					useStraightLink = straightLink.getValue();
-					useAutoOrganize = autoOrganize.getValue();
+					//useAutoOrganize = autoOrganize.getValue();
 				}
 				// end - additional options
 
@@ -481,7 +483,7 @@ public class CreateAndDeleteTemplate extends ContentPanel {
 
 				ActionPackage p = ActionFactory.getInstance().createTemplate(useTemplateName, useTemplateDescription, useOntologyWithName,
 						false, maxUserCount, useChat, useUserList, useMiniMap, useCursorTracking, useTranscript, transcriptText,
-						useOnlyAuthorCanModify, useCommitTextByEnter, useStraightLink, useAutoOrganize, autoGrowTextArea);
+						useOnlyAuthorCanModify, useCommitTextByEnter, useStraightLink, autoGrowTextArea); //useAutoOrganize, 
 				// ActionPackage p =
 				// ActionFactory.getInstance().createTemplate(useTemplateName,
 				// useTemplateDescription, useOntologyWithName,

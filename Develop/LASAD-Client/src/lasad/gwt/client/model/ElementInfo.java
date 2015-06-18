@@ -21,6 +21,7 @@ public class ElementInfo {
 		return elementOptions;
 	}
 
+	// I.e. box, relation, etc.
 	String elementType;
 
 	public String getElementType() {
@@ -31,6 +32,7 @@ public class ElementInfo {
 		this.elementType = elementType;
 	}
 
+	// I.e. what type of box or relation
 	String elementID;
 
 	public String getElementID() {

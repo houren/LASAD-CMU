@@ -16,6 +16,14 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 
+/**
+ * This class creates the dialog for adding a link between two existing, non-connected boxes when the user drags between them.
+ * If using the drop down argument map menu to add a link, see AbstractCreateSpecialLinkDialog.
+ * If creating a box and link simulatenously, see AbstractCreateBoxLinkDialog.
+ * Documentation added by Kevin Loughlin, 16 June 2015
+ * @author Unknown
+ */
+
 public abstract class AbstractCreateLinkDialog extends BoxComponent implements FocusableInterface {
 
 	protected GraphMap myMap;

@@ -24,6 +24,13 @@ import com.extjs.gxt.ui.client.widget.form.SimpleComboValue;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.user.client.Element;
 
+/**
+ * This class creates the dialog box for when the user selects to add a relation via the argument map drop down menu.
+ * If creating links via dragging, see AbstractCreateLinkDialog (link only) and AbstractCreateBoxLinkDialog (link and box).
+ * Documentation added by Kevin Loughlin, 16 June 2015
+ * @author Unknown
+ */
+
 public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 //	private final LASADActionSender communicator = LASADActionSender.getInstance();

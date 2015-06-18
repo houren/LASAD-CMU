@@ -409,7 +409,7 @@ public class Template {
 		options.setAttribute("onlyauthorcanmodify", a.getParameterValue(ParameterTypes.OnlyAuthorCanModify));
 		options.setAttribute("committextbyenter", a.getParameterValue(ParameterTypes.CommitTextByEnter));
 		options.setAttribute("straightlink", a.getParameterValue(ParameterTypes.StraightLink));
-		options.setAttribute("autoorganize", a.getParameterValue(ParameterTypes.AutoOrganize));
+		//options.setAttribute("autoorganize", a.getParameterValue(ParameterTypes.AutoOrganize));
 
 		// MODIFIED BY BM Adds the Parameter to the options Use the
 		// Parametertype name as Key
