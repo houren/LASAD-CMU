@@ -76,8 +76,8 @@
             <uisettings width="120" height="200" background-color="red" linewidth="4px" linecolor="red"/>
             <childelements/>
         </element>
-        <element elementtype="relation" elementid="Group" minquantity="0" maxquantity="0" quantity="0">
-            <elementoptions heading="Group" endings="false" details="false"/>
+        <element elementtype="relation" elementid="Linked Premises" minquantity="0" maxquantity="0" quantity="0">
+            <elementoptions heading="Linked Premises" endings="false" details="false"/>
             <uisettings width="120" height="200" background-color="blue" linewidth="6px" linecolor="blue"/>
             <childelements/>
         </element>

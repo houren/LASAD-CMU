@@ -62,7 +62,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.xml.client.impl.DOMParseException;
 
 // Added by Kevin Loughlin for auto organize
-import lasad.gwt.client.communication.AutoOrganizer;
+import lasad.gwt.client.model.organization.AutoOrganizer;
 
 public class ArgumentMapMenuBar extends GraphMapMenuBar {
 

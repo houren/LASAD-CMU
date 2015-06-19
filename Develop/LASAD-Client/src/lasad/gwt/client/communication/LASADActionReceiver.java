@@ -64,7 +64,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.xml.client.impl.DOMParseException;
 
-import lasad.gwt.client.communication.AutoOrganizer;
+import lasad.gwt.client.model.organization.AutoOrganizer;
 
 
 
@@ -151,17 +151,6 @@ public class LASADActionReceiver {
 			break;
 		case Map:
 			processMapAction(controller, a);
-			// Added by Kevin Loughlin to update Group Links, location not ideal, investigate where to best put it
-			Logger.log("Arrived at new code", Logger.DEBUG_DETAILS);
-			// Kevin Loughlin, to get all the nonGroupRelations in the event of a group link, to create the necessary new links
-			//if (info.getElementID().equalsIgnoreCase("Group") )
-			//{
-			//Logger.log("Entered first if", Logger.DEBUG_DETAILS);
-			AutoOrganizer autoOrganizer = new AutoOrganizer(LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap());
-			autoOrganizer.updateGroupLinks();
-			Logger.log("AutoOrganizer successfully returned", Logger.DEBUG_DETAILS);
-			//}
-			//End of added by Kevin Loughlin
 			break;
 		case Management:
 			processManagementAction(controller, a);

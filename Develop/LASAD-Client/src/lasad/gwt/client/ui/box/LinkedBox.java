@@ -17,6 +17,8 @@ public class LinkedBox
 	// Be mindful of difference between boxID and rootID.
 	private final int boxID;
 	private final int rootID;
+	private int groupID = -1;
+	private boolean visited = false;
 
 	private HashMap<LinkedBox, OrganizerLink> childConnections = null;
 	private HashMap<LinkedBox, OrganizerLink> parentConnections = null;
@@ -33,10 +35,11 @@ public class LinkedBox
 	private int widthLevel = 0;
 
 	// I doubt this constructor is ever going to be used, but I made it just in case
-	public LinkedBox(int boxID, int rootID, HashMap<LinkedBox, OrganizerLink> childConnections, HashMap<LinkedBox, OrganizerLink> parentConnections, HashMap<LinkedBox, OrganizerLink> allGroupConnections, HashMap<LinkedBox, OrganizerLink> childGroupConnections, HashMap<LinkedBox, OrganizerLink> parentGroupConnections)
+	public LinkedBox(int boxID, int rootID, int groupID, HashMap<LinkedBox, OrganizerLink> childConnections, HashMap<LinkedBox, OrganizerLink> parentConnections, HashMap<LinkedBox, OrganizerLink> allGroupConnections, HashMap<LinkedBox, OrganizerLink> childGroupConnections, HashMap<LinkedBox, OrganizerLink> parentGroupConnections)
 	{
 		this.boxID = boxID;
 		this.rootID = rootID;
+		this.groupID = groupID;
 		this.childConnections = childConnections;
 		this.parentConnections = parentConnections;
 		this.allGroupConnections = allGroupConnections;
@@ -76,6 +79,11 @@ public class LinkedBox
 	public int getRootID()
 	{
 		return rootID;
+	}
+
+	public int getGroupID()
+	{
+		return groupID;
 	}
 
 	public HashMap<LinkedBox, OrganizerLink> getChildConnections()
@@ -136,6 +144,11 @@ public class LinkedBox
 		{
 			this.allGroupConnections.put(parentGroupBox, link);
 		}
+	}
+
+	public void setGroupID(int groupID)
+	{
+		this.groupID = groupID;
 	}
 
 	// I don't think checking for null in these "getNum" methods is necessary because I instantiate the HashMaps on creation of this LinkedBox, but it doesn't hurt to check
@@ -217,6 +230,21 @@ public class LinkedBox
 	public int getWidthLevel()
 	{
 		return widthLevel;
+	}
+
+	public void resetVisited()
+	{
+		visited = false;
+	}
+
+	public boolean getVisited()
+	{
+		return visited;
+	}
+
+	public void setVisited(boolean visited)
+	{
+		this.visited = visited;
 	}
 
 	// Box IDs are unique and final, so this is all we need for equality for now.  May change this later if I start comparing between maps for some reason

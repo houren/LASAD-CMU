@@ -76,9 +76,9 @@ public abstract class AbstractCreateBoxLinkDialog extends BoxComponent implement
 		DOM.appendChild(rootElement, headerElement);
 
 		if (step == 1) {
-			this.headerElement.setInnerText("Please choose a box...");
+			this.headerElement.setInnerText("Please choose a Contribution...");
 		} else if (step == 2) {
-			this.headerElement.setInnerText("Please choose a link...");
+			this.headerElement.setInnerText("Please choose a Relation...");
 		}
 
 	}

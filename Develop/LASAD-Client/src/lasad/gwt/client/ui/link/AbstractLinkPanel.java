@@ -449,7 +449,7 @@ public abstract class AbstractLinkPanel extends LASADBoxComponent implements Ext
 
 				} else {
 					e.getStatus().setStatus(true);
-					e.getStatus().update("Create new Link");
+					e.getStatus().update("Create new Relation");
 				}
 
 				if (getController() != null) {

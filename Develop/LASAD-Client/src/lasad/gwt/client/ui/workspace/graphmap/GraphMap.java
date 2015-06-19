@@ -194,7 +194,7 @@ public abstract class GraphMap extends AbstractGraphMap{
 				protected void onDragEnter(DNDEvent e) {
 				
 					e.getStatus().setStatus(true);
-					e.getStatus().update("Create new Box");
+					e.getStatus().update("Create new Contribution");
 			
 					if (e.getDragSource().getData() instanceof AbstractBox) {
 						

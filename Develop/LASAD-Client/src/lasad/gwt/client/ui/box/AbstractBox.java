@@ -632,7 +632,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 						}
 
 					} else if (e.getStatus().getStatus() != false) {
-						e.getStatus().update("Create new Link");
+						e.getStatus().update("Create new Relation");
 					}
 				} else if (e.getDragSource().getData() instanceof TranscriptLinkData) {
 					boolean supportsTranscript = false;

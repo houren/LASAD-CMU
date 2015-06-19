@@ -115,7 +115,7 @@ public abstract class AbstractCreateLinkDialog extends BoxComponent implements F
 
 	public void initHeading() {
 		this.headerElement = DOM.createDiv();
-		this.headerElement.setInnerText("Please choose link...");
+		this.headerElement.setInnerText("Please choose a Relation...");
 		this.headerElement.setClassName("dialog-heading");
 		DOM.setStyleAttribute(headerElement, "backgroundColor", "#E6E6E6");
 		DOM.appendChild(rootElement, headerElement);

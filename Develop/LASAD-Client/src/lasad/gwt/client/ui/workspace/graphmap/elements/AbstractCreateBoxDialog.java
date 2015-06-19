@@ -72,7 +72,7 @@ public abstract class AbstractCreateBoxDialog extends BoxComponent implements Fo
 
 	public void initHeading() {
 		this.headerElement = DOM.createDiv();
-		this.headerElement.setInnerText("Please choose a box...");
+		this.headerElement.setInnerText("Please choose a Contribution...");
 		this.headerElement.setClassName("dialog-heading");
 		DOM.setStyleAttribute(headerElement, "backgroundColor", "#E6E6E6");
 		DOM.appendChild(rootElement, headerElement);
