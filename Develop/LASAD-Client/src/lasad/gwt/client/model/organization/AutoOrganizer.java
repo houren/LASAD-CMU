@@ -43,6 +43,9 @@ import lasad.gwt.client.model.argument.UnspecifiedElementModelArgument;
 
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.OrganizerLink;
+import lasad.gwt.client.model.organization.ArgumentThread;
+import lasad.gwt.client.model.organization.ArgumentModel;
+import java.util.Collection;
 
 /**
  * An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update group links
@@ -140,6 +143,7 @@ public class AutoOrganizer
 
 		if (linkType.equalsIgnoreCase("Linked Premises"))
 		{
+			Logger.log("Entered Linked Premises Code", Logger.DEBUG);
 			Vector<OrganizerLink> startChildLinks = origStartBox.getChildLinks();
 			Vector<OrganizerLink> startSiblingLinks = origStartBox.getSiblingLinks();
 
@@ -164,6 +168,7 @@ public class AutoOrganizer
 		}
 		else
 		{
+			Logger.log("Entered Other Link Type Code", Logger.DEBUG);
 			Vector<OrganizerLink> siblingLinks = origStartBox.getSiblingLinks();
 			for (OrganizerLink siblingLink : siblingLinks)
 			{
@@ -596,70 +601,83 @@ public class AutoOrganizer
 	// Adds necessary connections from a groupLink
 	private void sendUpdateGroupLinkToServer(OrganizerLink link)
 	{
+		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
+
+		if (link.getType().equalsIgnoreCase("Linked Premises"))
+		{
+			argModel.getBoxByBoxID(link.getStartBox().getBoxID()).addSiblingLink(link);
+			argModel.getBoxByBoxID(link.getEndBox().getBoxID()).addSiblingLink(link);
+		}
+		else
+		{
+			argModel.getBoxByBoxID(link.getStartBox().getBoxID()).addChildLink(link);
+			argModel.getBoxByBoxID(link.getEndBox().getBoxID()).addParentLink(link);
+		}
 		
+		String elementType = "relation";
+
+		MVController controller = LASAD_Client.getMVCController(map.getID());
+
 		ElementInfo linkInfo = new ElementInfo();
 		linkInfo.setElementType("relation");
+
+		// a better name for element ID here would be subtype, as in, what kind of relation.  I didn't write it.
 		linkInfo.setElementID(link.getType());
 
-		String startBoxStringID = Integer.toString(link.getStartBoxID());
-		String endBoxStringID = Integer.toString(link.getEndBoxID());
-
 		//communicator.sendActionPackage(actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID));
+
+		String startBoxStringID = Integer.toString(link.getStartBox().getBoxID());
+		String endBoxStringID = Integer.toString(link.getEndBox().getBoxID());
 		
 
 		ActionPackage myPackage = actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID);
 
 		for (Action a : myPackage.getActions())
-		{
-			String mapIDString = a.getParameterValue(ParameterTypes.MapId);
+		{	
+			// From now on, elementID refers to element ID number.
+			String elementIDString = a.getParameterValue(ParameterTypes.Id);
 
-			MVController controller = null;
-			if (mapIDString != null) {
-				controller = LASAD_Client.getMVCController(mapIDString);
+			int elementID = -1;
+
+			if (elementIDString != null) {
+				elementID = Integer.parseInt(elementIDString);
 			}
-			if (controller != null)
-			{
-		// Currently feedback engines count as "element", thus we have
-				// to filter them here...
-				String elementType = a.getParameterValue(ParameterTypes.Type);
-				String elementIDString = a.getParameterValue(ParameterTypes.Id);
-				int elementID = -1;
-				if (elementIDString != null) {
-					elementID = Integer.parseInt(elementIDString);
-				}
 
-				String username = a.getParameterValue(ParameterTypes.UserName);
+			String username = a.getParameterValue(ParameterTypes.UserName);
 
-				AbstractUnspecifiedElementModel elementModel = new UnspecifiedElementModelArgument(elementID, elementType, username);
-				
-				if (a.getParameterValue(ParameterTypes.ReplayTime) != null) {
-					elementModel.setIsReplay(true);
-				}
+			Logger.log("[lasad.gwt.client.communication.LASADActionReceiver] Create Model: " + elementID + ", Type: " + elementType,
+					Logger.DEBUG);
+			AbstractUnspecifiedElementModel elementModel = new UnspecifiedElementModelArgument(elementID, elementType, username);
 
-				// Needed to enable the add and del buttons in box header
-				if (a.getParameterValue(ParameterTypes.ElementId) != null) {
-					elementModel.setElementId(a.getParameterValue(ParameterTypes.ElementId));
-				}
-
-				// Add more specific data to the model
-				for (Parameter param : a.getParameters()) {
-					if (!param.getType().equals(ParameterTypes.Parent))
-						elementModel.setValue(param.getType(), param.getValue());
-				}
-
-				// Work on parent relations
-				if (a.getParameterValues(ParameterTypes.Parent) != null) {
-
-					for (String parentID : a.getParameterValues(ParameterTypes.Parent)) {
-						controller.setParent(elementModel, controller.getElement(Integer.parseInt(parentID)));
-
-						Logger.log("[lasad.gwt.client.communication.LASADActionReceiver] Added ParentElement: " + parentID, Logger.DEBUG);
-					}
-				}
-
-				// Now Register new Element to the Model
-				controller.addElementModel(elementModel);
+			if (a.getParameterValue(ParameterTypes.ReplayTime) != null) {
+				elementModel.setIsReplay(true);
 			}
+			// Needed to enable the add and del buttons in box header
+			if (a.getParameterValue(ParameterTypes.ElementId) != null) {
+				elementModel.setElementId(a.getParameterValue(ParameterTypes.ElementId));
+			}
+
+			// Add more specific data to the model
+			for (Parameter param : a.getParameters()) {
+				if (param.getType() != null && !param.getType().equals(ParameterTypes.Parent)
+						&& !param.getType().equals(ParameterTypes.HighlightElementId)) {
+					elementModel.setValue(param.getType(), param.getValue());
+				}
+			}
+
+			// Work on parent relations
+			if (a.getParameterValues(ParameterTypes.Parent) != null) {
+				for (String parentID : a.getParameterValues(ParameterTypes.Parent)) {
+					controller.setParent(elementModel, controller.getElement(Integer.parseInt(parentID)));
+
+					Logger.log("[lasad.gwt.client.communication.LASADActionReceiver] Added ParentElement: " + parentID, Logger.DEBUG);
+				}
+			}
+
+			// Now Register new Element to the Model
+			controller.addElementModel(elementModel);
+
+			// End Kevin Loughlin
 		}
 	}
 }

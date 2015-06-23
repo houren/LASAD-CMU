@@ -266,10 +266,40 @@ public class LinkedBox
 		}	
 	}
 
+	public String toStringShort()
+	{
+		StringBuilder buffer = new StringBuilder("\nBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID) + "\n");
+		return buffer.toString();
+	}
+
 	@Override
 	public String toString()
 	{
-		return "Box RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID) + "\n";
+		StringBuilder buffer = new StringBuilder("\nBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID) + "\n");
+		buffer.append("\nCHILD BOXES...\n");
+		for (OrganizerLink childLink : childLinks)
+		{
+			buffer.append(childLink.getEndBox().toStringShort());
+		}
+		buffer.append("\nPARENT BOXES...\n");
+		for (OrganizerLink parentLink : parentLinks)
+		{
+			buffer.append(parentLink.getStartBox().toStringShort());
+		}
+		buffer.append("\nSIBLING BOXES...\n");
+		for (OrganizerLink siblingLink : siblingLinks)
+		{
+			if (siblingLink.getEndBox().equals(this))
+			{
+				buffer.append(siblingLink.getStartBox().toStringShort());
+			}
+			else if (siblingLink.getStartBox().equals(this))
+			{
+				buffer.append(siblingLink.getEndBox().toStringShort());
+			}
+		}
+		buffer.append("\n");
+		return buffer.toString();
 	}
 
 	//TODO not really necessary at this point in time, but it's always good practice to provide a toString and copy method
