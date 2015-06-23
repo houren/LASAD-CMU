@@ -19,8 +19,6 @@ package lasad.gwt.client.model.organization;
 import java.util.Vector;
 import java.util.List;
 import java.util.Collections;
-import lasad.gwt.client.ui.box.LinkedBox;
-import lasad.gwt.client.ui.link.OrganizerLink;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.communication.helper.ActionFactory;
 import lasad.gwt.client.communication.LASADActionSender;
@@ -42,6 +40,9 @@ import lasad.gwt.client.model.AbstractUnspecifiedElementModel;
 import lasad.gwt.client.LASAD_Client;
 import lasad.shared.communication.objects.Parameter;
 import lasad.gwt.client.model.argument.UnspecifiedElementModelArgument;
+
+import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.model.organization.OrganizerLink;
 
 /**
  * An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update group links
@@ -81,6 +82,8 @@ public class AutoOrganizer
 
 	private Vector<LinkedBox> visited = new Vector<LinkedBox>();
 
+	private static HashMap<String, AutoOrganizer> instances = new HashMap<String, AutoOrganizer>();
+
 	// For sending map updates to the server
 	private LASADActionSender communicator = LASADActionSender.getInstance();
 	private ActionFactory actionBuilder = ActionFactory.getInstance();
@@ -90,11 +93,17 @@ public class AutoOrganizer
 	{
 		this.map = map;
 		this.mapComponents = map.getItems();
+		instances.put(map.getID(), this);
 	}
 
 	// Don't use default constructor
 	private AutoOrganizer()
 	{
+	}
+
+	public static AutoOrganizer getInstanceByMapID(String mapID)
+	{
+		return instances.get(mapID);
 	}
 
 	// The methd for organizing the map
@@ -118,7 +127,90 @@ public class AutoOrganizer
 
 	}
 
+	public void updateGroupLinks(OrganizerLink link)
+	{
+		visited.clear();
+		LinkedBox origStartBox = link.getStartBox();
+		LinkedBox origEndBox = link.getEndBox();
+
+
+		String linkType = link.getType();
+
+		visited.add(origStartBox);
+
+		if (linkType.equalsIgnoreCase("Linked Premises"))
+		{
+			Vector<OrganizerLink> startChildLinks = origStartBox.getChildLinks();
+			Vector<OrganizerLink> startSiblingLinks = origStartBox.getSiblingLinks();
+
+			Vector<OrganizerLink> endChildLinks = origEndBox.getChildLinks();
+			Vector<OrganizerLink> endSiblingLinks = origEndBox.getSiblingLinks();
+
+			for (OrganizerLink startChildLink : startChildLinks)
+			{
+				for (OrganizerLink endSiblingLink : endSiblingLinks)
+				{
+					updateRecursive(endSiblingLink, startChildLink);
+				}
+			}
+
+			for (OrganizerLink endChildLink : endChildLinks)
+			{
+				for (OrganizerLink startSiblingLink : startSiblingLinks)
+				{
+					updateRecursive(startSiblingLink, endChildLink);
+				}
+			}
+		}
+		else
+		{
+			Vector<OrganizerLink> siblingLinks = origStartBox.getSiblingLinks();
+			for (OrganizerLink siblingLink : siblingLinks)
+			{
+				updateRecursive(siblingLink, link);
+			}
+		}
+
+		visited.clear();	
+	}
+
+	private void updateRecursive(OrganizerLink siblingLink, OrganizerLink origLink)
+	{
+		LinkedBox startBox = siblingLink.getStartBox();
+		LinkedBox endBox = siblingLink.getEndBox();
+
+		String linkType = origLink.getType();
+		LinkedBox origEndBox = origLink.getEndBox();
+
+		if (!visited.contains(startBox))
+		{
+			OrganizerLink newLink = new OrganizerLink(startBox, origEndBox, linkType);
+			visited.add(startBox);
+			sendUpdateGroupLinkToServer(newLink);
+
+			Vector<OrganizerLink> nextSiblingLinks = startBox.getSiblingLinks();
+			for (OrganizerLink nextSiblingLink : nextSiblingLinks)
+			{
+				updateRecursive(nextSiblingLink, origLink);
+			}
+		}
+		if (!visited.contains(endBox))
+		{
+			OrganizerLink newLink = new OrganizerLink(endBox, origEndBox, linkType);
+			visited.add(endBox);
+			sendUpdateGroupLinkToServer(newLink);
+
+			Vector<OrganizerLink> nextSiblingLinks = endBox.getSiblingLinks();
+			for (OrganizerLink nextSiblingLink : nextSiblingLinks)
+			{
+				updateRecursive(nextSiblingLink, origLink);
+			}
+		}
+
+	}
+
 	// The method for updating the group links, if the ontology supports group links.
+	/*
 	public void updateGroupLinks()
 	{
 		Logger.log("Entered updateGroupLinks", Logger.DEBUG);
@@ -266,6 +358,7 @@ public class AutoOrganizer
 
 	}
 */
+
 	// Helper method that sorts the mapComponents into a LinkedBox Vector or an OrganizerLink vector
 	private void sortMapComponents()
 	{
@@ -317,27 +410,37 @@ public class AutoOrganizer
 
 			/* For every link, there must be a corresponding start and end box (invariant).  So even if the compiler thinks startBoxID
 				and endBoxID might not be changed from -1, they always will be. */
+
+			LinkedBox startBox = null;
+			LinkedBox endBox = null;
+
 			for (LinkedBox box : boxes)
 			{
 				if(box.getRootID() == startBoxRootID)
 				{
-					startBoxID = box.getBoxID();
+					startBox = box;
 				}
 				else if(box.getRootID() == endBoxRootID)
 				{
-					endBoxID = box.getBoxID();
+					endBox = box;
+				}
+				if (startBox != null && endBox != null)
+				{
+					break;
 				}
 			}
 
-			OrganizerLink organizerLink = new OrganizerLink(startBoxID, endBoxID, startBoxRootID, endBoxRootID, type);
+			OrganizerLink organizerLink = new OrganizerLink(startBox, endBox, type);
 
 			links.add(organizerLink);
 		}
 	}
 
+
 	// Helper method that associates each LinkedBox to LinkedBox connection with a corresponding OrganizerLink
 	// Might be able to optimize speed by removing a link if match is found
 	// My checks for contain are probably not necessary now that I flipped the nesting of the loops
+	/*
 	private void createConnectionRelationships()
 	{
 		for (LinkedBox box : boxes)
@@ -448,8 +551,9 @@ public class AutoOrganizer
 			}
 		}
 		*/
-	}
+	//}
 
+/*
 	private void sortGroupFamily(LinkedBox box, int groupID)
 	{
 		Logger.log("STUCK AT SORT GROUP FAMILY", Logger.DEBUG);
@@ -482,7 +586,7 @@ public class AutoOrganizer
 		int levelDifference = box.getHeightLevel() - midLevel;
 		sendUpdatePositionToServer(box, CENTER_X, CENTER_Y + (levelDifference * Y_SPACE) );
 	}
-
+*/
 	// Updates a box position on the map, might need to add to redraw the links because I'm losing arrow heads on them for some reason
 	private void sendUpdatePositionToServer(LinkedBox box, int x, int y)
 	{

@@ -66,6 +66,12 @@ import com.google.gwt.xml.client.impl.DOMParseException;
 
 import lasad.gwt.client.model.organization.AutoOrganizer;
 
+import lasad.gwt.client.model.organization.ArgumentThread;
+import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.model.organization.OrganizerLink;
+import java.util.Collection;
+
 
 
 /**
@@ -414,6 +420,10 @@ public class LASADActionReceiver {
 
 		Logger.log("[lasad.gwt.client.communication.LASADActionReceiver][processMapAction] Processing map action...", Logger.DEBUG);
 
+		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(controller.getMapID());
+
+		AutoOrganizer autoOrganizer = AutoOrganizer.getInstanceByMapID(controller.getMapID());
+
 		Logger.log("[Details] " + a.toString(), Logger.DEBUG_DETAILS);
 
 		String mapId = a.getParameterValue(ParameterTypes.MapId);
@@ -494,6 +504,133 @@ public class LASADActionReceiver {
 				// Now Register new Element to the Model
 				controller.addElementModel(elementModel);
 
+				// Kevin Loughlin
+				String elementSubType = a.getParameterValue(ParameterTypes.ElementId);
+
+				String rootIDString = a.getParameterValue(ParameterTypes.RootElementId);
+
+				int rootID = -1;
+
+				if (rootIDString != null)
+				{
+					rootID = Integer.parseInt(rootIDString);
+				}
+
+				if (elementType.equalsIgnoreCase("box"))
+				{
+					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID)));
+				}
+				else if (elementType.equalsIgnoreCase("relation"))
+				{
+					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
+					Logger.log("startBoxID: " + startBoxStringID, Logger.DEBUG);
+					int startBoxID = Integer.parseInt(startBoxStringID);
+
+					// For some reason, parent here gives box ID, not root ID, so plan accordingly
+					String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
+					Logger.log("endBoxID: " + endBoxStringID, Logger.DEBUG);
+					int endBoxID = Integer.parseInt(endBoxStringID);
+
+					LinkedBox startBox = null;
+					LinkedBox endBox = null;
+					LinkedBox potentialStartBox = null;
+					LinkedBox potentialEndBox = null;
+
+
+					Logger.log("GRAPH 1 Made it to relation loop", Logger.DEBUG);
+
+					Collection<ArgumentThread> argThreads = argModel.getArgThreads();
+
+					for (ArgumentThread argThread : argThreads)
+					{
+						potentialStartBox = argThread.getBoxByBoxID(startBoxID);
+						potentialEndBox = argThread.getBoxByBoxID(endBoxID);
+						if (potentialStartBox != null)
+						{
+							Logger.log("startBox assigned", Logger.DEBUG);
+							startBox = potentialStartBox;
+						}
+						if (potentialEndBox != null)
+						{
+							Logger.log("endBox assigned", Logger.DEBUG);
+							endBox = potentialEndBox;
+						}
+						if (startBox != null && endBox != null)
+						{
+							Logger.log("Breaking loop", Logger.DEBUG);
+							break;
+						}
+					}
+
+					if (startBox == null || endBox == null)
+					{
+						Logger.log("Error: group links could not be updated: null box", Logger.DEBUG);
+						return;
+					}			
+
+					Logger.log("startBox: " + startBox.toString(), Logger.DEBUG);
+					Logger.log("endBox: " + endBox.toString(), Logger.DEBUG);
+
+					Logger.log("GRAPH 1 Exited relation loop", Logger.DEBUG);
+
+					OrganizerLink link = new OrganizerLink(elementID, startBox, endBox, elementSubType);
+					Logger.log("GRAPH 1 K", Logger.DEBUG);
+					if (elementSubType.equalsIgnoreCase("Linked Premises"))
+					{
+						Logger.log("GRAPH 1 E", Logger.DEBUG);
+						startBox.addSiblingLink(link);
+						Logger.log("GRAPH 1 V", Logger.DEBUG);
+						endBox.addSiblingLink(link);
+						Logger.log("GRAPH 1 I", Logger.DEBUG);
+					}
+					else
+					{
+						Logger.log("GRAPH 1 !", Logger.DEBUG);
+						startBox.addChildLink(link);
+						Logger.log("GRAPH 1 ?", Logger.DEBUG);
+						endBox.addParentLink(link);
+					}
+					Logger.log("GRAPH 1 Made it past Element sub type equality test", Logger.DEBUG);
+
+					ArgumentThread startBoxThread = argModel.getBoxThread(startBox);
+
+					Logger.log("startBoxThread: " + startBoxThread.toString(), Logger.DEBUG);
+					Logger.log("GRAPH 1 L", Logger.DEBUG);
+					ArgumentThread endBoxThread = argModel.getBoxThread(endBox);
+					Logger.log("endBoxThread: " + endBoxThread.toString(), Logger.DEBUG);
+
+					Logger.log("GRAPH 1 Got box threads", Logger.DEBUG);
+
+					if (!startBoxThread.equals(endBoxThread))
+					{
+						Logger.log("GRAPH 1 O", Logger.DEBUG);
+						startBoxThread.addBoxes(endBoxThread.getBoxes());
+						Logger.log("GRAPH 1 U", Logger.DEBUG);
+						argModel.removeArgThread(endBoxThread);
+					}
+
+					Collection<ArgumentThread> argThreads2 = argModel.getArgThreads();
+					if (argThreads2.size() == 0)
+					{
+						Logger.log("Houston we have a problem", Logger.DEBUG);
+					}
+
+					for (ArgumentThread argThread : argThreads2)
+					{
+						Logger.log("PRINTING ARG THREADS", Logger.DEBUG);
+						if (argThread == null)
+						{
+							Logger.log("Houston we have a different problem", Logger.DEBUG);	
+						}
+						Logger.log(argThread.toString(), Logger.DEBUG);
+					}
+
+					autoOrganizer.updateGroupLinks(link);
+					Logger.log("GRAPH 1 Made it to end of create relation", Logger.DEBUG);
+				}
+
+				// End Kevin Loughlin
+
 				if (elementType.equalsIgnoreCase("FEEDBACK-CLUSTER")) {
 					FeedbackPanelArgument feedbackPanel = LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getFeedbackPanel();
 					if (feedbackPanel == null) {
@@ -548,10 +685,32 @@ public class LASADActionReceiver {
 					try {
 						controller.deleteElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)),
 								a.getParameterValue(ParameterTypes.UserName));
-					} catch (Exception e) {
+					}catch (Exception e) {
 						e.printStackTrace();
 						Logger.log("Can not delete element, because ID is no int!", Logger.DEBUG_ERRORS);
 					}
+
+					Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
+
+					// Kevin Loughlin
+					argModel.removeBoxByBoxID(elementID);
+
+					argModel.removeLinkByLinkID(elementID);
+					/*
+					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
+					Logger.log("startBoxID: " + startBoxStringID, Logger.DEBUG);
+					int startBoxID = Integer.parseInt(startBoxStringID);
+
+					// For some reason, parent here gives box ID, not root ID, so plan accordingly
+					String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
+					Logger.log("endBoxID: " + endBoxStringID, Logger.DEBUG);
+					int endBoxID = Integer.parseInt(endBoxStringID);
+
+					argModel.getBoxByBoxID(startBoxID).removeLinkToBoxID(endBoxID);
+					*/
+
+					Logger.log("Arg Model at end of delete:\n" + argModel.toString(), Logger.DEBUG);
+					// End Kevin Loughlin
 
 				} else {
 					// This occurs when another user deletes his/her feedback
@@ -668,6 +827,134 @@ public class LASADActionReceiver {
 				// Now Register new Element to the Model
 				controller.addElementModel(elementModel);
 
+				// Kevin Loughlin
+				String elementSubType = a.getParameterValue(ParameterTypes.ElementId);
+
+				String rootIDString = a.getParameterValue(ParameterTypes.RootElementId);
+
+				int rootID = -1;
+
+				if (rootIDString != null)
+				{
+					rootID = Integer.parseInt(rootIDString);
+				}
+
+				if (elementType.equalsIgnoreCase("box"))
+				{
+					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID)));
+				}
+				else if (elementType.equalsIgnoreCase("relation"))
+				{
+					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
+					Logger.log("startBoxID: " + startBoxStringID, Logger.DEBUG);
+					int startBoxID = Integer.parseInt(startBoxStringID);
+
+					// For some reason, parent here gives box ID, not root ID, so plan accordingly
+					String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
+					Logger.log("endBoxID: " + endBoxStringID, Logger.DEBUG);
+					int endBoxID = Integer.parseInt(endBoxStringID);
+
+					LinkedBox startBox = null;
+					LinkedBox endBox = null;
+					LinkedBox potentialStartBox = null;
+					LinkedBox potentialEndBox = null;
+
+
+					Logger.log("GRAPH 1 Made it to relation loop", Logger.DEBUG);
+
+					Collection<ArgumentThread> argThreads = argModel.getArgThreads();
+
+					for (ArgumentThread argThread : argThreads)
+					{
+						Logger.log("argThread: " + argThread.toString(), Logger.DEBUG);
+						potentialStartBox = argThread.getBoxByBoxID(startBoxID);
+						potentialEndBox = argThread.getBoxByBoxID(endBoxID);
+						if (potentialStartBox != null)
+						{
+							Logger.log("startBox assigned", Logger.DEBUG);
+							startBox = potentialStartBox;
+						}
+						if (potentialEndBox != null)
+						{
+							Logger.log("endBox assigned", Logger.DEBUG);
+							endBox = potentialEndBox;
+						}
+						if (startBox != null && endBox != null)
+						{
+							Logger.log("Breaking loop", Logger.DEBUG);
+							break;
+						}
+					}
+
+					if (startBox == null || endBox == null)
+					{
+						Logger.log("Error: group links could not be updated: null box", Logger.DEBUG);
+						return;
+					}			
+
+					Logger.log("startBox: " + startBox.toString(), Logger.DEBUG);
+					Logger.log("endBox: " + endBox.toString(), Logger.DEBUG);
+
+					Logger.log("GRAPH 1 Exited relation loop", Logger.DEBUG);
+
+					OrganizerLink link = new OrganizerLink(elementID, startBox, endBox, elementSubType);
+					Logger.log("GRAPH 1 K", Logger.DEBUG);
+					if (elementSubType.equalsIgnoreCase("Linked Premises"))
+					{
+						Logger.log("GRAPH 1 E", Logger.DEBUG);
+						startBox.addSiblingLink(link);
+						Logger.log("GRAPH 1 V", Logger.DEBUG);
+						endBox.addSiblingLink(link);
+						Logger.log("GRAPH 1 I", Logger.DEBUG);
+					}
+					else
+					{
+						Logger.log("GRAPH 1 !", Logger.DEBUG);
+						startBox.addChildLink(link);
+						Logger.log("GRAPH 1 ?", Logger.DEBUG);
+						endBox.addParentLink(link);
+					}
+					Logger.log("GRAPH 1 Made it past Element sub type equality test", Logger.DEBUG);
+
+					ArgumentThread startBoxThread = argModel.getBoxThread(startBox);
+
+					Logger.log("startBoxThread: " + startBoxThread.toString(), Logger.DEBUG);
+					Logger.log("GRAPH 1 L", Logger.DEBUG);
+					ArgumentThread endBoxThread = argModel.getBoxThread(endBox);
+					Logger.log("endBoxThread: " + endBoxThread.toString(), Logger.DEBUG);
+
+					Logger.log("GRAPH 1 Got box threads", Logger.DEBUG);
+
+					if (!startBoxThread.equals(endBoxThread))
+					{
+						Logger.log("GRAPH 1 O", Logger.DEBUG);
+						startBoxThread.addBoxes(endBoxThread.getBoxes());
+						Logger.log("GRAPH 1 U", Logger.DEBUG);
+						argModel.removeArgThread(endBoxThread);
+					}
+
+					Collection<ArgumentThread> argThreads2 = argModel.getArgThreads();
+					if (argThreads2.size() == 0)
+					{
+						Logger.log("Houston we have a problem", Logger.DEBUG);
+					}
+
+					for (ArgumentThread argThread : argThreads2)
+					{
+						Logger.log("PRINTING ARG THREADS", Logger.DEBUG);
+						if (argThread == null)
+						{
+							Logger.log("Houston we have a different problem", Logger.DEBUG);	
+						}
+						Logger.log(argThread.toString(), Logger.DEBUG);
+					}
+
+					autoOrganizer.updateGroupLinks(link);
+					Logger.log("GRAPH 1 Made it to end of create relation", Logger.DEBUG);
+				}
+
+				// End Kevin Loughlin
+
 				if (elementType.equalsIgnoreCase("FEEDBACK-CLUSTER")) {
 					FeedbackPanelArgument feedbackPanel = LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getFeedbackPanel();
 					if (feedbackPanel == null) {
@@ -711,11 +998,33 @@ public class LASADActionReceiver {
 				try {
 					controller.deleteElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)),
 							a.getParameterValue(ParameterTypes.UserName));
-
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 					Logger.log("Can not delete element, because ELEMENT-ID is no int!", Logger.DEBUG_ERRORS);
 				}
 
+				Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
+
+				// Kevin Loughlin
+				argModel.removeBoxByBoxID(elementID);
+
+				argModel.removeLinkByLinkID(elementID);
+				/*
+				String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
+				Logger.log("startBoxID: " + startBoxStringID, Logger.DEBUG);
+				int startBoxID = Integer.parseInt(startBoxStringID);
+
+				// For some reason, parent here gives box ID, not root ID, so plan accordingly
+				String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
+				Logger.log("endBoxID: " + endBoxStringID, Logger.DEBUG);
+				int endBoxID = Integer.parseInt(endBoxStringID);
+
+				argModel.getBoxByBoxID(startBoxID).removeLinkToBoxID(endBoxID);
+				*/
+
+				Logger.log("Arg Model at end of delete:\n" + argModel.toString(), Logger.DEBUG);
+				// End Kevin Loughlin
 			} 
 			
 			else if (a.getCategory().equals(Categories.Error)) {

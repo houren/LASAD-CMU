@@ -16,6 +16,11 @@ import com.extjs.gxt.ui.client.util.Size;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.google.gwt.user.client.Timer;
 
+// Kevin Loughlin
+import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.logger.Logger;
+import lasad.gwt.client.model.organization.AutoOrganizer;
+
 /*
  * refactoring of AbstractArgumentMap
  *
@@ -60,6 +65,9 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 	protected int numberOfCursorRecords = 0;
 	protected Timer t = null;
 
+	protected ArgumentModel argModel;
+	protected AutoOrganizer autoOrganizer;
+
 	public AbstractGraphMap(GraphMapSpace parentElement) {
 		this.myArgumentMapSpace = parentElement;
 		//this.myViewSession = myArgumentMapSpace.getSession();
@@ -67,6 +75,9 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 		init();
 		focusHandler = new GenericFocusHandler(this);
 		highlightHandler = new GenericHighlightHandler(this);
+		argModel = ArgumentModel.getInstanceByMapID(this.getID());
+		autoOrganizer = new AutoOrganizer(this);
+		Logger.log("Argument Model and autoOrganizer successfully assigned to this map.", Logger.DEBUG);
 	}
 	/*
 	 * if needed add the code that was commented out in the constructor.
@@ -91,6 +102,16 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 //	}
 
 	public void enableCursorTracking() {}
+
+	public ArgumentModel getArgModel()
+	{
+		return argModel;
+	}
+
+	public void setArgModel(ArgumentModel model)
+	{
+		argModel = model;
+	}
 
 	public GenericFadeableElementHandler getFadeHandler() {
 		return fadeHandler;
