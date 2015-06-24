@@ -13,10 +13,17 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 
+import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.logger.Logger;
+import lasad.gwt.client.ui.workspace.LASADInfo;
+
 public abstract class AbstractCreateLinkDialogListener implements EventListener {
 
 //    private final LASADActionSender communicator = LASADActionSender.getInstance();
 //    private final ActionFactory actionBuilder = ActionFactory.getInstance();
+
+	protected final int MAX_SIBLINGS = 2;
 
     protected GraphMap myMap;
     private AbstractCreateLinkDialog myDialogue;
@@ -24,17 +31,17 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
     private AbstractLink l1, l2;
 
     public AbstractCreateLinkDialogListener(GraphMap map, AbstractCreateLinkDialog dialogue, AbstractBox b1, AbstractBox b2) {
-	this.myMap = map;
-	this.myDialogue = dialogue;
-	this.b1 = b1;
-	this.b2 = b2;
+		this.myMap = map;
+		this.myDialogue = dialogue;
+		this.b1 = b1;
+		this.b2 = b2;
     }
 
     public AbstractCreateLinkDialogListener(GraphMap map, AbstractCreateLinkDialog dialogue, AbstractBox b1, AbstractLink l2) {
-	this.myMap = map;
-	this.myDialogue = dialogue;
-	this.b1 = b1;
-	this.l2 = l2;
+		this.myMap = map;
+		this.myDialogue = dialogue;
+		this.b1 = b1;
+		this.l2 = l2;
     }
 
     public void onBrowserEvent(Event be) {
@@ -54,8 +61,40 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 		    if (((Element) be.getEventTarget().cast()).getInnerText().equals(info.getElementOption(ParameterTypes.Heading))) {
 				// Send Action --> Server
 				if (b1 != null && b2 != null) {
+					if (info.getElementID().equalsIgnoreCase("Linked Premises"))
+					{
+						ArgumentModel argModel = ArgumentModel.getInstanceByMapID(myMap.getID());
+						LinkedBox alpha = argModel.getBoxByBoxID(b1.getConnectedModel().getId());
+						LinkedBox beta = argModel.getBoxByBoxID(b2.getConnectedModel().getId());
+						if (!argModel.getBoxThread(alpha).equals(argModel.getBoxThread(beta)))
+						{
+							if (alpha.getNumSiblings() < MAX_SIBLINGS && beta.getNumSiblings() < MAX_SIBLINGS)
+							{
+								if (b1.getElementInfo().getElementID().equalsIgnoreCase("Premise") && b1.getElementInfo().getElementID().equalsIgnoreCase("Premise"))
+								{
+									onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + "");
+								}
+								else
+								{
+									LASADInfo.display("Error", "Linked Premises can only be between premises - can't create link");
+								}
+							}
+							else
+							{
+								LASADInfo.display("Error", "One of the selected boxes already has 2 linked premises - can't create link");
+							}
+						}
+						else
+						{
+							// Same thread, can't create link
+							LASADInfo.display("Error", "Linked Premises cannot be constructed between already connected boxes - can't create link");
+						}
+					}
+					else
+					{
+						onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + "");
+					}
 				    //communicator.sendActionPackage(actionBuilder.createLinkWithElements(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + ""));
-					onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + "");
 				} else if (b1 != null && l2 != null) {
 				    //communicator.sendActionPackage(actionBuilder.createLinkWithElements(info, myMap.getID(), b1.getConnectedModel().getId() + "", l2.getConnectedModel().getId() + ""));
 					onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", l2.getConnectedModel().getId() + "");

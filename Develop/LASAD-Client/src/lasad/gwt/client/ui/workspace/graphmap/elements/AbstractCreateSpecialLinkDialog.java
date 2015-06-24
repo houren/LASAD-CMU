@@ -24,6 +24,11 @@ import com.extjs.gxt.ui.client.widget.form.SimpleComboValue;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.user.client.Element;
 
+import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.model.organization.ArgumentThread;
+import lasad.gwt.client.logger.Logger;
+
 /**
  * This class creates the dialog box for when the user selects to add a relation via the argument map drop down menu.
  * If creating links via dragging, see AbstractCreateLinkDialog (link only) and AbstractCreateBoxLinkDialog (link and box).
@@ -36,6 +41,8 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 //	private final LASADActionSender communicator = LASADActionSender.getInstance();
 //	private final ActionFactory actionBuilder = ActionFactory.getInstance();
 //	private MVController myController;
+
+	protected final int MAX_SIBLINGS = 2;
 
 	protected FormData formData;
 	protected SimpleComboBox<String> comboStart = new SimpleComboBox<String>();
@@ -93,6 +100,27 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se) {
+
+				// TODO : Verify I'm only doing linked premises between premises
+				// Be careful about RootID vs Box ID
+				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
+				LinkedBox alpha = argModel.getBoxByRootID(Integer.parseInt(comboStart.getRawValue()));
+				ArgumentThread alphaThread = argModel.getBoxThread(alpha);
+
+				if (!alpha.getType().equalsIgnoreCase("Premise"))
+				{
+					LASADInfo.display("Error", "Both boxes must be premises to create a linked premises link.");
+					return;
+				}
+
+				if (config.getElementID().equalsIgnoreCase("Linked Premises"))
+				{
+					if (alpha.getNumSiblings() >= MAX_SIBLINGS)
+					{
+						LASADInfo.display("Error", "Can't add another Linked Premise to this box - it already has 2 Linked Premises.");
+						return;
+					}
+				}
 				comboEnd.setEnabled(true);
 
 				boolean comboEndHasElements = false;
@@ -107,6 +135,19 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 				//TODO (Marcel) unite following two loops
 				for (String boxId : boxes.keySet()) {
+					if (!boxes.get(boxId).getElementInfo().getElementID().equalsIgnoreCase("Premise"))
+					{
+						LASADInfo.display("Error", "Both boxes must be premises to create a linked premises link.");
+						return;	
+					}
+					if (config.getElementID().equalsIgnoreCase("Linked Premises"))
+					{
+						if (argModel.getBoxThread(argModel.getBoxByRootID(Integer.parseInt(boxId))).equals(alphaThread))
+						{
+							// Same thread boxes can't be made into Linked Premises
+							restrictedIds.add(boxId);
+						}
+					}
 					if (boxId.equals(comboStart.getRawValue())) {
 						restrictedIds.add(boxId);
 

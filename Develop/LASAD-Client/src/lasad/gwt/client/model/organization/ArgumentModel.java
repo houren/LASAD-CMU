@@ -2,7 +2,7 @@ package lasad.gwt.client.model.organization;
 
 // Aware that this is unnecessary, I just do it as a reminder in case I change location
 import lasad.gwt.client.model.organization.ArgumentThread;
-import java.util.Vector;
+import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Collection;
 
@@ -18,7 +18,7 @@ import lasad.gwt.client.model.organization.LinkedBox;
  */
 public class ArgumentModel
 {
-	private Vector<ArgumentThread> argThreads;
+	private HashSet<ArgumentThread> argThreads;
 
 	// One model instance per map, where String is mapID
 	private static HashMap<String, ArgumentModel> instances = new HashMap<String, ArgumentModel>();
@@ -26,7 +26,7 @@ public class ArgumentModel
 	// Just for this class, if we need to create a new instance below
 	private ArgumentModel()
 	{
-		this.argThreads = new Vector<ArgumentThread>();
+		this.argThreads = new HashSet<ArgumentThread>();
 	}
 
 	public static ArgumentModel getInstanceByMapID(String mapID)
@@ -78,6 +78,19 @@ public class ArgumentModel
 		return null;
 	}
 
+	public LinkedBox getBoxByRootID(int rootID)
+	{
+		for (ArgumentThread argThread : argThreads)
+		{
+			LinkedBox box = argThread.getBoxByRootID(rootID);
+			if (box != null)
+			{
+				return box;
+			}
+		}
+		return null;
+	}
+
 	public OrganizerLink removeLinkByLinkID(int linkID)
 	{
 		for (ArgumentThread argThread : argThreads)
@@ -103,19 +116,21 @@ public class ArgumentModel
 		return null;
 	}
 
-	public Collection<ArgumentThread> getArgThreads()
+	public HashSet<ArgumentThread> getArgThreads()
 	{
-		Collection<ArgumentThread> colArgThreads = argThreads;
-		return colArgThreads;
+		return argThreads;
 	}
 
 	@Override
 	public String toString()
 	{
+		int counter = 1;
 		StringBuilder buffer = new StringBuilder("\n***********\nBEGIN ARGUMENT MODEL\n***********");
 		for (ArgumentThread argThread : this.argThreads)
 		{
+			buffer.append("\n\tThread " + counter);
 			buffer.append(argThread.toString());
+			counter++;
 		}
 		buffer.append("\n***********\nEND OF MODEL\n***********\n");
 		return buffer.toString();

@@ -1,6 +1,6 @@
 package lasad.gwt.client.model.organization;
 
-import java.util.Vector;
+import java.util.HashSet;
 import lasad.gwt.client.model.organization.OrganizerLink;
 
 /**
@@ -17,15 +17,17 @@ public class LinkedBox
 	private final int MAX_SIBLINGS = 2;
 	private final int ERROR = -1;
 
+	private final String type;
+
 	// Be mindful of difference between boxID and rootID.
 	private final int boxID;
 	private final int rootID;
 
-	private Vector<OrganizerLink> childLinks;
-	private Vector<OrganizerLink> parentLinks;
+	private HashSet<OrganizerLink> childLinks;
+	private HashSet<OrganizerLink> parentLinks;
 
 	// siblingLinks are those that are of subType "Linked Premises" and are thus handled differently
-	private Vector<OrganizerLink> siblingLinks;
+	private HashSet<OrganizerLink> siblingLinks;
 
 	// Height and width level will be used like a coordinate grid once we come to organizeMap() of AutoOrganizer
 	private int heightLevel;
@@ -33,10 +35,11 @@ public class LinkedBox
 
 
 	// I doubt this constructor is ever going to be used, but I made it just in case
-	public LinkedBox(int boxID, int rootID, Vector<OrganizerLink> childLinks, Vector<OrganizerLink> parentLinks, Vector<OrganizerLink> siblingLinks, int heightLevel, int widthLevel)
+	public LinkedBox(int boxID, int rootID, String type, HashSet<OrganizerLink> childLinks, HashSet<OrganizerLink> parentLinks, HashSet<OrganizerLink> siblingLinks, int heightLevel, int widthLevel)
 	{
 		this.boxID = boxID;
 		this.rootID = rootID;
+		this.type = type;
 		this.childLinks = childLinks;
 		this.parentLinks = parentLinks;
 		this.siblingLinks = siblingLinks;
@@ -45,13 +48,14 @@ public class LinkedBox
 	}
 
 	// This is the meat and bones constructor used in AutoOrganizer
-	public LinkedBox(int boxID, int rootID)
+	public LinkedBox(int boxID, int rootID, String type)
 	{
 		this.boxID = boxID;
 		this.rootID = rootID;
-		this.childLinks = new Vector<OrganizerLink>();
-		this.parentLinks = new Vector<OrganizerLink>();
-		this.siblingLinks = new Vector<OrganizerLink>();
+		this.type = type;
+		this.childLinks = new HashSet<OrganizerLink>();
+		this.parentLinks = new HashSet<OrganizerLink>();
+		this.siblingLinks = new HashSet<OrganizerLink>();
 		this.heightLevel = 0;
 		this.widthLevel = 0;
 	}
@@ -61,9 +65,10 @@ public class LinkedBox
 	{
 		this.boxID = ERROR;
 		this.rootID = ERROR;
-		this.childLinks = new Vector<OrganizerLink>();
-		this.parentLinks = new Vector<OrganizerLink>();
-		this.siblingLinks = new Vector<OrganizerLink>();
+		this.type = "garbage";
+		this.childLinks = new HashSet<OrganizerLink>();
+		this.parentLinks = new HashSet<OrganizerLink>();
+		this.siblingLinks = new HashSet<OrganizerLink>();
 		this.heightLevel = ERROR;
 		this.widthLevel = ERROR;
 	}
@@ -78,20 +83,27 @@ public class LinkedBox
 		return rootID;
 	}
 
-	public Vector<OrganizerLink> getChildLinks()
+	public String getType()
+	{
+		return type;
+	}
+
+	public HashSet<OrganizerLink> getChildLinks()
 	{
 		return childLinks;
 	}
 
-	public Vector<OrganizerLink> getParentLinks()
+	public HashSet<OrganizerLink> getParentLinks()
 	{
 		return parentLinks;
 	}
 
-	public Vector<OrganizerLink> getSiblingLinks()
+	public HashSet<OrganizerLink> getSiblingLinks()
 	{
 		return siblingLinks;
 	}
+
+	// I naturally avoid duplicates in all add methods by implementing this with HashSet
 
 	public void addChildLink(OrganizerLink link)
 	{
@@ -105,10 +117,7 @@ public class LinkedBox
 
 	public void addSiblingLink(OrganizerLink link)
 	{
-		if (siblingLinks.size() < MAX_SIBLINGS)
-		{
-			this.siblingLinks.add(link);
-		}
+		this.siblingLinks.add(link);
 	}
 
 	public void removeChildLink(OrganizerLink link)
@@ -123,10 +132,7 @@ public class LinkedBox
 
 	public void removeSiblingLink(OrganizerLink link)
 	{
-		if (siblingLinks.size() < MAX_SIBLINGS)
-		{
-			this.siblingLinks.remove(link);
-		}
+		this.siblingLinks.remove(link);
 	}
 
 	public int getNumChildren()
@@ -170,9 +176,9 @@ public class LinkedBox
 	 */
 	public void removeLinksToSelf()
 	{
-		Vector<OrganizerLink> childLinks = this.getChildLinks();
-		Vector<OrganizerLink> parentLinks = this.getParentLinks();
-		Vector<OrganizerLink> siblingLinks = this.getSiblingLinks();
+		HashSet<OrganizerLink> childLinks = this.getChildLinks();
+		HashSet<OrganizerLink> parentLinks = this.getParentLinks();
+		HashSet<OrganizerLink> siblingLinks = this.getSiblingLinks();
 
 		// Remove references to self in children
 		for (OrganizerLink childLink : childLinks)
@@ -211,9 +217,9 @@ public class LinkedBox
 	 */
 	public void removeLinkToBoxID(int boxID)
 	{
-		Vector<OrganizerLink> childLinks = this.getChildLinks();
-		Vector<OrganizerLink> parentLinks = this.getParentLinks();
-		Vector<OrganizerLink> siblingLinks = this.getSiblingLinks();
+		HashSet<OrganizerLink> childLinks = this.getChildLinks();
+		HashSet<OrganizerLink> parentLinks = this.getParentLinks();
+		HashSet<OrganizerLink> siblingLinks = this.getSiblingLinks();
 
 		// Check the children
 		for (OrganizerLink childLink : childLinks)
@@ -286,7 +292,7 @@ public class LinkedBox
 	// Just outputs the box's boxID and rootID, not its children and parents and siblings
 	public String toStringShort()
 	{
-		StringBuilder buffer = new StringBuilder("\n\t\t\tBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID));
+		StringBuilder buffer = new StringBuilder("\n\t\t\t\tBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID) + "; Box Type: " + type);
 		return buffer.toString();
 	}
 
@@ -296,7 +302,7 @@ public class LinkedBox
 	@Override
 	public String toString()
 	{
-		StringBuilder buffer = new StringBuilder("\n\t\tBEGIN BOX\n\t\tBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID));
+		StringBuilder buffer = new StringBuilder("\n\t\tBEGIN BOX\n\t\tBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID) + "; Box Type: " + type);
 		buffer.append("\n\t\t\tCHILD BOXES...");
 		for (OrganizerLink childLink : childLinks)
 		{

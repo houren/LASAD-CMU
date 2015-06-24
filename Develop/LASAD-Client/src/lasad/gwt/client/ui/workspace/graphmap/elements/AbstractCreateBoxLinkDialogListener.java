@@ -12,6 +12,11 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 
+import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.logger.Logger;
+import lasad.gwt.client.ui.workspace.LASADInfo;
+
 /**
  * This class represents the abstract action handler for the CreateBoxLink dialog box.
  */
@@ -20,6 +25,8 @@ public abstract class AbstractCreateBoxLinkDialogListener implements EventListen
 
 //	private final LASADActionSender communicator = LASADActionSender.getInstance();
 //	private final ActionFactory actionBuilder = ActionFactory.getInstance();
+
+	protected final int MAX_SIBLINGS = 2;
 
 	protected GraphMap myMap;
 	private AbstractCreateBoxLinkDialog myDialog;
@@ -60,9 +67,33 @@ public abstract class AbstractCreateBoxLinkDialogListener implements EventListen
 			for (ElementInfo info : getElementsByType("relation")) {
 				if (((Element) be.getEventTarget().cast()).getInnerText().equals(info.getElementOption(ParameterTypes.Heading))) {
 					// Send Action --> Server
+					if (info.getElementID().equalsIgnoreCase("Linked Premises"))
+					{
+						ArgumentModel argModel = ArgumentModel.getInstanceByMapID(myMap.getID());
+						LinkedBox alpha = argModel.getBoxByBoxID(myDialog.getStartBox().getConnectedModel().getId());
+						if (alpha.getNumSiblings() < MAX_SIBLINGS)
+						{
+							if (myDialog.getStartBox().getElementInfo().getElementID().equalsIgnoreCase("Premise") && myDialog.getBoxConfig().getElementID().equalsIgnoreCase("Premise"))
+							{
+								onClickSendUpdateToServer(myDialog.getBoxConfig(), info, myMap.getID(), myDialog.getPosition(true).x, myDialog.getPosition(true).y, String.valueOf(myDialog.getStartBox().getConnectedModel().getId()), "LAST-ID");
+							}
+							else
+							{
+								LASADInfo.display("Error", "Linked Premises can only be between premises - can't create link");
+							}
+						}
+						else
+						{
+							LASADInfo.display("Error", "The starting box already has 2 linked premises - can't create link");// 1 or more already have 2 siblings, can't create link
+						}
+					}
+					else
+					{
+						onClickSendUpdateToServer(myDialog.getBoxConfig(), info, myMap.getID(), myDialog.getPosition(true).x, myDialog.getPosition(true).y, String.valueOf(myDialog.getStartBox().getConnectedModel().getId()), "LAST-ID");
+					}
 
 					//communicator.sendActionPackage(actionBuilder.createBoxAndLink(myDialog.getBoxConfig(), info, myMap.getID(), myDialog.getPosition(true).x, myDialog.getPosition(true).y, String.valueOf(myDialog.getStartBox().getConnectedModel().getId()), "LAST-ID"));
-					onClickSendUpdateToServer(myDialog.getBoxConfig(), info, myMap.getID(), myDialog.getPosition(true).x, myDialog.getPosition(true).y, String.valueOf(myDialog.getStartBox().getConnectedModel().getId()), "LAST-ID");
+					
 						
 					// ActionSet actionSet = new ActionSet(myMap.getID());
 					//					

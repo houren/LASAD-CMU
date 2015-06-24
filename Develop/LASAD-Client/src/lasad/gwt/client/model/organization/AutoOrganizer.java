@@ -1,10 +1,8 @@
 package lasad.gwt.client.model.organization;
 
 // Some of these import statements can be deleted, but I'm too lazy to do that right now and it's not exactly a big deal.
-import java.util.Vector;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Collection;
-import java.util.Collections;
 
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.communication.helper.ActionFactory;
@@ -63,20 +61,20 @@ public class AutoOrganizer
 	private final int CENTER_Y = CENTER_X;
 
 	// All the boxes on the map
-	private Vector<LinkedBox> boxes = new Vector<LinkedBox>();
+	private HashSet<LinkedBox> boxes = new HashSet<LinkedBox>();
 
 	// siblingBoxes are for Mara Harrell's ontology; they are boxes attached via Linked Premises relations
-	private Vector<LinkedBox> siblingBoxes = new Vector<LinkedBox>();
+	private HashSet<LinkedBox> siblingBoxes = new HashSet<LinkedBox>();
 
 	/* rootBoxes are those that are on height level 1, i.e. they start an argument thread.  Theoretically, a map could have multiple
 		threads (even if that would be poor organization, and thus that must be taken into account in the organizeMap method. */
-	private Vector<LinkedBox> rootBoxes = new Vector<LinkedBox>();
+	private HashSet<LinkedBox> rootBoxes = new HashSet<LinkedBox>();
 
 	// All the links (relations) on a map
-	private Vector<OrganizerLink> links = new Vector<OrganizerLink>();
+	private HashSet<OrganizerLink> links = new HashSet<OrganizerLink>();
 
 	// Stores boxes that have been visited during a method call.  Important to clear at beginning of method call.
-	private Vector<LinkedBox> visited = new Vector<LinkedBox>();
+	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
 
 	// Instances of autoOrganizer: one per map.  String is mapID.
 	private static HashMap<String, AutoOrganizer> instances = new HashMap<String, AutoOrganizer>();
@@ -145,7 +143,7 @@ public class AutoOrganizer
 	 */
 	public void updateSiblingLinks(OrganizerLink link)
 	{
-		// IMPORTANT: Clear the visited nodes Vector to avoid collisions with anything in there previously
+		// IMPORTANT: Clear the visited nodes HashSet to avoid collisions with anything in there previously
 		visited.clear();
 
 		// The original link data
@@ -163,11 +161,11 @@ public class AutoOrganizer
 
 			Logger.log("Entered Linked Premises Code", Logger.DEBUG);
 
-			Vector<OrganizerLink> startChildLinks = origStartBox.getChildLinks();
-			Vector<OrganizerLink> startSiblingLinks = origStartBox.getSiblingLinks();
+			HashSet<OrganizerLink> startChildLinks = origStartBox.getChildLinks();
+			HashSet<OrganizerLink> startSiblingLinks = origStartBox.getSiblingLinks();
 
-			Vector<OrganizerLink> endChildLinks = origEndBox.getChildLinks();
-			Vector<OrganizerLink> endSiblingLinks = origEndBox.getSiblingLinks();
+			HashSet<OrganizerLink> endChildLinks = origEndBox.getChildLinks();
+			HashSet<OrganizerLink> endSiblingLinks = origEndBox.getSiblingLinks();
 
 			for (OrganizerLink startChildLink : startChildLinks)
 			{
@@ -177,11 +175,16 @@ public class AutoOrganizer
 					updateRecursive(startSiblingLink, startChildLink);
 				}
 
+				visited.clear();
+				/*
 				// Verify that every sibling of origEndBox connects to every child of the startBox
 				for (OrganizerLink endSiblingLink : endSiblingLinks)
 				{
 					updateRecursive(endSiblingLink, startChildLink);
 				}
+
+				visited.clear();
+				*/
 			}
 
 			for (OrganizerLink endChildLink : endChildLinks)
@@ -192,17 +195,22 @@ public class AutoOrganizer
 					updateRecursive(startSiblingLink, endChildLink);
 				}
 
+				visited.clear();
+				/*
 				// Verify that every sibling of origEndBox connects to every child of the endBox
 				for (OrganizerLink endSiblingLink : endSiblingLinks)
 				{
 					updateRecursive(endSiblingLink, endChildLink);
 				}
+
+				visited.clear();
+				*/
 			}
 		}
 		else
 		{
 			Logger.log("Entered Other Link Type Code", Logger.DEBUG);
-			Vector<OrganizerLink> siblingLinks = origStartBox.getSiblingLinks();
+			HashSet<OrganizerLink> siblingLinks = origStartBox.getSiblingLinks();
 
 			// Verify that all siblings of the origStartBox point to the endBox of the origLink
 			for (OrganizerLink siblingLink : siblingLinks)
@@ -237,7 +245,7 @@ public class AutoOrganizer
 			visited.add(startBox);
 			sendUpdateSiblingLinkToServer(newLink);
 
-			Vector<OrganizerLink> nextSiblingLinks = startBox.getSiblingLinks();
+			HashSet<OrganizerLink> nextSiblingLinks = startBox.getSiblingLinks();
 			for (OrganizerLink nextSiblingLink : nextSiblingLinks)
 			{
 				updateRecursive(nextSiblingLink, origLink);
@@ -251,7 +259,7 @@ public class AutoOrganizer
 			visited.add(endBox);
 			sendUpdateSiblingLinkToServer(newLink);
 
-			Vector<OrganizerLink> nextSiblingLinks = endBox.getSiblingLinks();
+			HashSet<OrganizerLink> nextSiblingLinks = endBox.getSiblingLinks();
 			for (OrganizerLink nextSiblingLink : nextSiblingLinks)
 			{
 				updateRecursive(nextSiblingLink, origLink);
@@ -260,20 +268,20 @@ public class AutoOrganizer
 
 	}
 
-	/*	Helper method that sorts the mapComponents into a LinkedBox Vector or an OrganizerLink vector
+	/*	Helper method that sorts the mapComponents into a LinkedBox HashSet or an OrganizerLink HashSet
 		Might not be used now that organization will come from an already updatedModel
 		Don't worry about this method for now because we're not doing organizeMap() yet */
 	private void sortMapComponents()
 	{
-		Vector<AbstractBox> abstractBoxes = new Vector<AbstractBox>();
-		Vector<AbstractLinkPanel> abstractLinkPanels = new Vector<AbstractLinkPanel>();
+		HashSet<AbstractBox> abstractBoxes = new HashSet<AbstractBox>();
+		HashSet<AbstractLinkPanel> abstractLinkPanels = new HashSet<AbstractLinkPanel>();
 
 		for (Component mapComponent : mapComponents)
 		{
 			if (mapComponent instanceof AbstractBox)
 			{
 				AbstractBox abstractBox = (AbstractBox) mapComponent;
-				LinkedBox newBox = new LinkedBox(abstractBox.getConnectedModel().getId(), Integer.parseInt(abstractBox.getConnectedModel().getValue(ParameterTypes.RootElementId)) );
+				LinkedBox newBox = new LinkedBox(abstractBox.getConnectedModel().getId(), Integer.parseInt(abstractBox.getConnectedModel().getValue(ParameterTypes.RootElementId)), abstractBox.getElementInfo().getElementID());
 				boxes.add(newBox);
 
 			}

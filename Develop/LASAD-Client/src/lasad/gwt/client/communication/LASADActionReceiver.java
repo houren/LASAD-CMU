@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.Vector;
+import java.util.HashSet;
 
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.communication.helper.ActionFactory;
@@ -521,7 +522,7 @@ public class LASADActionReceiver {
 				// If it's a box, add it to the model
 				if (elementType.equalsIgnoreCase("box"))
 				{
-					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID)));
+					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType)));
 				}
 
 				// If it's a relation, add it to the model
@@ -587,7 +588,7 @@ public class LASADActionReceiver {
 
 					Logger.log("Model after creation" + argModel.toString(), Logger.DEBUG);
 
-					autoOrganizer.updateSiblingLinks(link);
+					//autoOrganizer.updateSiblingLinks(link);
 					Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
 				}
 
@@ -803,7 +804,7 @@ public class LASADActionReceiver {
 
 				if (elementType.equalsIgnoreCase("box"))
 				{
-					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID)));
+					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType)));
 				}
 				else if (elementType.equalsIgnoreCase("relation"))
 				{
@@ -819,7 +820,7 @@ public class LASADActionReceiver {
 					LinkedBox potentialStartBox = null;
 					LinkedBox potentialEndBox = null;
 
-					Collection<ArgumentThread> argThreads = argModel.getArgThreads();
+					HashSet<ArgumentThread> argThreads = argModel.getArgThreads();
 
 					for (ArgumentThread argThread : argThreads)
 					{
@@ -869,7 +870,7 @@ public class LASADActionReceiver {
 
 					Logger.log("Model after creation" + argModel.toString(), Logger.DEBUG);
 
-					autoOrganizer.updateSiblingLinks(link);
+					//autoOrganizer.updateSiblingLinks(link);
 					Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
 				}
 				// End Kevin Loughlin
