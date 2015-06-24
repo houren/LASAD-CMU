@@ -64,8 +64,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.xml.client.impl.DOMParseException;
 
+// Added for autoOrganizer support by Kevin Loughlin
 import lasad.gwt.client.model.organization.AutoOrganizer;
-
 import lasad.gwt.client.model.organization.ArgumentThread;
 import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.model.organization.LinkedBox;
@@ -504,7 +504,9 @@ public class LASADActionReceiver {
 				// Now Register new Element to the Model
 				controller.addElementModel(elementModel);
 
-				// Kevin Loughlin
+				// Begin Kevin Loughlin
+
+				// Since we're creating a new element, we need to add it to the autoOrganize model and update the siblingLinks on the map
 				String elementSubType = a.getParameterValue(ParameterTypes.ElementId);
 
 				String rootIDString = a.getParameterValue(ParameterTypes.RootElementId);
@@ -516,10 +518,13 @@ public class LASADActionReceiver {
 					rootID = Integer.parseInt(rootIDString);
 				}
 
+				// If it's a box, add it to the model
 				if (elementType.equalsIgnoreCase("box"))
 				{
 					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID)));
 				}
+
+				// If it's a relation, add it to the model
 				else if (elementType.equalsIgnoreCase("relation"))
 				{
 					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
@@ -534,9 +539,7 @@ public class LASADActionReceiver {
 					LinkedBox potentialStartBox = null;
 					LinkedBox potentialEndBox = null;
 
-					Collection<ArgumentThread> argThreads = argModel.getArgThreads();
-
-					for (ArgumentThread argThread : argThreads)
+					for (ArgumentThread argThread : argModel.getArgThreads())
 					{
 						potentialStartBox = argThread.getBoxByBoxID(startBoxID);
 						potentialEndBox = argThread.getBoxByBoxID(endBoxID);
@@ -556,7 +559,7 @@ public class LASADActionReceiver {
 
 					if (startBox == null || endBox == null)
 					{
-						Logger.log("Error: group links could not be updated: null box", Logger.DEBUG);
+						Logger.log("Error: sibling links could not be updated: null box", Logger.DEBUG);
 						return;
 					}			
 
@@ -584,8 +587,8 @@ public class LASADActionReceiver {
 
 					Logger.log("Model after creation" + argModel.toString(), Logger.DEBUG);
 
-					autoOrganizer.updateGroupLinks(link);
-					Logger.log("Model after update Group Links" + argModel.toString(), Logger.DEBUG);
+					autoOrganizer.updateSiblingLinks(link);
+					Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
 				}
 
 				// End Kevin Loughlin
@@ -649,9 +652,9 @@ public class LASADActionReceiver {
 						Logger.log("Can not delete element, because ID is no int!", Logger.DEBUG_ERRORS);
 					}
 
+					// Begin Kevin Loughlin's code for removing an element from ArgumentModel, which is still very much in development
 					Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
 
-					// Kevin Loughlin
 					argModel.removeBoxByBoxID(elementID);
 
 					argModel.removeLinkByLinkID(elementID);
@@ -838,7 +841,7 @@ public class LASADActionReceiver {
 
 					if (startBox == null || endBox == null)
 					{
-						Logger.log("Error: group links could not be updated: null box", Logger.DEBUG);
+						Logger.log("Error: sibling links could not be updated: null box", Logger.DEBUG);
 						return;
 					}			
 
@@ -866,8 +869,8 @@ public class LASADActionReceiver {
 
 					Logger.log("Model after creation" + argModel.toString(), Logger.DEBUG);
 
-					autoOrganizer.updateGroupLinks(link);
-					Logger.log("Model after update Group Links" + argModel.toString(), Logger.DEBUG);
+					autoOrganizer.updateSiblingLinks(link);
+					Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
 				}
 				// End Kevin Loughlin
 

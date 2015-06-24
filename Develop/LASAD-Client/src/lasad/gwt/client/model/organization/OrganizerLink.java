@@ -11,21 +11,24 @@ import java.sql.SQLException;
  * OrganizerLink is, like LinkedBox is to AbstractBox, a way of representing an AbstractLinkPanel (and/or an AbstractLink) that is more
  * friendly to AutoOrganizer.  The important info for updating a link via an Action is contained within an OrganizerLink.
  * @author Kevin Loughlin
- * @since 17 June 2015, Updated 18 June 2015
+ * @since 17 June 2015, Updated 24 June 2015
  */
 public class OrganizerLink
 {
-	/* Be mindful of difference between boxID and rootID.  I considered making these fields final but then realized I needed to change them
-		at one point after making a copy of an OrganizerLink in AutoOrganizer. */
-	private final int linkID;	
+	// Be mindful of difference between boxID and rootID.
 	private LinkedBox startBox;
 	private LinkedBox endBox;
+
+	// I.e. what kind of relation (perhaps it could be support, refutation, Linked Premises, depending on the ontology and its terminology)
 	private String type;
 
-	// I.e. what kind of relation (perhaps it could be support, refutation, group, depending on the ontology and its terminology)
+	// Might serve a purpose in removal, right now we're just working on adding elements
+	private final int linkID;
 	
 
-	//
+	/**
+	 * Constructor
+	 */
 	public OrganizerLink(int linkID, LinkedBox startBox, LinkedBox endBox, String type)
 	{
 		this.linkID = linkID;
@@ -34,6 +37,10 @@ public class OrganizerLink
 		this.type = type;
 	}
 
+	/**
+	 * I'm trying to get it so that the next available ID is given to this link, but I can't import the commented out library, so
+	 * I don't know what's going on.  Hence the commented out code in this constructor.
+	 */
 	public OrganizerLink(LinkedBox startBox, LinkedBox endBox, String type)
 	{
 		/*
@@ -74,7 +81,7 @@ public class OrganizerLink
 		this.type = type;
 	}
 
-	// Don't use the default constructor, hence why it's set as private and does nothing
+	// Don't use the default constructor, hence why it's set as private and does nothing other than shutting the compiler up
 	private OrganizerLink()
 	{
 		this.linkID = -1;

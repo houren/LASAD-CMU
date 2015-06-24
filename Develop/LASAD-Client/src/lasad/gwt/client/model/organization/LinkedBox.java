@@ -9,7 +9,7 @@ import lasad.gwt.client.model.organization.OrganizerLink;
  * organization of all Links on the map, as they can be followed in a chain similar to a linked list.  This class is key to AutoOrganizer.
  * All names within this class are self-explanatory.
  * @author Kevin Loughlin
- * @since 11 June 2015, Updated 19 June 2015
+ * @since 11 June 2015, Updated 24 June 2015
  */
 
 public class LinkedBox
@@ -23,14 +23,14 @@ public class LinkedBox
 
 	private Vector<OrganizerLink> childLinks;
 	private Vector<OrganizerLink> parentLinks;
+
+	// siblingLinks are those that are of subType "Linked Premises" and are thus handled differently
 	private Vector<OrganizerLink> siblingLinks;
 
+	// Height and width level will be used like a coordinate grid once we come to organizeMap() of AutoOrganizer
 	private int heightLevel;
 	private int widthLevel;
 
-	/* Methods are structured so that an update to childGroupLinks or parentGroupLinks will be added to allGroupConenctions.
-		childGroupLinks are groupLinks where this box is the parent (i.e. starting box for the link),
-		and vice-versa for parentGroupLinks. */
 
 	// I doubt this constructor is ever going to be used, but I made it just in case
 	public LinkedBox(int boxID, int rootID, Vector<OrganizerLink> childLinks, Vector<OrganizerLink> parentLinks, Vector<OrganizerLink> siblingLinks, int heightLevel, int widthLevel)
@@ -56,7 +56,7 @@ public class LinkedBox
 		this.widthLevel = 0;
 	}
 
-	// I don't want people to use the default constructor because this LinkedBox needs definitive IDs
+	// I don't want people to use the default constructor because this LinkedBox needs definitive IDs.  This just quiets the compiler.
 	private LinkedBox()
 	{
 		this.boxID = ERROR;
@@ -103,7 +103,6 @@ public class LinkedBox
 		this.parentLinks.add(link);
 	}
 
-	// Like I said above, the next two methods for adding child/parent groupLinks also add the connection to the overall HashMap of groupLinks
 	public void addSiblingLink(OrganizerLink link)
 	{
 		if (siblingLinks.size() < MAX_SIBLINGS)
@@ -122,7 +121,6 @@ public class LinkedBox
 		this.parentLinks.remove(link);
 	}
 
-	// Like I said above, the next two methods for adding child/parent groupLinks also add the connection to the overall HashMap of groupLinks
 	public void removeSiblingLink(OrganizerLink link)
 	{
 		if (siblingLinks.size() < MAX_SIBLINGS)
@@ -131,7 +129,6 @@ public class LinkedBox
 		}
 	}
 
-	// I don't think checking for null in these "getNum" methods is necessary because I instantiate the HashMaps on creation of this LinkedBox, but it doesn't hurt to check
 	public int getNumChildren()
 	{
 		return childLinks.size();
@@ -167,12 +164,17 @@ public class LinkedBox
 		return widthLevel;
 	}
 
+	/**
+	 *	Gets rid of the traces of itself in children/parents/siblings by removing the links to itself from those boxes.
+	 *	Will be key for removal later on.
+	 */
 	public void removeLinksToSelf()
 	{
 		Vector<OrganizerLink> childLinks = this.getChildLinks();
 		Vector<OrganizerLink> parentLinks = this.getParentLinks();
 		Vector<OrganizerLink> siblingLinks = this.getSiblingLinks();
 
+		// Remove references to self in children
 		for (OrganizerLink childLink : childLinks)
 		{
 			if (childLink.getStartBox().equals(this)) 
@@ -180,6 +182,8 @@ public class LinkedBox
 				childLink.getEndBox().removeParentLink(childLink);
 			}
 		}
+
+		// Remove references to self in parents
 		for (OrganizerLink parentLink : parentLinks)
 		{
 			if (parentLink.getEndBox().equals(this)) 
@@ -187,6 +191,8 @@ public class LinkedBox
 				parentLink.getStartBox().removeChildLink(parentLink);
 			}
 		}
+
+		// Remove references to self in siblings
 		for (OrganizerLink siblingLink : siblingLinks)
 		{
 			if (siblingLink.getStartBox().equals(this)) 
@@ -200,11 +206,16 @@ public class LinkedBox
 		}
 	}
 
+	/**
+	 *	Gets rid of the specific link from this to boxID
+	 */
 	public void removeLinkToBoxID(int boxID)
 	{
 		Vector<OrganizerLink> childLinks = this.getChildLinks();
 		Vector<OrganizerLink> parentLinks = this.getParentLinks();
 		Vector<OrganizerLink> siblingLinks = this.getSiblingLinks();
+
+		// Check the children
 		for (OrganizerLink childLink : childLinks)
 		{
 			LinkedBox endBox = childLink.getEndBox();
@@ -215,6 +226,8 @@ public class LinkedBox
 				return;
 			}
 		}
+
+		// Check the parents
 		for (OrganizerLink parentLink : parentLinks)
 		{
 			LinkedBox startBox = parentLink.getStartBox();
@@ -225,6 +238,8 @@ public class LinkedBox
 				return;
 			}
 		}
+
+		// Check the siblings
 		for (OrganizerLink siblingLink : siblingLinks)
 		{
 			LinkedBox startBox = siblingLink.getStartBox();
@@ -242,6 +257,8 @@ public class LinkedBox
 				return;
 			}
 		}
+
+		// If link hasn't been found by this point, it doesn't exist and we just return
 	}
 
 	// Box IDs are unique and final, so this is all we need for equality for now.  May change this later if I start comparing between maps for some reason
@@ -266,27 +283,31 @@ public class LinkedBox
 		}	
 	}
 
+	// Just outputs the box's boxID and rootID, not its children and parents and siblings
 	public String toStringShort()
 	{
-		StringBuilder buffer = new StringBuilder("\nBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID) + "\n");
+		StringBuilder buffer = new StringBuilder("\n\t\t\tBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID));
 		return buffer.toString();
 	}
 
+	/**
+	 *	Outputs this box's identification numbers as well as the ID's of all its children/parents/siblings
+	 */
 	@Override
 	public String toString()
 	{
-		StringBuilder buffer = new StringBuilder("\nBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID) + "\n");
-		buffer.append("\nCHILD BOXES...\n");
+		StringBuilder buffer = new StringBuilder("\n\t\tBEGIN BOX\n\t\tBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID));
+		buffer.append("\n\t\t\tCHILD BOXES...");
 		for (OrganizerLink childLink : childLinks)
 		{
 			buffer.append(childLink.getEndBox().toStringShort());
 		}
-		buffer.append("\nPARENT BOXES...\n");
+		buffer.append("\n\t\t\tPARENT BOXES...");
 		for (OrganizerLink parentLink : parentLinks)
 		{
 			buffer.append(parentLink.getStartBox().toStringShort());
 		}
-		buffer.append("\nSIBLING BOXES...\n");
+		buffer.append("\n\t\t\tSIBLING BOXES...");
 		for (OrganizerLink siblingLink : siblingLinks)
 		{
 			if (siblingLink.getEndBox().equals(this))
@@ -298,9 +319,7 @@ public class LinkedBox
 				buffer.append(siblingLink.getEndBox().toStringShort());
 			}
 		}
-		buffer.append("\n");
+		buffer.append("\n\t\tEND BOX\n");
 		return buffer.toString();
 	}
-
-	//TODO not really necessary at this point in time, but it's always good practice to provide a toString and copy method
 }

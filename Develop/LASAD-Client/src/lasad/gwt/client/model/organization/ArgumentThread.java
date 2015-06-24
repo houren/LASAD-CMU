@@ -5,6 +5,13 @@ import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import java.util.Collection;
 
+/**
+ *	An argument thread is a connected chain of boxes on the argument map space.
+ *  This class is useful for AutoOrganizer.
+ *	@author Kevin Loughlin
+ *	@since 19 June 2015, Updated 24 June 2015
+ */
+
 public class ArgumentThread
 {
 	// HashMap allows for constant lookup time by BoxID
@@ -183,14 +190,13 @@ public class ArgumentThread
 	@Override
 	public String toString()
 	{
-		StringBuilder buffer = new StringBuilder("\nArgument Thread\n");
-		buffer = buffer.append("boxes\n");
+		StringBuilder buffer = new StringBuilder("\n\tBEGIN ARGUMENT THREAD\n");
 		for (LinkedBox box : boxMap.values())
 		{
 			buffer = buffer.append(box.toString());
 		}
 
-		buffer = buffer.append("End of thread\n\n");
+		buffer = buffer.append("\n\tEND ARGUMENT THREAD\n");
 		return buffer.toString();
 	}
 }

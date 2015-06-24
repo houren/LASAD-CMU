@@ -9,11 +9,21 @@ import java.util.Collection;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.model.organization.LinkedBox;
 
+
+/**
+ *	An argument model is simply a vector of threads, i.e. a vector separate chains of arguments on the map space.
+ *	This format of modeling is more conducive to support for AutoOrganizer.
+ *	@author Kevin Loughlin
+ *	@since 19 June 2015, Updated 24 June 2015
+ */
 public class ArgumentModel
 {
 	private Vector<ArgumentThread> argThreads;
+
+	// One model instance per map, where String is mapID
 	private static HashMap<String, ArgumentModel> instances = new HashMap<String, ArgumentModel>();
 
+	// Just for this class, if we need to create a new instance below
 	private ArgumentModel()
 	{
 		this.argThreads = new Vector<ArgumentThread>();
@@ -23,6 +33,7 @@ public class ArgumentModel
 	{
 		ArgumentModel myArgModel = instances.get(mapID);
 
+		// if the model doesn't already exist, create it
 		if (myArgModel == null)
 		{
 			instances.put(mapID, new ArgumentModel());
@@ -92,14 +103,6 @@ public class ArgumentModel
 		return null;
 	}
 
-	/*
-	public boolean fromSameThread(OrganizerLink link)
-	{
-		return (getBoxThread(link.getStartBox()) == getBoxThread(link.getEndBox()));
-	}
-	*/
-
-	// Dangerous, be careful with this
 	public Collection<ArgumentThread> getArgThreads()
 	{
 		Collection<ArgumentThread> colArgThreads = argThreads;
@@ -109,13 +112,12 @@ public class ArgumentModel
 	@Override
 	public String toString()
 	{
-		StringBuilder buffer = new StringBuilder("\n\n*****\nArgument Model\n*****\n");
+		StringBuilder buffer = new StringBuilder("\n***********\nBEGIN ARGUMENT MODEL\n***********");
 		for (ArgumentThread argThread : this.argThreads)
 		{
 			buffer.append(argThread.toString());
 		}
-		buffer.append("END OF MODEL\n\n");
+		buffer.append("\n***********\nEND OF MODEL\n***********\n");
 		return buffer.toString();
 	}
-
 }
