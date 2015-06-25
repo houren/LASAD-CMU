@@ -43,7 +43,6 @@ import lasad.gwt.client.model.organization.ArgumentModel;
  * @since 12 June 2015, Updated 24 June 2015
  */
 
-// TODO how do we handle circular links?  Right now they MIGHT cause an endless loop, although I think this.visited takes care of that
 public class AutoOrganizer
 {
 	// Space between organized nodes
@@ -60,6 +59,7 @@ public class AutoOrganizer
 	private final int CENTER_X = 2400;
 	private final int CENTER_Y = CENTER_X;
 
+	// This is hack for LinkID, need to find to a way to get next available ID
 	private static int counterID = -1;
 
 	// All the boxes on the map
@@ -145,53 +145,18 @@ public class AutoOrganizer
 	 */
 	public void updateSiblingLinks(OrganizerLink link)
 	{
-		Logger.log("Entered updateSiblingLinks", Logger.DEBUG);
 		// The original link data
 		LinkedBox origStartBox = link.getStartBox();
 		LinkedBox origEndBox = link.getEndBox();
 		String linkType = link.getType();
 
-		if (origStartBox == null)
-		{
-			Logger.log("NULL NEG 1", Logger.DEBUG);
-		}
-		if (origEndBox == null)
-		{
-			Logger.log("NULL NEG 2", Logger.DEBUG);
-		}
-		if (linkType == null)
-		{
-			Logger.log("NULL NEG 3", Logger.DEBUG);	
-		}
-
-
 		if (linkType.equalsIgnoreCase("Linked Premises"))
 		{
-			Logger.log("Entered LinkPremises", Logger.DEBUG);
 			HashSet<OrganizerLink> origStartChildLinks = origStartBox.getChildLinks();
 			HashSet<LinkedBox> origStartChildBoxes = origStartBox.getChildBoxes();
 
 			HashSet<OrganizerLink> origEndChildLinks = origEndBox.getChildLinks();
 			HashSet<LinkedBox> origEndChildBoxes = origEndBox.getChildBoxes();
-
-			if (origStartChildLinks == null)
-			{
-				Logger.log("NULL 1", Logger.DEBUG);
-			}
-			if (origStartChildBoxes == null)
-			{
-				Logger.log("NULL 2", Logger.DEBUG);
-			}
-			if (origEndChildLinks == null)
-			{
-				Logger.log("NULL 3", Logger.DEBUG);
-			}
-			if (origEndChildBoxes == null)
-			{
-				Logger.log("NULL 4", Logger.DEBUG);	
-			}
-
-			Logger.log("Entering first loop", Logger.DEBUG);
 
 			for (OrganizerLink origStartChildLink : origStartChildLinks)
 			{
@@ -202,9 +167,7 @@ public class AutoOrganizer
 					addLinkToVisual(newLink);
 				}
 			}
-			Logger.log("Exited first loop", Logger.DEBUG);
 
-			Logger.log("Entering second loop", Logger.DEBUG);
 			for (OrganizerLink origEndChildLink : origEndChildLinks)
 			{
 				LinkedBox newChildBox = origEndChildLink.getEndBox();
@@ -214,13 +177,9 @@ public class AutoOrganizer
 					addLinkToVisual(newLink);
 				}
 			}
-			Logger.log("Exited second loop", Logger.DEBUG);
-
-			Logger.log("Exited LinkPremises", Logger.DEBUG);
 		}
 		else
 		{
-			Logger.log("Entered NON-LinkPremises", Logger.DEBUG);
 			// IMPORTANT: Clear the visited nodes HashSet to avoid collisions with anything in there previously
 			HashSet<LinkedBox> origStartSiblingBoxes = origStartBox.getSiblingBoxes();
 			visited.clear();
@@ -230,101 +189,17 @@ public class AutoOrganizer
 			}
 			 // potential start box, end box, type of link
 			visited.clear();
-
-			Logger.log("Exited NON-LinkPremises", Logger.DEBUG);
 		}
 	}
-		/*
-		// IMPORTANT: Clear the visited nodes HashSet to avoid collisions with anything in there previously
-		visited.clear();
 
-		// The original link data
-		LinkedBox origStartBox = link.getStartBox();
-		LinkedBox origEndBox = link.getEndBox();
-		String linkType = link.getType();
-
-		visited.add(origStartBox);
-
-		// Behaves differently depending on whether or not the link sub type is Linked Premises
-		if (linkType.equalsIgnoreCase("Linked Premises"))
-		{
-			/*	Important to note that the concept of "startBox" versus "endBox" isn't as crucial for siblingLinks
-				other than to distinguish between the two boxes. */
-/*
-			Logger.log("Entered Linked Premises Code", Logger.DEBUG);
-
-			HashSet<OrganizerLink> startChildLinks = origStartBox.getChildLinks();
-			HashSet<OrganizerLink> startSiblingLinks = origStartBox.getSiblingLinks();
-
-			HashSet<OrganizerLink> endChildLinks = origEndBox.getChildLinks();
-			HashSet<OrganizerLink> endSiblingLinks = origEndBox.getSiblingLinks();
-
-			for (OrganizerLink startChildLink : startChildLinks)
-			{
-				// Verify that every sibling of origStartBox connects to every child of the startBox
-				for (OrganizerLink startSiblingLink : startSiblingLinks)
-				{
-					updateRecursive(startSiblingLink, startChildLink);
-				}
-
-				visited.clear();
-				/*
-				// Verify that every sibling of origEndBox connects to every child of the startBox
-				for (OrganizerLink endSiblingLink : endSiblingLinks)
-				{
-					updateRecursive(endSiblingLink, startChildLink);
-				}
-
-				visited.clear();
-				*//*
-			}
-
-			for (OrganizerLink endChildLink : endChildLinks)
-			{
-				// Verify that every sibling of origStartBox connects to every child of the endBox
-				for (OrganizerLink startSiblingLink : startSiblingLinks)
-				{
-					updateRecursive(startSiblingLink, endChildLink);
-				}
-
-				visited.clear();
-				/*
-				// Verify that every sibling of origEndBox connects to every child of the endBox
-				for (OrganizerLink endSiblingLink : endSiblingLinks)
-				{
-					updateRecursive(endSiblingLink, endChildLink);
-				}
-
-				visited.clear();
-				*//*
-			}
-		}
-		else
-		{
-			Logger.log("Entered Other Link Type Code", Logger.DEBUG);
-			HashSet<OrganizerLink> siblingLinks = origStartBox.getSiblingLinks();
-
-			// Verify that all siblings of the origStartBox point to the endBox of the origLink
-			for (OrganizerLink siblingLink : siblingLinks)
-			{
-				updateRecursive(siblingLink, link);
-			}
-		}
-
-		// Reclear visited for added protection in case I forget to anywhere else
-		visited.clear();	
-		*/
-
-	/*	Recursively checks the siblings of a given box to see if they need to be updated with a new relation.
+	/*	Recursively checks the siblings of a given start box to see if they need to be updated with a new relation.
 	 *	Keeps track of boxes visited so that the method will eventually end.
-	 *	@param siblingLink - The Linked Premise from a box to its sibling box.  The sibling needs to receive a corresponding
-	 *	link similar to origLink.
-	 *	@param origLink - The original link from the startBox to a child/sibling.  We are checking the siblings of startBox
-	 *	for needed relation updates.  We use the type of origLink of one of its two boxes in making our new relation.
+	 *	@param startBox - The box from which we might make a link
+	 *	@param END_BOX - The constant box to which we will be connecting
+	 *	@param LINK_TYPE - The type of connection we will make
 	*/
 	private void updateRecursive(LinkedBox startBox, LinkedBox END_BOX, String LINK_TYPE)
 	{
-		Logger.log("Entered updateRecursive", Logger.DEBUG);
 		if (!visited.contains(startBox))
 		{
 			visited.add(startBox);
@@ -429,112 +304,92 @@ public class AutoOrganizer
 	*/
 	private void addLinkToVisual(OrganizerLink link)
 	{
-		try
-		{
-			Logger.log("Entered add link to visual", Logger.DEBUG);
-			// Get the argModel that we need to update
-			ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
+		// Get the argModel that we need to update
+		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
 
-			// Add the necessary links to the organizer model
-			if (link.getType().equalsIgnoreCase("Linked Premises"))
+		// Add the necessary links to the organizer model
+		if (link.getType().equalsIgnoreCase("Linked Premises"))
+		{
+			argModel.getBoxByBoxID(link.getStartBox().getBoxID()).addSiblingLink(link);
+			argModel.getBoxByBoxID(link.getEndBox().getBoxID()).addSiblingLink(link);
+		}
+		else
+		{
+			argModel.getBoxByBoxID(link.getStartBox().getBoxID()).addChildLink(link);
+			argModel.getBoxByBoxID(link.getEndBox().getBoxID()).addParentLink(link);
+		}
+		
+		String elementType = "relation";
+
+		MVController controller = LASAD_Client.getMVCController(map.getID());
+
+		ElementInfo linkInfo = new ElementInfo();
+		linkInfo.setElementType(elementType);
+
+		// a better name for element ID here would be subtype, as in, what kind of relation.  I didn't write it.
+		linkInfo.setElementID(link.getType());
+
+		String startBoxStringID = Integer.toString(link.getStartBox().getBoxID());
+		String endBoxStringID = Integer.toString(link.getEndBox().getBoxID());
+
+		ActionPackage myPackage = actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID);
+
+		for (Action a : myPackage.getActions())
+		{	
+			// From now on, elementID refers to element ID number.
+
+			// TODO: This is a hack, need to find proper element ID to use (next available)
+			int elementID = this.counterID;
+			counterID--;
+
+			String elementIDString = a.getParameterValue(ParameterTypes.Id);
+			if (elementIDString == null)
 			{
-				argModel.getBoxByBoxID(link.getStartBox().getBoxID()).addSiblingLink(link);
-				argModel.getBoxByBoxID(link.getEndBox().getBoxID()).addSiblingLink(link);
+				Logger.log("Element ID is null", Logger.DEBUG);
 			}
 			else
 			{
-				argModel.getBoxByBoxID(link.getStartBox().getBoxID()).addChildLink(link);
-				argModel.getBoxByBoxID(link.getEndBox().getBoxID()).addParentLink(link);
+				elementID = Integer.parseInt(elementIDString);
 			}
 
-			Logger.log("Arg model updated", Logger.DEBUG);
-			
-			String elementType = "relation";
+			String username = a.getParameterValue(ParameterTypes.UserName);
 
-			MVController controller = LASAD_Client.getMVCController(map.getID());
-
-			ElementInfo linkInfo = new ElementInfo();
-			linkInfo.setElementType(elementType);
-
-			// a better name for element ID here would be subtype, as in, what kind of relation.  I didn't write it.
-			linkInfo.setElementID(link.getType());
-
-			String startBoxStringID = Integer.toString(link.getStartBox().getBoxID());
-			String endBoxStringID = Integer.toString(link.getEndBox().getBoxID());
-
-			Logger.log("Creating action package", Logger.DEBUG);
-
-			ActionPackage myPackage = actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID);
-
-			Logger.log("Entering action loop", Logger.DEBUG);
-			for (Action a : myPackage.getActions())
-			{	
-				// From now on, elementID refers to element ID number.
-
-				int elementID = this.counterID;
-				counterID--;
-				String elementIDString = a.getParameterValue(ParameterTypes.Id);
-				if (elementIDString == null)
-				{
-					Logger.log("Element ID is null", Logger.DEBUG);
-				}
-				else
-				{
-					elementID = Integer.parseInt(elementIDString);
-				}
-				
-				Logger.log("Parse successfully", Logger.DEBUG);
-
-				String username = a.getParameterValue(ParameterTypes.UserName);
-
-				if (username == null)
-				{
-					Logger.log("User name is null", Logger.DEBUG);
-				}
-
-				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver] Create Model: " + elementID + ", Type: " + elementType,
-						Logger.DEBUG);
-				AbstractUnspecifiedElementModel elementModel = new UnspecifiedElementModelArgument(elementID, elementType, username);
-
-				if (a.getParameterValue(ParameterTypes.ReplayTime) != null) {
-					elementModel.setIsReplay(true);
-				}
-				// Needed to enable the add and del buttons in box header
-				if (a.getParameterValue(ParameterTypes.ElementId) != null) {
-					elementModel.setElementId(a.getParameterValue(ParameterTypes.ElementId));
-				}
-
-				// Add more specific data to the model
-				for (Parameter param : a.getParameters()) {
-					if (param.getType() != null && !param.getType().equals(ParameterTypes.Parent)
-							&& !param.getType().equals(ParameterTypes.HighlightElementId)) {
-						elementModel.setValue(param.getType(), param.getValue());
-					}
-				}
-
-				// Work on parent relations
-				if (a.getParameterValues(ParameterTypes.Parent) != null) {
-					for (String parentID : a.getParameterValues(ParameterTypes.Parent)) {
-						controller.setParent(elementModel, controller.getElement(Integer.parseInt(parentID)));
-
-						Logger.log("[lasad.gwt.client.communication.LASADActionReceiver] Added ParentElement: " + parentID, Logger.DEBUG);
-					}
-				}
-
-				// Now Register new Element to the default Model (what will actually update it on the map)
-				Logger.log("Adding to model", Logger.DEBUG);
-				controller.addElementModel(elementModel);
-				Logger.log("Added to model", Logger.DEBUG);
-
-				// End Kevin Loughlin
+			if (username == null)
+			{
+				Logger.log("User name is null", Logger.DEBUG);
 			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			Logger.log("EXCEPTION CAUGHT", Logger.DEBUG);
-		}
 
-		Logger.log("Exited add link to visual", Logger.DEBUG);
+			Logger.log("[lasad.gwt.client.communication.LASADActionReceiver] Create Model: " + elementID + ", Type: " + elementType,
+					Logger.DEBUG);
+			AbstractUnspecifiedElementModel elementModel = new UnspecifiedElementModelArgument(elementID, elementType, username);
+
+			if (a.getParameterValue(ParameterTypes.ReplayTime) != null) {
+				elementModel.setIsReplay(true);
+			}
+			// Needed to enable the add and del buttons in box header
+			if (a.getParameterValue(ParameterTypes.ElementId) != null) {
+				elementModel.setElementId(a.getParameterValue(ParameterTypes.ElementId));
+			}
+
+			// Add more specific data to the model
+			for (Parameter param : a.getParameters()) {
+				if (param.getType() != null && !param.getType().equals(ParameterTypes.Parent)
+						&& !param.getType().equals(ParameterTypes.HighlightElementId)) {
+					elementModel.setValue(param.getType(), param.getValue());
+				}
+			}
+
+			// Work on parent relations
+			if (a.getParameterValues(ParameterTypes.Parent) != null) {
+				for (String parentID : a.getParameterValues(ParameterTypes.Parent)) {
+					controller.setParent(elementModel, controller.getElement(Integer.parseInt(parentID)));
+
+					Logger.log("[lasad.gwt.client.communication.LASADActionReceiver] Added ParentElement: " + parentID, Logger.DEBUG);
+				}
+			}
+
+			// Now Register new Element to the default Model (what will actually update it on the map)
+			controller.addElementModel(elementModel);
+		}
 	}
 }

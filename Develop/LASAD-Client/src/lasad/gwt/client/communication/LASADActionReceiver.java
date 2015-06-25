@@ -586,7 +586,7 @@ public class LASADActionReceiver {
 						argModel.removeArgThread(endBoxThread);
 					}
 
-					Logger.log("Model after creation" + argModel.toString(), Logger.DEBUG);
+					Logger.log("Model before update Sibling Links" + argModel.toString(), Logger.DEBUG);
 
 					autoOrganizer.updateSiblingLinks(link);
 					Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);

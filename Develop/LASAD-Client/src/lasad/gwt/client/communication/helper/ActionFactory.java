@@ -526,9 +526,7 @@ public class ActionFactory {
 		resultingActions.add(a);
 
 		if (existingChildElements == null) {
-			Logger.log("Hey there", Logger.DEBUG);
 			Collection<ElementInfo> childElements = info.getChildElements().values();
-			Logger.log("Hey there", Logger.DEBUG);
 			for (ElementInfo childElement : childElements) {
 				Logger.log("Creating action for ChildElement: " + childElement.getElementType(), Logger.DEBUG);
 
