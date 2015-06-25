@@ -91,6 +91,10 @@ public class LASADActionReceiver {
 	private List<Integer> elementReplay;
 	private ReplayInitializer init;
 
+	private boolean siblingsAlreadyUpdated = false;
+
+	private static int counterID = -1;
+
 	// David Drexler Edit-END
 
 	public static LASADActionReceiver getInstance() {
@@ -101,6 +105,11 @@ public class LASADActionReceiver {
 	}
 
 	private LASADActionReceiver() {
+	}
+
+	public void setSiblingsAlreadyUpdated(boolean alreadyUpdated)
+	{
+		this.siblingsAlreadyUpdated = alreadyUpdated;
 	}
 
 	public void doActionPackage(ActionPackage p) {
@@ -465,10 +474,14 @@ public class LASADActionReceiver {
 
 				String elementIDString = a.getParameterValue(ParameterTypes.Id);
 
-				int elementID = -1;
+				int elementID = counterID;
 
 				if (elementIDString != null) {
 					elementID = Integer.parseInt(elementIDString);
+				}
+				else
+				{
+					counterID--;
 				}
 
 				String username = a.getParameterValue(ParameterTypes.UserName);
@@ -588,8 +601,17 @@ public class LASADActionReceiver {
 
 					Logger.log("Model before update Sibling Links" + argModel.toString(), Logger.DEBUG);
 
-					autoOrganizer.updateSiblingLinks(link);
-					Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
+					if (siblingsAlreadyUpdated)
+					{
+						Logger.log("Did not update sibling links", Logger.DEBUG);
+						this.setSiblingsAlreadyUpdated(false);
+					}
+					else
+					{
+						// This will change the alreadyUpdate field for us
+						autoOrganizer.updateSiblingLinks(link);
+						Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
+					}
 				}
 
 				// End Kevin Loughlin
@@ -753,9 +775,13 @@ public class LASADActionReceiver {
 				}
 
 				String elementIDString = a.getParameterValue(ParameterTypes.Id);
-				int elementID = -1;
+				int elementID = counterID;
 				if (elementIDString != null) {
 					elementID = Integer.parseInt(elementIDString);
+				}
+				else
+				{
+					elementID--;
 				}
 
 				String username = a.getParameterValue(ParameterTypes.UserName);
@@ -870,8 +896,16 @@ public class LASADActionReceiver {
 
 					Logger.log("Model after creation" + argModel.toString(), Logger.DEBUG);
 
-					autoOrganizer.updateSiblingLinks(link);
-					Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
+					if (siblingsAlreadyUpdated)
+					{
+						Logger.log("Did not update sibling links", Logger.DEBUG);
+						this.setSiblingsAlreadyUpdated(false);
+					}
+					else
+					{
+						autoOrganizer.updateSiblingLinks(link);
+						Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
+					}
 				}
 				// End Kevin Loughlin
 

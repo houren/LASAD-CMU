@@ -7440,3 +7440,197 @@ Image concatenated.....
 25-Jun-2015 12:22:09.176 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
 25-Jun-2015 12:22:09.206 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
 25-Jun-2015 12:22:09.207 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+25-Jun-2015 14:06:30.030 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+25-Jun-2015 14:06:30.038 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+25-Jun-2015 14:06:30.038 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+25-Jun-2015 14:06:30.038 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+25-Jun-2015 14:06:30.038 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+25-Jun-2015 14:06:30.038 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+25-Jun-2015 14:06:30.039 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+25-Jun-2015 14:06:30.039 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+25-Jun-2015 14:06:30.039 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+25-Jun-2015 14:06:30.039 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+25-Jun-2015 14:06:30.039 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+25-Jun-2015 14:06:30.040 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+25-Jun-2015 14:06:30.040 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+25-Jun-2015 14:06:30.040 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+25-Jun-2015 14:06:30.040 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+25-Jun-2015 14:06:30.040 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+25-Jun-2015 14:06:30.040 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+25-Jun-2015 14:06:30.040 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+25-Jun-2015 14:06:30.209 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+25-Jun-2015 14:06:30.238 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+25-Jun-2015 14:06:30.240 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+25-Jun-2015 14:06:30.242 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+25-Jun-2015 14:06:30.243 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 674 ms
+25-Jun-2015 14:06:30.268 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+25-Jun-2015 14:06:30.269 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+25-Jun-2015 14:06:30.297 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+25-Jun-2015 14:06:33.668 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+25-Jun-2015 14:06:33.772 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 3,474 ms
+25-Jun-2015 14:06:33.776 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+25-Jun-2015 14:06:33.793 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 17 ms
+25-Jun-2015 14:06:33.793 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+25-Jun-2015 14:06:34.098 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 305 ms
+25-Jun-2015 14:06:34.101 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+25-Jun-2015 14:06:34.135 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 34 ms
+25-Jun-2015 14:06:34.136 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+25-Jun-2015 14:06:34.169 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 34 ms
+25-Jun-2015 14:06:34.170 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+25-Jun-2015 14:06:34.196 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 26 ms
+25-Jun-2015 14:06:34.217 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+25-Jun-2015 14:06:34.225 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+25-Jun-2015 14:06:34.226 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 3983 ms
+25-Jun-2015 14:06:44.677 INFO [http-nio-8080-exec-5] de.novanic.eventservice.logger.DefaultServerLogger.log Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+25-Jun-2015 14:06:44.852 INFO [http-nio-8080-exec-5] null.null Server: Client "78858BF4E72C2DE8FBD451ED8AA930F31404069971" initialized.
+25-Jun-2015 14:10:32.697 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+25-Jun-2015 14:10:32.697 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+25-Jun-2015 14:10:32.752 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+25-Jun-2015 14:10:32.807 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+25-Jun-2015 14:10:32.824 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+25-Jun-2015 14:10:33.851 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+25-Jun-2015 14:10:34.876 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+25-Jun-2015 14:10:34.984 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] is still processing a request that has yet to finish. This is very likely to create a memory leak. You can control the time allowed for requests to finish by using the unloadDelay attribute of the standard Context implementation. Stack trace of request processing thread:
+ java.lang.Object.wait(Native Method)
+ de.novanic.eventservice.service.connection.strategy.connector.ConnectionStrategyServerConnectorAdapter.waitMaxWaitingTime(ConnectionStrategyServerConnectorAdapter.java:82)
+ de.novanic.eventservice.service.connection.strategy.connector.longpolling.LongPollingServerConnector.listen(LongPollingServerConnector.java:62)
+ de.novanic.eventservice.service.registry.DefaultEventRegistry.listen(DefaultEventRegistry.java:223)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:242)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:227)
+ sun.reflect.GeneratedMethodAccessor36.invoke(Unknown Source)
+ sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+ java.lang.reflect.Method.invoke(Method.java:497)
+ com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:561)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+ com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:291)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)
+ org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+ org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+ org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:142)
+ org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+ org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:617)
+ org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+ org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:518)
+ org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1091)
+ org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:668)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1521)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1478)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+ java.lang.Thread.run(Thread.java:745)
+25-Jun-2015 14:10:34.985 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+25-Jun-2015 14:10:35.007 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+25-Jun-2015 14:10:35.084 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+25-Jun-2015 14:10:35.153 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+25-Jun-2015 14:10:35.154 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+25-Jun-2015 14:15:33.941 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+25-Jun-2015 14:15:33.943 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+25-Jun-2015 14:15:33.943 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+25-Jun-2015 14:15:33.943 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+25-Jun-2015 14:15:33.943 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+25-Jun-2015 14:15:33.943 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+25-Jun-2015 14:15:33.944 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+25-Jun-2015 14:15:33.944 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+25-Jun-2015 14:15:33.944 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+25-Jun-2015 14:15:33.944 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+25-Jun-2015 14:15:33.944 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+25-Jun-2015 14:15:33.945 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+25-Jun-2015 14:15:33.945 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+25-Jun-2015 14:15:33.945 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+25-Jun-2015 14:15:33.945 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+25-Jun-2015 14:15:33.945 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+25-Jun-2015 14:15:33.945 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+25-Jun-2015 14:15:33.945 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+25-Jun-2015 14:15:34.089 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+25-Jun-2015 14:15:34.111 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+25-Jun-2015 14:15:34.113 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+25-Jun-2015 14:15:34.115 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+25-Jun-2015 14:15:34.115 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 537 ms
+25-Jun-2015 14:15:34.134 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+25-Jun-2015 14:15:34.134 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+25-Jun-2015 14:15:34.155 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+25-Jun-2015 14:15:36.311 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+25-Jun-2015 14:15:36.416 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 2,262 ms
+25-Jun-2015 14:15:36.417 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+25-Jun-2015 14:15:36.437 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 19 ms
+25-Jun-2015 14:15:36.437 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+25-Jun-2015 14:15:36.693 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 256 ms
+25-Jun-2015 14:15:36.693 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+25-Jun-2015 14:15:36.725 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 31 ms
+25-Jun-2015 14:15:36.725 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+25-Jun-2015 14:15:36.761 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 35 ms
+25-Jun-2015 14:15:36.761 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+25-Jun-2015 14:15:36.787 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 26 ms
+25-Jun-2015 14:15:36.791 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+25-Jun-2015 14:15:36.799 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+25-Jun-2015 14:15:36.802 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 2686 ms
+25-Jun-2015 14:16:11.189 INFO [http-nio-8080-exec-4] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+25-Jun-2015 14:16:11.305 INFO [http-nio-8080-exec-4] null.null Server: Client "D986B0A300356E87D60EDD8A759EEA2E1099684897" initialized.
+
+<lasad version="1.13"><ontology type="Harrell_DiagrammingOntology">    <elements>        <element elementtype="box" elementid="Premise" minquantity="0" maxquantity="0" quantity="0">            <elementoptions heading="Premise" />            <uisettings width="200" height="200" border="standard" background-color="#FFCC00" />            <childelements>                <element elementtype="text" elementid="Premise-text" minquantity="1" maxquantity="1" quantity="1">                    <elementoptions />                    <uisettings minheight="42" />                    <childelements />                </element>                <element elementtype="awareness" elementid="author" minquantity="1" maxquantity="1" quantity="1">                    <elementoptions />                    <uisettings minheight="16" maxheight="16" />                    <childelements />                </element>            </childelements>        </element>        <element elementtype="box" elementid="Conclusion" minquantity="0" maxquantity="0" quantity="0">            <elementoptions heading="Conclusion" />            <uisettings width="200" height="200" border="standard" background-color="#99CCFF" />            <childelements>                <element elementtype="text" elementid="Conclusion-text" minquantity="1" maxquantity="1" quantity="1">                    <elementoptions />                    <uisettings minheight="42" />                    <childelements />                </element>                <element elementtype="awareness" elementid="author" minquantity="1" maxquantity="1" quantity="1">                    <elementoptions />                    <uisettings minheight="16" maxheight="16" />                    <childelements />                </element>            </childelements>        </element>        <element elementtype="box" elementid="Refutation" minquantity="0" maxquantity="0" quantity="0">            <elementoptions heading="Refutation" />            <uisettings width="200" height="200" border="standard" background-color="red" />            <childelements>                <element elementtype="text" elementid="Refutation-text" minquantity="1" maxquantity="1" quantity="1">                    <elementoptions />                    <uisettings minheight="42" />                    <childelements />                </element>                <element elementtype="awareness" elementid="author" minquantity="1" maxquantity="1" quantity="1">                    <elementoptions />                    <uisettings minheight="16" maxheight="16" />                    <childelements />                </element>            </childelements>        </element>        <element elementtype="box" elementid="Instructor-Comment" minquantity="0" maxquantity="0" quantity="0">            <elementoptions heading="Instructor-Comment" />            <uisettings width="200" height="200" border="standard" background-color="yellow" />            <childelements>                <element elementtype="text" elementid="Instructor-Comment-text" minquantity="1" maxquantity="1" quantity="1">                <elementoptions />                <uisettings minheight="42" />                <childelements />                </element>            <element elementtype="awareness" elementid="author" minquantity="1" maxquantity="1" quantity="1">                <elementoptions />                <uisettings minheight="16" maxheight="16" />                <childelements />            </element>            </childelements>        </element>        <element elementtype="relation" elementid="Support" minquantity="0" maxquantity="0" quantity="0">            <elementoptions heading="Support" endings="true" details="false" />            <uisettings width="120" height="200" background-color="green" linewidth="4px" linecolor="green" />            <childelements />        </element>        <element elementtype="relation" elementid="Objection" minquantity="0" maxquantity="0" quantity="0">            <elementoptions heading="Objection" endings="true" details="false" />            <uisettings width="120" height="200" background-color="red" linewidth="4px" linecolor="red" />            <childelements />        </element>        <element elementtype="relation" elementid="Linked Premises" minquantity="0" maxquantity="0" quantity="0">            <elementoptions heading="Linked Premises" endings="false" details="false" />            <uisettings width="120" height="200" background-color="blue" linewidth="6px" linecolor="blue" />            <childelements />        </element>        <element elementtype="relation" elementid="Instructor-Pointer" minquantity="0" maxquantity="0" quantity="0">            <elementoptions heading="Instructor-Pointer" endings="true" details="false" />            <uisettings width="120" height="200" background-color="#000000" linewidth="4px" linecolor="#000000" />            <childelements />        </element>    </elements></ontology><maptemplate uniquename="Harrell_DiagrammingOntologyTemplate" title="Harrell_DiagrammingOntologyTemplate" ontology="Harrell_DiagrammingOntology">  <mapdetails>    <description>Template for Mara Harrell's class</description>    <options maxuser="30" chatsystem="true" listofusers="true" minimap="false" track-cursor="false" selection-details="false" onlyauthorcanmodify="false" committextbyenter="true" straightlink="true" AutoGrowTextArea="false" />  </mapdetails></maptemplate><content><element id="20" type="box" element-id="Premise" root-element-id="1" pos-x="2142" pos-y="2535" height="100" width="200" username="d1"><sub-element type="text"><parameter><name>USERNAME</name><value>d1</value></parameter><parameter><name>TYPE</name><value>text</value></parameter><parameter><name>MAP-ID</name><value>2</value></parameter><parameter><name>ELEMENT-ID</name><value>Premise-text</value></parameter><parameter><name>USERACTION-ID</name><value>D986B0A300356E87D60EDD8A759EEA2E10996848971435256343380</value></parameter><parameter><name>NUM-ACTIONS</name><value>3</value></parameter></sub-element><sub-element type="awareness"><parameter><name>USERNAME</name><value>d1</value></parameter><parameter><name>TYPE</name><value>awareness</value></parameter><parameter><name>MAP-ID</name><value>2</value></parameter><parameter><name>ELEMENT-ID</name><value>author</value></parameter><parameter><name>TIME</name><value>1435256343402</value></parameter><parameter><name>USERACTION-ID</name><value>D986B0A300356E87D60EDD8A759EEA2E10996848971435256343380</value></parameter><parameter><name>NUM-ACTIONS</name><value>3</value></parameter></sub-element></element><element id="23" type="box" element-id="Premise" root-element-id="2" pos-x="2857" pos-y="2201" height="101" width="200" username="d1"><sub-element type="text"><parameter><name>USERNAME</name><value>d1</value></parameter><parameter><name>TYPE</name><value>text</value></parameter><parameter><name>MAP-ID</name><value>2</value></parameter><parameter><name>ELEMENT-ID</name><value>Premise-text</value></parameter><parameter><name>USERACTION-ID</name><value>D986B0A300356E87D60EDD8A759EEA2E10996848971435256346372</value></parameter><parameter><name>NUM-ACTIONS</name><value>4</value></parameter></sub-element><sub-element type="awareness"><parameter><name>USERNAME</name><value>d1</value></parameter><parameter><name>TYPE</name><value>awareness</value></parameter><parameter><name>MAP-ID</name><value>2</value></parameter><parameter><name>ELEMENT-ID</name><value>author</value></parameter><parameter><name>TIME</name><value>1435256346398</value></parameter><parameter><name>USERACTION-ID</name><value>D986B0A300356E87D60EDD8A759EEA2E10996848971435256346372</value></parameter><parameter><name>NUM-ACTIONS</name><value>4</value></parameter></sub-element></element><element id="27" type="box" element-id="Premise" root-element-id="4" pos-x="2185" pos-y="2204" height="100" width="200" username="d1"><sub-element type="text"><parameter><name>USERNAME</name><value>d1</value></parameter><parameter><name>TYPE</name><value>text</value></parameter><parameter><name>MAP-ID</name><value>2</value></parameter><parameter><name>ELEMENT-ID</name><value>Premise-text</value></parameter><parameter><name>USERACTION-ID</name><value>D986B0A300356E87D60EDD8A759EEA2E10996848971435256352267</value></parameter><parameter><name>NUM-ACTIONS</name><value>4</value></parameter></sub-element><sub-element type="awareness"><parameter><name>USERNAME</name><value>d1</value></parameter><parameter><name>TYPE</name><value>awareness</value></parameter><parameter><name>MAP-ID</name><value>2</value></parameter><parameter><name>ELEMENT-ID</name><value>author</value></parameter><parameter><name>TIME</name><value>1435256352304</value></parameter><parameter><name>USERACTION-ID</name><value>D986B0A300356E87D60EDD8A759EEA2E10996848971435256352267</value></parameter><parameter><name>NUM-ACTIONS</name><value>4</value></parameter></sub-element></element><element id="31" type="box" element-id="Premise" root-element-id="6" pos-x="2680" pos-y="2521" height="101" width="200" username="d1"><sub-element type="text"><parameter><name>USERNAME</name><value>d1</value></parameter><parameter><name>TYPE</name><value>text</value></parameter><parameter><name>MAP-ID</name><value>2</value></parameter><parameter><name>ELEMENT-ID</name><value>Premise-text</value></parameter><parameter><name>USERACTION-ID</name><value>D986B0A300356E87D60EDD8A759EEA2E10996848971435256360261</value></parameter><parameter><name>NUM-ACTIONS</name><value>4</value></parameter></sub-element><sub-element type="awareness"><parameter><name>USERNAME</name><value>d1</value></parameter><parameter><name>TYPE</name><value>awareness</value></parameter><parameter><name>MAP-ID</name><value>2</value></parameter><parameter><name>ELEMENT-ID</name><value>author</value></parameter><parameter><name>TIME</name><value>1435256360277</value></parameter><parameter><name>USERACTION-ID</name><value>D986B0A300356E87D60EDD8A759EEA2E10996848971435256360261</value></parameter><parameter><name>NUM-ACTIONS</name><value>4</value></parameter></sub-element></element><element type="relation" element-id="Support" root-element-id="3" start-parent-root-element-id="1" end-parent-root-element-id="2" height="13" width="13" username="d1"/><element type="relation" element-id="Objection" root-element-id="5" start-parent-root-element-id="1" end-parent-root-element-id="4" height="12" width="12" username="d1"/><element type="relation" element-id="Linked Premises" root-element-id="7" start-parent-root-element-id="1" end-parent-root-element-id="6" height="13" width="12" username="d1"/><element type="relation" element-id="Support" root-element-id="null" start-parent-root-element-id="6" end-parent-root-element-id="2" height="12" width="13" username="null"/><element type="relation" element-id="Objection" root-element-id="null" start-parent-root-element-id="6" end-parent-root-element-id="4" height="12" width="12" username="null"/></content><chatlog/><backgroundimg>image.jpg</backgroundimg></lasad>
+25-Jun-2015 14:24:00.492 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+25-Jun-2015 14:24:00.493 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+25-Jun-2015 14:24:00.546 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+25-Jun-2015 14:24:00.598 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+25-Jun-2015 14:24:00.609 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+25-Jun-2015 14:24:01.650 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+25-Jun-2015 14:24:02.681 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+25-Jun-2015 14:24:02.786 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+25-Jun-2015 14:24:02.787 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] is still processing a request that has yet to finish. This is very likely to create a memory leak. You can control the time allowed for requests to finish by using the unloadDelay attribute of the standard Context implementation. Stack trace of request processing thread:
+ java.lang.Object.wait(Native Method)
+ de.novanic.eventservice.service.connection.strategy.connector.ConnectionStrategyServerConnectorAdapter.waitMaxWaitingTime(ConnectionStrategyServerConnectorAdapter.java:82)
+ de.novanic.eventservice.service.connection.strategy.connector.longpolling.LongPollingServerConnector.listen(LongPollingServerConnector.java:62)
+ de.novanic.eventservice.service.registry.DefaultEventRegistry.listen(DefaultEventRegistry.java:223)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:242)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:227)
+ sun.reflect.GeneratedMethodAccessor36.invoke(Unknown Source)
+ sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+ java.lang.reflect.Method.invoke(Method.java:497)
+ com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:561)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+ com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:291)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)
+ org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+ org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+ org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:142)
+ org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+ org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:617)
+ org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+ org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:518)
+ org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1091)
+ org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:668)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1521)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1478)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+ java.lang.Thread.run(Thread.java:745)
+25-Jun-2015 14:24:02.802 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+25-Jun-2015 14:24:02.889 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+25-Jun-2015 14:24:02.925 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+25-Jun-2015 14:24:02.926 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]

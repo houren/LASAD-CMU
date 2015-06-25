@@ -32,6 +32,8 @@ import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.model.organization.ArgumentThread;
 import lasad.gwt.client.model.organization.ArgumentModel;
 
+import lasad.gwt.client.communication.LASADActionReceiver;
+
 /**
  * An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update links
  * in ArgumentMap representations where a type of relation is listed as "Linked Premises" (not case sensitive). The overall map organizing function,
@@ -333,7 +335,13 @@ public class AutoOrganizer
 		String endBoxStringID = Integer.toString(link.getEndBox().getBoxID());
 
 		ActionPackage myPackage = actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID);
+		LASADActionReceiver receiver = LASADActionReceiver.getInstance();
+		receiver.setSiblingsAlreadyUpdated(true);
+		receiver.doActionPackage(myPackage);
+	}
+}
 
+		/*
 		for (Action a : myPackage.getActions())
 		{	
 			// From now on, elementID refers to element ID number.
@@ -390,6 +398,4 @@ public class AutoOrganizer
 
 			// Now Register new Element to the default Model (what will actually update it on the map)
 			controller.addElementModel(elementModel);
-		}
-	}
-}
+			*/
