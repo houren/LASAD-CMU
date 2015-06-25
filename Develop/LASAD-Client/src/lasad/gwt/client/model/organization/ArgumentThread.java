@@ -56,8 +56,15 @@ public class ArgumentThread
 
 	public void addBox(LinkedBox box)
 	{
-		boxMap.put(new Integer(box.getBoxID()), box);
-		ifRootAddBox(box);
+		if (boxMap.values().contains(box))
+		{
+			return;
+		}
+		else
+		{
+			boxMap.put(new Integer(box.getBoxID()), box);
+			ifRootAddBox(box);
+		}
 	}
 
 	public void addBoxes(Collection<LinkedBox> boxes)
@@ -181,7 +188,7 @@ public class ArgumentThread
 
 	private void ifRootAddBox(LinkedBox box)
 	{
-		if (box.getNumParents() == 0)
+		if (box.getNumParents() == 0 && (!rootBoxMap.values().contains(box)))
 		{
 			rootBoxMap.put(new Integer(box.getBoxID()), box);
 		}

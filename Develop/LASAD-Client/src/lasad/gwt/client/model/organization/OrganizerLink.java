@@ -154,7 +154,7 @@ public class OrganizerLink
 		if (object instanceof OrganizerLink)
 		{
 			OrganizerLink link = (OrganizerLink) object;
-			if (this.startBox.equals(link.getStartBox()) && this.endBox.equals(link.getEndBox()) && link.getType().equalsIgnoreCase(this.type))
+			if (startBox.equals(link.getStartBox()) && endBox.equals(link.getEndBox()) && link.getType().equalsIgnoreCase(type))
 			{
 				return true;
 			}

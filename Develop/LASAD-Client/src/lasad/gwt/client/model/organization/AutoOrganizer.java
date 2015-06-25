@@ -307,6 +307,7 @@ public class AutoOrganizer
 	private void addLinkToVisual(OrganizerLink link)
 	{
 		// Get the argModel that we need to update
+		/*
 		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
 
 		// Add the necessary links to the organizer model
@@ -320,6 +321,7 @@ public class AutoOrganizer
 			argModel.getBoxByBoxID(link.getStartBox().getBoxID()).addChildLink(link);
 			argModel.getBoxByBoxID(link.getEndBox().getBoxID()).addParentLink(link);
 		}
+		*/
 		
 		String elementType = "relation";
 
