@@ -335,9 +335,8 @@ public class AutoOrganizer
 		String endBoxStringID = Integer.toString(link.getEndBox().getBoxID());
 
 		ActionPackage myPackage = actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID);
-		LASADActionReceiver receiver = LASADActionReceiver.getInstance();
-		receiver.setSiblingsAlreadyUpdated(true);
-		receiver.doActionPackage(myPackage);
+		LASADActionReceiver.getInstance().setSiblingsAlreadyUpdated(true);
+		communicator.sendActionPackage(myPackage);
 	}
 }
 
