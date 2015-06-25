@@ -24,30 +24,20 @@ public class LinkedBox
 	private final int rootID;
 
 	private HashSet<OrganizerLink> childLinks;
+	private HashSet<LinkedBox> childBoxes;
+
 	private HashSet<OrganizerLink> parentLinks;
+	private HashSet<LinkedBox> parentBoxes;
 
 	// siblingLinks are those that are of subType "Linked Premises" and are thus handled differently
 	private HashSet<OrganizerLink> siblingLinks;
+	private HashSet<LinkedBox> siblingBoxes;
 
 	// Height and width level will be used like a coordinate grid once we come to organizeMap() of AutoOrganizer
 	private int heightLevel;
 	private int widthLevel;
 
-
-	// I doubt this constructor is ever going to be used, but I made it just in case
-	public LinkedBox(int boxID, int rootID, String type, HashSet<OrganizerLink> childLinks, HashSet<OrganizerLink> parentLinks, HashSet<OrganizerLink> siblingLinks, int heightLevel, int widthLevel)
-	{
-		this.boxID = boxID;
-		this.rootID = rootID;
-		this.type = type;
-		this.childLinks = childLinks;
-		this.parentLinks = parentLinks;
-		this.siblingLinks = siblingLinks;
-		this.heightLevel = heightLevel;
-		this.widthLevel = widthLevel;
-	}
-
-	// This is the meat and bones constructor used in AutoOrganizer
+	// This is the meat and bones constructor
 	public LinkedBox(int boxID, int rootID, String type)
 	{
 		this.boxID = boxID;
@@ -56,6 +46,9 @@ public class LinkedBox
 		this.childLinks = new HashSet<OrganizerLink>();
 		this.parentLinks = new HashSet<OrganizerLink>();
 		this.siblingLinks = new HashSet<OrganizerLink>();
+		this.childBoxes = new HashSet<LinkedBox>();
+		this.parentBoxes = new HashSet<LinkedBox>();
+		this.siblingBoxes = new HashSet<LinkedBox>();
 		this.heightLevel = 0;
 		this.widthLevel = 0;
 	}
@@ -69,6 +62,9 @@ public class LinkedBox
 		this.childLinks = new HashSet<OrganizerLink>();
 		this.parentLinks = new HashSet<OrganizerLink>();
 		this.siblingLinks = new HashSet<OrganizerLink>();
+		this.childBoxes = new HashSet<LinkedBox>();
+		this.parentBoxes = new HashSet<LinkedBox>();
+		this.siblingBoxes = new HashSet<LinkedBox>();
 		this.heightLevel = ERROR;
 		this.widthLevel = ERROR;
 	}
@@ -103,36 +99,71 @@ public class LinkedBox
 		return siblingLinks;
 	}
 
-	// I naturally avoid duplicates in all add methods by implementing this with HashSet
+	public HashSet<LinkedBox> getChildBoxes()
+	{
+		return childBoxes;
+	}
+
+	public HashSet<LinkedBox> getParentBoxes()
+	{
+		return parentBoxes;
+	}
+
+	public HashSet<LinkedBox> getSiblingBoxes()
+	{
+		return siblingBoxes;
+	}
+
+	// I naturally avoid duplicates in all add methods by implementing this with HashSet.  Takes care of updating boxes too.
 
 	public void addChildLink(OrganizerLink link)
 	{
 		this.childLinks.add(link);
+		this.childBoxes.add(link.getEndBox());
 	}
 
 	public void addParentLink(OrganizerLink link)
 	{
 		this.parentLinks.add(link);
+		this.parentBoxes.add(link.getStartBox());
 	}
 
 	public void addSiblingLink(OrganizerLink link)
 	{
 		this.siblingLinks.add(link);
+		if (link.getStartBox().equals(this))
+		{
+			this.siblingBoxes.add(link.getEndBox());
+		}
+		else
+		{
+			this.siblingBoxes.add(link.getStartBox());
+		}
 	}
 
 	public void removeChildLink(OrganizerLink link)
 	{
 		this.childLinks.remove(link);
+		this.childBoxes.remove(link.getEndBox());
 	}
 
 	public void removeParentLink(OrganizerLink link)
 	{
 		this.parentLinks.remove(link);
+		this.parentBoxes.remove(link.getStartBox());
 	}
 
 	public void removeSiblingLink(OrganizerLink link)
 	{
 		this.siblingLinks.remove(link);
+		if (link.getStartBox().equals(this))
+		{
+			this.siblingBoxes.remove(link.getEndBox());
+		}
+		else
+		{
+			this.siblingBoxes.remove(link.getStartBox());
+		}
 	}
 
 	public int getNumChildren()

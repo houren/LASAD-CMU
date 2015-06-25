@@ -588,7 +588,7 @@ public class LASADActionReceiver {
 
 					Logger.log("Model after creation" + argModel.toString(), Logger.DEBUG);
 
-					//autoOrganizer.updateSiblingLinks(link);
+					autoOrganizer.updateSiblingLinks(link);
 					Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
 				}
 
@@ -870,7 +870,7 @@ public class LASADActionReceiver {
 
 					Logger.log("Model after creation" + argModel.toString(), Logger.DEBUG);
 
-					//autoOrganizer.updateSiblingLinks(link);
+					autoOrganizer.updateSiblingLinks(link);
 					Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
 				}
 				// End Kevin Loughlin
