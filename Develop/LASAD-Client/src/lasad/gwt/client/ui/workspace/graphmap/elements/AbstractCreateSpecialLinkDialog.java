@@ -82,7 +82,24 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 		comboStart.setFieldLabel("<font color=\"#000000\">" + "Start" + "</font>");
 		comboStart.setAllowBlank(false);
 		for (String id : boxes.keySet()) {
-			comboStart.add(id);
+			// TODO : Verify I'm only doing linked premises between premises
+			// Be careful about RootID vs Box ID
+
+			if (config.getElementID().equalsIgnoreCase("Linked Premises"))
+			{
+				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
+				LinkedBox alpha = argModel.getBoxByRootID(Integer.parseInt(id));
+
+				if (alpha.getNumSiblings() < MAX_SIBLINGS && alpha.getType().equalsIgnoreCase("Premise"))
+				{
+					comboStart.add(id);
+				}
+			}
+			else
+			{
+				comboStart.add(id);
+			}
+
 			comboEnd.add(id);
 		}
 		simple.add(comboStart, formData);
@@ -100,27 +117,7 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se) {
-
-				// TODO : Verify I'm only doing linked premises between premises
-				// Be careful about RootID vs Box ID
 				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
-				LinkedBox alpha = argModel.getBoxByRootID(Integer.parseInt(comboStart.getRawValue()));
-				ArgumentThread alphaThread = argModel.getBoxThread(alpha);
-
-				if (!alpha.getType().equalsIgnoreCase("Premise"))
-				{
-					LASADInfo.display("Error", "Both boxes must be of type premise to create a linked premises link.  Please choose boxes that are of type premise.");
-					return;
-				}
-
-				if (config.getElementID().equalsIgnoreCase("Linked Premises"))
-				{
-					if (alpha.getNumSiblings() >= MAX_SIBLINGS)
-					{
-						LASADInfo.display("Error", "Can't add another Linked Premise to this box - it already has 2 Linked Premises.");
-						return;
-					}
-				}
 				comboEnd.setEnabled(true);
 
 				boolean comboEndHasElements = false;
@@ -143,7 +140,10 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 					{
 						if (argModel.getBoxByRootID(Integer.parseInt(boxId)).getNumSiblings() >= MAX_SIBLINGS)
 						{
-							// Same thread boxes can't be made into Linked Premises
+							restrictedIds.add(boxId);
+						}
+						else if (!boxes.get(boxId).getElementInfo().getElementID().equalsIgnoreCase("Premise"))
+						{
 							restrictedIds.add(boxId);
 						}
 					}
@@ -188,11 +188,25 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se) {
+				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
 				comboStart.removeAll();
 				for (String id : boxes.keySet()) {
-					if (!id.equals(comboEnd.getRawValue())) {
-						comboStart.add(id);
+					if (config.getElementID().equalsIgnoreCase("Linked Premises"))
+					{
+						if (argModel.getBoxByRootID(Integer.parseInt(id)).getNumSiblings() < MAX_SIBLINGS && (!id.equals(comboEnd.getRawValue())))
+						{
+							if (boxes.get(id).getElementInfo().getElementID().equalsIgnoreCase("Premise"))
+							{
+								comboStart.add(id);
+							}
+						}
 					}
+					else
+					{
+						if (!id.equals(comboEnd.getRawValue())) {
+							comboStart.add(id);
+						}
+					}	
 				}
 			}
 		});
