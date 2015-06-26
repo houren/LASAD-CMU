@@ -66,32 +66,26 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 						ArgumentModel argModel = ArgumentModel.getInstanceByMapID(myMap.getID());
 						LinkedBox alpha = argModel.getBoxByBoxID(b1.getConnectedModel().getId());
 						LinkedBox beta = argModel.getBoxByBoxID(b2.getConnectedModel().getId());
-						if (!argModel.getBoxThread(alpha).equals(argModel.getBoxThread(beta)))
+						if (b1.getElementInfo().getElementID().equalsIgnoreCase("Premise") && b1.getElementInfo().getElementID().equalsIgnoreCase("Premise"))
 						{
 							if (alpha.getNumSiblings() < MAX_SIBLINGS && beta.getNumSiblings() < MAX_SIBLINGS)
 							{
-								if (b1.getElementInfo().getElementID().equalsIgnoreCase("Premise") && b1.getElementInfo().getElementID().equalsIgnoreCase("Premise"))
-								{
-									onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + "");
-								}
-								else
-								{
-									LASADInfo.display("Error", "Linked Premises can only be between premises - can't create link");
-								}
+								onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + "");
+								//TODO we should actually check for circular links before deciding whether to add the link
 							}
 							else
 							{
-								LASADInfo.display("Error", "One of the selected boxes already has 2 linked premises - can't create link");
+								LASADInfo.display("Error", "One or both of the selected boxes already has 2 linked premises - can't create link");
 							}
 						}
 						else
 						{
-							// Same thread, can't create link
-							LASADInfo.display("Error", "Linked Premises cannot be constructed between already connected boxes - can't create link");
+							LASADInfo.display("Error", "Linked Premises can only be between premises - can't create link");
 						}
 					}
 					else
 					{
+						//TODO we should actually check for circular links before deciding whether to add the link
 						onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + "");
 					}
 				    //communicator.sendActionPackage(actionBuilder.createLinkWithElements(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + ""));

@@ -1,6 +1,7 @@
 package lasad.gwt.client.model.organization;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import java.util.Collection;
@@ -9,7 +10,7 @@ import java.util.Collection;
  *	An argument thread is a connected chain of boxes on the argument map space.
  *  This class is useful for AutoOrganizer.
  *	@author Kevin Loughlin
- *	@since 19 June 2015, Updated 24 June 2015
+ *	@since 19 June 2015, Updated 26 June 2015
  */
 
 public class ArgumentThread
@@ -18,15 +19,14 @@ public class ArgumentThread
 	// HashMap allows for constant lookup time by BoxID
 	private HashMap<Integer, LinkedBox> boxMap;
 
-	// Root boxes are boxes that start an argument thread (i.e. have no parents).  No association with rootID
-	private HashMap<Integer, LinkedBox> rootBoxMap;
-
 	private int threadID;
+
+	// Clear this before use in a method
+	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
 
 	public ArgumentThread()
 	{
 		this.boxMap = new HashMap<Integer, LinkedBox>();
-		this.rootBoxMap = new HashMap<Integer, LinkedBox>();
 		numThreads++;
 		this.threadID = numThreads;
 	}
@@ -35,8 +35,6 @@ public class ArgumentThread
 	{
 		this.boxMap = new HashMap<Integer, LinkedBox>();
 		this.boxMap.put(new Integer(box.getBoxID()), box);
-		this.rootBoxMap = new HashMap<Integer, LinkedBox>();
-		ifRootAddBox(box);
 		numThreads++;
 		this.threadID = numThreads;
 	}
@@ -44,7 +42,6 @@ public class ArgumentThread
 	public ArgumentThread(Collection<LinkedBox> boxes)
 	{
 		this.boxMap = new HashMap<Integer, LinkedBox>();
-		this.rootBoxMap = new HashMap<Integer, LinkedBox>();
 		for (LinkedBox box : boxes)
 		{
 			addBox(box);
@@ -67,7 +64,6 @@ public class ArgumentThread
 		else
 		{
 			boxMap.put(new Integer(box.getBoxID()), box);
-			ifRootAddBox(box);
 		}
 	}
 
@@ -88,7 +84,6 @@ public class ArgumentThread
 			toRemove.removeLinksToSelf();
 			Integer boxIntID = new Integer(boxID);
 			LinkedBox returnValue = boxMap.remove(boxIntID);
-			rootBoxMap.remove(boxIntID);
 			return returnValue;
 		}
 		else
@@ -192,9 +187,21 @@ public class ArgumentThread
 		this.addBox(newBox);
 	}
 
-	public Collection<LinkedBox> getRootBoxes()
+	// RootBoxes are boxes that no have parents, nor do their siblings.  They are useful for a "starting point" when traversing a thread.
+	public HashSet<LinkedBox> getRootBoxes()
 	{
-		return rootBoxMap.values();
+		HashSet<LinkedBox> rootBoxes = new HashSet<LinkedBox>();
+		for (LinkedBox box : boxMap.values())
+		{
+			visited.clear();
+			if (isRoot(box))
+			{
+				rootBoxes.addAll(visited);
+				break;
+			}
+		}
+		visited.clear();
+		return rootBoxes;
 	}
 
 	@Override
@@ -232,11 +239,44 @@ public class ArgumentThread
 		}
 	}
 
-	private void ifRootAddBox(LinkedBox box)
+	// Determines if a box is a root box (visited must be cleared before entering this function)
+	private boolean isRoot(LinkedBox box)
 	{
-		if (box.getNumParents() == 0 && (!rootBoxMap.values().contains(box)))
+		if (!findIfBoxHasExtendedParents(box))
 		{
-			rootBoxMap.put(new Integer(box.getBoxID()), box);
+			return true;
+		}
+		return false;
+	}
+
+	// Recursive method, determines if a box or its siblings has parents (and thus wouldn't be a rootBox);
+	// Visited must be cleared before calling this function
+	private boolean findIfBoxHasExtendedParents(LinkedBox box)
+	{
+		if (box.getNumParents() > 0)
+		{
+			return true;
+		}
+		else
+		{
+			if (visited.contains(box))
+			{
+				return false;
+			}
+			else
+			{
+				visited.add(box);
+				HashSet<LinkedBox> siblingBoxes = box.getSiblingBoxes();
+
+				for (LinkedBox siblingBox : siblingBoxes)
+				{
+					if(findIfBoxHasExtendedParents(siblingBox))
+					{
+						return true;
+					}
+				}
+				return false;
+			}
 		}
 	}
 

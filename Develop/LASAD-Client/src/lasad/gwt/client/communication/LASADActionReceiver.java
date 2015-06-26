@@ -645,6 +645,20 @@ public class LASADActionReceiver {
 						Logger.log("WARNING: There is no highlight for this feedback", Logger.DEBUG);
 					}
 				}
+
+				// Testing to see if root boxes assign correctly, they work as of 26 June 2015
+				/*
+				for (ArgumentThread thread : argModel.getArgThreads())
+				{
+					HashSet<LinkedBox> rootBoxes = thread.getRootBoxes();
+					Logger.log("\nNew thread\n", Logger.DEBUG);
+
+					for (LinkedBox rootBox : rootBoxes)
+					{
+						Logger.log(rootBox.toString(), Logger.DEBUG);
+					}
+				}	
+				*/			
 			} else if (a.getCmd().equals(Commands.UpdateElement)) {
 
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] UPDATE-ELEMENT", Logger.DEBUG);
@@ -822,6 +836,16 @@ public class LASADActionReceiver {
 				if (elementType.equalsIgnoreCase("box"))
 				{
 					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType)));
+					for (ArgumentThread thread : argModel.getArgThreads())
+					{
+						HashSet<LinkedBox> rootBoxes = thread.getRootBoxes();
+						Logger.log("\nNew thread\n", Logger.DEBUG);
+
+						for (LinkedBox rootBox : rootBoxes)
+						{
+							Logger.log(rootBox.toString(), Logger.DEBUG);
+						}
+					}
 				}
 
 				// If it's a relation, add it to the model
@@ -965,7 +989,6 @@ public class LASADActionReceiver {
 			}
 
 		}
-
 	}
 
 	private void processRegisterFeedbackAgent(MVController controller, Action a) {

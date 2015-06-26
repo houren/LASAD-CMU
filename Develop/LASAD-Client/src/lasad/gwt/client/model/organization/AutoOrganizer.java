@@ -122,6 +122,7 @@ public class AutoOrganizer
 	{
 		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Running AutoOrganizer...", Logger.DEBUG);
 
+		// Don't use sortMapComponents(), it's slow and unnecessary.  Fetch the components directly from th already created instance of ArgumentModel for this map
 		sortMapComponents();
 
 		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Components sorted...", Logger.DEBUG);

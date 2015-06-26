@@ -109,7 +109,7 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 				if (!alpha.getType().equalsIgnoreCase("Premise"))
 				{
-					LASADInfo.display("Error", "Both boxes must be premises to create a linked premises link.");
+					LASADInfo.display("Error", "Both boxes must be of type premise to create a linked premises link.  Please choose boxes that are of type premise.");
 					return;
 				}
 
@@ -137,12 +137,11 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 				for (String boxId : boxes.keySet()) {
 					if (!boxes.get(boxId).getElementInfo().getElementID().equalsIgnoreCase("Premise"))
 					{
-						LASADInfo.display("Error", "Both boxes must be premises to create a linked premises link.");
-						return;	
+						restrictedIds.add(boxId);
 					}
 					if (config.getElementID().equalsIgnoreCase("Linked Premises"))
 					{
-						if (argModel.getBoxThread(argModel.getBoxByRootID(Integer.parseInt(boxId))).equals(alphaThread))
+						if (argModel.getBoxByRootID(Integer.parseInt(boxId)).getNumSiblings() >= MAX_SIBLINGS)
 						{
 							// Same thread boxes can't be made into Linked Premises
 							restrictedIds.add(boxId);
