@@ -428,9 +428,11 @@ public class LASADActionReceiver {
 
 	private void processMapAction(MVController controller, Action a) {
 
-		Logger.log("[lasad.gwt.client.communication.LASADActionReceiver][processMapAction] Processing map action...", Logger.DEBUG);
-
 		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(controller.getMapID());
+
+		Logger.log("Arg model before performing action\n" + argModel.toString(), Logger.DEBUG);
+
+		Logger.log("[lasad.gwt.client.communication.LASADActionReceiver][processMapAction] Processing map action...", Logger.DEBUG);
 
 		AutoOrganizer autoOrganizer = AutoOrganizer.getInstanceByMapID(controller.getMapID());
 
@@ -599,7 +601,7 @@ public class LASADActionReceiver {
 						argModel.removeArgThread(endBoxThread);
 					}
 
-					Logger.log("Model before update Sibling Links" + argModel.toString(), Logger.DEBUG);
+					Logger.log("Model after initial action" + argModel.toString(), Logger.DEBUG);
 
 					if (siblingsAlreadyUpdated)
 					{
@@ -775,23 +777,22 @@ public class LASADActionReceiver {
 				}
 
 				String elementIDString = a.getParameterValue(ParameterTypes.Id);
-				int elementID = counterID;
+
+				int elementID = -1;
+
 				if (elementIDString != null) {
 					elementID = Integer.parseInt(elementIDString);
-				}
-				else
-				{
-					elementID--;
 				}
 
 				String username = a.getParameterValue(ParameterTypes.UserName);
 
+				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver] Create Model: " + elementID + ", Type: " + elementType,
+						Logger.DEBUG);
 				AbstractUnspecifiedElementModel elementModel = new UnspecifiedElementModelArgument(elementID, elementType, username);
-				
+
 				if (a.getParameterValue(ParameterTypes.ReplayTime) != null) {
 					elementModel.setIsReplay(true);
 				}
-
 				// Needed to enable the add and del buttons in box header
 				if (a.getParameterValue(ParameterTypes.ElementId) != null) {
 					elementModel.setElementId(a.getParameterValue(ParameterTypes.ElementId));
@@ -799,13 +800,14 @@ public class LASADActionReceiver {
 
 				// Add more specific data to the model
 				for (Parameter param : a.getParameters()) {
-					if (!param.getType().equals(ParameterTypes.Parent))
+					if (param.getType() != null && !param.getType().equals(ParameterTypes.Parent)
+							&& !param.getType().equals(ParameterTypes.HighlightElementId)) {
 						elementModel.setValue(param.getType(), param.getValue());
+					}
 				}
 
 				// Work on parent relations
 				if (a.getParameterValues(ParameterTypes.Parent) != null) {
-
 					for (String parentID : a.getParameterValues(ParameterTypes.Parent)) {
 						controller.setParent(elementModel, controller.getElement(Integer.parseInt(parentID)));
 
@@ -815,8 +817,10 @@ public class LASADActionReceiver {
 
 				// Now Register new Element to the Model
 				controller.addElementModel(elementModel);
+				/*
+				// Begin Kevin Loughlin
 
-				// Kevin Loughlin
+				// Since we're creating a new element, we need to add it to the autoOrganize model and update the siblingLinks on the map
 				String elementSubType = a.getParameterValue(ParameterTypes.ElementId);
 
 				String rootIDString = a.getParameterValue(ParameterTypes.RootElementId);
@@ -828,10 +832,13 @@ public class LASADActionReceiver {
 					rootID = Integer.parseInt(rootIDString);
 				}
 
+				// If it's a box, add it to the model
 				if (elementType.equalsIgnoreCase("box"))
 				{
 					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType)));
 				}
+
+				// If it's a relation, add it to the model
 				else if (elementType.equalsIgnoreCase("relation"))
 				{
 					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
@@ -846,9 +853,7 @@ public class LASADActionReceiver {
 					LinkedBox potentialStartBox = null;
 					LinkedBox potentialEndBox = null;
 
-					HashSet<ArgumentThread> argThreads = argModel.getArgThreads();
-
-					for (ArgumentThread argThread : argThreads)
+					for (ArgumentThread argThread : argModel.getArgThreads())
 					{
 						potentialStartBox = argThread.getBoxByBoxID(startBoxID);
 						potentialEndBox = argThread.getBoxByBoxID(endBoxID);
@@ -894,7 +899,7 @@ public class LASADActionReceiver {
 						argModel.removeArgThread(endBoxThread);
 					}
 
-					Logger.log("Model after creation" + argModel.toString(), Logger.DEBUG);
+					Logger.log("Model before update Sibling Links" + argModel.toString(), Logger.DEBUG);
 
 					if (siblingsAlreadyUpdated)
 					{
@@ -903,10 +908,12 @@ public class LASADActionReceiver {
 					}
 					else
 					{
+						// This will change the alreadyUpdate field for us
 						autoOrganizer.updateSiblingLinks(link);
 						Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
 					}
 				}
+				*/
 				// End Kevin Loughlin
 
 				if (elementType.equalsIgnoreCase("FEEDBACK-CLUSTER")) {

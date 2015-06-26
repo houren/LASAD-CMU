@@ -146,6 +146,12 @@ public class OrganizerLink
 		this.type = type;
 	}
 
+	@Override
+	public int hashCode()
+	{
+		return ((this.startBox.getBoxID())^3 + (this.endBox.getBoxID()^3));
+	}
+
 	/* BoxIDs should be unique and thus just checking the start and end as well as type should be sufficient for equality.
 		If the invariants of an ArgumentMap change, then this method will need to be updated accordingly. */
 	@Override

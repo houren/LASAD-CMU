@@ -124,6 +124,7 @@ public class LinkedBox
 
 	public void addParentLink(OrganizerLink link)
 	{
+
 		this.parentLinks.add(link);
 		this.parentBoxes.add(link.getStartBox());
 	}
@@ -318,6 +319,12 @@ public class LinkedBox
 		{
 			return false;
 		}	
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return this.boxID;
 	}
 
 	// Just outputs the box's boxID and rootID, not its children and parents and siblings
