@@ -53,16 +53,18 @@ public class ArgumentModel
 		this.argThreads.remove(argThread);
 	}
 
-	public void removeBoxByBoxID(int boxID)
+	public Object removeEltByEltID(int eltID)
 	{
 		for (ArgumentThread argThread : argThreads)
 		{
-			LinkedBox removed = argThread.removeBoxByBoxID(boxID);
+			Object removed = argThread.removeEltByEltID(eltID);
 			if (removed != null)
 			{
-				break;
+				return removed;
 			}
 		}
+
+		return null;
 	}
 
 	public LinkedBox getBoxByBoxID(int boxID)
@@ -86,19 +88,6 @@ public class ArgumentModel
 			if (box != null)
 			{
 				return box;
-			}
-		}
-		return null;
-	}
-
-	public OrganizerLink removeLinkByLinkID(int linkID)
-	{
-		for (ArgumentThread argThread : argThreads)
-		{
-			OrganizerLink link = argThread.removeLinkByLinkID(linkID);
-			if (link != null)
-			{
-				return link;
 			}
 		}
 		return null;

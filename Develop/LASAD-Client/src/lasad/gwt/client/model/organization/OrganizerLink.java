@@ -22,8 +22,8 @@ public class OrganizerLink
 	// I.e. what kind of relation (perhaps it could be support, refutation, Linked Premises, depending on the ontology and its terminology)
 	private String type;
 
-	// Might serve a purpose in removal, right now we're just working on adding elements
-	private final int linkID;
+	// Helps with removal of links, otherwise not needed
+	private int linkID;
 	
 
 	/**
@@ -43,38 +43,6 @@ public class OrganizerLink
 	 */
 	public OrganizerLink(LinkedBox startBox, LinkedBox endBox, String type)
 	{
-		/*
-		Connection con = null;
-		try
-		{
-			con = DatabaseConnectionHandler.getConnection(OrganizerLink.class);
-			PreparedStatement getLastID = con.prepareStatement("SELECT LAST_INSERT_ID()");
-			ResultSet rs = getLastID.executeQuery();
-			rs.next();
-			
-			this.linkID = rs.getInt(1);
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			if(con != null) {
-//				try {
-//					con.close();
-					//close Connection
-					DatabaseConnectionHandler.closeConnection(OrganizerLink.class, con);
-//				} catch (SQLException e){
-//					e.printStackTrace();
-//				}
-			}
-		}
-		*/
 		this.linkID = -1;
 		this.startBox = startBox;
 		this.endBox = endBox;
@@ -150,6 +118,11 @@ public class OrganizerLink
 	public int hashCode()
 	{
 		return ((this.startBox.getBoxID())^3 + (this.endBox.getBoxID()^3));
+	}
+
+	public OrganizerLink clone()
+	{
+		return new OrganizerLink(this.getLinkID(), this.getStartBox(), this.getEndBox(), this.getType());
 	}
 
 	/* BoxIDs should be unique and thus just checking the start and end as well as type should be sufficient for equality.

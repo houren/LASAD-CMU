@@ -215,19 +215,13 @@ public class LinkedBox
 		// Remove references to self in children
 		for (OrganizerLink childLink : childLinks)
 		{
-			if (childLink.getStartBox().equals(this)) 
-			{
-				childLink.getEndBox().removeParentLink(childLink);
-			}
+			childLink.getEndBox().removeParentLink(childLink);
 		}
 
 		// Remove references to self in parents
 		for (OrganizerLink parentLink : parentLinks)
 		{
-			if (parentLink.getEndBox().equals(this)) 
-			{
-				parentLink.getStartBox().removeChildLink(parentLink);
-			}
+			parentLink.getStartBox().removeChildLink(parentLink);
 		}
 
 		// Remove references to self in siblings

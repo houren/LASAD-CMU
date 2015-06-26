@@ -305,24 +305,7 @@ public class AutoOrganizer
 		@param link - the link to be added to the model and map
 	*/
 	private void addLinkToVisual(OrganizerLink link)
-	{
-		// Get the argModel that we need to update
-		/*
-		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
-
-		// Add the necessary links to the organizer model
-		if (link.getType().equalsIgnoreCase("Linked Premises"))
-		{
-			argModel.getBoxByBoxID(link.getStartBox().getBoxID()).addSiblingLink(link);
-			argModel.getBoxByBoxID(link.getEndBox().getBoxID()).addSiblingLink(link);
-		}
-		else
-		{
-			argModel.getBoxByBoxID(link.getStartBox().getBoxID()).addChildLink(link);
-			argModel.getBoxByBoxID(link.getEndBox().getBoxID()).addParentLink(link);
-		}
-		*/
-		
+	{	
 		String elementType = "relation";
 
 		MVController controller = LASAD_Client.getMVCController(map.getID());
@@ -341,62 +324,3 @@ public class AutoOrganizer
 		communicator.sendActionPackage(myPackage);
 	}
 }
-
-		/*
-		for (Action a : myPackage.getActions())
-		{	
-			// From now on, elementID refers to element ID number.
-
-			// TODO: This is a hack, need to find proper element ID to use (next available)
-			int elementID = this.counterID;
-			counterID--;
-
-			String elementIDString = a.getParameterValue(ParameterTypes.Id);
-			if (elementIDString == null)
-			{
-				Logger.log("Element ID is null", Logger.DEBUG);
-			}
-			else
-			{
-				elementID = Integer.parseInt(elementIDString);
-			}
-
-			String username = a.getParameterValue(ParameterTypes.UserName);
-
-			if (username == null)
-			{
-				Logger.log("User name is null", Logger.DEBUG);
-			}
-
-			Logger.log("[lasad.gwt.client.communication.LASADActionReceiver] Create Model: " + elementID + ", Type: " + elementType,
-					Logger.DEBUG);
-			AbstractUnspecifiedElementModel elementModel = new UnspecifiedElementModelArgument(elementID, elementType, username);
-
-			if (a.getParameterValue(ParameterTypes.ReplayTime) != null) {
-				elementModel.setIsReplay(true);
-			}
-			// Needed to enable the add and del buttons in box header
-			if (a.getParameterValue(ParameterTypes.ElementId) != null) {
-				elementModel.setElementId(a.getParameterValue(ParameterTypes.ElementId));
-			}
-
-			// Add more specific data to the model
-			for (Parameter param : a.getParameters()) {
-				if (param.getType() != null && !param.getType().equals(ParameterTypes.Parent)
-						&& !param.getType().equals(ParameterTypes.HighlightElementId)) {
-					elementModel.setValue(param.getType(), param.getValue());
-				}
-			}
-
-			// Work on parent relations
-			if (a.getParameterValues(ParameterTypes.Parent) != null) {
-				for (String parentID : a.getParameterValues(ParameterTypes.Parent)) {
-					controller.setParent(elementModel, controller.getElement(Integer.parseInt(parentID)));
-
-					Logger.log("[lasad.gwt.client.communication.LASADActionReceiver] Added ParentElement: " + parentID, Logger.DEBUG);
-				}
-			}
-
-			// Now Register new Element to the default Model (what will actually update it on the map)
-			controller.addElementModel(elementModel);
-			*/

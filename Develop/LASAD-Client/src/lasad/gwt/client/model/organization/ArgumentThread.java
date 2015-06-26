@@ -14,19 +14,21 @@ import java.util.Collection;
 
 public class ArgumentThread
 {
+	private static int numThreads = 0;
 	// HashMap allows for constant lookup time by BoxID
 	private HashMap<Integer, LinkedBox> boxMap;
 
-	private HashMap<Integer, OrganizerLink> linkMap;
-
 	// Root boxes are boxes that start an argument thread (i.e. have no parents).  No association with rootID
 	private HashMap<Integer, LinkedBox> rootBoxMap;
+
+	private int threadID;
 
 	public ArgumentThread()
 	{
 		this.boxMap = new HashMap<Integer, LinkedBox>();
 		this.rootBoxMap = new HashMap<Integer, LinkedBox>();
-		this.linkMap = new HashMap<Integer, OrganizerLink>();
+		numThreads++;
+		this.threadID = numThreads;
 	}
 
 	public ArgumentThread(LinkedBox box)
@@ -35,7 +37,8 @@ public class ArgumentThread
 		this.boxMap.put(new Integer(box.getBoxID()), box);
 		this.rootBoxMap = new HashMap<Integer, LinkedBox>();
 		ifRootAddBox(box);
-		this.linkMap = new HashMap<Integer, OrganizerLink>();
+		numThreads++;
+		this.threadID = numThreads;
 	}
 
 	public ArgumentThread(Collection<LinkedBox> boxes)
@@ -46,7 +49,8 @@ public class ArgumentThread
 		{
 			addBox(box);
 		}
-		this.linkMap = new HashMap<Integer, OrganizerLink>();
+		numThreads++;
+		this.threadID = numThreads;
 	}
 
 	public Collection<LinkedBox> getBoxes()
@@ -75,7 +79,8 @@ public class ArgumentThread
 		}
 	}
 
-	public LinkedBox removeBoxByBoxID(int boxID)
+	// Helper for removeEltByEltID
+	private LinkedBox removeBoxByBoxID(int boxID)
 	{
 		LinkedBox toRemove = this.getBoxByBoxID(boxID);
 		if (toRemove != null)
@@ -92,18 +97,59 @@ public class ArgumentThread
 		}
 	}
 
-	public OrganizerLink removeLinkByLinkID(int linkID)
+	public Object removeEltByEltID(int eltID)
 	{
-		OrganizerLink toRemove = this.getLinkByLinkID(linkID);
-		if (toRemove != null)
+		Object returnValue = this.removeBoxByBoxID(eltID);
+		if (returnValue == null)
 		{
-			Integer linkIntID = new Integer(linkID);
-			OrganizerLink returnValue = linkMap.remove(linkIntID);
-			return returnValue;
+			for (LinkedBox box : boxMap.values())
+			{
+				for (OrganizerLink childLink : box.getChildLinks())
+				{
+					if (childLink.getLinkID() == eltID)
+					{
+						returnValue = childLink.clone();
+						childLink.getEndBox().removeParentLink(childLink);
+						box.removeChildLink(childLink);
+						return returnValue;
+					}
+				}
+
+				for (OrganizerLink parentLink : box.getParentLinks())
+				{
+					if (parentLink.getLinkID() == eltID)
+					{
+						returnValue = parentLink.clone();
+						parentLink.getStartBox().removeChildLink(parentLink);
+						box.removeParentLink(parentLink);
+						return returnValue;
+					}
+				}
+
+				for (OrganizerLink siblingLink : box.getSiblingLinks())
+				{
+					if (siblingLink.getLinkID() == eltID)
+					{
+						returnValue = siblingLink.clone();
+						if (box.equals(siblingLink.getStartBox()))
+						{
+							siblingLink.getEndBox().removeSiblingLink(siblingLink);
+						}
+						else
+						{
+							siblingLink.getStartBox().removeSiblingLink(siblingLink);
+						}
+						box.removeSiblingLink(siblingLink);
+						return returnValue;
+					}
+				}
+			}
+
+			return null;
 		}
 		else
 		{
-			return null;
+			return returnValue;
 		}
 	}
 
@@ -124,12 +170,6 @@ public class ArgumentThread
 	{
 		Integer id = new Integer(boxID);
 		return boxMap.get(id);
-	}
-
-	public OrganizerLink getLinkByLinkID(int linkID)
-	{
-		Integer id = new Integer(linkID);
-		return linkMap.get(id);
 	}
 
 	public LinkedBox getBoxByRootID(int rootID)
@@ -155,6 +195,12 @@ public class ArgumentThread
 	public Collection<LinkedBox> getRootBoxes()
 	{
 		return rootBoxMap.values();
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return this.threadID;
 	}
 
 	@Override

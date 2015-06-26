@@ -430,7 +430,7 @@ public class LASADActionReceiver {
 
 		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(controller.getMapID());
 
-		Logger.log("Arg model before performing action\n" + argModel.toString(), Logger.DEBUG);
+		//Logger.log("Arg model before performing action\n" + argModel.toString(), Logger.DEBUG);
 
 		Logger.log("[lasad.gwt.client.communication.LASADActionReceiver][processMapAction] Processing map action...", Logger.DEBUG);
 
@@ -601,7 +601,7 @@ public class LASADActionReceiver {
 						argModel.removeArgThread(endBoxThread);
 					}
 
-					Logger.log("Model after initial action" + argModel.toString(), Logger.DEBUG);
+					//Logger.log("Model after initial action" + argModel.toString(), Logger.DEBUG);
 
 					if (siblingsAlreadyUpdated)
 					{
@@ -612,7 +612,7 @@ public class LASADActionReceiver {
 					{
 						// This will change the alreadyUpdate field for us
 						autoOrganizer.updateSiblingLinks(link);
-						Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
+						//Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
 					}
 				}
 
@@ -677,26 +677,12 @@ public class LASADActionReceiver {
 						Logger.log("Can not delete element, because ID is no int!", Logger.DEBUG_ERRORS);
 					}
 
-					// Begin Kevin Loughlin's code for removing an element from ArgumentModel, which is still very much in development
-					Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
+					// Kevin Loughlin
 
-					argModel.removeBoxByBoxID(elementID);
+					//Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
+					argModel.removeEltByEltID(elementID);
 
-					argModel.removeLinkByLinkID(elementID);
-					/*
-					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
-					Logger.log("startBoxID: " + startBoxStringID, Logger.DEBUG);
-					int startBoxID = Integer.parseInt(startBoxStringID);
-
-					// For some reason, parent here gives box ID, not root ID, so plan accordingly
-					String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
-					Logger.log("endBoxID: " + endBoxStringID, Logger.DEBUG);
-					int endBoxID = Integer.parseInt(endBoxStringID);
-
-					argModel.getBoxByBoxID(startBoxID).removeLinkToBoxID(endBoxID);
-					*/
-
-					Logger.log("Arg Model at end of delete:\n" + argModel.toString(), Logger.DEBUG);
+					//Logger.log("Arg Model at end of delete:\n" + argModel.toString(), Logger.DEBUG);
 					// End Kevin Loughlin
 
 				} else {
@@ -817,7 +803,7 @@ public class LASADActionReceiver {
 
 				// Now Register new Element to the Model
 				controller.addElementModel(elementModel);
-				/*
+				
 				// Begin Kevin Loughlin
 
 				// Since we're creating a new element, we need to add it to the autoOrganize model and update the siblingLinks on the map
@@ -899,7 +885,7 @@ public class LASADActionReceiver {
 						argModel.removeArgThread(endBoxThread);
 					}
 
-					Logger.log("Model before update Sibling Links" + argModel.toString(), Logger.DEBUG);
+					//Logger.log("Model before update Sibling Links" + argModel.toString(), Logger.DEBUG);
 
 					if (siblingsAlreadyUpdated)
 					{
@@ -908,12 +894,12 @@ public class LASADActionReceiver {
 					}
 					else
 					{
-						// This will change the alreadyUpdate field for us
+						// This will change the alreadyUpdated field for us
 						autoOrganizer.updateSiblingLinks(link);
-						Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
+						//Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
 					}
 				}
-				*/
+				
 				// End Kevin Loughlin
 
 				if (elementType.equalsIgnoreCase("FEEDBACK-CLUSTER")) {
@@ -965,26 +951,12 @@ public class LASADActionReceiver {
 					Logger.log("Can not delete element, because ELEMENT-ID is no int!", Logger.DEBUG_ERRORS);
 				}
 
-				Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
-
 				// Kevin Loughlin
-				argModel.removeBoxByBoxID(elementID);
 
-				argModel.removeLinkByLinkID(elementID);
-				/*
-				String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
-				Logger.log("startBoxID: " + startBoxStringID, Logger.DEBUG);
-				int startBoxID = Integer.parseInt(startBoxStringID);
+				//Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
+				argModel.removeEltByEltID(elementID);
 
-				// For some reason, parent here gives box ID, not root ID, so plan accordingly
-				String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
-				Logger.log("endBoxID: " + endBoxStringID, Logger.DEBUG);
-				int endBoxID = Integer.parseInt(endBoxStringID);
-
-				argModel.getBoxByBoxID(startBoxID).removeLinkToBoxID(endBoxID);
-				*/
-
-				Logger.log("Arg Model at end of delete:\n" + argModel.toString(), Logger.DEBUG);
+				//Logger.log("Arg Model at end of delete:\n" + argModel.toString(), Logger.DEBUG);
 				// End Kevin Loughlin
 			} 
 			
