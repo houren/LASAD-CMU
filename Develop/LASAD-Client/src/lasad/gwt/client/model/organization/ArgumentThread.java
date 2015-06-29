@@ -10,7 +10,7 @@ import java.util.Collection;
  *	An argument thread is a connected chain of boxes on the argument map space.
  *  This class is useful for AutoOrganizer.
  *	@author Kevin Loughlin
- *	@since 19 June 2015, Updated 26 June 2015
+ *	@since 19 June 2015, Updated 30 June 2015
  */
 
 public class ArgumentThread
@@ -197,7 +197,7 @@ public class ArgumentThread
 			if (isRoot(box))
 			{
 				rootBoxes.addAll(visited);
-				break;
+				//break;
 			}
 		}
 		visited.clear();

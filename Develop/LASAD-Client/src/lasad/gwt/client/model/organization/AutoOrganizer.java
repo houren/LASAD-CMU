@@ -2,7 +2,9 @@ package lasad.gwt.client.model.organization;
 
 // Some of these import statements can be deleted, but I'm too lazy to do that right now and it's not exactly a big deal.
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.ArrayList;
 
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.communication.helper.ActionFactory;
@@ -42,13 +44,18 @@ import lasad.gwt.client.communication.LASADActionReceiver;
  * This class, especially organizeMap, needs significant overhauls, as I have changed the structuring such that there is a model that updates
  * with every change to the map.  Thus, we don't need to start from scratch and gather components every time the map is called.
  * @author Kevin Loughlin
- * @since 12 June 2015, Updated 24 June 2015
+ * @since 12 June 2015, Updated 30 June 2015
  */
 
 public class AutoOrganizer
 {
 	// Space between organized nodes
 	private final int Y_SPACE = 150;
+	private final int X_SPACE = 150;
+	
+	//Initial coordinates
+	private final int INITIAL_X = 0;
+	private final int INITIAL_Y = 2200;
 
 	// The map
 	private AbstractGraphMap map;
@@ -79,6 +86,9 @@ public class AutoOrganizer
 
 	// Stores boxes that have been visited during a method call.  Important to clear at beginning of method call.
 	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
+	
+	// Same as the variable above, but this one keeps the order in which the boxes are inserted
+	private ArrayList<LinkedBox> visitedList = new ArrayList<LinkedBox>();
 
 	// Instances of autoOrganizer: one per map.  String is mapID.
 	private static HashMap<String, AutoOrganizer> instances = new HashMap<String, AutoOrganizer>();
@@ -113,6 +123,70 @@ public class AutoOrganizer
 		return instances.get(mapID);
 	}
 
+	/* UNDER DEVELOPMENT
+	 * Recursively calculates the coordinates for each box in an argument thread
+	 * @param level - Indicates the height level of the 'root' parameter, should be 0 when called for an actual root
+	 * @param root - the root "parent" of the argument thread
+	 * @param xCoords - stores the x coordinates calculated
+	 * @param yCoords - stores the y coordinates calculated
+	 * @param neighborBoxes - boxes in the same height level as the root
+	 * @return The maximum number of boxes in a single height level of the thread
+	 */
+	private int organizeThread(int level, LinkedBox root, ArrayList<Integer> xCoords, ArrayList<Integer> yCoords, LinkedHashSet<LinkedBox> neighborBoxes)
+	{
+		if(visitedList.contains(root) || root == null) return 0;
+		
+		int span;
+		if(!neighborBoxes.contains(root)) span = neighborBoxes.size()+1; else span = neighborBoxes.size(); 
+		
+		LinkedHashSet<LinkedBox> childrenNeighbors = new LinkedHashSet<LinkedBox>();
+		
+		xCoords.add(new Integer(-(span-1)));
+		yCoords.add(level);
+			
+		visitedList.add(root);
+		childrenNeighbors.addAll(root.getChildBoxes());
+			
+		for(LinkedBox box : root.getSiblingBoxes())
+		{
+			xCoords.add(new Integer(xCoords.get(xCoords.size()-1)+2));
+			yCoords.add(level);
+				
+			visitedList.add(box);
+			childrenNeighbors.addAll(box.getChildBoxes());
+		}
+		
+		for(LinkedBox box : neighborBoxes){
+			if(visitedList.contains(box))
+				continue;
+			
+			xCoords.add(new Integer(xCoords.get(xCoords.size()-1)+2));
+			yCoords.add(level);
+				
+			visitedList.add(box);
+			childrenNeighbors.addAll(box.getChildBoxes());
+		}
+			
+		int childSpan;
+		for(LinkedBox box : childrenNeighbors)
+		{
+			for(LinkedBox siblingBox : box.getSiblingBoxes())
+			{
+				if(!childrenNeighbors.contains(siblingBox))
+					childrenNeighbors.add(siblingBox);
+			}
+		}
+		
+		for(LinkedBox box : childrenNeighbors)
+		{
+			childSpan = organizeThread(level+1, box, xCoords, yCoords, childrenNeighbors);
+			
+			if(childSpan > span) span = childSpan;
+		}
+		
+		return span;		
+	}
+
 	/**
 	 * UNDER DEVELOPMENT
 	 * Organizes the map from bottom to top: Root "parents" start at the bottom, leading the way to children above.
@@ -122,18 +196,76 @@ public class AutoOrganizer
 	{
 		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Running AutoOrganizer...", Logger.DEBUG);
 
-		// Don't use sortMapComponents(), it's slow and unnecessary.  Fetch the components directly from th already created instance of ArgumentModel for this map
-		sortMapComponents();
+		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
 
-		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Components sorted...", Logger.DEBUG);
-
-		// Just testing to see if this works
-		int yCoord = 2200;			
-		for (LinkedBox box : boxes)
+		int yCoord = INITIAL_Y;
+		int xCoord = INITIAL_X;
+		int newXCoord = 0;
+		int maxSpan = 0;
+		int lastSpan = 0;
+		int span = 0;
+		int init = 0;
+		int yMax = 0;
+	
+		ArrayList<Integer> yCoords = new ArrayList<Integer>();
+		ArrayList<Integer> xCoords = new ArrayList<Integer>();
+		ArrayList<ArgumentThread> threadList = new ArrayList<ArgumentThread>();
+		visitedList.clear();
+		
+		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Retrieving threads...", Logger.DEBUG);
+		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Number of threads: "+argModel.getArgThreads().size(), Logger.DEBUG);
+		HashSet<LinkedBox> roots = new HashSet<LinkedBox>();
+		
+		argModel.updateArgThreads();
+		
+		for (ArgumentThread argThread : argModel.getArgThreads())
 		{
-			sendUpdatePositionToServer(box, CENTER_X, yCoord);
-			yCoord += Y_SPACE;
+			threadList.add(argThread);
+			LinkedBox root = null;
+			
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] All boxes in the thread: "+argThread, Logger.DEBUG);
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Got the root: "+argThread.getRootBoxes().size(), Logger.DEBUG);
+			for(LinkedBox box : argThread.getRootBoxes()){
+				root = box;
+				break;
+			}
+			
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Got the root: "+root, Logger.DEBUG);
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Number of roots: "+argThread.getRootBoxes().size(), Logger.DEBUG);
+			if(root == null) continue;
+			
+			span = organizeThread(0, root, xCoords, yCoords, new LinkedHashSet(argThread.getRootBoxes()));
+			maxSpan += lastSpan+span;
+			lastSpan = span;
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Shift: "+maxSpan, Logger.DEBUG);
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] X Coords (before shift): "+xCoords, Logger.DEBUG);
+			
+			for(int i = init; i < xCoords.size(); i++)
+			{
+				xCoords.set(i, xCoords.get(i)+maxSpan);
+			}
+		
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] X Coords (after shift): "+xCoords, Logger.DEBUG);
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Y Coords "+yCoords, Logger.DEBUG);
+			
+			init = xCoords.size();
+			if(init-1 >= 0) 
+				if(yCoords.get(init-1) > yMax) yMax = yCoords.get(init-1);
+			
+			//xCoord = newXCoord;
 		}
+		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Going to update positions...", Logger.DEBUG);
+		int i = 0;
+		int j = 0;
+		for(LinkedBox box : visitedList)
+		{
+			xCoord = CENTER_X+(xCoords.get(i)-maxSpan/2)*X_SPACE;
+			yCoord = (yMax/2-yCoords.get(i))*Y_SPACE+CENTER_Y;
+			sendUpdatePositionToServer(box, xCoord, yCoord);
+			i++;
+		}
+		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Components organized... Boxes visitedList: "+visitedList.size(), Logger.DEBUG);
+		visitedList.clear();
 
 		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Positions updated...", Logger.DEBUG);
 

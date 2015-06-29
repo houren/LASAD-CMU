@@ -5,6 +5,7 @@ import lasad.gwt.client.model.organization.ArgumentThread;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Collection;
+import java.util.ArrayList;
 
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.model.organization.LinkedBox;
@@ -14,7 +15,7 @@ import lasad.gwt.client.model.organization.LinkedBox;
  *	An argument model is simply a vector of threads, i.e. a vector separate chains of arguments on the map space.
  *	This format of modeling is more conducive to support for AutoOrganizer.
  *	@author Kevin Loughlin
- *	@since 19 June 2015, Updated 24 June 2015
+ *	@since 19 June 2015, Updated 30 June 2015
  */
 public class ArgumentModel
 {
@@ -22,6 +23,9 @@ public class ArgumentModel
 
 	// One model instance per map, where String is mapID
 	private static HashMap<String, ArgumentModel> instances = new HashMap<String, ArgumentModel>();
+	
+	// Clear this before use in a method
+	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
 
 	// Just for this class, if we need to create a new instance below
 	private ArgumentModel()
@@ -103,6 +107,70 @@ public class ArgumentModel
 			}
 		}
 		return null;
+	}
+	
+	private ArrayList<LinkedBox> discoverArgThread(LinkedBox rootBox){
+			ArrayList<LinkedBox> siblings = new ArrayList<LinkedBox>();
+			siblings.add(rootBox);
+			siblings.addAll(rootBox.getSiblingBoxes());
+			
+			visited.addAll(siblings);
+			
+			ArrayList<LinkedBox> allBranch = new ArrayList<LinkedBox>();
+			allBranch.addAll(siblings);
+			
+			for(LinkedBox box : siblings){
+				for(LinkedBox childBox : box.getChildBoxes())
+				{
+					if(!visited.contains(childBox))
+					{
+						allBranch.addAll(discoverArgThread(childBox));
+					}else{
+						allBranch.add(childBox);
+						return allBranch;
+					}
+				}
+			}
+			return allBranch;
+	}
+	
+	//guarantees that the ArgThreads listed correspond to the current state of the map
+	public void updateArgThreads()
+	{
+		HashSet<LinkedBox> allBoxes = new HashSet<LinkedBox>();
+		for(ArgumentThread argThread : this.getArgThreads()){
+			allBoxes.addAll(argThread.getBoxes());
+			this.removeArgThread(argThread);
+		}
+		
+		ArrayList<ArrayList<LinkedBox>> threads = new ArrayList<ArrayList<LinkedBox>>();
+		visited.clear();
+		ArrayList<LinkedBox> thread;
+		for(LinkedBox box : allBoxes)
+		{
+			if(visited.contains(box)) continue;
+			thread = discoverArgThread(box);
+			
+			boolean partOfOther = false;
+			LinkedBox lastChild = thread.get(thread.size()-1);
+			for(ArrayList<LinkedBox> set : threads)
+			{
+				if(set.contains(lastChild))
+				{
+					thread.remove(lastChild);
+					set.addAll(thread);
+					partOfOther = true;
+					break;
+				}
+			}
+			if(!partOfOther)
+				threads.add(thread);
+		}
+		
+		for(ArrayList<LinkedBox> set : threads)
+		{
+			this.addArgThread(new ArgumentThread(set));
+		}
 	}
 
 	public HashSet<ArgumentThread> getArgThreads()
