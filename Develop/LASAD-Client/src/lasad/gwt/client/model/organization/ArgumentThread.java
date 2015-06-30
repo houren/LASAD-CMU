@@ -2,9 +2,11 @@ package lasad.gwt.client.model.organization;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.HashSet;
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import java.util.Collection;
+import lasad.gwt.client.logger.Logger;
 
 /**
  *	An argument thread is a connected chain of boxes on the argument map space.
@@ -186,6 +188,45 @@ public class ArgumentThread
 		this.removeBoxByBoxID(newBox.getBoxID());
 		this.addBox(newBox);
 	}
+	
+	//identify a cycle
+	private boolean isCycle(HashSet<LinkedBox> start, LinkedBox currentBox){
+		if(start.contains(currentBox))
+		{
+			visited.addAll(start);
+			
+			for(LinkedBox box : start)
+			{
+				for(LinkedBox childBox : box.getChildBoxes())
+				{
+					if(isCycle(start, childBox))
+						return true;
+				}
+			}
+		}
+		else
+		{
+			HashSet<LinkedBox> siblings = new HashSet<LinkedBox>(currentBox.getSiblingBoxes());
+			siblings.add(currentBox);
+			
+			for(LinkedBox box : siblings)
+			{
+				for(LinkedBox childBox : box.getChildBoxes())
+				{
+					if(start.contains(childBox)){
+						visited.addAll(siblings);
+						return true;
+					}if(visited.contains(childBox)){
+						return false;
+					}if(isCycle(start, childBox)){
+						visited.addAll(siblings);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 
 	// RootBoxes are boxes that no have parents, nor do their siblings.  They are useful for a "starting point" when traversing a thread.
 	public HashSet<LinkedBox> getRootBoxes()
@@ -201,6 +242,59 @@ public class ArgumentThread
 			}
 		}
 		visited.clear();
+		
+		//when the threads has boxes but no root is found, the root is a cycle
+		if(boxMap.values().size() > 0 && rootBoxes.size() == 0)
+		{
+			Logger.log("[lasad.gwt.client.communication.ArgumentThread][run] Starting Cycle detection", Logger.DEBUG);
+			boolean hasParent;
+			HashSet<LinkedBox> start = new HashSet<LinkedBox>();
+			HashSet<LinkedBox> verified = new HashSet<LinkedBox>();
+			
+			for (LinkedBox box : boxMap.values())
+			{
+				hasParent = false;
+				visited.clear();
+				start.clear();
+				start.addAll(box.getSiblingBoxes());
+				start.add(box);
+				if(verified.contains(box))
+					continue;
+				verified.addAll(start);
+				
+				Logger.log("[lasad.gwt.client.communication.ArgumentThread][run] Gonna run isCycle, box: "+box, Logger.DEBUG);
+				if (isCycle(start, box))
+				{
+					LinkedBox root = null;
+					int minParents = Integer.MAX_VALUE;
+					int numParents;
+					Logger.log("[lasad.gwt.client.communication.ArgumentThread][run] Finding the best box to be root", Logger.DEBUG);
+					for(LinkedBox cBox : visited)
+					{
+						numParents = cBox.getParentBoxes().size();
+						for(LinkedBox sibling : cBox.getSiblingBoxes())
+							numParents += sibling.getParentBoxes().size();
+						
+						if(numParents < minParents)
+						{
+							minParents = numParents;
+							root = cBox;
+						}
+					}
+					
+					if(root != null)
+					{
+						rootBoxes.addAll(root.getSiblingBoxes());
+						rootBoxes.add(root);
+						break;
+					}
+					Logger.log("[lasad.gwt.client.communication.ArgumentThread][run] Assigning roots: "+rootBoxes, Logger.DEBUG);
+				}
+			}
+		
+			visited.clear();
+		}
+		
 		return rootBoxes;
 	}
 

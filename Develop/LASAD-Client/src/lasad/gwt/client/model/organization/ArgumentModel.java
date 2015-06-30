@@ -153,8 +153,12 @@ public class ArgumentModel
 			
 			boolean partOfOther = false;
 			LinkedBox lastChild = thread.get(thread.size()-1);
+			HashSet<LinkedBox> firstParents = thread.get(0).getParentBoxes();
 			for(ArrayList<LinkedBox> set : threads)
 			{
+				if(partOfOther)
+					break;
+				
 				if(set.contains(lastChild))
 				{
 					thread.remove(lastChild);
@@ -162,7 +166,18 @@ public class ArgumentModel
 					partOfOther = true;
 					break;
 				}
+				
+				for(LinkedBox parent : firstParents)
+				{
+					if(set.contains(parent))
+					{
+						set.addAll(thread);
+						partOfOther = true;
+						break;
+					}
+				}
 			}
+			
 			if(!partOfOther)
 				threads.add(thread);
 		}

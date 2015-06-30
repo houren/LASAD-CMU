@@ -224,7 +224,6 @@ public class AutoOrganizer
 			LinkedBox root = null;
 			
 			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] All boxes in the thread: "+argThread, Logger.DEBUG);
-			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Got the root: "+argThread.getRootBoxes().size(), Logger.DEBUG);
 			for(LinkedBox box : argThread.getRootBoxes()){
 				root = box;
 				break;
