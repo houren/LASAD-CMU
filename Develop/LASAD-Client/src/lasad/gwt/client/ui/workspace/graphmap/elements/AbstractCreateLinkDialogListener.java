@@ -15,6 +15,8 @@ import com.google.gwt.user.client.EventListener;
 
 import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.model.organization.OrganizerLink;
+import lasad.gwt.client.model.organization.AutoOrganizer;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.ui.workspace.LASADInfo;
 
@@ -66,29 +68,39 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 						ArgumentModel argModel = ArgumentModel.getInstanceByMapID(myMap.getID());
 						LinkedBox alpha = argModel.getBoxByBoxID(b1.getConnectedModel().getId());
 						LinkedBox beta = argModel.getBoxByBoxID(b2.getConnectedModel().getId());
-						if (b1.getElementInfo().getElementID().equalsIgnoreCase("Premise") && b1.getElementInfo().getElementID().equalsIgnoreCase("Premise"))
+						OrganizerLink newLink = new OrganizerLink(alpha, beta, "Linked Premises");
+
+						int statusCode = myMap.getAutoOrganizer().linkedPremisesCanBeCreated(newLink);
+
+						if (statusCode == 0)
 						{
-							if (alpha.getNumSiblings() < MAX_SIBLINGS && beta.getNumSiblings() < MAX_SIBLINGS)
-							{
-								onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + "");
-								//TODO we should actually check for circular links before deciding whether to add the link
-							}
-							else
-							{
-								LASADInfo.display("Error", "One or both of the selected boxes already has 2 linked premises - can't create link");
-							}
+							onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + "");
 						}
 						else
 						{
-							LASADInfo.display("Error", "Linked Premises can only be between premises - can't create link");
+							switch (statusCode)
+							{
+								case 1:
+									LASADInfo.display("Error", "Linked Premises can only be between premises - can't create link");
+									break;
+								case 2:
+									LASADInfo.display("Error", "One or both of the selected boxes already has 2 linked premises - can't create link");
+									break;
+								case 3:
+									LASADInfo.display("Error", "One of the linked premises is already connected to a child of the other - can't create link");
+									break;
+								default:
+									Logger.log("ERROR: Unrecognized status code returned from AutoOrganizer.linkedPremisesCanBeCreated", Logger.DEBUG);
+									break;
+
+							}
 						}
+						
 					}
 					else
 					{
-						//TODO we should actually check for circular links before deciding whether to add the link
 						onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + "");
 					}
-				    //communicator.sendActionPackage(actionBuilder.createLinkWithElements(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + ""));
 				} else if (b1 != null && l2 != null) {
 				    //communicator.sendActionPackage(actionBuilder.createLinkWithElements(info, myMap.getID(), b1.getConnectedModel().getId() + "", l2.getConnectedModel().getId() + ""));
 					onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", l2.getConnectedModel().getId() + "");

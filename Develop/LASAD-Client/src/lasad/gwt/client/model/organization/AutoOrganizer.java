@@ -35,6 +35,7 @@ import lasad.gwt.client.model.organization.ArgumentThread;
 import lasad.gwt.client.model.organization.ArgumentModel;
 
 import lasad.gwt.client.communication.LASADActionReceiver;
+import lasad.gwt.client.ui.workspace.LASADInfo;
 
 /**
  * An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update links
@@ -52,6 +53,8 @@ public class AutoOrganizer
 	// Space between organized nodes
 	private final int Y_SPACE = 150;
 	private final int X_SPACE = 150;
+
+	private final int MAX_SIBLINGS = 2;
 	
 	//Initial coordinates
 	private final int INITIAL_X = 0;
@@ -92,6 +95,9 @@ public class AutoOrganizer
 
 	// Instances of autoOrganizer: one per map.  String is mapID.
 	private static HashMap<String, AutoOrganizer> instances = new HashMap<String, AutoOrganizer>();
+
+	// Must be cleared when updateSiblingLinks is called
+	private HashSet<OrganizerLink> linksToCreate = new HashSet<OrganizerLink>();
 
 	// For sending map updates to the server
 	private LASADActionSender communicator = LASADActionSender.getInstance();
@@ -279,6 +285,7 @@ public class AutoOrganizer
 	 */
 	public void updateSiblingLinks(OrganizerLink link)
 	{
+		linksToCreate.clear();
 		// The original link data
 		LinkedBox origStartBox = link.getStartBox();
 		LinkedBox origEndBox = link.getEndBox();
@@ -298,7 +305,7 @@ public class AutoOrganizer
 				if (!origEndChildBoxes.contains(newChildBox))
 				{
 					OrganizerLink newLink = new OrganizerLink(origEndBox, newChildBox, origStartChildLink.getType());
-					addLinkToVisual(newLink);
+					linksToCreate.add(newLink);
 				}
 			}
 
@@ -308,7 +315,7 @@ public class AutoOrganizer
 				if (!origStartChildBoxes.contains(newChildBox))
 				{
 					OrganizerLink newLink = new OrganizerLink(origStartBox, newChildBox, origEndChildLink.getType());
-					addLinkToVisual(newLink);
+					linksToCreate.add(newLink);
 				}
 			}
 		}
@@ -324,6 +331,9 @@ public class AutoOrganizer
 			 // potential start box, end box, type of link
 			visited.clear();
 		}
+
+		addLinksToVisual();
+		linksToCreate.clear();
 	}
 
 	/*	Recursively checks the siblings of a given start box to see if they need to be updated with a new relation.
@@ -339,7 +349,7 @@ public class AutoOrganizer
 			visited.add(startBox);
 			if (!startBox.getChildBoxes().contains(END_BOX))
 			{
-				addLinkToVisual(new OrganizerLink(startBox, END_BOX, LINK_TYPE));
+				linksToCreate.add(new OrganizerLink(startBox, END_BOX, LINK_TYPE));
 			}
 			for (LinkedBox siblingBox : startBox.getSiblingBoxes())
 			{
@@ -348,83 +358,80 @@ public class AutoOrganizer
 		}
 	}
 
-	/*	Helper method that sorts the mapComponents into a LinkedBox HashSet or an OrganizerLink HashSet
-		Might not be used now that organization will come from an already updatedModel
-		Don't worry about this method for now because we're not doing organizeMap() yet */
-	private void sortMapComponents()
+	// Returns 0 for yes, otherwise error code
+	public int linkedPremisesCanBeCreated(OrganizerLink link)
 	{
-		HashSet<AbstractBox> abstractBoxes = new HashSet<AbstractBox>();
-		HashSet<AbstractLinkPanel> abstractLinkPanels = new HashSet<AbstractLinkPanel>();
+		Logger.log("Entered linkedPremisesCanBeCreated", Logger.DEBUG);
 
-		for (Component mapComponent : mapComponents)
+		LinkedBox startBox = link.getStartBox();
+		LinkedBox endBox = link.getEndBox();
+
+		if (startBox == null || endBox == null)
 		{
-			if (mapComponent instanceof AbstractBox)
-			{
-				AbstractBox abstractBox = (AbstractBox) mapComponent;
-				LinkedBox newBox = new LinkedBox(abstractBox.getConnectedModel().getId(), Integer.parseInt(abstractBox.getConnectedModel().getValue(ParameterTypes.RootElementId)), abstractBox.getElementInfo().getElementID());
-				boxes.add(newBox);
-
-			}
-			else if (mapComponent instanceof AbstractLinkPanel)
-			{
-				abstractLinkPanels.add((AbstractLinkPanel) mapComponent);
-			}
+			Logger.log("null box", Logger.DEBUG);
 		}
 
-		for (AbstractLinkPanel linkPanel : abstractLinkPanels)
+		if (startBox.equals(endBox))
 		{
-			String startBoxRootString;
-			String endBoxRootString;
-			int startBoxRootID;
-			int endBoxRootID;
+			Logger.log("returning 4", Logger.DEBUG);
+			return 4;
+		}
 
-			// Shuts the compiler up
-			int startBoxID = -1;
-			int endBoxID = -1;
-
-			String type = linkPanel.getMyLink().getElementInfo().getElementID();
-			String direction = linkPanel.getMyLink().getConnectedModel().getValue(ParameterTypes.Direction);
-
-			if (direction != null && direction.split(",")[0].equalsIgnoreCase(Integer.toString(linkPanel.getMyLink().getConnectedModel().getParents().get(1).getId())))
+		// Checks that both boxes are premises, else return error code 1
+		if (startBox.getType().equalsIgnoreCase("Premise") && endBox.getType().equalsIgnoreCase("Premise"))
+		{
+			// Checks that they both have fewer than 2 siblings, else return error code 2
+			if (startBox.getNumSiblings() < MAX_SIBLINGS && endBox.getNumSiblings() < MAX_SIBLINGS)
 			{
-				startBoxRootString = linkPanel.getMyLink().getConnectedModel().getParents().get(1).getValue(ParameterTypes.RootElementId);	
-				endBoxRootString = linkPanel.getMyLink().getConnectedModel().getParents().get(0).getValue(ParameterTypes.RootElementId);	
-			} 
+				// Checks that there aren't existing connections with each other's children, else return error code 3
+				if (this.isCompatible(startBox, endBox))
+				{
+					Logger.log("returning 0", Logger.DEBUG);
+					return 0;
+				}
+				else
+				{
+					Logger.log("returning 3", Logger.DEBUG);
+					return 3;
+				}
+			}
 			else
 			{
-				startBoxRootString = linkPanel.getMyLink().getConnectedModel().getParents().get(0).getValue(ParameterTypes.RootElementId);		//getValue(ParameterTypes.Id);
-				endBoxRootString = linkPanel.getMyLink().getConnectedModel().getParents().get(1).getValue(ParameterTypes.RootElementId);	
+				Logger.log("returning 2", Logger.DEBUG);
+				return 2;
 			}
-
-			startBoxRootID = Integer.parseInt(startBoxRootString);
-			endBoxRootID = Integer.parseInt(endBoxRootString);
-
-			/* For every link, there must be a corresponding start and end box (invariant).  So even if the compiler thinks startBoxID
-				and endBoxID might not be changed from -1, they always will be. */
-
-			LinkedBox startBox = null;
-			LinkedBox endBox = null;
-
-			for (LinkedBox box : boxes)
-			{
-				if(box.getRootID() == startBoxRootID)
-				{
-					startBox = box;
-				}
-				else if(box.getRootID() == endBoxRootID)
-				{
-					endBox = box;
-				}
-				if (startBox != null && endBox != null)
-				{
-					break;
-				}
-			}
-
-			OrganizerLink organizerLink = new OrganizerLink(startBox, endBox, type);
-
-			links.add(organizerLink);
 		}
+		else
+		{
+			Logger.log("returning 1", Logger.DEBUG);
+			return 1;
+		}
+	}
+
+	// Checks that there aren't existing connections with each other's children.  True for compatible
+	private boolean isCompatible(LinkedBox startBox, LinkedBox endBox)
+	{
+		Logger.log("Entered isCompatible", Logger.DEBUG);
+		HashSet<LinkedBox> startChildBoxes = startBox.getChildBoxes();
+		HashSet<LinkedBox> endChildBoxes = endBox.getChildBoxes();
+
+		for (LinkedBox startChildBox : startChildBoxes)
+		{
+			if (endBox.hasLinkWith(startChildBox))
+			{
+				return false;
+			}
+		}
+
+		for (LinkedBox endChildBox : endChildBoxes)
+		{
+			if (startBox.hasLinkWith(endChildBox))
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	// Updates a box position on the map, might need to add to redraw the relations because I'm losing arrow heads on them for some reason
@@ -433,10 +440,9 @@ public class AutoOrganizer
 		communicator.sendActionPackage(actionBuilder.updateBoxPosition(map.getID(), box.getBoxID(), x, y));
 	}
 
-	/*	Adds the passed link to the organizer model and map
-		@param link - the link to be added to the model and map
+	/*	Adds the new links to the organizer model and map
 	*/
-	private void addLinkToVisual(OrganizerLink link)
+	private void addLinksToVisual()
 	{	
 		String elementType = "relation";
 
@@ -445,14 +451,17 @@ public class AutoOrganizer
 		ElementInfo linkInfo = new ElementInfo();
 		linkInfo.setElementType(elementType);
 
-		// a better name for element ID here would be subtype, as in, what kind of relation.  I didn't write it.
-		linkInfo.setElementID(link.getType());
+		for (OrganizerLink link : linksToCreate)
+		{
+			// a better name for element ID here would be subtype, as in, what kind of relation.  I didn't write it.
+			linkInfo.setElementID(link.getType());
 
-		String startBoxStringID = Integer.toString(link.getStartBox().getBoxID());
-		String endBoxStringID = Integer.toString(link.getEndBox().getBoxID());
+			String startBoxStringID = Integer.toString(link.getStartBox().getBoxID());
+			String endBoxStringID = Integer.toString(link.getEndBox().getBoxID());
 
-		ActionPackage myPackage = actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID);
-		LASADActionReceiver.getInstance().setSiblingsAlreadyUpdated(true);
-		communicator.sendActionPackage(myPackage);
+			ActionPackage myPackage = actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID);
+			LASADActionReceiver.getInstance().setSiblingsAlreadyUpdated(true);
+			communicator.sendActionPackage(myPackage);
+		}
 	}
 }

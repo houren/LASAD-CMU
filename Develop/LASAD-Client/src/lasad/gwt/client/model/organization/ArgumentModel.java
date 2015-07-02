@@ -73,15 +73,18 @@ public class ArgumentModel
 
 	public LinkedBox getBoxByBoxID(int boxID)
 	{
-		for (ArgumentThread argThread : argThreads)
+		LinkedBox returnBox = null;
+		for (ArgumentThread argThread : this.argThreads)
 		{
-			LinkedBox box = argThread.getBoxByBoxID(boxID);
-			if (box != null)
+			returnBox = argThread.getBoxByBoxID(boxID);
+			if (returnBox != null)
 			{
-				return box;
+				return returnBox;
 			}
 		}
+		
 		return null;
+		
 	}
 
 	public LinkedBox getBoxByRootID(int rootID)
@@ -97,6 +100,7 @@ public class ArgumentModel
 		return null;
 	}
 
+	// Returns the argument thread of the provided box, else null
 	public ArgumentThread getBoxThread(LinkedBox box)
 	{
 		for (ArgumentThread thread : argThreads)
@@ -110,28 +114,28 @@ public class ArgumentModel
 	}
 	
 	private ArrayList<LinkedBox> discoverArgThread(LinkedBox rootBox){
-			ArrayList<LinkedBox> siblings = new ArrayList<LinkedBox>();
-			siblings.add(rootBox);
-			siblings.addAll(rootBox.getSiblingBoxes());
-			
-			visited.addAll(siblings);
-			
-			ArrayList<LinkedBox> allBranch = new ArrayList<LinkedBox>();
-			allBranch.addAll(siblings);
-			
-			for(LinkedBox box : siblings){
-				for(LinkedBox childBox : box.getChildBoxes())
+		ArrayList<LinkedBox> siblings = new ArrayList<LinkedBox>();
+		siblings.add(rootBox);
+		siblings.addAll(rootBox.getSiblingBoxes());
+		
+		visited.addAll(siblings);
+		
+		ArrayList<LinkedBox> allBranch = new ArrayList<LinkedBox>();
+		allBranch.addAll(siblings);
+		
+		for(LinkedBox box : siblings){
+			for(LinkedBox childBox : box.getChildBoxes())
+			{
+				if(!visited.contains(childBox))
 				{
-					if(!visited.contains(childBox))
-					{
-						allBranch.addAll(discoverArgThread(childBox));
-					}else{
-						allBranch.add(childBox);
-						return allBranch;
-					}
+					allBranch.addAll(discoverArgThread(childBox));
+				}else{
+					allBranch.add(childBox);
+					return allBranch;
 				}
 			}
-			return allBranch;
+		}
+		return allBranch;
 	}
 	
 	//guarantees that the ArgThreads listed correspond to the current state of the map

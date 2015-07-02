@@ -24,7 +24,6 @@ public class OrganizerLink
 
 	// Helps with removal of links, otherwise not needed
 	private int linkID;
-	
 
 	/**
 	 * Constructor

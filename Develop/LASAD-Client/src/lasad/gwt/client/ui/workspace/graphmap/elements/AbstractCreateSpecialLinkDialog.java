@@ -26,7 +26,9 @@ import com.google.gwt.user.client.Element;
 
 import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.model.organization.ArgumentThread;
+import lasad.gwt.client.model.organization.AutoOrganizer;
 import lasad.gwt.client.logger.Logger;
 
 /**
@@ -81,33 +83,33 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 		// Fill combo boxes
 		comboStart.setFieldLabel("<font color=\"#000000\">" + "Start" + "</font>");
 		comboStart.setAllowBlank(false);
-		for (String id : boxes.keySet()) {
+		for (String rootID : boxes.keySet()) {
 			// TODO : Verify I'm only doing linked premises between premises
 			// Be careful about RootID vs Box ID
 
 			if (config.getElementID().equalsIgnoreCase("Linked Premises"))
 			{
 				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
-				LinkedBox alpha = argModel.getBoxByRootID(Integer.parseInt(id));
+				LinkedBox alpha = argModel.getBoxByRootID(Integer.parseInt(rootID));
 
 				if (alpha.getNumSiblings() < MAX_SIBLINGS && alpha.getType().equalsIgnoreCase("Premise"))
 				{
-					comboStart.add(id);
+					comboStart.add(rootID);
 				}
 			}
 			else
 			{
-				comboStart.add(id);
+				comboStart.add(rootID);
 			}
 
-			comboEnd.add(id);
+			comboEnd.add(rootID);
 		}
 		simple.add(comboStart, formData);
 
 		comboEnd.setFieldLabel("<font color=\"#000000\">" + "End" + "</font>");
 		comboEnd.setAllowBlank(false);
-		for (String id : links.keySet()) {
-			comboEnd.add(id);
+		for (String rootID : links.keySet()) {
+			comboEnd.add(rootID);
 		}
 		comboEnd.setEnabled(false);
 		simple.add(comboEnd, formData);
@@ -118,6 +120,10 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 			@Override
 			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se) {
 				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
+
+				// Important to use rootID
+				LinkedBox startBox = argModel.getBoxByRootID(Integer.parseInt(comboStart.getRawValue()));
+
 				comboEnd.setEnabled(true);
 
 				boolean comboEndHasElements = false;
@@ -130,25 +136,25 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 				Vector<String> restrictedIds = new Vector<String>();
 
+				AutoOrganizer autoOrganizer = AutoOrganizer.getInstanceByMapID(correspondingMapId);
+
 				//TODO (Marcel) unite following two loops
-				for (String boxId : boxes.keySet()) {
-					if (!boxes.get(boxId).getElementInfo().getElementID().equalsIgnoreCase("Premise"))
-					{
-						restrictedIds.add(boxId);
-					}
+				for (String rootID : boxes.keySet()) {
+
+					LinkedBox endBox = argModel.getBoxByRootID(Integer.parseInt(rootID));
+
 					if (config.getElementID().equalsIgnoreCase("Linked Premises"))
 					{
-						if (argModel.getBoxByRootID(Integer.parseInt(boxId)).getNumSiblings() >= MAX_SIBLINGS)
+						OrganizerLink newLink = new OrganizerLink(startBox, endBox, config.getElementID());
+
+						if (autoOrganizer.linkedPremisesCanBeCreated(newLink) != 0)
 						{
-							restrictedIds.add(boxId);
+							restrictedIds.add(rootID);
 						}
-						else if (!boxes.get(boxId).getElementInfo().getElementID().equalsIgnoreCase("Premise"))
-						{
-							restrictedIds.add(boxId);
-						}
+
 					}
-					if (boxId.equals(comboStart.getRawValue())) {
-						restrictedIds.add(boxId);
+					if (rootID.equals(comboStart.getRawValue())) {
+						restrictedIds.add(rootID);
 
 						// It's not allowed to connect two boxes that already
 						// are connected to each other
@@ -162,9 +168,9 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 					}
 				}
 
-				for (String boxId : boxes.keySet()) {
-					if (!restrictedIds.contains(boxId)) {
-						comboEnd.add(boxId);
+				for (String rootID : boxes.keySet()) {
+					if (!restrictedIds.contains(rootID)) {
+						comboEnd.add(rootID);
 						if (comboEndHasElements == false) comboEndHasElements = true;
 					}
 				}
@@ -189,22 +195,29 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 			@Override
 			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se) {
 				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
+				LinkedBox endBox = argModel.getBoxByRootID(Integer.parseInt(comboEnd.getRawValue()));
+
 				comboStart.removeAll();
-				for (String id : boxes.keySet()) {
+
+				AutoOrganizer autoOrganizer = AutoOrganizer.getInstanceByMapID(correspondingMapId);
+
+				for (String rootID : boxes.keySet()) {
+
+					LinkedBox startBox = argModel.getBoxByRootID(Integer.parseInt(rootID));
+
 					if (config.getElementID().equalsIgnoreCase("Linked Premises"))
 					{
-						if (argModel.getBoxByRootID(Integer.parseInt(id)).getNumSiblings() < MAX_SIBLINGS && (!id.equals(comboEnd.getRawValue())))
+						OrganizerLink newLink = new OrganizerLink(startBox, endBox, "Linked Premises");
+
+						if (autoOrganizer.linkedPremisesCanBeCreated(newLink) == 0)
 						{
-							if (boxes.get(id).getElementInfo().getElementID().equalsIgnoreCase("Premise"))
-							{
-								comboStart.add(id);
-							}
+							comboStart.add(rootID);
 						}
 					}
 					else
 					{
-						if (!id.equals(comboEnd.getRawValue())) {
-							comboStart.add(id);
+						if (!rootID.equals(comboEnd.getRawValue())) {
+							comboStart.add(rootID);
 						}
 					}	
 				}

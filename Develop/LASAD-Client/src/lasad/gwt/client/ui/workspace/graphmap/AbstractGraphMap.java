@@ -103,6 +103,11 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 
 	public void enableCursorTracking() {}
 
+	public AutoOrganizer getAutoOrganizer()
+	{
+		return this.autoOrganizer;
+	}
+
 	public ArgumentModel getArgModel()
 	{
 		return argModel;

@@ -550,28 +550,8 @@ public class LASADActionReceiver {
 					String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
 					int endBoxID = Integer.parseInt(endBoxStringID);
 
-					LinkedBox startBox = null;
-					LinkedBox endBox = null;
-					LinkedBox potentialStartBox = null;
-					LinkedBox potentialEndBox = null;
-
-					for (ArgumentThread argThread : argModel.getArgThreads())
-					{
-						potentialStartBox = argThread.getBoxByBoxID(startBoxID);
-						potentialEndBox = argThread.getBoxByBoxID(endBoxID);
-						if (potentialStartBox != null)
-						{
-							startBox = potentialStartBox;
-						}
-						if (potentialEndBox != null)
-						{
-							endBox = potentialEndBox;
-						}
-						if (startBox != null && endBox != null)
-						{
-							break;
-						}
-					}
+					LinkedBox startBox = argModel.getBoxByBoxID(startBoxID);
+					LinkedBox endBox = argModel.getBoxByBoxID(endBoxID);
 
 					if (startBox == null || endBox == null)
 					{

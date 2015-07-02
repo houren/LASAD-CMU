@@ -293,6 +293,18 @@ public class LinkedBox
 		// If link hasn't been found by this point, it doesn't exist and we just return
 	}
 
+	public boolean hasLinkWith(LinkedBox other)
+	{
+		if (this.getChildBoxes().contains(other) || this.getParentBoxes().contains(other) || this.getSiblingBoxes().contains(other))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	// Box IDs are unique and final, so this is all we need for equality for now.  May change this later if I start comparing between maps for some reason
 	@Override
 	public boolean equals(Object object)

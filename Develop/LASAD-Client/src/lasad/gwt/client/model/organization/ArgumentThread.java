@@ -190,6 +190,7 @@ public class ArgumentThread
 	}
 	
 	//identify a cycle
+	// As used, start is initialiazed as the INITIAL currentBox and its siblings
 	private boolean isCycle(HashSet<LinkedBox> start, LinkedBox currentBox){
 		if(start.contains(currentBox))
 		{
