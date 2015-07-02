@@ -98,6 +98,7 @@ public class AutoOrganizer
 
 	// Must be cleared when updateSiblingLinks is called
 	private HashSet<OrganizerLink> linksToCreate = new HashSet<OrganizerLink>();
+	private HashSet<OrganizerLink> linksToRemove = new HashSet<OrganizerLink>();
 
 	// For sending map updates to the server
 	private LASADActionSender communicator = LASADActionSender.getInstance();
@@ -461,6 +462,46 @@ public class AutoOrganizer
 
 			ActionPackage myPackage = actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID);
 			LASADActionReceiver.getInstance().setSiblingsAlreadyUpdated(true);
+			communicator.sendActionPackage(myPackage);
+		}
+	}
+
+	public void determineLinksToRemove(OrganizerLink removedLink)
+	{
+		linksToCreate.clear();
+		linksToRemove.clear();
+		if (!removedLink.getType().equalsIgnoreCase("Linked Premises"))
+		{
+			LinkedBox removedLinkStartBox = removedLink.getStartBox();
+			int numSiblings = removedLinkStartBox.getNumSiblings();
+			HashSet<OrganizerLink> siblingLinks = removedLinkStartBox.getSiblingLinks();
+			for (OrganizerLink link : siblingLinks)
+			{
+				linksToRemove.add(link);
+			}
+
+			// Don't forget new connection if there's 2 siblings
+			/*
+			if (numSiblings == 2)
+			{
+				
+			}
+			*/
+		}
+
+		removeLinksFromVisual();
+		linksToCreate.clear();
+		linksToRemove.clear();
+	}
+
+	private void removeLinksFromVisual()
+	{
+		MVController controller = LASAD_Client.getMVCController(map.getID());
+
+		for (OrganizerLink link : linksToRemove)
+		{
+			ActionPackage myPackage = actionBuilder.removeElement(map.getID(), link.getLinkID());
+			LASADActionReceiver.getInstance().setPremisesAlreadyRemoved(true);
 			communicator.sendActionPackage(myPackage);
 		}
 	}

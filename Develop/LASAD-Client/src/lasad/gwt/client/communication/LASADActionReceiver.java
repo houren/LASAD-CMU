@@ -92,6 +92,7 @@ public class LASADActionReceiver {
 	private ReplayInitializer init;
 
 	private boolean siblingsAlreadyUpdated = false;
+	private boolean premisesAlreadyRemoved = false;
 
 	private static int counterID = -1;
 
@@ -110,6 +111,11 @@ public class LASADActionReceiver {
 	public void setSiblingsAlreadyUpdated(boolean alreadyUpdated)
 	{
 		this.siblingsAlreadyUpdated = alreadyUpdated;
+	}
+
+	public void setPremisesAlreadyRemoved(boolean alreadyRemoved)
+	{
+		this.premisesAlreadyRemoved = alreadyRemoved;
 	}
 
 	public void doActionPackage(ActionPackage p) {
@@ -674,7 +680,21 @@ public class LASADActionReceiver {
 					// Kevin Loughlin
 
 					//Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
-					argModel.removeEltByEltID(elementID);
+					Object removedObj = argModel.removeEltByEltID(elementID);
+					if (removedObj != null)
+					{
+						if (removedObj instanceof OrganizerLink)
+						{
+							if (premisesAlreadyRemoved)
+							{
+								this.setPremisesAlreadyRemoved(false);
+							}
+							else
+							{
+								autoOrganizer.determineLinksToRemove((OrganizerLink) removedObj);
+							}
+						}
+					}
 
 					//Logger.log("Arg Model at end of delete:\n" + argModel.toString(), Logger.DEBUG);
 					// End Kevin Loughlin
