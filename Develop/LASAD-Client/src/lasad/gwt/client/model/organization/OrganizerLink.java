@@ -1,17 +1,11 @@
 package lasad.gwt.client.model.organization;
 import lasad.gwt.client.model.organization.LinkedBox;
 
-// Doesn't work --- import lasad.database.DatabaseConnectionHandler;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 /**
  * OrganizerLink is, like LinkedBox is to AbstractBox, a way of representing an AbstractLinkPanel (and/or an AbstractLink) that is more
  * friendly to AutoOrganizer.  The important info for updating a link via an Action is contained within an OrganizerLink.
  * @author Kevin Loughlin
- * @since 17 June 2015, Updated 24 June 2015
+ * @since 17 June 2015, Updated 6 July 2015
  */
 public class OrganizerLink
 {
@@ -37,8 +31,7 @@ public class OrganizerLink
 	}
 
 	/**
-	 * I'm trying to get it so that the next available ID is given to this link, but I can't import the commented out library, so
-	 * I don't know what's going on.  Hence the commented out code in this constructor.
+	 * Somehow this ID turns out right in the end.  No idea how...
 	 */
 	public OrganizerLink(LinkedBox startBox, LinkedBox endBox, String type)
 	{

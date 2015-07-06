@@ -588,6 +588,8 @@ public class LASADActionReceiver {
 					}
 
 					//Logger.log("Model after initial action" + argModel.toString(), Logger.DEBUG);
+					Logger.log("BEFORE UPDATE\n", Logger.DEBUG);
+					Logger.log(argModel.toString(), Logger.DEBUG);
 
 					if (siblingsAlreadyUpdated)
 					{
@@ -600,6 +602,9 @@ public class LASADActionReceiver {
 						autoOrganizer.updateSiblingLinks(link);
 						//Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
 					}
+
+					Logger.log("AFTER UPDATE\n", Logger.DEBUG);
+					Logger.log(argModel.toString(), Logger.DEBUG);
 				}
 
 				// End Kevin Loughlin
@@ -681,6 +686,9 @@ public class LASADActionReceiver {
 
 					//Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
 					Object removedObj = argModel.removeEltByEltID(elementID);
+
+					// TODO Check to see if new thread is necessary
+
 					if (removedObj != null)
 					{
 						if (removedObj instanceof OrganizerLink)
@@ -701,7 +709,7 @@ public class LASADActionReceiver {
 
 				} else {
 					// This occurs when another user deletes his/her feedback
-					Logger.log("Cannot delete delete, because element ID is unknown.", Logger.DEBUG_ERRORS);
+					Logger.log("Cannot delete, because element ID is unknown.", Logger.DEBUG_ERRORS);
 				}
 			} else if (a.getCmd().equals(Commands.ListMap)) {
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] LISTMAP", Logger.DEBUG);

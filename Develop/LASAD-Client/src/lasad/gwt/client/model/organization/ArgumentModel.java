@@ -1,12 +1,12 @@
 package lasad.gwt.client.model.organization;
 
-// Aware that this is unnecessary, I just do it as a reminder in case I change location
-import lasad.gwt.client.model.organization.ArgumentThread;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Collection;
 import java.util.ArrayList;
 
+// Aware that this is unnecessary, I just do it as a reminder in case I change location
+import lasad.gwt.client.model.organization.ArgumentThread;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.model.organization.LinkedBox;
 

@@ -17,6 +17,7 @@ import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.model.organization.AutoOrganizer;
+import lasad.gwt.client.model.organization.LinkedPremisesStatusCodes;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.ui.workspace.LASADInfo;
 
@@ -64,17 +65,23 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 				// Send Action --> Server
 				if (b1 != null && b2 != null) {
 
+					// Begin additions by Kevin Loughlin to handle when new links may actually be created (necessary to maintain Linked Premises invariants)
 					String linkType = info.getElementID();
 					ArgumentModel argModel = ArgumentModel.getInstanceByMapID(myMap.getID());
 					LinkedBox alpha = argModel.getBoxByBoxID(b1.getConnectedModel().getId());
 					LinkedBox beta = argModel.getBoxByBoxID(b2.getConnectedModel().getId());
 					OrganizerLink newLink = new OrganizerLink(alpha, beta, linkType);
 
-					if (linkType.equalsIgnoreCase("Linked Premises"))
+					if (alpha.hasExtendedSiblingLinkWith(beta))
+					{
+						LASADInfo.display("Error", "You cannot create a relation between already linked premises.");
+					}
+
+					else if (linkType.equalsIgnoreCase("Linked Premises"))
 					{
 						int statusCode = myMap.getAutoOrganizer().linkedPremisesCanBeCreated(newLink);
 
-						if (statusCode == 0)
+						if (statusCode == LinkedPremisesStatusCodes.SUCCESS)
 						{
 							onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + "");
 						}
@@ -82,13 +89,19 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 						{
 							switch (statusCode)
 							{
-								case 1:
+								case LinkedPremisesStatusCodes.NULL_BOX:
+									Logger.log("Null box passed to linkedPremisesCanBeCreated", Logger.DEBUG);
+									break;
+								case LinkedPremisesStatusCodes.SAME_BOX:
+									Logger.log("Same start and end box passed to linkedPremisesCanBeCreated", Logger.DEBUG);
+									break;
+								case LinkedPremisesStatusCodes.NOT_PREMISES:
 									LASADInfo.display("Error", "Linked Premises can only be between premises - can't create link");
 									break;
-								case 2:
+								case LinkedPremisesStatusCodes.TOO_MANY_SIBS:
 									LASADInfo.display("Error", "One or both of the selected boxes already has 2 linked premises - can't create link");
 									break;
-								case 3:
+								case LinkedPremisesStatusCodes.TWO_WAY_LINK:
 									LASADInfo.display("Error", "Creating linked premises here would result in a two-way link on the map - can't create link");
 									break;
 								default:
@@ -99,9 +112,9 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 						}
 						
 					}
-					else if (alpha.hasExtendedSiblingLinkWith(beta))
+					else if (!alpha.okayForLink(beta))
 					{
-						LASADInfo.display("Error", "You cannot create a non linked premise relation between a group of already linked premises.");
+						LASADInfo.display("Error", "Creating a link here would result in a two-way link - can't create link.");
 					}
 					else
 					{

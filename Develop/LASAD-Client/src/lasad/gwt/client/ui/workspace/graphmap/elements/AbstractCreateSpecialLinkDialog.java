@@ -35,6 +35,7 @@ import lasad.gwt.client.logger.Logger;
  * This class creates the dialog box for when the user selects to add a relation via the argument map drop down menu.
  * If creating links via dragging, see AbstractCreateLinkDialog (link only) and AbstractCreateBoxLinkDialog (link and box).
  * Documentation added by Kevin Loughlin, 16 June 2015
+ * Modified by Kevin Loughlin 6 July 2015 to add limitations on what types of links can be added and when.
  * @author Unknown
  */
 

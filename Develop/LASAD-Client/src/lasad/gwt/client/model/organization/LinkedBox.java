@@ -10,14 +10,14 @@ import lasad.gwt.client.logger.Logger;
  * organization of all Links on the map, as they can be followed in a chain similar to a linked list.  This class is key to AutoOrganizer.
  * All names within this class are self-explanatory.
  * @author Kevin Loughlin
- * @since 11 June 2015, Updated 24 June 2015
+ * @since 11 June 2015, Updated 6 July 2015
  */
 
 public class LinkedBox
 {
-	private final int MAX_SIBLINGS = 2;
 	private final int ERROR = -1;
 
+	// I.e. premise, conclusion, etc.
 	private final String type;
 
 	// Be mindful of difference between boxID and rootID.
@@ -37,6 +37,9 @@ public class LinkedBox
 	// Height and width level will be used like a coordinate grid once we come to organizeMap() of AutoOrganizer
 	private int heightLevel;
 	private int widthLevel;
+
+	// Just for use with getThisAndExtendedSiblings
+	private HashSet<LinkedBox> gathered = new HashSet<LinkedBox>();
 
 	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
 
@@ -117,8 +120,27 @@ public class LinkedBox
 		return siblingBoxes;
 	}
 
-	// I naturally avoid duplicates in all add methods by implementing this with HashSet.  Takes care of updating boxes too.
+	public HashSet<LinkedBox> getThisAndExtendedSiblings()
+	{
+		gathered.clear();
+		findThisAndExtendedSiblings(this);
+		return gathered;
+	}
 
+	// intialize currentBox as this and visited should be empty; RECURSIVE; remember to remove this box after use of findExtendedSiblings
+	private void findThisAndExtendedSiblings(LinkedBox currentBox)
+	{
+		gathered.add(currentBox);
+		for (LinkedBox siblingBox : currentBox.getSiblingBoxes())
+		{
+			if (!gathered.contains(siblingBox))
+			{
+				findThisAndExtendedSiblings(siblingBox);
+			}
+		}
+	}
+
+	// I naturally avoid duplicates in all add methods by implementing this with HashSet.  Takes care of updating boxes too.
 	public void addChildLink(OrganizerLink link)
 	{
 		this.childLinks.add(link);
@@ -207,7 +229,7 @@ public class LinkedBox
 
 	/**
 	 *	Gets rid of the traces of itself in children/parents/siblings by removing the links to itself from those boxes.
-	 *	Will be key for removal later on.
+	 *	Will be key for removal from map/model later on.
 	 */
 	public void removeLinksToSelf()
 	{
@@ -239,61 +261,6 @@ public class LinkedBox
 				siblingLink.getStartBox().removeSiblingLink(siblingLink);
 			}
 		}
-	}
-
-	/**
-	 *	Gets rid of the specific link from this to boxID
-	 */
-	public void removeLinkToBoxID(int boxID)
-	{
-		HashSet<OrganizerLink> childLinks = this.getChildLinks();
-		HashSet<OrganizerLink> parentLinks = this.getParentLinks();
-		HashSet<OrganizerLink> siblingLinks = this.getSiblingLinks();
-
-		// Check the children
-		for (OrganizerLink childLink : childLinks)
-		{
-			LinkedBox endBox = childLink.getEndBox();
-			if (endBox.getBoxID() == boxID) 
-			{
-				this.childLinks.remove(childLink);
-				endBox.removeParentLink(childLink);
-				return;
-			}
-		}
-
-		// Check the parents
-		for (OrganizerLink parentLink : parentLinks)
-		{
-			LinkedBox startBox = parentLink.getStartBox();
-			if (startBox.getBoxID() == boxID) 
-			{
-				this.parentLinks.remove(parentLink);
-				startBox.removeChildLink(parentLink);
-				return;
-			}
-		}
-
-		// Check the siblings
-		for (OrganizerLink siblingLink : siblingLinks)
-		{
-			LinkedBox startBox = siblingLink.getStartBox();
-			LinkedBox endBox = siblingLink.getEndBox();
-			if (startBox.getBoxID() == boxID) 
-			{
-				this.siblingLinks.remove(siblingLink);
-				startBox.removeSiblingLink(siblingLink);
-				return;
-			}
-			else if (endBox.getBoxID() == boxID) 
-			{
-				this.siblingLinks.remove(siblingLink);
-				endBox.removeSiblingLink(siblingLink);
-				return;
-			}
-		}
-
-		// If link hasn't been found by this point, it doesn't exist and we just return
 	}
 
 	public boolean hasChildLinkWith(LinkedBox other)
@@ -332,10 +299,18 @@ public class LinkedBox
 		}
 	}
 
+	/**
+	 *	ExtendedSiblingLinks reference checking for connections via siblings, siblings of siblings, and so on
+	 *	@param boxToFind - The box with which we are checking this instance for an extended sibling connection
+	 *	@return true if an extended sibling connection exists, false if not
+	 */
 	public boolean hasExtendedSiblingLinkWith(LinkedBox boxToFind)
 	{
 		boolean foundExtendedSibling = false;
+
+		// Don;t forget to clear visited!!
 		visited.clear();
+
 		if (this.hasSiblingLinkWith(boxToFind))
 		{
 			foundExtendedSibling = true;
@@ -349,6 +324,12 @@ public class LinkedBox
 		return foundExtendedSibling;
 	}
 
+	/*
+	 *	Recursive helper for hasExtendedSiblingLinkWith
+	 *	@param box - the Box we are checking to see if it is the one we are searching for
+	 *	@param BOX_TO_FIND - The box we are searching for
+	 *	@return true if match, false if not
+	 */
 	private boolean extendedSiblingRecursive(LinkedBox box, LinkedBox BOX_TO_FIND)
 	{
 		Logger.log("Entered extendedSiblingRecursive", Logger.DEBUG);
@@ -376,6 +357,11 @@ public class LinkedBox
 		return false;
 	}
 
+	/**
+	 *	A nonChild link is a link that is only either a parent link or a sibling link
+	 *	@param other - the box to check for the link
+	 *	@return true if the link exists, else false
+	 */
 	public boolean hasNonChildLinkWith(LinkedBox other)
 	{
 		if (this.hasParentLinkWith(other) || this.hasSiblingLinkWith(other))
@@ -400,7 +386,7 @@ public class LinkedBox
 		}
 	}
 
-	// Box IDs are unique and final, so this is all we need for equality for now.  May change this later if I start comparing between maps for some reason
+	// Box IDs are unique and final, so this is all we need for equality for now.
 	@Override
 	public boolean equals(Object object)
 	{
@@ -422,6 +408,7 @@ public class LinkedBox
 		}	
 	}
 
+	// Necessary override since we're using HashMaps and HashSets in our code.  BoxIDs are unique, so this guarantees no collisions.
 	@Override
 	public int hashCode()
 	{
@@ -466,5 +453,19 @@ public class LinkedBox
 		}
 		buffer.append("\n\t\tEND BOX\n");
 		return buffer.toString();
+	}
+
+	// Needs a better name, do that tomorrow
+	public boolean okayForLink(LinkedBox endBox)
+	{
+		HashSet<LinkedBox> startBoxAndExtSibs = this.getThisAndExtendedSiblings();
+		for (LinkedBox startBox : startBoxAndExtSibs)
+		{
+			if (endBox.hasChildLinkWith(startBox))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }

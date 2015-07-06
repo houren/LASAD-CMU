@@ -1,96 +1,64 @@
 package lasad.gwt.client.model.organization;
 
-// Some of these import statements can be deleted, but I'm too lazy to do that right now and it's not exactly a big deal.
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.ArrayList;
 
-import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.communication.helper.ActionFactory;
 import lasad.gwt.client.communication.LASADActionSender;
+import lasad.gwt.client.communication.LASADActionReceiver;
+
+import lasad.gwt.client.LASAD_Client;
+
 import lasad.gwt.client.model.argument.MVController;
-import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
-import lasad.shared.communication.objects.parameters.ParameterTypes;
-import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.ElementInfo;
 
-import com.extjs.gxt.ui.client.widget.Component;
-import lasad.gwt.client.ui.link.AbstractLinkPanel;
-import java.util.HashMap;
-import java.util.Set;
-
-import lasad.shared.communication.objects.Action;
-import lasad.shared.communication.objects.ActionPackage;
-import lasad.gwt.client.model.argument.MVController;
-import lasad.gwt.client.model.AbstractUnspecifiedElementModel;
-import lasad.gwt.client.LASAD_Client;
-import lasad.shared.communication.objects.Parameter;
-import lasad.gwt.client.model.argument.UnspecifiedElementModelArgument;
-
 // I'm aware that importing from the same package is unnecessary, but I do it in case I chnage the package of this class ever.
-import lasad.gwt.client.model.organization.LinkedBox;
-import lasad.gwt.client.model.organization.OrganizerLink;
-import lasad.gwt.client.model.organization.ArgumentThread;
 import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.model.organization.ArgumentThread;
+import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.model.organization.LinkedPremisesStatusCodes;
+import lasad.gwt.client.model.organization.OrganizerLink;
 
-import lasad.gwt.client.communication.LASADActionReceiver;
-import lasad.gwt.client.ui.workspace.LASADInfo;
+import lasad.gwt.client.logger.Logger;
+import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
+
+import lasad.shared.communication.objects.ActionPackage;
 
 /**
  * An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update links
  * in ArgumentMap representations where a type of relation is listed as "Linked Premises" (not case sensitive). The overall map organizing function,
  * accordingly called organizeMap(), is only called when the user clicks the corresponding button on the ArgumentMapMenuBar. Though originally
- * built for maps using Mara Harrell's template, this class can be applied to any map from any template.
- * This class, especially organizeMap, needs significant overhauls, as I have changed the structuring such that there is a model that updates
- * with every change to the map.  Thus, we don't need to start from scratch and gather components every time the map is called.
- * @author Kevin Loughlin
- * @since 12 June 2015, Updated 30 June 2015
+ * built for maps using Mara Harrell's template, this class can be applied to any map from any template.  There is a model that updates
+ * with every change to the map.  Thus, we don't need to start from scratch and gather components every time these methods are called.
+ * @author Kevin Loughlin and Darlan Santana Farias
+ * @since 12 June 2015, Updated 6 July 2015
  */
-
 public class AutoOrganizer
 {
 	// Space between organized nodes
 	private final int Y_SPACE = 150;
 	private final int X_SPACE = 150;
 
+	// The maximum number of siblings (linked premises) a box can have
 	private final int MAX_SIBLINGS = 2;
 	
 	//Initial coordinates
 	private final int INITIAL_X = 0;
 	private final int INITIAL_Y = 2200;
 
-	// The map
-	private AbstractGraphMap map;
-
-	/*	The map's components (i.e. instances of AbstractBox and AbstractLinkPanel, I would imagine child elements would be stored here)
-		but they're not needed */
-	private List<Component> mapComponents;
-
 	// Perfectly centered box location
 	private final int CENTER_X = 2400;
 	private final int CENTER_Y = CENTER_X;
 
-	// This is hack for LinkID, need to find to a way to get next available ID
-	private static int counterID = -1;
-
-	// All the boxes on the map
-	private HashSet<LinkedBox> boxes = new HashSet<LinkedBox>();
-
-	// siblingBoxes are for Mara Harrell's ontology; they are boxes attached via Linked Premises relations
-	private HashSet<LinkedBox> siblingBoxes = new HashSet<LinkedBox>();
-
-	/* rootBoxes are those that are on height level 1, i.e. they start an argument thread.  Theoretically, a map could have multiple
-		threads (even if that would be poor organization, and thus that must be taken into account in the organizeMap method. */
-	private HashSet<LinkedBox> rootBoxes = new HashSet<LinkedBox>();
-
-	// All the links (relations) on a map
-	private HashSet<OrganizerLink> links = new HashSet<OrganizerLink>();
+	// The map that this instance of AutoOrganizer corresponds to
+	private AbstractGraphMap map;
 
 	// Stores boxes that have been visited during a method call.  Important to clear at beginning of method call.
 	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
 	
-	// Same as the variable above, but this one keeps the order in which the boxes are inserted
+	// Same as HashSet visited, but the ArrayList keeps the order in which the boxes are inserted in exchange for slightly slower method speeds
 	private ArrayList<LinkedBox> visitedList = new ArrayList<LinkedBox>();
 
 	// Instances of autoOrganizer: one per map.  String is mapID.
@@ -111,7 +79,6 @@ public class AutoOrganizer
 	public AutoOrganizer(AbstractGraphMap map)
 	{
 		this.map = map;
-		this.mapComponents = map.getItems();
 		instances.put(map.getID(), this);
 	}
 
@@ -122,8 +89,8 @@ public class AutoOrganizer
 
 	/**
 	 * Returns the AutoOrganizer instance relating to the parameter mapID
-	 * @param mapID - The ID for the map that corresponds to an autoOrganizer in the instances of AutoOrganizer
-	 * @return The autoOrganizer instance for mapID, or null if it does not exist
+	 * @param mapID - The ID for the map that corresponds to an instance of AutoOrganizer
+	 * @return The autoOrganizer instance corresponding to mapID, or null if the instance does not exist
 	 */
 	public static AutoOrganizer getInstanceByMapID(String mapID)
 	{
@@ -279,13 +246,15 @@ public class AutoOrganizer
 
 	/**
 	 * Updates the sibling boxes (i.e. linked premises boxes) related to the creation of a new link.
-	 * For example, if box A is attached to box B as linked premises, and box B gets a new child, then box A should also
+	 * For example, if box A is attached to box B as a linked premise, and box B gets a new child, then box A should also
 	 * have a relation pointing to that child.  This method uses the private helper method "updateRecursive" to do its dirty work.
-	 * @param link - The new, user-drawn link from which we must check for potentially-needed other new links
+	 * @param link - The new, user-drawn link from which we must search for possibly necessary additional new links
 	 */
 	public void updateSiblingLinks(OrganizerLink link)
 	{
+		// VERY IMPORTANT TO CLEAR LINKS TO CREATE WHEN STARTING, AS THEY ACCUMULATE THROUGHOUT THIS CALL
 		linksToCreate.clear();
+
 		// The original link data
 		LinkedBox origStartBox = link.getStartBox();
 		LinkedBox origEndBox = link.getEndBox();
@@ -321,14 +290,16 @@ public class AutoOrganizer
 		}
 		else
 		{
-			// IMPORTANT: Clear the visited nodes HashSet to avoid collisions with anything in there previously
 			HashSet<LinkedBox> origStartSiblingBoxes = origStartBox.getSiblingBoxes();
+
+			// IMPORTANT: Clear the visited nodes HashSet to avoid collisions with anything in there previously
 			visited.clear();
+
 			for (LinkedBox origStartSiblingBox : origStartSiblingBoxes)
 			{
 				updateRecursive(origStartSiblingBox, origEndBox, linkType);
 			}
-			 // potential start box, end box, type of link
+
 			visited.clear();
 		}
 
@@ -336,11 +307,12 @@ public class AutoOrganizer
 		linksToCreate.clear();
 	}
 
-	/*	Recursively checks the siblings of a given start box to see if they need to be updated with a new relation.
+	/*	
+	 *	Recursively checks the siblings of a given start box to see if they need to be updated with a new relation.
 	 *	Keeps track of boxes visited so that the method will eventually end.
 	 *	@param startBox - The box from which we might make a link
 	 *	@param END_BOX - The constant box to which we will be connecting
-	 *	@param LINK_TYPE - The type of connection we will make
+	 *	@param LINK_TYPE - The type of connection we will make if necessary
 	*/
 	private void updateRecursive(LinkedBox startBox, LinkedBox END_BOX, String LINK_TYPE)
 	{
@@ -358,89 +330,101 @@ public class AutoOrganizer
 		}
 	}
 
-	// Returns 0 for yes, otherwise error code
+	/**
+	 *	Determines whether or not the passed linked premise OrganizerLink can be created on the map, which depends on invariants such as
+	 *	the maximum number of permitted siblings per box, both boxes being premises, and no conflicting links between siblings.
+	 *	@param link - The link to check for valid creation
+	 *	@return Success/error integer code: 0 for success, greater than 0 for error code
+	 */
 	public int linkedPremisesCanBeCreated(OrganizerLink link)
 	{
 		LinkedBox startBox = link.getStartBox();
 		LinkedBox endBox = link.getEndBox();
 
+		// Boxes shouldn't be null
 		if (startBox == null || endBox == null)
 		{
-			Logger.log("null box", Logger.DEBUG);
-			return 5;
+			return LinkedPremisesStatusCodes.NULL_BOX;
 		}
 
+		// Can't create a link to self
 		if (startBox.equals(endBox))
 		{
-			return 4;
+			return LinkedPremisesStatusCodes.SAME_BOX;
 		}
 
-		// Checks that both boxes are premises, else return error code 1
+		// Checks that both boxes are premises, else return error code
 		if (startBox.getType().equalsIgnoreCase("Premise") && endBox.getType().equalsIgnoreCase("Premise"))
 		{
-			// Checks that they both have fewer than 2 siblings, else return error code 2
+			// Checks that they both have fewer than 2 siblings, else return error code
 			if (startBox.getNumSiblings() < MAX_SIBLINGS && endBox.getNumSiblings() < MAX_SIBLINGS)
 			{
-				HashSet<LinkedBox> startBoxAndSibs = new HashSet<LinkedBox>(startBox.getSiblingBoxes());
-				startBoxAndSibs.add(startBox);
-				// Checks that there aren't existing "circular" connections with each other's children, else return error code 3
-				if (this.isCompatible(startBoxAndSibs, endBox))
+				// See this.isCompatible for what the method within this if statement checks, else return error code
+				if (this.isCompatible(startBox, endBox))
 				{
-					return 0;
+					return LinkedPremisesStatusCodes.SUCCESS;
 				}
 				else
 				{
-					return 3;
+					return LinkedPremisesStatusCodes.TWO_WAY_LINK;
 				}
 			}
 			else
 			{
-				return 2;
+				return LinkedPremisesStatusCodes.TOO_MANY_SIBS;
 			}
 		}
 		else
 		{
-			return 1;
+			return LinkedPremisesStatusCodes.NOT_PREMISES;
 		}
 	}
 
-	/*	Checks that there aren't existing nonChild connections between the start box plus siblings group and the end Box children.  Returns true if compatible.
-		StartBox and endBox are two boxes that are having a linked premises relation created between them. */
-	private boolean isCompatible(HashSet<LinkedBox> startBoxAndSibs, LinkedBox endBox)
+	/*	
+	 *	Checks that there aren't existing invalid connections between the startBoxAndExtSibs group and the end Box children.
+	 *	@param startBoxAndExtSibs - The startBox for the new link and its extended siblings
+	 *	@param endBox - The end box for the new link
+	 *	@return true if there are no conflicts, false if the linked premises should not be created
+	 */
+	private boolean isCompatible(LinkedBox startBox, LinkedBox endBox)
 	{
-		for (LinkedBox startBox : startBoxAndSibs)
+		Logger.log("INSIDE isCompatible", Logger.DEBUG);
+		HashSet<LinkedBox> startChildBoxes = startBox.getChildBoxes();
+		HashSet<LinkedBox> endChildBoxes = endBox.getChildBoxes();
+		
+		for (LinkedBox startChildBox : startChildBoxes)
 		{
-			HashSet<LinkedBox> startChildBoxes = startBox.getChildBoxes();
-			HashSet<LinkedBox> endChildBoxes = endBox.getChildBoxes();
-
-			for (LinkedBox startChildBox : startChildBoxes)
+			if (endBox.hasNonChildLinkWith(startChildBox))
 			{
-				if (endBox.hasNonChildLinkWith(startChildBox))
-				{
-					return false;
-				}
+				return false;
 			}
+		}
 
-			for (LinkedBox endChildBox : endChildBoxes)
+		for (LinkedBox endChildBox : endChildBoxes)
+		{
+			if (startBox.hasNonChildLinkWith(endChildBox))
 			{
-				if (startBox.hasNonChildLinkWith(endChildBox))
-				{
-					return false;
-				}
+				return false;
 			}
 		}
 
 		return true;
 	}
 
-	// Updates a box position on the map, might need to add to redraw the relations because I'm losing arrow heads on them for some reason
+	/*
+	 *	Updates a box position on the map, might need to add to redraw the relations because we're losing arrow heads on them for some reason.
+	 *	@param box - The box whose position we will update
+	 *	@param x - The new x coordinate for the box
+	 *	@param y - The new y coordinate for the box
+	 */
 	private void sendUpdatePositionToServer(LinkedBox box, int x, int y)
 	{
 		communicator.sendActionPackage(actionBuilder.updateBoxPosition(map.getID(), box.getBoxID(), x, y));
 	}
 
-	/*	Adds the new links to the organizer model and map
-	*/
+	/*
+	 *	Wraps each new link to be created as an actionPackage, which is sent to server to be added to the model and map.
+	 */
 	private void addLinksToVisual()
 	{	
 		String elementType = "relation";
@@ -452,7 +436,7 @@ public class AutoOrganizer
 
 		for (OrganizerLink link : linksToCreate)
 		{
-			// a better name for element ID here would be subtype, as in, what kind of relation.  I didn't write it.
+			// a better name for element ID here would be subtype, as in, what kind of relation.  Alas, I didn't name it.
 			linkInfo.setElementID(link.getType());
 
 			String startBoxStringID = Integer.toString(link.getStartBox().getBoxID());
@@ -464,10 +448,17 @@ public class AutoOrganizer
 		}
 	}
 
+	/**
+	 *	Determines if supplemental links need to be removed after the passed link is removed.  This might be necessary, for example,
+	 *	if the removal of solely the passed link would result in a violation of the linked premises invariants (i.e. each sibling box must
+	 *	link to each other sibling's children).
+	 *	@param removedLink - The link already removed from the model, that provides an easy access point for other nearby links to remove
+	 */
 	public void determineLinksToRemove(OrganizerLink removedLink)
 	{
-		linksToCreate.clear();
+		// remember to clear linksToRemove before using!!
 		linksToRemove.clear();
+
 		if (!removedLink.getType().equalsIgnoreCase("Linked Premises"))
 		{
 			LinkedBox removedLinkStartBox = removedLink.getStartBox();
@@ -480,10 +471,13 @@ public class AutoOrganizer
 		}
 
 		removeLinksFromVisual();
-		linksToCreate.clear();
 		linksToRemove.clear();
 	}
 
+	/*
+	 *	Helper method called by determineLinksToRemove that actually sends the actionPackage to the server, telling the server to
+	 *	remove each necessary link from the map.
+	 */
 	private void removeLinksFromVisual()
 	{
 		MVController controller = LASAD_Client.getMVCController(map.getID());
