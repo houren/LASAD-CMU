@@ -2,6 +2,7 @@ package lasad.gwt.client.model.organization;
 
 import java.util.HashSet;
 import lasad.gwt.client.model.organization.OrganizerLink;
+import lasad.gwt.client.logger.Logger;
 
 /**
  * LinkedBox is an alternative representation to AbstractBox, more conducive for map organization and modeling.  Each LinkedBox has its boxID
@@ -36,6 +37,8 @@ public class LinkedBox
 	// Height and width level will be used like a coordinate grid once we come to organizeMap() of AutoOrganizer
 	private int heightLevel;
 	private int widthLevel;
+
+	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
 
 	// This is the meat and bones constructor
 	public LinkedBox(int boxID, int rootID, String type)
@@ -293,9 +296,101 @@ public class LinkedBox
 		// If link hasn't been found by this point, it doesn't exist and we just return
 	}
 
+	public boolean hasChildLinkWith(LinkedBox other)
+	{
+		if (this.getChildBoxes().contains(other))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public boolean hasParentLinkWith(LinkedBox other)
+	{
+		if (this.getParentBoxes().contains(other))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public boolean hasSiblingLinkWith(LinkedBox other)
+	{
+		if (this.getSiblingBoxes().contains(other))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public boolean hasExtendedSiblingLinkWith(LinkedBox boxToFind)
+	{
+		boolean foundExtendedSibling = false;
+		visited.clear();
+		if (this.hasSiblingLinkWith(boxToFind))
+		{
+			foundExtendedSibling = true;
+		}
+		else
+		{
+			foundExtendedSibling = extendedSiblingRecursive(this, boxToFind);
+		}
+
+		visited.clear();
+		return foundExtendedSibling;
+	}
+
+	private boolean extendedSiblingRecursive(LinkedBox box, LinkedBox BOX_TO_FIND)
+	{
+		Logger.log("Entered extendedSiblingRecursive", Logger.DEBUG);
+
+		if (!visited.contains(box))
+		{
+			visited.add(box);
+			if (box.equals(BOX_TO_FIND))
+			{
+				return true;
+			}
+			else
+			{
+				HashSet<LinkedBox> siblingBoxes = box.getSiblingBoxes();
+				for (LinkedBox siblingBox : siblingBoxes)
+				{
+					if (extendedSiblingRecursive(siblingBox, BOX_TO_FIND))
+					{
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	public boolean hasNonChildLinkWith(LinkedBox other)
+	{
+		if (this.hasParentLinkWith(other) || this.hasSiblingLinkWith(other))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	public boolean hasLinkWith(LinkedBox other)
 	{
-		if (this.getChildBoxes().contains(other) || this.getParentBoxes().contains(other) || this.getSiblingBoxes().contains(other))
+		if (this.hasChildLinkWith(other) || this.hasNonChildLinkWith(other))
 		{
 			return true;
 		}

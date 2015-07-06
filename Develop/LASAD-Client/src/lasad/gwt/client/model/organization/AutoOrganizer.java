@@ -278,7 +278,6 @@ public class AutoOrganizer
 	}
 
 	/**
-	 * UNDER DEVELOPMENT
 	 * Updates the sibling boxes (i.e. linked premises boxes) related to the creation of a new link.
 	 * For example, if box A is attached to box B as linked premises, and box B gets a new child, then box A should also
 	 * have a relation pointing to that child.  This method uses the private helper method "updateRecursive" to do its dirty work.
@@ -362,19 +361,17 @@ public class AutoOrganizer
 	// Returns 0 for yes, otherwise error code
 	public int linkedPremisesCanBeCreated(OrganizerLink link)
 	{
-		Logger.log("Entered linkedPremisesCanBeCreated", Logger.DEBUG);
-
 		LinkedBox startBox = link.getStartBox();
 		LinkedBox endBox = link.getEndBox();
 
 		if (startBox == null || endBox == null)
 		{
 			Logger.log("null box", Logger.DEBUG);
+			return 5;
 		}
 
 		if (startBox.equals(endBox))
 		{
-			Logger.log("returning 4", Logger.DEBUG);
 			return 4;
 		}
 
@@ -384,51 +381,52 @@ public class AutoOrganizer
 			// Checks that they both have fewer than 2 siblings, else return error code 2
 			if (startBox.getNumSiblings() < MAX_SIBLINGS && endBox.getNumSiblings() < MAX_SIBLINGS)
 			{
-				// Checks that there aren't existing connections with each other's children, else return error code 3
-				if (this.isCompatible(startBox, endBox))
+				HashSet<LinkedBox> startBoxAndSibs = new HashSet<LinkedBox>(startBox.getSiblingBoxes());
+				startBoxAndSibs.add(startBox);
+				// Checks that there aren't existing "circular" connections with each other's children, else return error code 3
+				if (this.isCompatible(startBoxAndSibs, endBox))
 				{
-					Logger.log("returning 0", Logger.DEBUG);
 					return 0;
 				}
 				else
 				{
-					Logger.log("returning 3", Logger.DEBUG);
 					return 3;
 				}
 			}
 			else
 			{
-				Logger.log("returning 2", Logger.DEBUG);
 				return 2;
 			}
 		}
 		else
 		{
-			Logger.log("returning 1", Logger.DEBUG);
 			return 1;
 		}
 	}
 
-	// Checks that there aren't existing connections with each other's children.  True for compatible
-	private boolean isCompatible(LinkedBox startBox, LinkedBox endBox)
+	/*	Checks that there aren't existing nonChild connections between the start box plus siblings group and the end Box children.  Returns true if compatible.
+		StartBox and endBox are two boxes that are having a linked premises relation created between them. */
+	private boolean isCompatible(HashSet<LinkedBox> startBoxAndSibs, LinkedBox endBox)
 	{
-		Logger.log("Entered isCompatible", Logger.DEBUG);
-		HashSet<LinkedBox> startChildBoxes = startBox.getChildBoxes();
-		HashSet<LinkedBox> endChildBoxes = endBox.getChildBoxes();
-
-		for (LinkedBox startChildBox : startChildBoxes)
+		for (LinkedBox startBox : startBoxAndSibs)
 		{
-			if (endBox.hasLinkWith(startChildBox))
+			HashSet<LinkedBox> startChildBoxes = startBox.getChildBoxes();
+			HashSet<LinkedBox> endChildBoxes = endBox.getChildBoxes();
+
+			for (LinkedBox startChildBox : startChildBoxes)
 			{
-				return false;
+				if (endBox.hasNonChildLinkWith(startChildBox))
+				{
+					return false;
+				}
 			}
-		}
 
-		for (LinkedBox endChildBox : endChildBoxes)
-		{
-			if (startBox.hasLinkWith(endChildBox))
+			for (LinkedBox endChildBox : endChildBoxes)
 			{
-				return false;
+				if (startBox.hasNonChildLinkWith(endChildBox))
+				{
+					return false;
+				}
 			}
 		}
 
@@ -479,14 +477,6 @@ public class AutoOrganizer
 			{
 				linksToRemove.add(link);
 			}
-
-			// Don't forget new connection if there's 2 siblings
-			/*
-			if (numSiblings == 2)
-			{
-				
-			}
-			*/
 		}
 
 		removeLinksFromVisual();

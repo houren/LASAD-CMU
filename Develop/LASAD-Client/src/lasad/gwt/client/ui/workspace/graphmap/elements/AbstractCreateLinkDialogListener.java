@@ -63,13 +63,15 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 		    if (((Element) be.getEventTarget().cast()).getInnerText().equals(info.getElementOption(ParameterTypes.Heading))) {
 				// Send Action --> Server
 				if (b1 != null && b2 != null) {
-					if (info.getElementID().equalsIgnoreCase("Linked Premises"))
-					{
-						ArgumentModel argModel = ArgumentModel.getInstanceByMapID(myMap.getID());
-						LinkedBox alpha = argModel.getBoxByBoxID(b1.getConnectedModel().getId());
-						LinkedBox beta = argModel.getBoxByBoxID(b2.getConnectedModel().getId());
-						OrganizerLink newLink = new OrganizerLink(alpha, beta, "Linked Premises");
 
+					String linkType = info.getElementID();
+					ArgumentModel argModel = ArgumentModel.getInstanceByMapID(myMap.getID());
+					LinkedBox alpha = argModel.getBoxByBoxID(b1.getConnectedModel().getId());
+					LinkedBox beta = argModel.getBoxByBoxID(b2.getConnectedModel().getId());
+					OrganizerLink newLink = new OrganizerLink(alpha, beta, linkType);
+
+					if (linkType.equalsIgnoreCase("Linked Premises"))
+					{
 						int statusCode = myMap.getAutoOrganizer().linkedPremisesCanBeCreated(newLink);
 
 						if (statusCode == 0)
@@ -87,7 +89,7 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 									LASADInfo.display("Error", "One or both of the selected boxes already has 2 linked premises - can't create link");
 									break;
 								case 3:
-									LASADInfo.display("Error", "One of the linked premises is already connected to a child of the other - can't create link");
+									LASADInfo.display("Error", "Creating linked premises here would result in a two-way link on the map - can't create link");
 									break;
 								default:
 									Logger.log("ERROR: Unrecognized status code returned from AutoOrganizer.linkedPremisesCanBeCreated", Logger.DEBUG);
@@ -96,6 +98,10 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 							}
 						}
 						
+					}
+					else if (alpha.hasExtendedSiblingLinkWith(beta))
+					{
+						LASADInfo.display("Error", "You cannot create a non linked premise relation between a group of already linked premises.");
 					}
 					else
 					{

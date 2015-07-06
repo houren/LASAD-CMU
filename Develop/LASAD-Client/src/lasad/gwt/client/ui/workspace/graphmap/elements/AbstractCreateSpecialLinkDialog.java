@@ -153,6 +153,11 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 						}
 
 					}
+					else if (startBox.hasExtendedSiblingLinkWith(endBox))
+					{
+						restrictedIds.add(rootID);
+					}
+
 					if (rootID.equals(comboStart.getRawValue())) {
 						restrictedIds.add(rootID);
 
@@ -213,6 +218,10 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 						{
 							comboStart.add(rootID);
 						}
+					}
+					else if (!startBox.hasExtendedSiblingLinkWith(endBox))
+					{
+						comboStart.add(rootID);
 					}
 					else
 					{
