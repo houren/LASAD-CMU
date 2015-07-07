@@ -24,6 +24,16 @@ public class LinkedBox
 	private final int boxID;
 	private final int rootID;
 
+	private int width;
+	private int height;
+
+	// Note: updating xLeft will class methods will automatically update xCenter and vice-versa.  Same is true for y equivalents.
+	private double xLeft;
+	private double yTop;
+
+	private double xCenter;
+	private double yCenter;
+
 	private HashSet<OrganizerLink> childLinks;
 	private HashSet<LinkedBox> childBoxes;
 
@@ -39,11 +49,17 @@ public class LinkedBox
 	private int widthLevel;
 
 	// This is the meat and bones constructor
-	public LinkedBox(int boxID, int rootID, String type)
+	public LinkedBox(int boxID, int rootID, String type, double xLeft, double yTop, int width, int height)
 	{
 		this.boxID = boxID;
 		this.rootID = rootID;
 		this.type = type;
+		this.xLeft = xLeft;
+		this.yTop = yTop;
+		this.width = width;
+		this.height = height;
+		this.xCenter = xLeft + width / 2.0;
+		this.yCenter = yTop + height / 2.0;
 		this.childLinks = new HashSet<OrganizerLink>();
 		this.parentLinks = new HashSet<OrganizerLink>();
 		this.siblingLinks = new HashSet<OrganizerLink>();
@@ -60,6 +76,12 @@ public class LinkedBox
 		this.boxID = ERROR;
 		this.rootID = ERROR;
 		this.type = "garbage";
+		this.xLeft = ERROR;
+		this.yTop = ERROR;
+		this.width = ERROR;
+		this.height = ERROR;
+		this.xCenter = ERROR;
+		this.yCenter = ERROR;
 		this.childLinks = new HashSet<OrganizerLink>();
 		this.parentLinks = new HashSet<OrganizerLink>();
 		this.siblingLinks = new HashSet<OrganizerLink>();
@@ -83,6 +105,72 @@ public class LinkedBox
 	public String getType()
 	{
 		return type;
+	}
+
+	public int getWidth()
+	{
+		return width;
+	}
+
+	public void setWidth(int width)
+	{
+		this.width = width;
+		this.xCenter = this.xLeft + width / 2.0;
+	}
+
+	public int getHeight()
+	{
+		return height;
+	}
+
+	public void setHeight(int height)
+	{
+		this.height = height;
+		this.yCenter = this.yTop + height / 2.0;
+	}
+
+	public double getXLeft()
+	{
+		return xLeft;
+	}
+
+	public void setXLeft(double xLeft)
+	{
+		this.xLeft = xLeft;
+		this.xCenter = xLeft + this.width / 2.0;
+	}
+
+	public double getXCenter()
+	{
+		return xCenter;
+	}
+
+	public void setXCenter(double xCenter)
+	{
+		this.xCenter = xCenter;
+		this.xLeft = this.width / 2.0 - xCenter;
+	}
+
+	public double getYTop()
+	{
+		return yTop;
+	}
+
+	public void setYTop(double yTop)
+	{
+		this.yTop = yTop;
+		this.yCenter = yTop + this.height / 2.0;
+	}
+
+	public double getYCenter()
+	{
+		return yCenter;
+	}
+
+	public void setYCenter(double yCenter)
+	{
+		this.yCenter = yCenter;
+		this.yTop = this.height / 2.0 - yCenter;
 	}
 
 	public HashSet<OrganizerLink> getChildLinks()
@@ -457,7 +545,7 @@ public class LinkedBox
 	@Override
 	public String toString()
 	{
-		StringBuilder buffer = new StringBuilder("\n\t\tBEGIN BOX\n\t\tBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID) + "; Box Type: " + type);
+		StringBuilder buffer = new StringBuilder("\n\t\tBEGIN BOX\n\t\tBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID) + "; Box Type: " + type + "; xCenter: " + xCenter + "; yCenter: " + yCenter);
 		buffer.append("\n\t\t\tCHILD BOXES...");
 		for (OrganizerLink childLink : childLinks)
 		{

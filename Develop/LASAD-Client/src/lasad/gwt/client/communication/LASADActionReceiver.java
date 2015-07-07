@@ -85,6 +85,10 @@ public class LASADActionReceiver {
 	lasad_clientConstants myConstants = GWT.create(lasad_clientConstants.class);
 	private static LASADActionReceiver myInstance = null;
 
+	// These shouldn't be hardcoded but I'm a rebel for now
+	private final int DEFAULT_WIDTH = 200;
+	private final int DEFAULT_HEIGHT = 200;
+
 	// David Drexler Edit-BEGIN
 	private TreeMap<Integer, ActionPackage> treeForwReplay;
 	private TreeMap<String, List<Integer>> treeUserReplay;
@@ -543,7 +547,56 @@ public class LASADActionReceiver {
 				// If it's a box, add it to the model
 				if (elementType.equalsIgnoreCase("box"))
 				{
-					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType)));
+					String xLeftString = a.getParameterValue(ParameterTypes.PosX);
+					double xLeft;
+					if (xLeftString != null)
+					{
+						xLeft = Double.parseDouble(xLeftString);
+					}
+					else
+					{
+						Logger.log("Null xLeftString", Logger.DEBUG);
+						return;
+					}
+
+					String yTopString = a.getParameterValue(ParameterTypes.PosY);
+					double yTop;
+					if (yTopString != null)
+					{
+						yTop = Double.parseDouble(yTopString);
+					}
+					else
+					{
+						Logger.log("Null yTopString", Logger.DEBUG);
+						return;
+					}
+
+					//String widthString = elementModel.getValue(ParameterTypes.Width);
+					int width = DEFAULT_WIDTH;
+					/*if (widthString != null)
+					{
+						width = Integer.parseInt(widthString);
+					}
+					else
+					{
+						Logger.log("Null widthString", Logger.DEBUG);
+						return;
+					}*/
+
+
+					//String heightString = elementModel.getValue(ParameterTypes.Height);
+					int height = DEFAULT_HEIGHT;
+					/*if (heightString != null)
+					{
+						height = Integer.parseInt(heightString);
+					}
+					else
+					{
+						Logger.log("Null heightString", Logger.DEBUG);
+						return;
+					}*/
+
+					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height)));
 				}
 
 				// If it's a relation, add it to the model
@@ -643,14 +696,38 @@ public class LASADActionReceiver {
 					}
 				}	
 				*/			
-			} else if (a.getCmd().equals(Commands.UpdateElement)) {
+			}
+			else if (a.getCmd().equals(Commands.UpdateElement)) {
 
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] UPDATE-ELEMENT", Logger.DEBUG);
+
 				if (a.getParameterValue(ParameterTypes.UserName) != null
 						&& a.getParameterValue(ParameterTypes.UserName).equalsIgnoreCase(LASAD_Client.getInstance().getUsername())
-						&& a.getParameterValue(ParameterTypes.Status) != null) {
-					a = Action.removeParameter(a, ParameterTypes.Status);
+						&& a.getParameterValue(ParameterTypes.Status) != null && a.getParameterValue(ParameterTypes.Text) == null) {
+					Action.removeParameter(a, ParameterTypes.Status);
 				} else {
+
+					String elementIDString = a.getParameterValue(ParameterTypes.Id);
+					int elementID = Integer.parseInt(elementIDString);
+					LinkedBox boxToUpdate = argModel.getBoxByBoxID(elementID);
+
+					if (boxToUpdate != null)
+					{
+						String newWidthString = a.getParameterValue(ParameterTypes.Width);
+						String newXLeftString = a.getParameterValue(ParameterTypes.PosX);
+
+						if (newWidthString != null)
+						{
+							boxToUpdate.setWidth(Integer.parseInt(newWidthString));
+							boxToUpdate.setHeight(Integer.parseInt(a.getParameterValue(ParameterTypes.Height)));
+						}
+						if (newXLeftString != null)
+						{
+							boxToUpdate.setXLeft(Double.parseDouble(newXLeftString));
+							boxToUpdate.setYTop(Double.parseDouble(a.getParameterValue(ParameterTypes.PosY)));
+						}
+					}
+					
 					controller.updateElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)), a.getParameters());
 				}
 			} else if (a.getCmd().equals(Commands.UpdateCursorPosition)) {
@@ -844,17 +921,56 @@ public class LASADActionReceiver {
 				// If it's a box, add it to the model
 				if (elementType.equalsIgnoreCase("box"))
 				{
-					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType)));
-					for (ArgumentThread thread : argModel.getArgThreads())
+					String xLeftString = a.getParameterValue(ParameterTypes.PosX);
+					double xLeft;
+					if (xLeftString != null)
 					{
-						HashSet<LinkedBox> rootBoxes = thread.getRootBoxes();
-						Logger.log("\nNew thread\n", Logger.DEBUG);
-
-						for (LinkedBox rootBox : rootBoxes)
-						{
-							Logger.log(rootBox.toString(), Logger.DEBUG);
-						}
+						xLeft = Double.parseDouble(xLeftString);
 					}
+					else
+					{
+						Logger.log("Null xLeftString", Logger.DEBUG);
+						return;
+					}
+
+					String yTopString = a.getParameterValue(ParameterTypes.PosY);
+					double yTop;
+					if (yTopString != null)
+					{
+						yTop = Double.parseDouble(yTopString);
+					}
+					else
+					{
+						Logger.log("Null yTopString", Logger.DEBUG);
+						return;
+					}
+
+					//String widthString = elementModel.getValue(ParameterTypes.Width);
+					int width = DEFAULT_WIDTH;
+					/*if (widthString != null)
+					{
+						width = Integer.parseInt(widthString);
+					}
+					else
+					{
+						Logger.log("Null widthString", Logger.DEBUG);
+						return;
+					}*/
+
+
+					//String heightString = elementModel.getValue(ParameterTypes.Height);
+					int height = DEFAULT_HEIGHT;
+					/*if (heightString != null)
+					{
+						height = Integer.parseInt(heightString);
+					}
+					else
+					{
+						Logger.log("Null heightString", Logger.DEBUG);
+						return;
+					}*/
+
+					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height)));
 				}
 
 				// If it's a relation, add it to the model
@@ -867,28 +983,8 @@ public class LASADActionReceiver {
 					String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
 					int endBoxID = Integer.parseInt(endBoxStringID);
 
-					LinkedBox startBox = null;
-					LinkedBox endBox = null;
-					LinkedBox potentialStartBox = null;
-					LinkedBox potentialEndBox = null;
-
-					for (ArgumentThread argThread : argModel.getArgThreads())
-					{
-						potentialStartBox = argThread.getBoxByBoxID(startBoxID);
-						potentialEndBox = argThread.getBoxByBoxID(endBoxID);
-						if (potentialStartBox != null)
-						{
-							startBox = potentialStartBox;
-						}
-						if (potentialEndBox != null)
-						{
-							endBox = potentialEndBox;
-						}
-						if (startBox != null && endBox != null)
-						{
-							break;
-						}
-					}
+					LinkedBox startBox = argModel.getBoxByBoxID(startBoxID);
+					LinkedBox endBox = argModel.getBoxByBoxID(endBoxID);
 
 					if (startBox == null || endBox == null)
 					{
@@ -918,8 +1014,6 @@ public class LASADActionReceiver {
 						argModel.removeArgThread(endBoxThread);
 					}
 
-					//Logger.log("Model before update Sibling Links" + argModel.toString(), Logger.DEBUG);
-
 					if (siblingsAlreadyUpdated)
 					{
 						Logger.log("Did not update sibling links", Logger.DEBUG);
@@ -927,12 +1021,12 @@ public class LASADActionReceiver {
 					}
 					else
 					{
-						// This will change the alreadyUpdated field for us
+						// This will change the alreadyUpdate field for us
 						autoOrganizer.updateSiblingLinks(link);
 						//Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
 					}
 				}
-				
+
 				// End Kevin Loughlin
 
 				if (elementType.equalsIgnoreCase("FEEDBACK-CLUSTER")) {
@@ -956,7 +1050,27 @@ public class LASADActionReceiver {
 					Action.removeParameter(a, ParameterTypes.Status);
 				} else {
 
-					// Action.removeParameter(a, "STATUS");
+					String elementIDString = a.getParameterValue(ParameterTypes.Id);
+					int elementID = Integer.parseInt(elementIDString);
+					LinkedBox boxToUpdate = argModel.getBoxByBoxID(elementID);
+
+					if (boxToUpdate != null)
+					{
+						String newWidthString = a.getParameterValue(ParameterTypes.Width);
+						String newXLeftString = a.getParameterValue(ParameterTypes.PosX);
+
+						if (newWidthString != null)
+						{
+							boxToUpdate.setWidth(Integer.parseInt(newWidthString));
+							boxToUpdate.setHeight(Integer.parseInt(a.getParameterValue(ParameterTypes.Height)));
+						}
+						if (newXLeftString != null)
+						{
+							boxToUpdate.setXLeft(Double.parseDouble(newXLeftString));
+							boxToUpdate.setYTop(Double.parseDouble(a.getParameterValue(ParameterTypes.PosY)));
+						}
+					}
+					
 					controller.updateElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)), a.getParameters());
 				}
 
@@ -998,6 +1112,8 @@ public class LASADActionReceiver {
 			}
 
 		}
+
+		//Logger.log(argModel.toString(), Logger.DEBUG);
 	}
 
 	private void processRegisterFeedbackAgent(MVController controller, Action a) {
