@@ -54,19 +54,12 @@ public class AutoOrganizer
 
 	// The map that this instance of AutoOrganizer corresponds to
 	private AbstractGraphMap map;
-
-	// Stores boxes that have been visited during a method call.  Important to clear at beginning of method call.
-	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
 	
-	// Same as HashSet visited, but the ArrayList keeps the order in which the boxes are inserted in exchange for slightly slower method speeds
+	// Keeps track of the boxes visited as well as the order in which the boxes are inserted
 	private ArrayList<LinkedBox> visitedList = new ArrayList<LinkedBox>();
 
 	// Instances of autoOrganizer: one per map.  String is mapID.
 	private static HashMap<String, AutoOrganizer> instances = new HashMap<String, AutoOrganizer>();
-
-	// Must be cleared when updateSiblingLinks is called
-	private HashSet<OrganizerLink> linksToCreate = new HashSet<OrganizerLink>();
-	private HashSet<OrganizerLink> linksToRemove = new HashSet<OrganizerLink>();
 
 	// For sending map updates to the server
 	private LASADActionSender communicator = LASADActionSender.getInstance();
@@ -252,8 +245,8 @@ public class AutoOrganizer
 	 */
 	public void updateSiblingLinks(OrganizerLink link)
 	{
-		// VERY IMPORTANT TO CLEAR LINKS TO CREATE WHEN STARTING, AS THEY ACCUMULATE THROUGHOUT THIS CALL
-		linksToCreate.clear();
+		//Logger.log("Entered updateSiblingLinks", Logger.DEBUG);
+		HashSet<OrganizerLink> linksToCreate = new HashSet<OrganizerLink>();
 
 		// The original link data
 		LinkedBox origStartBox = link.getStartBox();
@@ -292,19 +285,51 @@ public class AutoOrganizer
 		{
 			HashSet<LinkedBox> origStartSiblingBoxes = origStartBox.getSiblingBoxes();
 
-			// IMPORTANT: Clear the visited nodes HashSet to avoid collisions with anything in there previously
-			visited.clear();
-
+			// We only need the first one, hence why I break, but I use this for loop in case origStartSiblingBoxes is empty so that it will skip
 			for (LinkedBox origStartSiblingBox : origStartSiblingBoxes)
 			{
-				updateRecursive(origStartSiblingBox, origEndBox, linkType);
+				linksToCreate = updateRecursive(origStartSiblingBox, origEndBox, linkType, new VisitedAndLinksHolder()).getLinks();
+				break;
 			}
-
-			visited.clear();
 		}
 
-		addLinksToVisual();
-		linksToCreate.clear();
+		addLinksToVisual(linksToCreate);
+	}
+
+	/**
+	 *	Holds the visited boxes and links accumulated in a recursive method, with the benefit of one data structure
+	 *	For use with updateSiblingLinks and updateRecursive
+	 */
+	class VisitedAndLinksHolder
+	{
+		private HashSet<LinkedBox> visited;
+		private HashSet<OrganizerLink> links;
+
+		public VisitedAndLinksHolder()
+		{
+			visited = new HashSet<LinkedBox>();
+			links = new HashSet<OrganizerLink>();
+		}
+
+		public void addVisited(LinkedBox box)
+		{
+			visited.add(box);
+		}
+
+		public void addLink(OrganizerLink link)
+		{
+			links.add(link);
+		}
+
+		public HashSet<LinkedBox> getVisited()
+		{
+			return visited;
+		}
+
+		public HashSet<OrganizerLink> getLinks()
+		{
+			return links;
+		}
 	}
 
 	/*	
@@ -313,21 +338,25 @@ public class AutoOrganizer
 	 *	@param startBox - The box from which we might make a link
 	 *	@param END_BOX - The constant box to which we will be connecting
 	 *	@param LINK_TYPE - The type of connection we will make if necessary
+	 *  @param holder - The visited boxes and the links that need to be created, should be initialized as empty
 	*/
-	private void updateRecursive(LinkedBox startBox, LinkedBox END_BOX, String LINK_TYPE)
+	private VisitedAndLinksHolder updateRecursive(LinkedBox startBox, LinkedBox END_BOX, String LINK_TYPE, VisitedAndLinksHolder holder)
 	{
-		if (!visited.contains(startBox))
+		//Logger.log("Entered update recursive.", Logger.DEBUG);
+		if (!holder.getVisited().contains(startBox))
 		{
-			visited.add(startBox);
+			holder.addVisited(startBox);
 			if (!startBox.getChildBoxes().contains(END_BOX))
 			{
-				linksToCreate.add(new OrganizerLink(startBox, END_BOX, LINK_TYPE));
+				holder.addLink(new OrganizerLink(startBox, END_BOX, LINK_TYPE));
 			}
 			for (LinkedBox siblingBox : startBox.getSiblingBoxes())
 			{
-				updateRecursive(siblingBox, END_BOX, LINK_TYPE);
+				holder = updateRecursive(siblingBox, END_BOX, LINK_TYPE, holder);
 			}
 		}
+
+		return holder;
 	}
 
 	/**
@@ -338,6 +367,7 @@ public class AutoOrganizer
 	 */
 	public int linkedPremisesCanBeCreated(OrganizerLink link)
 	{
+		//Logger.log("Entered linkedPremisesCanBeCreated", Logger.DEBUG);
 		LinkedBox startBox = link.getStartBox();
 		LinkedBox endBox = link.getEndBox();
 
@@ -388,7 +418,7 @@ public class AutoOrganizer
 	 */
 	private boolean isCompatible(LinkedBox startBox, LinkedBox endBox)
 	{
-		Logger.log("INSIDE isCompatible", Logger.DEBUG);
+		//Logger.log("INSIDE isCompatible", Logger.DEBUG);
 		HashSet<LinkedBox> startChildBoxes = startBox.getChildBoxes();
 		HashSet<LinkedBox> endChildBoxes = endBox.getChildBoxes();
 		
@@ -425,8 +455,9 @@ public class AutoOrganizer
 	/*
 	 *	Wraps each new link to be created as an actionPackage, which is sent to server to be added to the model and map.
 	 */
-	private void addLinksToVisual()
-	{	
+	private void addLinksToVisual(HashSet<OrganizerLink> linksToCreate)
+	{
+		//Logger.log("Entered addLinksToVisual", Logger.DEBUG);	
 		String elementType = "relation";
 
 		MVController controller = LASAD_Client.getMVCController(map.getID());
@@ -456,8 +487,8 @@ public class AutoOrganizer
 	 */
 	public void determineLinksToRemove(OrganizerLink removedLink)
 	{
-		// remember to clear linksToRemove before using!!
-		linksToRemove.clear();
+		//ogger.log("Entered determineLinksToRemove", Logger.DEBUG);
+		HashSet<OrganizerLink> linksToRemove = new HashSet<OrganizerLink>();
 
 		if (!removedLink.getType().equalsIgnoreCase("Linked Premises"))
 		{
@@ -470,16 +501,16 @@ public class AutoOrganizer
 			}
 		}
 
-		removeLinksFromVisual();
-		linksToRemove.clear();
+		removeLinksFromVisual(linksToRemove);
 	}
 
 	/*
 	 *	Helper method called by determineLinksToRemove that actually sends the actionPackage to the server, telling the server to
 	 *	remove each necessary link from the map.
 	 */
-	private void removeLinksFromVisual()
+	private void removeLinksFromVisual(HashSet<OrganizerLink> linksToRemove)
 	{
+		//Logger.log("Entered removeLinksFromVisual", Logger.DEBUG);
 		MVController controller = LASAD_Client.getMVCController(map.getID());
 
 		for (OrganizerLink link : linksToRemove)
@@ -488,5 +519,75 @@ public class AutoOrganizer
 			LASADActionReceiver.getInstance().setPremisesAlreadyRemoved(true);
 			communicator.sendActionPackage(myPackage);
 		}
+	}
+
+	/**
+	 *	Checks to see if the removal of the passed link warrants the creation of a new Thread, and creates the thread if needed
+	 *	@param removedLink - The link removed from the model
+	 */
+	public void createNewThreadIfNecessary(OrganizerLink removedLink)
+	{
+		//Logger.log("Entered createNewThreadIfNecessary", Logger.DEBUG);
+		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
+		ArgumentThread startArgThread = argModel.getBoxThread(removedLink.getStartBox());
+		HashSet<LinkedBox> allThreadBoxes = new HashSet<LinkedBox>(startArgThread.getBoxes());
+		HashSet<LinkedBox> boxesReached = visitRecursive(removedLink.getEndBox(), new HashSet<LinkedBox>());
+		if (boxesReached.size() == allThreadBoxes.size() && boxesReached.containsAll(allThreadBoxes))
+		{
+			// They're still in the same thread
+			return;
+		}
+		else
+		{
+			ArgumentThread newThread = new ArgumentThread();
+			startArgThread.removeBoxes(boxesReached);
+			newThread.addBoxes(boxesReached);
+			argModel.addArgThread(newThread);
+		}
+	}
+
+	/**
+	 *	Checks to see if the removal of the passed box warrants the removal of a new Thread, and removes the thread if needed
+	 *	@param removedBox - The box removed from the model
+	 */
+	public void removeThreadIfNecessary(LinkedBox removedBox)
+	{
+		//Logger.log("Entered removeThreadIfNecessary", Logger.DEBUG);
+		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
+		ArgumentThread argThread = argModel.getBoxThread(removedBox);
+		if (argThread.getBoxes().size() == 0)
+		{
+			argModel.removeArgThread(argThread);
+		}
+	}
+
+	/*
+	 *	Goes through all the boxes directly/indirectly attached to box to see if we can reach all from the original thread
+	 *	@param box - The box currently being visited, should be initialized as the endBox of the deleted link
+	 *	@param boxesReached - The boxes so far reached, should be initialized as a new, empty HashSet
+	 */
+	private HashSet<LinkedBox> visitRecursive(LinkedBox box, HashSet<LinkedBox> boxesReached)
+	{
+		//Logger.log("Entered visit recursive.", Logger.DEBUG);
+		if (!boxesReached.contains(box))
+		{
+			boxesReached.add(box);
+			for (LinkedBox childBox : box.getChildBoxes())
+			{
+				boxesReached = visitRecursive(childBox, boxesReached);
+			}
+
+			for (LinkedBox parentBox : box.getParentBoxes())
+			{
+				boxesReached = visitRecursive(parentBox, boxesReached);
+			}
+
+			for (LinkedBox siblingBox : box.getSiblingBoxes())
+			{
+				boxesReached = visitRecursive(siblingBox, boxesReached);
+			}
+		}
+
+		return boxesReached;
 	}
 }

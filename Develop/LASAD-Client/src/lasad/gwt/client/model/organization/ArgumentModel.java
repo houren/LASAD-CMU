@@ -55,6 +55,18 @@ public class ArgumentModel
 	public void removeArgThread(ArgumentThread argThread)
 	{
 		this.argThreads.remove(argThread);
+		ArgumentThread.decNumThreads();
+	}
+
+	public void removeEmptyThreads()
+	{
+		for (ArgumentThread argThread : argThreads)
+		{
+			if (argThread.getBoxes().size() == 0)
+			{
+				this.removeArgThread(argThread);
+			}
+		}
 	}
 
 	public Object removeEltByEltID(int eltID)

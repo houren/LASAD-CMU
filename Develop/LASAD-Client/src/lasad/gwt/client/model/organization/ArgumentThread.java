@@ -375,6 +375,11 @@ public class ArgumentThread
 		}
 	}
 
+	public static void decNumThreads()
+	{
+		numThreads--;
+	}
+
 	@Override
 	public String toString()
 	{

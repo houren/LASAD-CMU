@@ -38,11 +38,6 @@ public class LinkedBox
 	private int heightLevel;
 	private int widthLevel;
 
-	// Just for use with getThisAndExtendedSiblings
-	private HashSet<LinkedBox> gathered = new HashSet<LinkedBox>();
-
-	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
-
 	// This is the meat and bones constructor
 	public LinkedBox(int boxID, int rootID, String type)
 	{
@@ -122,22 +117,23 @@ public class LinkedBox
 
 	public HashSet<LinkedBox> getThisAndExtendedSiblings()
 	{
-		gathered.clear();
-		findThisAndExtendedSiblings(this);
-		return gathered;
+		return findThisAndExtendedSiblings(this, new HashSet<LinkedBox>());
 	}
 
-	// intialize currentBox as this and visited should be empty; RECURSIVE; remember to remove this box after use of findExtendedSiblings
-	private void findThisAndExtendedSiblings(LinkedBox currentBox)
+	// intialize currentBox as this and accumulated should be empty; RECURSIVE
+	private HashSet<LinkedBox> findThisAndExtendedSiblings(LinkedBox currentBox, HashSet<LinkedBox> accumulated)
 	{
-		gathered.add(currentBox);
-		for (LinkedBox siblingBox : currentBox.getSiblingBoxes())
+		//Logger.log("Entered findThisAndExtendedSiblings", Logger.DEBUG);
+		if (!accumulated.contains(currentBox))
 		{
-			if (!gathered.contains(siblingBox))
+			accumulated.add(currentBox);
+			for (LinkedBox siblingBox : currentBox.getSiblingBoxes())
 			{
-				findThisAndExtendedSiblings(siblingBox);
+				accumulated = findThisAndExtendedSiblings(siblingBox, accumulated);
 			}
 		}
+
+		return accumulated;
 	}
 
 	// I naturally avoid duplicates in all add methods by implementing this with HashSet.  Takes care of updating boxes too.
@@ -308,53 +304,86 @@ public class LinkedBox
 	{
 		boolean foundExtendedSibling = false;
 
-		// Don;t forget to clear visited!!
-		visited.clear();
-
 		if (this.hasSiblingLinkWith(boxToFind))
 		{
 			foundExtendedSibling = true;
 		}
 		else
 		{
-			foundExtendedSibling = extendedSiblingRecursive(this, boxToFind);
+			foundExtendedSibling = extendedSiblingRecursive(this, boxToFind, new VisitedAndBoolHolder()).getFound();
 		}
 
-		visited.clear();
 		return foundExtendedSibling;
+	}
+
+	/**
+	 *	Holds the visited boxes and whether or not an extended sibling has been found, data accumulated in a recursive method.
+	 */
+	class VisitedAndBoolHolder
+	{
+		private HashSet<LinkedBox> visited;
+		private boolean foundExtendedSibling;
+
+		public VisitedAndBoolHolder()
+		{
+			visited = new HashSet<LinkedBox>();
+			foundExtendedSibling = false;
+		}
+
+		public void addVisited(LinkedBox box)
+		{
+			visited.add(box);
+		}
+
+		public void setFound(boolean found)
+		{
+			foundExtendedSibling = found;
+		}
+
+		public HashSet<LinkedBox> getVisited()
+		{
+			return visited;
+		}
+
+		public boolean getFound()
+		{
+			return foundExtendedSibling;
+		}
 	}
 
 	/*
 	 *	Recursive helper for hasExtendedSiblingLinkWith
 	 *	@param box - the Box we are checking to see if it is the one we are searching for
 	 *	@param BOX_TO_FIND - The box we are searching for
+	 *	@param visited - The accumuated set of visited boxes, should be intiliazed as empty
 	 *	@return true if match, false if not
 	 */
-	private boolean extendedSiblingRecursive(LinkedBox box, LinkedBox BOX_TO_FIND)
+	private VisitedAndBoolHolder extendedSiblingRecursive(LinkedBox box, LinkedBox BOX_TO_FIND, VisitedAndBoolHolder holder)
 	{
-		Logger.log("Entered extendedSiblingRecursive", Logger.DEBUG);
+		//Logger.log("Entered extendedSiblingRecursive", Logger.DEBUG);
 
-		if (!visited.contains(box))
+		if (!holder.getVisited().contains(box))
 		{
-			visited.add(box);
+			holder.addVisited(box);
 			if (box.equals(BOX_TO_FIND))
 			{
-				return true;
+				holder.setFound(true);
+				return holder;
 			}
 			else
 			{
 				HashSet<LinkedBox> siblingBoxes = box.getSiblingBoxes();
 				for (LinkedBox siblingBox : siblingBoxes)
 				{
-					if (extendedSiblingRecursive(siblingBox, BOX_TO_FIND))
+					if (extendedSiblingRecursive(siblingBox, BOX_TO_FIND, holder).getFound())
 					{
-						return true;
+						return holder;
 					}
 				}
 			}
 		}
 		
-		return false;
+		return holder;
 	}
 
 	/**

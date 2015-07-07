@@ -587,10 +587,6 @@ public class LASADActionReceiver {
 						argModel.removeArgThread(endBoxThread);
 					}
 
-					//Logger.log("Model after initial action" + argModel.toString(), Logger.DEBUG);
-					Logger.log("BEFORE UPDATE\n", Logger.DEBUG);
-					Logger.log(argModel.toString(), Logger.DEBUG);
-
 					if (siblingsAlreadyUpdated)
 					{
 						Logger.log("Did not update sibling links", Logger.DEBUG);
@@ -602,9 +598,6 @@ public class LASADActionReceiver {
 						autoOrganizer.updateSiblingLinks(link);
 						//Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
 					}
-
-					Logger.log("AFTER UPDATE\n", Logger.DEBUG);
-					Logger.log(argModel.toString(), Logger.DEBUG);
 				}
 
 				// End Kevin Loughlin
@@ -687,19 +680,27 @@ public class LASADActionReceiver {
 					//Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
 					Object removedObj = argModel.removeEltByEltID(elementID);
 
-					// TODO Check to see if new thread is necessary
+					Logger.log("Object removed", Logger.DEBUG);
 
 					if (removedObj != null)
 					{
-						if (removedObj instanceof OrganizerLink)
+						if (removedObj instanceof LinkedBox)
 						{
+							argModel.removeEmptyThreads();
+						}
+						else if (removedObj instanceof OrganizerLink)
+						{
+							OrganizerLink removedLink = (OrganizerLink) removedObj;
+							// TODO Check to see if new thread is necessary
+							autoOrganizer.createNewThreadIfNecessary(removedLink);
+							
 							if (premisesAlreadyRemoved)
 							{
 								this.setPremisesAlreadyRemoved(false);
 							}
 							else
 							{
-								autoOrganizer.determineLinksToRemove((OrganizerLink) removedObj);
+								autoOrganizer.determineLinksToRemove(removedLink);
 							}
 						}
 					}
