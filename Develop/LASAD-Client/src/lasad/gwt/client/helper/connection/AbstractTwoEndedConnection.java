@@ -47,7 +47,6 @@ public abstract class AbstractTwoEndedConnection extends AbstractConnection {
 		if (parent != null && second != null) {
 			DOM.appendChild(parent, second.getElement());
 		}
-
 	}
 
 	public ConnectionEnding getEnding(int i) {

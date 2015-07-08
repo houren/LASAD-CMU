@@ -71,4 +71,16 @@ public class Point {
 		return p1.left == p2.left && p1.top == p2.top;
 	}
 
+	@Override
+	public String toString()
+	{
+		StringBuilder buffer = new StringBuilder("Point... Left Coord: " + this.left + "; Top Coord: " + this.top);
+		return buffer.toString();
+	}
+
+	public Point clone()
+	{
+		return new Point(this.left, this.top);
+	}
+
 }

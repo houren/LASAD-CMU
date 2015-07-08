@@ -790,7 +790,7 @@ public abstract class AbstractLinkPanel extends LASADBoxComponent implements Ext
 				con.update();
 			}
 		} catch (Exception e) {
-			Logger.log("updateConnections in class Box.java failed", Logger.DEBUG_ERRORS);
+			Logger.log("updateConnections in class AbstractLinkPanel.java failed", Logger.DEBUG_ERRORS);
 		}
 	}
 	

@@ -13,6 +13,8 @@ import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.ElementInfo;
 import lasad.gwt.client.ui.workspace.graphmap.GraphMap;
 
+import lasad.gwt.client.logger.Logger;
+
 
 public abstract class AbstractStraightLink extends AbstractLink {
 	public AbstractStraightLink(GraphMap myMap, ElementInfo config, Connector cn1,
@@ -75,7 +77,9 @@ public abstract class AbstractStraightLink extends AbstractLink {
 					Point p2 = (Point) data.getPoints().get(1);
 		
 					float tan = ((float) (p2.top - p1.top)) / (p2.left - p1.left);
+
 					float angle = (float) Math.toDegrees(Math.atan(tan));
+
 					if (p1.left < p2.left) {
 						angle += 180f;
 					}
@@ -91,16 +95,20 @@ public abstract class AbstractStraightLink extends AbstractLink {
 					Point p2 = (Point) data.getPoints().get(0);
 		
 					float tan = ((float) (p2.top - p1.top)) / (p2.left - p1.left);
+
 					float angle = (float) Math.toDegrees(Math.atan(tan));
 					if (p1.left < p2.left) {
 						angle += 180f;
 					}
+
+					float newangle = angle + 90f;
+
 					getEnding(1).update(p1.left, p1.top, angle + 90f);
 				}
 			}
 			
 		} catch (Exception e) {
-			Logger.log("update(ConnectionData) in class StraightLink.java failed.", Logger.DEBUG_ERRORS);
+			Logger.log("update(ConnectionData) in class AbstractStraightLink.java failed.", Logger.DEBUG_ERRORS);
 		}
 	} 
 }

@@ -23,6 +23,9 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import lasad.gwt.client.logger.Logger;
+
+
 /**
  * Little modified version of {@link com.google.gwt.user.client.ui.DeckPanel} so
  * as it do not touch width/height.
@@ -102,13 +105,19 @@ public class DeckPanel extends ComplexPanel {
 	 *            the index of the widget to be shown
 	 */
 	public void showWidget(int index) {
+		Logger.log("Entering showWidget", Logger.DEBUG);
 		checkIndexBoundsForAccess(index);
 
 		if (visibleWidget != null) {
 			visibleWidget.setVisible(false);
 		}
+		else
+		{
+			Logger.log("visibleWidget is null", Logger.DEBUG);
+		}
 		visibleWidget = getWidget(index);
 		visibleWidget.setVisible(true);
+		Logger.log("Leaving showWidget", Logger.DEBUG);
 	}
 
 	/**

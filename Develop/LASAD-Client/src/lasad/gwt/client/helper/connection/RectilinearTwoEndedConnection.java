@@ -29,6 +29,8 @@ import lasad.gwt.client.helper.connector.Direction;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 
+import lasad.gwt.client.logger.Logger;
+
 /**
  * Rectilinear connection widget
  * 
@@ -68,8 +70,20 @@ public class RectilinearTwoEndedConnection extends AbstractTwoEndedConnection {
 	 * @see lasad.gwt.client.helper.connection.AbstractConnection#update(lasad.gwt.client.helper.connection.data.ConnectionData)
 	 */
 	protected void update(ConnectionData data) {
+		Logger.log("Entered update in RectTwoEndedConnection", Logger.DEBUG);
 		if (data.getPoints().size() <= 1) {
+			Logger.log("IllegalArgumentException", Logger.DEBUG);
 			throw new IllegalArgumentException("Too few connection points");
+		}
+
+		if (getEnding(0) == null)
+		{
+			Logger.log("Ending 0 is null in RectTwoEndedConnection", Logger.DEBUG);
+		}
+
+		if (getEnding(1) == null)
+		{
+			Logger.log("Ending 1 is null in RectTwoEndedConnection", Logger.DEBUG);
 		}
 
 		prepareElements(data.getPoints().size() - 1);

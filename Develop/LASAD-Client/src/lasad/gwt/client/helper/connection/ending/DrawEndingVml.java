@@ -121,6 +121,7 @@ public class DrawEndingVml extends DrawEnding {
 	}
 
 	public void update(int left, int top, float angle) {
+		
 		if (angle < 0.0f || angle >= 360.0f) {
 			throw new IllegalArgumentException("Angle must from [0.0f, 360.0f)");
 		}

@@ -5,6 +5,8 @@ import lasad.gwt.client.helper.connection.data.Point;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 
+import lasad.gwt.client.logger.Logger;
+
 public class DrawEndingCanvas extends DrawEnding {
 
 	private Element styledDiv;
@@ -29,8 +31,16 @@ public class DrawEndingCanvas extends DrawEnding {
 	}
 
 	public void update(int left, int top, float angle) {
+
 		if (angle < 0.0f || angle >= 360.0f) {
 			throw new IllegalArgumentException("Angle must from [0.0f, 360.0f)");
+		}
+
+		// Hack for making the arrow heads get drawn in vertical cases
+		boolean isVertical = false;
+		if (angle == 0.0f || angle == 180.0f)
+		{
+			isVertical = true;
 		}
 
 		int arrowheadWidth = 6;
@@ -56,7 +66,7 @@ public class DrawEndingCanvas extends DrawEnding {
 				(int)(start.top + 40*Math.cos(Math.toRadians(angle))));
 
 		Point vect = new Point(start.left-end.left, start.top-end.top);
-		Point[] tipPoints = getTipPoints(start, vect, arrowheadHeight, arrowheadWidth);
+		Point[] tipPoints = getTipPoints(start, vect, arrowheadHeight, arrowheadWidth, isVertical);
 		
 		// start = start.move(new Point(-2,-1));
 		Point p1=tipPoints[0], p2=tipPoints[1], p3=tipPoints[2];
@@ -74,26 +84,47 @@ public class DrawEndingCanvas extends DrawEnding {
 	 * @param vect
 	 * @return
 	 */
-	private Point[] getTipPoints(Point point, Point vect, int arrowheadHeight, int arrowheadWidth) {
+	private Point[] getTipPoints(Point point, Point vect, int arrowheadHeight, int arrowheadWidth, boolean isVertical) {
 		//array for tip points
 		//{ax, ay, bx, by, cx, cy}
 		Point[] tipPoints = new Point[3];
 		
 		//intersection point is first tip point
+
 		tipPoints[0] = new Point(point.left, point.top);
 
 		//calculate normalization factor
 		double norm = Math.sqrt(vect.left*vect.left + vect.top*vect.top);
 
-		//go 'arrowheadHeigth' px back on edge
+		//go 'arrowheadHeight' px back on edge
 		double hx = point.left - (vect.left/norm)*arrowheadHeight;
 		double hy = point.top - (vect.top/norm)*arrowheadHeight;
 		
 		//go 'arrowheadWidth' px with 90 degree to edge in each direction
 		//to get other tip points
 		tipPoints[1] = new Point((int)(hx + (-vect.top/norm)*arrowheadWidth), (int)(hy + (vect.left/norm)*arrowheadWidth));
-		tipPoints[2] = new Point((int)(hx - (-vect.top/norm)*arrowheadWidth), (int)(hy - (vect.left/norm)*arrowheadWidth)); 
-			
+		tipPoints[2] = new Point((int)(hx - (-vect.top/norm)*arrowheadWidth), (int)(hy - (vect.left/norm)*arrowheadWidth));
+
+		// Hack for the bug that LASAD was not drawing arrow heads if and only if the relations were vertical
+		if (isVertical)
+		{
+			Point temp = tipPoints[1].clone();
+			tipPoints[1] = tipPoints[2].clone();
+			tipPoints[2] = temp;
+
+			if (tipPoints[1].getTop() < tipPoints[0].getTop())
+			{
+				Point vectorUp = new Point(0, 2 * arrowheadHeight);
+				tipPoints[1] = tipPoints[1].move(vectorUp);
+				tipPoints[2] = tipPoints[2].move(vectorUp);
+			}
+			else if (tipPoints[1].getTop() > tipPoints[0].getTop())
+			{
+				Point vectorDown = new Point(0, -2 * arrowheadHeight);
+				tipPoints[1] = tipPoints[1].move(vectorDown);
+				tipPoints[2] = tipPoints[2].move(vectorDown);
+			}
+		} 	
 		return tipPoints;
 	}
 

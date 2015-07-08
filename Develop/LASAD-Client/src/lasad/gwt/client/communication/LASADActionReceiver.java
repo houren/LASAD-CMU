@@ -749,15 +749,13 @@ public class LASADActionReceiver {
 								a.getParameterValue(ParameterTypes.UserName));
 					}catch (Exception e) {
 						e.printStackTrace();
-						Logger.log("Can not delete element, because ID is no int!", Logger.DEBUG_ERRORS);
+						Logger.log("Can not delete element, because ID is not int!", Logger.DEBUG_ERRORS);
 					}
 
 					// Kevin Loughlin
 
 					//Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
 					Object removedObj = argModel.removeEltByEltID(elementID);
-
-					Logger.log("Object removed", Logger.DEBUG);
 
 					if (removedObj != null)
 					{

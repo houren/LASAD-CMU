@@ -24,8 +24,9 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 
 /**
- * SimpleLinkPanel is INSERT DESCRIPTION
- * @author ???
+ *	I THINK SimpleLinkPanel is the representation of the basic link panel created for previews while using the authoring tool, but since the author
+ *	of this file was kind enough to not provide a file description, this is unconfirmed.
+ *	@author ???
  */
 
 public class SimpleLinkPanel extends BoxComponent implements ExtendedElementContainerMasterInterface, ExtendedElementContainerInterface {

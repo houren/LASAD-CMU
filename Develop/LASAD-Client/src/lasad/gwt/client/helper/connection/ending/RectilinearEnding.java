@@ -24,6 +24,7 @@ import lasad.gwt.client.helper.connector.Direction;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Widget;
 
+
 /**
  * OK, what does it do?  Where are the comments?
  * @author Michał Baliński (michal.balinski@gmail.com)
@@ -55,8 +56,9 @@ public class RectilinearEnding extends ConnectionEnding {
 	 *      int, float)
 	 */
 	public void update(int left, int top, float angle) {
+
 		if (angle < 0.0f || angle >= 360.0f) {
-			throw new IllegalArgumentException("Angle must from [0.0f, 360.0f)");
+			throw new IllegalArgumentException("Angle must be from [0.0f, 360.0f)");
 		}
 
 		if (angle > 315.0f || angle < 45.0f) {
