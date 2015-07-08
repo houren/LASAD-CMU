@@ -815,7 +815,9 @@ public class ActionFactory {
 			boolean onlyAuthorCanModify,
 			boolean commitTextByEnter,
 			boolean straightLink,
-			boolean useAutoGrowTextArea) 
+			boolean useAutoGrowTextArea,
+			boolean organizeTopToBottom,
+			boolean allowLinksToLinks) 
 	{
 		ActionPackage p = new ActionPackage();
 		Action a = new Action(Commands.CreateTemplate, Categories.Authoring);
@@ -852,6 +854,9 @@ public class ActionFactory {
 		
 		//MODFIED BY BM
 		a.addParameter(ParameterTypes.AutoGrowTextArea, useAutoGrowTextArea + "");
+		
+		a.addParameter(ParameterTypes.OrganizeTopToBottom, organizeTopToBottom + "");
+		a.addParameter(ParameterTypes.AllowLinksToLinks, allowLinksToLinks + "");
 		
 		p.addAction(a);
 		return p;

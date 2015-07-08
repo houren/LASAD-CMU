@@ -31,6 +31,8 @@ import lasad.gwt.client.model.organization.ArgumentThread;
 import lasad.gwt.client.model.organization.AutoOrganizer;
 import lasad.gwt.client.logger.Logger;
 
+import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
+
 /**
  * This class creates the dialog box for when the user selects to add a relation via the argument map drop down menu.
  * If creating links via dragging, see AbstractCreateLinkDialog (link only) and AbstractCreateBoxLinkDialog (link and box).
@@ -58,11 +60,14 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 	private TreeMap<String, AbstractBox> boxes;
 	private TreeMap<String, AbstractLink> links;
 
+	protected boolean allowLinksToLinks;
+
 	public AbstractCreateSpecialLinkDialog(ElementInfo config, String mapId, TreeMap<String, AbstractBox> boxes, TreeMap<String, AbstractLink> links) {
 		this.config = config;
 		this.correspondingMapId = mapId;
 		this.boxes = boxes;
 		this.links = links;
+		this.allowLinksToLinks = AbstractGraphMap.getInstanceByMapID(correspondingMapId).getMyViewSession().getController().getMapInfo().isAllowLinksToLinks();
 	}
 
 	@Override
@@ -109,8 +114,12 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 		comboEnd.setFieldLabel("<font color=\"#000000\">" + "End" + "</font>");
 		comboEnd.setAllowBlank(false);
-		for (String rootID : links.keySet()) {
-			comboEnd.add(rootID);
+
+		if (this.getAllowLinksToLinks())
+		{
+			for (String rootID : links.keySet()) {
+				comboEnd.add(rootID);
+			}
 		}
 		comboEnd.setEnabled(false);
 		simple.add(comboEnd, formData);
@@ -181,12 +190,15 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 					}
 				}
 
-				for (String id : links.keySet()) {
-					// It's not allowed to have a link from a box to its
-					// connected links
-					if (!(links.get(id).getConnectedModel().getParents().get(0).getValue(ParameterTypes.RootElementId).equals(comboStart.getRawValue()) || links.get(id).getConnectedModel().getParents().get(1).getValue(ParameterTypes.RootElementId).equals(comboStart.getRawValue()))) {
-						comboEnd.add(id);
-						if (comboEndHasElements == false) comboEndHasElements = true;
+				if (allowLinksToLinks)
+				{
+					for (String id : links.keySet()) {
+						// It's not allowed to have a link from a box to its
+						// connected links
+						if (!(links.get(id).getConnectedModel().getParents().get(0).getValue(ParameterTypes.RootElementId).equals(comboStart.getRawValue()) || links.get(id).getConnectedModel().getParents().get(1).getValue(ParameterTypes.RootElementId).equals(comboStart.getRawValue()))) {
+							comboEnd.add(id);
+							if (comboEndHasElements == false) comboEndHasElements = true;
+						}
 					}
 				}
 
@@ -281,6 +293,11 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 	protected TreeMap<String, AbstractLink> getLinks() {
 		return links;
+	}
+
+	protected boolean getAllowLinksToLinks()
+	{
+		return allowLinksToLinks;
 	}
 
 }

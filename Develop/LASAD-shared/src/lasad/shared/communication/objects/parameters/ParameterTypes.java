@@ -26,7 +26,8 @@ public enum ParameterTypes {
 			"SELECTION"), LastId("LAST-ID"), UserJoin("USERJOIN"), Changed("Changed"), Successful("Successful"), OldStatus("OldStatus"), NewStatus(
 			"NewStatus"), ChangedComponentID("ChangedComponentID"), challengeId("CHALLENGE_ID"), challengeName("CHALLENGE_NAME"), token(
 			"TOKEN"), groupId("GROUP_ID"), passwordEncrypted("passwordEncrypted"), BackgroundImageURL("BackgroundImageURL"), PatternId(
-			"PATTERN-ID"), RequestId("REQUEST-ID"), ServiceClass("SERVICE-CLASS"),
+			"PATTERN-ID"), RequestId("REQUEST-ID"), ServiceClass("SERVICE-CLASS"), OrganizeTopToBottom("ORGANIZE_TOP_TO_BOTTOM"), 
+			AllowLinksToLinks("ALLOW_LINKS_TO_LINKS"),
 
 	TextOnImage("textonimage"), Source("source"), Dragable("dragable"), Text1("TEXT1"), Text2("TEXT2"), Spot1("SPOT1"), Spot2("SPOT2"), DetailsOnly(
 			"detailsonly"), FontColor("font-color"), Client("CLIENT"), UserList("USERLIST"), Headline("headline"), Link("LINK"), ImageURL(
@@ -36,11 +37,8 @@ public enum ParameterTypes {
 			"configbutton"), Reason("Reason"), Succeeded("Succeeded"), OnlyAuthorCanModify("onlyauthorcanmodify"), CommitTextByEnter(
 			"committextbyenter"), StraightLink("straightlink"), UseMiniMap("USE-MINIMAP"), ServerVersion("serverVersion"),
 	// MODIFIED BY BM
-	AutoGrowTextArea("USE-AUTOGROW"),
+	AutoGrowTextArea("USE-AUTOGROW");
 	// MODIFIED BY BM END
-
-	//Kevin Loughlin is adding autoorganize for support for the cleanup function
-	AutoOrganize("autoorganize");
 
 	private String oldParameter;
 

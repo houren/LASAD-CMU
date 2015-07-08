@@ -45,6 +45,10 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 		this.myDialogue = dialogue;
 		this.b1 = b1;
 		this.l2 = l2;
+		if (!myMap.getMyViewSession().getController().getMapInfo().isAllowLinksToLinks())
+		{
+			myDialogue.removeFromParent();
+		}
     }
 
     public void onBrowserEvent(Event be) {
@@ -120,7 +124,7 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 					{
 						onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + "");
 					}
-				} else if (b1 != null && l2 != null) {
+				} else if (myMap.getMyViewSession().getController().getMapInfo().isAllowLinksToLinks() && b1 != null && l2 != null) {
 				    //communicator.sendActionPackage(actionBuilder.createLinkWithElements(info, myMap.getID(), b1.getConnectedModel().getId() + "", l2.getConnectedModel().getId() + ""));
 					onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", l2.getConnectedModel().getId() + "");
 				}

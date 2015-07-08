@@ -417,6 +417,9 @@ public class Template {
 				a.getParameterValue(ParameterTypes.AutoGrowTextArea));
 		// MODIFY END
 
+		options.setAttribute("organizetoptobottom", a.getParameterValue(ParameterTypes.OrganizeTopToBottom));
+		options.setAttribute("allowlinkstolinks", a.getParameterValue(ParameterTypes.AllowLinksToLinks));
+
 		mapdetails.addContent(description);
 		mapdetails.addContent(options);
 		

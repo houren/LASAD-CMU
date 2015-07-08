@@ -273,7 +273,11 @@ public abstract class AbstractLinkPanel extends LASADBoxComponent implements Ext
 		{
 			makeDraggable(myLink.getMap());
 		}
-		createDNDTarget();
+		
+		if (myLink.getMap().getMyViewSession().getController().getMapInfo().isAllowLinksToLinks())
+		{
+			createDNDTarget();	
+		}
 	}
 
 	//ZyG, 18.05.11
@@ -364,6 +368,7 @@ public abstract class AbstractLinkPanel extends LASADBoxComponent implements Ext
 	}
 
 	private DropTarget createDNDTarget() {
+
 		final DropTarget target = new DropTarget(this);
 
 		final GraphMap myMap = myLink.getMap();
