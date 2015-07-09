@@ -135,6 +135,7 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se) {
+
 				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
 
 				// Important to use rootID
@@ -225,6 +226,7 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se) {
+
 				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
 				LinkedBox endBox = argModel.getBoxByRootID(Integer.parseInt(comboEnd.getRawValue()));
 

@@ -55,7 +55,8 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Timer;
 
-
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.dom.client.Style;
 
 /**
  * Visual representation of each box in the graph-layout
@@ -1275,6 +1276,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 				if (westConnector.getElement().getClassName().equals("west-connector-dark")) {
 					westConnector.getElement().setClassName("west-connector");
 				}
+				//DOM.setStyleAttribute(RootPanel.getBodyElement(), "cursor", Style.Cursor.DEFAULT);
 				hoverTimer.schedule(500);
 			}
 

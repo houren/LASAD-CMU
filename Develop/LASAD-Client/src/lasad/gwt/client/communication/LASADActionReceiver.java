@@ -72,6 +72,7 @@ import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import java.util.Collection;
+import lasad.gwt.client.model.ElementInfo;
 
 
 
@@ -571,30 +572,24 @@ public class LASADActionReceiver {
 						return;
 					}
 
-					//String widthString = elementModel.getValue(ParameterTypes.Width);
-					int width = DEFAULT_WIDTH;
-					/*if (widthString != null)
+					ElementInfo newBoxDimensions = controller.getMapInfo().getElementsByType("box").get(elementModel.getValue(ParameterTypes.ElementId));
+					if (newBoxDimensions == null)
 					{
-						width = Integer.parseInt(widthString);
+						Logger.log("newBoxDimenions are null", Logger.DEBUG);
 					}
-					else
-					{
-						Logger.log("Null widthString", Logger.DEBUG);
-						return;
-					}*/
 
+					String widthString = newBoxDimensions.getUiOption(ParameterTypes.Width);
+					String heightString = newBoxDimensions.getUiOption(ParameterTypes.Height);
 
-					//String heightString = elementModel.getValue(ParameterTypes.Height);
-					int height = DEFAULT_HEIGHT;
-					/*if (heightString != null)
+					if (widthString == null || heightString == null)
 					{
-						height = Integer.parseInt(heightString);
+						Logger.log("width and/or height string(s) are null", Logger.DEBUG);
 					}
-					else
-					{
-						Logger.log("Null heightString", Logger.DEBUG);
-						return;
-					}*/
+
+					Logger.log("Width: " + widthString + "; Height: " + heightString, Logger.DEBUG);
+
+					int width = Integer.parseInt(widthString);
+					int height = Integer.parseInt(heightString);
 
 					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height)));
 				}
