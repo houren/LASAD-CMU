@@ -36,7 +36,9 @@ public class User {
 	
 	boolean usingWebservice = false;
 	
-	public User() { }
+	public User()
+	{
+	}
 	
 	public User(String nickname, String password, String role) {
 		this(nickname, password, role, false);

@@ -8,7 +8,7 @@
 		</description>
 		<options maxuser="20" chatsystem="true" sentenceopener="true"
 			listofusers="true" feedback="true" track-cursor="false"
-			group-pointer="true" onlyauthorcanmodify="true" straightlink="true" />
+			group-pointer="true" onlyauthorcanmodify="true" straightlink="true" allowlinkstolinks="true"/>
 	</mapdetails>
 
 

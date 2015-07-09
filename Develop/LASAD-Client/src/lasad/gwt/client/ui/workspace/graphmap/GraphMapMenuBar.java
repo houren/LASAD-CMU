@@ -31,6 +31,8 @@ import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 
+import lasad.gwt.client.logger.Logger;
+
 public abstract class GraphMapMenuBar extends ToolBar {
 	
 //	private final LASADActionSender communicator = LASADActionSender.getInstance();
@@ -189,6 +191,7 @@ public abstract class GraphMapMenuBar extends ToolBar {
 
 			@Override
 			public void componentSelected(MenuEvent ce) {
+				Logger.log("Made it to component selected", Logger.DEBUG);
 				TreeMap<String, AbstractBox> boxes = new TreeMap<String, AbstractBox>();
 				TreeMap<String, AbstractLink> links = new TreeMap<String, AbstractLink>();
 				List<Component> mapComponents = GraphMapMenuBar.this.getMyMapSpace().getMyMap().getItems();

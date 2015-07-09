@@ -3,6 +3,7 @@ package lasad.gwt.client.ui.link;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.HashMap;
 
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.helper.connection.Connection;
@@ -273,11 +274,8 @@ public abstract class AbstractLinkPanel extends LASADBoxComponent implements Ext
 		{
 			makeDraggable(myLink.getMap());
 		}
-		
-		if (myLink.getMap().getMyViewSession().getController().getMapInfo().isAllowLinksToLinks())
-		{
-			createDNDTarget();	
-		}
+
+		createDNDTarget();	
 	}
 
 	//ZyG, 18.05.11
@@ -376,6 +374,7 @@ public abstract class AbstractLinkPanel extends LASADBoxComponent implements Ext
 		target.addDNDListener(new DNDListener() {
 			public void dragDrop(DNDEvent e) {
 
+				Logger.log("Drag Drop of link", Logger.DEBUG);
 				boolean allowsTranscript = false;
 
 				for (ElementInfo elem : myLink.getElementInfo().getChildElements().values()) {
@@ -435,9 +434,37 @@ public abstract class AbstractLinkPanel extends LASADBoxComponent implements Ext
 					e.getStatus().update("Link relation with transcript");
 				} else if (e.getDragSource().getData() instanceof TranscriptLinkData) {
 					// Do nothing
-				} else if (e.getDragSource().getData() instanceof AbstractBox && (((AbstractLinkPanel) target.getComponent()).getMyLink().getConnectedModel().getParents().get(0).getValue(ParameterTypes.RootElementId).equals(((AbstractBox) e.getDragSource().getData()).getConnectedModel().getValue(ParameterTypes.RootElementId)) || ((AbstractLinkPanel) target.getComponent()).getMyLink().getConnectedModel().getParents().get(1).getValue(ParameterTypes.RootElementId).equals(((AbstractBox) e.getDragSource().getData()).getConnectedModel().getValue(ParameterTypes.RootElementId)))) {
+				}
+				else if (myLink.getMap().getMyViewSession().getController().getMapInfo().isAllowLinksToLinks())
+				{
+					if (e.getDragSource().getData() instanceof AbstractBox && (((AbstractLinkPanel) target.getComponent()).getMyLink().getConnectedModel().getParents().get(0).getValue(ParameterTypes.RootElementId).equals(((AbstractBox) e.getDragSource().getData()).getConnectedModel().getValue(ParameterTypes.RootElementId)) || ((AbstractLinkPanel) target.getComponent()).getMyLink().getConnectedModel().getParents().get(1).getValue(ParameterTypes.RootElementId).equals(((AbstractBox) e.getDragSource().getData()).getConnectedModel().getValue(ParameterTypes.RootElementId))))
+					{
+						e.getStatus().setStatus(false);
+						e.getStatus().update("Cannot be connected to this relation");
+
+						// Clear Drag & Drop Line
+						if (myMap.getMyCon() != null) {
+							myMap.getMyCon().remove();
+							myMap.setMyCon(null);
+						}
+						myMap.setStartPoint(null);
+						myMap.setEndPoint(null);
+
+						if (myMap.getEndConnector() != null) {
+							myMap.getEndConnector().removeFromParent();
+							myMap.setEndConnector(null);
+						}
+					}
+					else
+					{
+						e.getStatus().setStatus(true);
+						e.getStatus().update("Create new Relation");
+					}
+				}
+				else
+				{
 					e.getStatus().setStatus(false);
-					e.getStatus().update("Cannot be connected to this relation");
+					e.getStatus().update("Cannot connect to relations in this ontology.");
 
 					// Clear Drag & Drop Line
 					if (myMap.getMyCon() != null) {
@@ -451,10 +478,6 @@ public abstract class AbstractLinkPanel extends LASADBoxComponent implements Ext
 						myMap.getEndConnector().removeFromParent();
 						myMap.setEndConnector(null);
 					}
-
-				} else {
-					e.getStatus().setStatus(true);
-					e.getStatus().update("Create new Relation");
 				}
 
 				if (getController() != null) {

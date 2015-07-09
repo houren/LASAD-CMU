@@ -2,7 +2,7 @@
 <maptemplate uniquename="Metafora" title="Metafora" ontology="Metafora">
   <mapdetails>
     <description />
-    <options maxuser="15" chatsystem="true" listofusers="true" track-cursor="false" selection-details="false" />
+    <options maxuser="15" chatsystem="true" listofusers="true" track-cursor="false" selection-details="false" allowlinkstolinks="true"/>
   </mapdetails>
 </maptemplate>
 

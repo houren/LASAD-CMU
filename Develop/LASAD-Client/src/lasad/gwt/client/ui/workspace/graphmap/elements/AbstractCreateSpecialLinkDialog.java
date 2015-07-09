@@ -1,5 +1,6 @@
 package lasad.gwt.client.ui.workspace.graphmap.elements;
 
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -117,8 +118,13 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 		if (this.getAllowLinksToLinks())
 		{
-			for (String rootID : links.keySet()) {
-				comboEnd.add(rootID);
+			for(Map.Entry<String, AbstractLink> entry : links.entrySet())
+			{
+				String details = entry.getValue().getElementInfo().getElementOption(ParameterTypes.Details);
+				if (details == null || details.equalsIgnoreCase("true"))
+				{
+					comboEnd.add(entry.getKey());
+				}
 			}
 		}
 		comboEnd.setEnabled(false);
@@ -192,18 +198,25 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 				if (allowLinksToLinks)
 				{
-					for (String id : links.keySet()) {
-						// It's not allowed to have a link from a box to its
-						// connected links
-						if (!(links.get(id).getConnectedModel().getParents().get(0).getValue(ParameterTypes.RootElementId).equals(comboStart.getRawValue()) || links.get(id).getConnectedModel().getParents().get(1).getValue(ParameterTypes.RootElementId).equals(comboStart.getRawValue()))) {
-							comboEnd.add(id);
-							if (comboEndHasElements == false) comboEndHasElements = true;
-						}
+					for (Map.Entry<String, AbstractLink> entry : links.entrySet())
+					{
+						String id = entry.getKey();
+						
+						String details = entry.getValue().getElementInfo().getElementOption(ParameterTypes.Details);
+						if (details == null || details.equalsIgnoreCase("true"))
+						{
+							// It's not allowed to have a link from a box to its
+							// connected links
+							if (!(links.get(id).getConnectedModel().getParents().get(0).getValue(ParameterTypes.RootElementId).equals(comboStart.getRawValue()) || links.get(id).getConnectedModel().getParents().get(1).getValue(ParameterTypes.RootElementId).equals(comboStart.getRawValue())))
+							{
+								comboEnd.add(id);
+								if (comboEndHasElements == false) comboEndHasElements = true;
+							}
+						}				
 					}
 				}
-
 				if (!comboEndHasElements) {
-					LASADInfo.display("Error", "No more connections available for this starting element.");
+					LASADInfo.display("Error", "No more numeric connections available for this starting element.");
 				}
 			}
 		});

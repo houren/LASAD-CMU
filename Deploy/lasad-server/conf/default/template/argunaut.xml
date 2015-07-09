@@ -4,6 +4,6 @@
 						<description>
 							Enabled configurations: chat system, list of users, group-pointer; cursor-tracking: disabled
 						</description>
-						<options maxuser="20" chatsystem="true" listofusers="true" feedback="true" track-cursor="false" group-pointer="true"/>
+						<options maxuser="20" chatsystem="true" listofusers="true" feedback="true" track-cursor="false" group-pointer="true" allowlinkstolinks="true"/>
 					</mapdetails>
 	</maptemplate>

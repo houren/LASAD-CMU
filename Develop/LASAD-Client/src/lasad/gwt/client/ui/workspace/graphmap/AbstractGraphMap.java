@@ -33,7 +33,7 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 //	protected LASADActionSender communicator = LASADActionSender.getInstance();
 //	protected ActionFactory actionBuilder = ActionFactory.getInstance();
 
-	// Instances of maps
+	// Instances of maps, where string is mapID
 	protected static HashMap<String, AbstractGraphMap> instances = new HashMap<String, AbstractGraphMap>();
 
 	protected GraphMapSpace myArgumentMapSpace;

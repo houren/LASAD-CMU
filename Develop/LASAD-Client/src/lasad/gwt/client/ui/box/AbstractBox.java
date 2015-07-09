@@ -549,6 +549,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 
 			@Override
 			public void dragEnter(DNDEvent e) {
+
 				e.getStatus().setStatus(true);
 
 				if (e.getDragSource().getData() instanceof AbstractBox) {
@@ -650,6 +651,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 					}
 				}
 				e.cancelBubble();
+				
 			}
 
 			@Override
@@ -1518,5 +1520,5 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		autogrow = true;
 		setSize(getWidth(), getHeight()+ height);
 		autogrow = false;
-	}	
+	}
 }
