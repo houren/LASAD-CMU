@@ -5,7 +5,7 @@
 					<description>
 						Emulation of the Belvedere system by Dan Suthers
 					</description>
-					<options maxuser="10" chatsystem="false" listofusers="false" feedback="false" track-cursor="false" selection-details="true"/>
+					<options maxuser="10" chatsystem="false" listofusers="false" feedback="false" track-cursor="false" selection-details="true" allowlinkstolinks="true"/>
 				</mapdetails>
 					
 </maptemplate>

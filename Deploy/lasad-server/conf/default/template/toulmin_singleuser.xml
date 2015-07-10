@@ -6,7 +6,7 @@
 							
 						</description>
 
-						<options maxuser="1" chatsystem="false" feedback="false" track-cursor="false"/>
+						<options maxuser="1" chatsystem="false" feedback="false" track-cursor="false" allowlinkstolinks="true"/>
 					</mapdetails>
 						
 				</maptemplate>

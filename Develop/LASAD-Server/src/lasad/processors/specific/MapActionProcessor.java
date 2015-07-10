@@ -319,9 +319,9 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 
 			if (!Element.isElementActive(elementID)) {
 				Logger.log("Element " + elementID + " is no longer active. Delete failed.");
-				ActionPackage ap = ActionPackageFactory.error("Element is already deleted. Delete failed");
-				Logger.doCFLogging(ap);
-				ManagementController.addToUsersActionQueue(ap, u.getSessionID());
+				// Not necessary -> ActionPackage ap = ActionPackageFactory.error("Element is already deleted. Delete failed");
+				// Logger.doCFLogging(ap);
+				// ManagementController.addToUsersActionQueue(ap, u.getSessionID());
 				return;
 			}
 

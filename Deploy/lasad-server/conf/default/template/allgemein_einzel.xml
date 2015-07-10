@@ -6,7 +6,7 @@
 			Studienbedingung 1a: Unterstützung für allgemeine Argumentation
 						</description>
 		<options maxuser="2" chatsystem="false" listofusers="false"
-			feedback="false" track-cursor="false" selection-details="false" />
+			feedback="false" track-cursor="false" selection-details="false" allowlinkstolinks="true"/>
 	</mapdetails>
 
 </maptemplate>
