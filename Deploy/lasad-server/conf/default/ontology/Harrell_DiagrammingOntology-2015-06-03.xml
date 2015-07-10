@@ -3,7 +3,7 @@
 <ontology type="Harrell_DiagrammingOntology">
     <elements>
         <element elementtype="box" elementid="Premise" minquantity="0" maxquantity="0" quantity="0">
-            <elementoptions heading="Premise"/>
+            <elementoptions heading="Premise" canbegrouped="true"/>
             <uisettings width="200" height="200" border="standard" background-color="#FFCC00"/>
             <childelements>
                 <element elementtype="text" elementid="Premise-text" minquantity="1" maxquantity="1" quantity="1">
@@ -77,7 +77,7 @@
             <childelements/>
         </element>
         <element elementtype="relation" elementid="Linked Premises" minquantity="0" maxquantity="0" quantity="0">
-            <elementoptions heading="Linked Premises" endings="false" details="false"/>
+            <elementoptions heading="Linked Premises" endings="false" details="false" connectsgroup="true"/>
             <uisettings width="120" height="200" background-color="blue" linewidth="6px" linecolor="blue"/>
             <childelements/>
         </element>

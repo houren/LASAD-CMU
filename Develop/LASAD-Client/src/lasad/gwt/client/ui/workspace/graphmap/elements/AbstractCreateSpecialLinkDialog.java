@@ -91,15 +91,26 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 		comboStart.setFieldLabel("<font color=\"#000000\">" + "Start" + "</font>");
 		comboStart.setAllowBlank(false);
 		for (String rootID : boxes.keySet()) {
-			// TODO : Verify I'm only doing linked premises between premises
+
 			// Be careful about RootID vs Box ID
 
-			if (config.getElementID().equalsIgnoreCase("Linked Premises"))
+			String connectsGroupString = config.getElementOption(ParameterTypes.ConnectsGroup);
+			boolean connectsGroup;
+			if (connectsGroupString == null)
+			{
+				connectsGroup = false;
+			}
+			else
+			{
+				connectsGroup = Boolean.parseBoolean(connectsGroupString);
+			}
+
+			if (connectsGroup)
 			{
 				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
 				LinkedBox alpha = argModel.getBoxByRootID(Integer.parseInt(rootID));
 
-				if (alpha.getNumSiblings() < MAX_SIBLINGS && alpha.getType().equalsIgnoreCase("Premise"))
+				if (alpha.getNumSiblings() < MAX_SIBLINGS && alpha.getCanBeGrouped())
 				{
 					comboStart.add(rootID);
 				}
@@ -155,16 +166,27 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 				AutoOrganizer autoOrganizer = AutoOrganizer.getInstanceByMapID(correspondingMapId);
 
+				String connectsGroupString = config.getElementOption(ParameterTypes.ConnectsGroup);
+				boolean connectsGroup;
+				if (connectsGroupString == null)
+				{
+					connectsGroup = false;
+				}
+				else
+				{
+					connectsGroup = Boolean.parseBoolean(connectsGroupString);
+				}
+
 				//TODO (Marcel) unite following two loops
 				for (String rootID : boxes.keySet()) {
 
 					LinkedBox endBox = argModel.getBoxByRootID(Integer.parseInt(rootID));
 
-					if (config.getElementID().equalsIgnoreCase("Linked Premises"))
+					if (connectsGroup)
 					{
-						OrganizerLink newLink = new OrganizerLink(startBox, endBox, config.getElementID());
+						OrganizerLink newLink = new OrganizerLink(startBox, endBox, config.getElementID(), connectsGroup);
 
-						if (autoOrganizer.linkedPremisesCanBeCreated(newLink) != 0)
+						if (autoOrganizer.groupedBoxesCanBeCreated(newLink) != 0)
 						{
 							restrictedIds.add(rootID);
 						}
@@ -234,15 +256,26 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 				AutoOrganizer autoOrganizer = AutoOrganizer.getInstanceByMapID(correspondingMapId);
 
+				String connectsGroupString = config.getElementOption(ParameterTypes.ConnectsGroup);
+				boolean connectsGroup;
+				if (connectsGroupString == null)
+				{
+					connectsGroup = false;
+				}
+				else
+				{
+					connectsGroup = Boolean.parseBoolean(connectsGroupString);
+				}
+
 				for (String rootID : boxes.keySet()) {
 
 					LinkedBox startBox = argModel.getBoxByRootID(Integer.parseInt(rootID));
 
-					if (config.getElementID().equalsIgnoreCase("Linked Premises"))
+					if (connectsGroup)
 					{
-						OrganizerLink newLink = new OrganizerLink(startBox, endBox, "Linked Premises");
+						OrganizerLink newLink = new OrganizerLink(startBox, endBox, config.getElementID(), connectsGroup);
 
-						if (autoOrganizer.linkedPremisesCanBeCreated(newLink) == 0)
+						if (autoOrganizer.groupedBoxesCanBeCreated(newLink) == 0)
 						{
 							comboStart.add(rootID);
 						}

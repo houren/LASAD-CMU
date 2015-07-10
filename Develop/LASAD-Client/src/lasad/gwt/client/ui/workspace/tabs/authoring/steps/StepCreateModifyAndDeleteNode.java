@@ -47,6 +47,7 @@ public class StepCreateModifyAndDeleteNode extends ContentPanel {
 	private Slider widthSl;
 	private CheckBox addTextField;
 	private CheckBox addAwarenessCheckbox;
+	private CheckBox canBeGrouped;
 
 	private SliderField sfWidth;
 
@@ -327,6 +328,15 @@ public class StepCreateModifyAndDeleteNode extends ContentPanel {
 		} else {
 			addAwarenessCheckbox.setValue(false);
 		}
+		
+		canBeGrouped = new CheckBox();
+		canBeGrouped.setFieldLabel("Can be grouped with other boxes of the same type");
+
+		if (elInfo == null) {
+			canBeGrouped.setValue(true);
+		} else {
+			canBeGrouped.setValue(false);
+		}
 		// SN: End Awareness Checkbox
 
 		Button previewButton = new Button("Preview") {
@@ -353,6 +363,7 @@ public class StepCreateModifyAndDeleteNode extends ContentPanel {
 					if (addAwarenessCheckbox.getValue()) {
 						addAwareness(newElement);
 					}
+
 					// SN: End Awareness Checkbox
 					
 
@@ -389,6 +400,8 @@ public class StepCreateModifyAndDeleteNode extends ContentPanel {
 					}
 					// SN: End Awareness Checkbox
 
+					newElement.addElementOption(ParameterTypes.CanBeGrouped, canBeGrouped.getValue().toString());
+
 
 					if (elInfo != null) {
 						CreateModifyAndDeleteOntology.contributionToElement.remove(elInfo);
@@ -419,6 +432,8 @@ public class StepCreateModifyAndDeleteNode extends ContentPanel {
 			addTopLevelElementForm.add(addTextField);
 			addTopLevelElementForm.add(addAwarenessCheckbox);
 		}
+
+		addTopLevelElementForm.add(canBeGrouped);
 
 		addTopLevelElementForm.addButton(previewButton);
 		addTopLevelElementForm.addButton(saveButton);
@@ -545,6 +560,7 @@ public class StepCreateModifyAndDeleteNode extends ContentPanel {
 	private ElementInfo createNewElement(ElementInfo elInfo) {
 		Vector<Parameter> elOptions = new Vector<Parameter>();
 		elOptions.add(new Parameter(ParameterTypes.Heading, title.getValue()));
+		elOptions.add(new Parameter(ParameterTypes.CanBeGrouped, canBeGrouped.getValue().toString()));
 
 		Vector<Parameter> uiOptions = new Vector<Parameter>();
 		// TODO: Width und Height waren hier klein geschrieben, sind jetzt aber auf den gro�1�7-geschriebenen Wert abgebildet.

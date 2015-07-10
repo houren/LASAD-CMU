@@ -67,24 +67,41 @@ public abstract class AbstractCreateBoxLinkDialogListener implements EventListen
 			for (ElementInfo info : getElementsByType("relation")) {
 				if (((Element) be.getEventTarget().cast()).getInnerText().equals(info.getElementOption(ParameterTypes.Heading))) {
 					// Send Action --> Server
-					if (info.getElementID().equalsIgnoreCase("Linked Premises"))
+					String connectsGroupString = info.getElementOption(ParameterTypes.ConnectsGroup);
+					boolean connectsGroup;
+					if (connectsGroupString == null)
+					{
+						connectsGroup = false;
+					}
+					else
+					{
+						connectsGroup = Boolean.parseBoolean(connectsGroupString);
+					}	
+					if (connectsGroup)
 					{
 						ArgumentModel argModel = ArgumentModel.getInstanceByMapID(myMap.getID());
 						LinkedBox alpha = argModel.getBoxByBoxID(myDialog.getStartBox().getConnectedModel().getId());
-						if (alpha.getNumSiblings() < MAX_SIBLINGS)
+						if (alpha.getCanBeGrouped())
 						{
-							if (myDialog.getStartBox().getElementInfo().getElementID().equalsIgnoreCase("Premise") && myDialog.getBoxConfig().getElementID().equalsIgnoreCase("Premise"))
+							if (alpha.getNumSiblings() < MAX_SIBLINGS)
 							{
-								onClickSendUpdateToServer(myDialog.getBoxConfig(), info, myMap.getID(), myDialog.getPosition(true).x, myDialog.getPosition(true).y, String.valueOf(myDialog.getStartBox().getConnectedModel().getId()), "LAST-ID");
+								if (alpha.getType().equalsIgnoreCase(myDialog.getBoxConfig().getElementID()))
+								{
+									onClickSendUpdateToServer(myDialog.getBoxConfig(), info, myMap.getID(), myDialog.getPosition(true).x, myDialog.getPosition(true).y, String.valueOf(myDialog.getStartBox().getConnectedModel().getId()), "LAST-ID");
+								}
+								else
+								{
+									LASADInfo.display("Error", "Grouped boxes can only be between boxes of the same type - can't create link");
+								}
 							}
 							else
 							{
-								LASADInfo.display("Error", "Linked Premises can only be between premises - can't create link");
+								LASADInfo.display("Error", "The starting box already has 2 siblings - can't create link");// 1 or more already have 2 siblings, can't create link
 							}
 						}
 						else
 						{
-							LASADInfo.display("Error", "The starting box already has 2 linked premises - can't create link");// 1 or more already have 2 siblings, can't create link
+							LASADInfo.display("Error", "Boxes are not of a groupable type");
 						}
 					}
 					else

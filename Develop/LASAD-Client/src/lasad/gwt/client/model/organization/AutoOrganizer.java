@@ -18,7 +18,7 @@ import lasad.gwt.client.model.ElementInfo;
 import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.model.organization.ArgumentThread;
 import lasad.gwt.client.model.organization.LinkedBox;
-import lasad.gwt.client.model.organization.LinkedPremisesStatusCodes;
+import lasad.gwt.client.model.organization.GroupedBoxesStatusCodes;
 import lasad.gwt.client.model.organization.OrganizerLink;
 
 import lasad.gwt.client.logger.Logger;
@@ -28,7 +28,7 @@ import lasad.shared.communication.objects.ActionPackage;
 
 /**
  * An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update links
- * in ArgumentMap representations where a type of relation is listed as "Linked Premises" (not case sensitive). The overall map organizing function,
+ * in ArgumentMap representations where a type of relation can create groups of boxes. The overall map organizing function,
  * accordingly called organizeMap(), is only called when the user clicks the corresponding button on the ArgumentMapMenuBar. Though originally
  * built for maps using Mara Harrell's template, this class can be applied to any map from any template.  There is a model that updates
  * with every change to the map.  Thus, we don't need to start from scratch and gather components every time these methods are called.
@@ -41,7 +41,7 @@ public class AutoOrganizer
 	private final int Y_SPACE = 150;
 	private final int X_SPACE = 150;
 
-	// The maximum number of siblings (linked premises) a box can have
+	// The maximum number of siblings (grouped boxes) a box can have
 	private final int MAX_SIBLINGS = 2;
 	
 	//Initial coordinates
@@ -157,7 +157,7 @@ public class AutoOrganizer
 	/**
 	 * UNDER DEVELOPMENT
 	 * Organizes the map from bottom to top: Root "parents" start at the bottom, leading the way to children above.
-	 * "sibling" boxes (i.e. boxes attached via Linked Premises) are placed adjacently.
+	 * "sibling" boxes (i.e. boxes attached via group links) are placed adjacently.
 	 */
 	public void organizeMap()
 	{
@@ -238,8 +238,8 @@ public class AutoOrganizer
 	}
 
 	/**
-	 * Updates the sibling boxes (i.e. linked premises boxes) related to the creation of a new link.
-	 * For example, if box A is attached to box B as a linked premise, and box B gets a new child, then box A should also
+	 * Updates the sibling boxes (i.e. grouped boxes) related to the creation of a new link.
+	 * For example, if box A is attached to box B via a group link, and box B gets a new child, then box A should also
 	 * have a relation pointing to that child.  This method uses the private helper method "updateRecursive" to do its dirty work.
 	 * @param link - The new, user-drawn link from which we must search for possibly necessary additional new links
 	 */
@@ -253,7 +253,7 @@ public class AutoOrganizer
 		LinkedBox origEndBox = link.getEndBox();
 		String linkType = link.getType();
 
-		if (linkType.equalsIgnoreCase("Linked Premises"))
+		if (link.getConnectsGroup())
 		{
 			HashSet<OrganizerLink> origStartChildLinks = origStartBox.getChildLinks();
 			HashSet<LinkedBox> origStartChildBoxes = origStartBox.getChildBoxes();
@@ -266,7 +266,7 @@ public class AutoOrganizer
 				LinkedBox newChildBox = origStartChildLink.getEndBox();
 				if (!origEndChildBoxes.contains(newChildBox))
 				{
-					OrganizerLink newLink = new OrganizerLink(origEndBox, newChildBox, origStartChildLink.getType());
+					OrganizerLink newLink = new OrganizerLink(origEndBox, newChildBox, origStartChildLink.getType(), origStartChildLink.getConnectsGroup());
 					linksToCreate.add(newLink);
 				}
 			}
@@ -276,7 +276,7 @@ public class AutoOrganizer
 				LinkedBox newChildBox = origEndChildLink.getEndBox();
 				if (!origStartChildBoxes.contains(newChildBox))
 				{
-					OrganizerLink newLink = new OrganizerLink(origStartBox, newChildBox, origEndChildLink.getType());
+					OrganizerLink newLink = new OrganizerLink(origStartBox, newChildBox, origEndChildLink.getType(), origEndChildLink.getConnectsGroup());
 					linksToCreate.add(newLink);
 				}
 			}
@@ -288,7 +288,7 @@ public class AutoOrganizer
 			// We only need the first one, hence why I break, but I use this for loop in case origStartSiblingBoxes is empty so that it will skip
 			for (LinkedBox origStartSiblingBox : origStartSiblingBoxes)
 			{
-				linksToCreate = updateRecursive(origStartSiblingBox, origEndBox, linkType, new VisitedAndLinksHolder()).getLinks();
+				linksToCreate = updateRecursive(origStartSiblingBox, origEndBox, link, new VisitedAndLinksHolder()).getLinks();
 				break;
 			}
 		}
@@ -340,7 +340,7 @@ public class AutoOrganizer
 	 *	@param LINK_TYPE - The type of connection we will make if necessary
 	 *  @param holder - The visited boxes and the links that need to be created, should be initialized as empty
 	*/
-	private VisitedAndLinksHolder updateRecursive(LinkedBox startBox, LinkedBox END_BOX, String LINK_TYPE, VisitedAndLinksHolder holder)
+	private VisitedAndLinksHolder updateRecursive(LinkedBox startBox, LinkedBox END_BOX, OrganizerLink LINK_DATA, VisitedAndLinksHolder holder)
 	{
 		//Logger.log("Entered update recursive.", Logger.DEBUG);
 		if (!holder.getVisited().contains(startBox))
@@ -348,11 +348,11 @@ public class AutoOrganizer
 			holder.addVisited(startBox);
 			if (!startBox.getChildBoxes().contains(END_BOX))
 			{
-				holder.addLink(new OrganizerLink(startBox, END_BOX, LINK_TYPE));
+				holder.addLink(new OrganizerLink(startBox, END_BOX, LINK_DATA.getType(), LINK_DATA.getConnectsGroup()));
 			}
 			for (LinkedBox siblingBox : startBox.getSiblingBoxes())
 			{
-				holder = updateRecursive(siblingBox, END_BOX, LINK_TYPE, holder);
+				holder = updateRecursive(siblingBox, END_BOX, LINK_DATA, holder);
 			}
 		}
 
@@ -360,53 +360,61 @@ public class AutoOrganizer
 	}
 
 	/**
-	 *	Determines whether or not the passed linked premise OrganizerLink can be created on the map, which depends on invariants such as
-	 *	the maximum number of permitted siblings per box, both boxes being premises, and no conflicting links between siblings.
+	 *	Determines whether or not the passed group OrganizerLink can be created on the map, which depends on invariants such as
+	 *	the maximum number of permitted siblings per box, both boxes being the same type, groupable, and no conflicting links between siblings.
 	 *	@param link - The link to check for valid creation
 	 *	@return Success/error integer code: 0 for success, greater than 0 for error code
 	 */
-	public int linkedPremisesCanBeCreated(OrganizerLink link)
+	public int groupedBoxesCanBeCreated(OrganizerLink link)
 	{
-		//Logger.log("Entered linkedPremisesCanBeCreated", Logger.DEBUG);
+		//Logger.log("Entered GroupedBoxesCanBeCreated", Logger.DEBUG);
 		LinkedBox startBox = link.getStartBox();
 		LinkedBox endBox = link.getEndBox();
 
 		// Boxes shouldn't be null
 		if (startBox == null || endBox == null)
 		{
-			return LinkedPremisesStatusCodes.NULL_BOX;
+			return GroupedBoxesStatusCodes.NULL_BOX;
 		}
 
 		// Can't create a link to self
 		if (startBox.equals(endBox))
 		{
-			return LinkedPremisesStatusCodes.SAME_BOX;
+			return GroupedBoxesStatusCodes.SAME_BOX;
 		}
 
-		// Checks that both boxes are premises, else return error code
-		if (startBox.getType().equalsIgnoreCase("Premise") && endBox.getType().equalsIgnoreCase("Premise"))
+		// Checks if they are of groupable type
+		if (startBox.getCanBeGrouped())
 		{
-			// Checks that they both have fewer than 2 siblings, else return error code
-			if (startBox.getNumSiblings() < MAX_SIBLINGS && endBox.getNumSiblings() < MAX_SIBLINGS)
+			// Checks that both boxes are of same type, else return error code
+			if (startBox.getType().equalsIgnoreCase(endBox.getType()))
 			{
-				// See this.isCompatible for what the method within this if statement checks, else return error code
-				if (this.isCompatible(startBox, endBox))
+				// Checks that they both have fewer than 2 siblings, else return error code
+				if (startBox.getNumSiblings() < MAX_SIBLINGS && endBox.getNumSiblings() < MAX_SIBLINGS)
 				{
-					return LinkedPremisesStatusCodes.SUCCESS;
+					// See this.isCompatible for what the method within this if statement checks, else return error code
+					if (this.isCompatible(startBox, endBox))
+					{
+						return GroupedBoxesStatusCodes.SUCCESS;
+					}
+					else
+					{
+						return GroupedBoxesStatusCodes.TWO_WAY_LINK;
+					}
 				}
 				else
 				{
-					return LinkedPremisesStatusCodes.TWO_WAY_LINK;
+					return GroupedBoxesStatusCodes.TOO_MANY_SIBS;
 				}
 			}
 			else
 			{
-				return LinkedPremisesStatusCodes.TOO_MANY_SIBS;
+				return GroupedBoxesStatusCodes.NOT_SAME_TYPE;
 			}
 		}
 		else
 		{
-			return LinkedPremisesStatusCodes.NOT_PREMISES;
+			return GroupedBoxesStatusCodes.CANT_BE_GROUPED;
 		}
 	}
 
@@ -414,7 +422,7 @@ public class AutoOrganizer
 	 *	Checks that there aren't existing invalid connections between the startBoxAndExtSibs group and the end Box children.
 	 *	@param startBoxAndExtSibs - The startBox for the new link and its extended siblings
 	 *	@param endBox - The end box for the new link
-	 *	@return true if there are no conflicts, false if the linked premises should not be created
+	 *	@return true if there are no conflicts, false if the grouped boxes should not be created
 	 */
 	private boolean isCompatible(LinkedBox startBox, LinkedBox endBox)
 	{
@@ -481,7 +489,7 @@ public class AutoOrganizer
 
 	/**
 	 *	Determines if supplemental links need to be removed after the passed link is removed.  This might be necessary, for example,
-	 *	if the removal of solely the passed link would result in a violation of the linked premises invariants (i.e. each sibling box must
+	 *	if the removal of solely the passed link would result in a violation of the grouped boxes invariants (i.e. each sibling box must
 	 *	link to each other sibling's children).
 	 *	@param removedLink - The link already removed from the model, that provides an easy access point for other nearby links to remove
 	 */
@@ -490,7 +498,7 @@ public class AutoOrganizer
 		//ogger.log("Entered determineLinksToRemove", Logger.DEBUG);
 		HashSet<OrganizerLink> linksToRemove = new HashSet<OrganizerLink>();
 
-		if (!removedLink.getType().equalsIgnoreCase("Linked Premises"))
+		if (!removedLink.getConnectsGroup())
 		{
 			LinkedBox removedLinkStartBox = removedLink.getStartBox();
 			int numSiblings = removedLinkStartBox.getNumSiblings();
@@ -516,7 +524,7 @@ public class AutoOrganizer
 		for (OrganizerLink link : linksToRemove)
 		{
 			ActionPackage myPackage = actionBuilder.removeElement(map.getID(), link.getLinkID());
-			LASADActionReceiver.getInstance().setPremisesAlreadyRemoved(true);
+			LASADActionReceiver.getInstance().setLinksAlreadyRemoved(true);
 			communicator.sendActionPackage(myPackage);
 		}
 	}

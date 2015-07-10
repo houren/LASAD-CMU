@@ -17,7 +17,7 @@ import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.model.organization.AutoOrganizer;
-import lasad.gwt.client.model.organization.LinkedPremisesStatusCodes;
+import lasad.gwt.client.model.organization.GroupedBoxesStatusCodes;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.ui.workspace.LASADInfo;
 
@@ -69,23 +69,35 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 				// Send Action --> Server
 				if (b1 != null && b2 != null) {
 
-					// Begin additions by Kevin Loughlin to handle when new links may actually be created (necessary to maintain Linked Premises invariants)
+					// Begin additions by Kevin Loughlin to handle when new links may actually be created (necessary to maintain grouped boxes invariants)
 					String linkType = info.getElementID();
+
+					String connectsGroupString = info.getElementOption(ParameterTypes.ConnectsGroup);
+					boolean connectsGroup;
+					if (connectsGroupString == null)
+					{
+						connectsGroup = false;
+					}
+					else
+					{
+						connectsGroup = Boolean.parseBoolean(connectsGroupString);
+					}
+
 					ArgumentModel argModel = ArgumentModel.getInstanceByMapID(myMap.getID());
 					LinkedBox alpha = argModel.getBoxByBoxID(b1.getConnectedModel().getId());
 					LinkedBox beta = argModel.getBoxByBoxID(b2.getConnectedModel().getId());
-					OrganizerLink newLink = new OrganizerLink(alpha, beta, linkType);
+					OrganizerLink newLink = new OrganizerLink(alpha, beta, linkType, connectsGroup);
 
 					if (alpha.hasExtendedSiblingLinkWith(beta))
 					{
-						LASADInfo.display("Error", "You cannot create a relation between already linked premises.");
+						LASADInfo.display("Error", "You cannot create a relation between already grouped boxes.");
 					}
 
-					else if (linkType.equalsIgnoreCase("Linked Premises"))
+					else if (newLink.getConnectsGroup())
 					{
-						int statusCode = myMap.getAutoOrganizer().linkedPremisesCanBeCreated(newLink);
+						int statusCode = myMap.getAutoOrganizer().groupedBoxesCanBeCreated(newLink);
 
-						if (statusCode == LinkedPremisesStatusCodes.SUCCESS)
+						if (statusCode == GroupedBoxesStatusCodes.SUCCESS)
 						{
 							onClickSendUpdateToServer(info, myMap.getID(), b1.getConnectedModel().getId() + "", b2.getConnectedModel().getId() + "");
 						}
@@ -93,23 +105,25 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 						{
 							switch (statusCode)
 							{
-								case LinkedPremisesStatusCodes.NULL_BOX:
-									Logger.log("Null box passed to linkedPremisesCanBeCreated", Logger.DEBUG);
+								case GroupedBoxesStatusCodes.NULL_BOX:
+									Logger.log("Null box passed to GroupedBoxesCanBeCreated", Logger.DEBUG);
 									break;
-								case LinkedPremisesStatusCodes.SAME_BOX:
-									Logger.log("Same start and end box passed to linkedPremisesCanBeCreated", Logger.DEBUG);
+								case GroupedBoxesStatusCodes.SAME_BOX:
+									Logger.log("Same start and end box passed to GroupedBoxesCanBeCreated", Logger.DEBUG);
 									break;
-								case LinkedPremisesStatusCodes.NOT_PREMISES:
-									LASADInfo.display("Error", "Linked Premises can only be between premises - can't create link");
+								case GroupedBoxesStatusCodes.NOT_SAME_TYPE:
+									LASADInfo.display("Error", "Grouped boxes can only be between boxes of the same type - can't create link");
 									break;
-								case LinkedPremisesStatusCodes.TOO_MANY_SIBS:
-									LASADInfo.display("Error", "One or both of the selected boxes already has 2 linked premises - can't create link");
+								case GroupedBoxesStatusCodes.TOO_MANY_SIBS:
+									LASADInfo.display("Error", "One or both of the selected boxes already has 2 grouped boxes - can't create link");
 									break;
-								case LinkedPremisesStatusCodes.TWO_WAY_LINK:
-									LASADInfo.display("Error", "Creating linked premises here would result in a two-way link on the map - can't create link");
+								case GroupedBoxesStatusCodes.TWO_WAY_LINK:
+									LASADInfo.display("Error", "Creating grouped boxes here would result in a two-way link on the map - can't create link");
 									break;
+								case GroupedBoxesStatusCodes.CANT_BE_GROUPED:
+									LASADInfo.display("Error", "Boxes are not of a groupable type");
 								default:
-									Logger.log("ERROR: Unrecognized status code returned from AutoOrganizer.linkedPremisesCanBeCreated", Logger.DEBUG);
+									Logger.log("ERROR: Unrecognized status code returned from AutoOrganizer.GroupedBoxesCanBeCreated", Logger.DEBUG);
 									break;
 
 							}

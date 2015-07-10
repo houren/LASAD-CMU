@@ -19,32 +19,38 @@ public class OrganizerLink
 	// Helps with removal of links, otherwise not needed
 	private int linkID;
 
+	// Whether or not this type of OrganizerLink can group boxes together
+	private boolean connectsGroup;
+
 	/**
 	 * Constructor
 	 */
-	public OrganizerLink(int linkID, LinkedBox startBox, LinkedBox endBox, String type)
+	public OrganizerLink(int linkID, LinkedBox startBox, LinkedBox endBox, String type, boolean connectsGroup)
 	{
 		this.linkID = linkID;
 		this.startBox = startBox;
 		this.endBox = endBox;
 		this.type = type;
+		this.connectsGroup = connectsGroup;
 	}
 
 	/**
 	 * Somehow this ID turns out right in the end.  No idea how...
 	 */
-	public OrganizerLink(LinkedBox startBox, LinkedBox endBox, String type)
+	public OrganizerLink(LinkedBox startBox, LinkedBox endBox, String type, boolean connectsGroup)
 	{
 		this.linkID = -1;
 		this.startBox = startBox;
 		this.endBox = endBox;
 		this.type = type;
+		this.connectsGroup = connectsGroup;
 	}
 
 	// Don't use the default constructor, hence why it's set as private and does nothing other than shutting the compiler up
 	private OrganizerLink()
 	{
 		this.linkID = -1;
+		this.connectsGroup = false;
 	}
 
 	/* Gets */
@@ -89,6 +95,11 @@ public class OrganizerLink
 		return type;
 	}
 
+	public boolean getConnectsGroup()
+	{
+		return connectsGroup;
+	}
+
 	/* Sets */
 
 	public void setStartBox(LinkedBox startBox)
@@ -114,7 +125,7 @@ public class OrganizerLink
 
 	public OrganizerLink clone()
 	{
-		return new OrganizerLink(this.getLinkID(), this.getStartBox(), this.getEndBox(), this.getType());
+		return new OrganizerLink(this.getLinkID(), this.getStartBox(), this.getEndBox(), this.getType(), this.getConnectsGroup());
 	}
 
 	/* BoxIDs should be unique and thus just checking the start and end as well as type should be sufficient for equality.

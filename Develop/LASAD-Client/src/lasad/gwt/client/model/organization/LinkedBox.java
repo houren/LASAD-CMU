@@ -48,8 +48,11 @@ public class LinkedBox
 	private int heightLevel;
 	private int widthLevel;
 
+	// if the box can be grouped
+	private boolean canBeGrouped;
+
 	// This is the meat and bones constructor
-	public LinkedBox(int boxID, int rootID, String type, double xLeft, double yTop, int width, int height)
+	public LinkedBox(int boxID, int rootID, String type, double xLeft, double yTop, int width, int height, boolean canBeGrouped)
 	{
 		this.boxID = boxID;
 		this.rootID = rootID;
@@ -68,6 +71,7 @@ public class LinkedBox
 		this.siblingBoxes = new HashSet<LinkedBox>();
 		this.heightLevel = 0;
 		this.widthLevel = 0;
+		this.canBeGrouped = canBeGrouped;
 	}
 
 	// I don't want people to use the default constructor because this LinkedBox needs definitive IDs.  This just quiets the compiler.
@@ -90,6 +94,12 @@ public class LinkedBox
 		this.siblingBoxes = new HashSet<LinkedBox>();
 		this.heightLevel = ERROR;
 		this.widthLevel = ERROR;
+		this.canBeGrouped = false;
+	}
+
+	public boolean getCanBeGrouped()
+	{
+		return canBeGrouped;
 	}
 
 	public int getBoxID()

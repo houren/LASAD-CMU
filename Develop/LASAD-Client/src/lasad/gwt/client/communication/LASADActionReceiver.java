@@ -97,7 +97,7 @@ public class LASADActionReceiver {
 	private ReplayInitializer init;
 
 	private boolean siblingsAlreadyUpdated = false;
-	private boolean premisesAlreadyRemoved = false;
+	private boolean linksAlreadyRemoved = false;
 
 	private static int counterID = -1;
 
@@ -118,9 +118,9 @@ public class LASADActionReceiver {
 		this.siblingsAlreadyUpdated = alreadyUpdated;
 	}
 
-	public void setPremisesAlreadyRemoved(boolean alreadyRemoved)
+	public void setLinksAlreadyRemoved(boolean alreadyRemoved)
 	{
-		this.premisesAlreadyRemoved = alreadyRemoved;
+		this.linksAlreadyRemoved = alreadyRemoved;
 	}
 
 	public void doActionPackage(ActionPackage p) {
@@ -572,14 +572,24 @@ public class LASADActionReceiver {
 						return;
 					}
 
-					ElementInfo newBoxDimensions = controller.getMapInfo().getElementsByType("box").get(elementModel.getValue(ParameterTypes.ElementId));
-					if (newBoxDimensions == null)
+					ElementInfo newBoxInfo = controller.getMapInfo().getElementsByType("box").get(elementModel.getValue(ParameterTypes.ElementId));
+					if (newBoxInfo == null)
 					{
 						Logger.log("newBoxDimenions are null", Logger.DEBUG);
 					}
 
-					String widthString = newBoxDimensions.getUiOption(ParameterTypes.Width);
-					String heightString = newBoxDimensions.getUiOption(ParameterTypes.Height);
+					String widthString = newBoxInfo.getUiOption(ParameterTypes.Width);
+					String heightString = newBoxInfo.getUiOption(ParameterTypes.Height);
+					String canBeGroupedString = newBoxInfo.getElementOption(ParameterTypes.CanBeGrouped);
+					boolean canBeGrouped;
+					if (canBeGroupedString == null)
+					{
+						canBeGrouped = false;
+					}
+					else
+					{
+						canBeGrouped = Boolean.parseBoolean(canBeGroupedString);
+					}
 
 					if (widthString == null || heightString == null)
 					{
@@ -591,7 +601,7 @@ public class LASADActionReceiver {
 					int width = Integer.parseInt(widthString);
 					int height = Integer.parseInt(heightString);
 
-					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height)));
+					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height, canBeGrouped)));
 				}
 
 				// If it's a relation, add it to the model
@@ -611,10 +621,22 @@ public class LASADActionReceiver {
 					{
 						Logger.log("Error: sibling links could not be updated: null box", Logger.DEBUG);
 						return;
-					}			
+					}
 
-					OrganizerLink link = new OrganizerLink(elementID, startBox, endBox, elementSubType);
-					if (elementSubType.equalsIgnoreCase("Linked Premises"))
+					ElementInfo newLinkInfo = controller.getMapInfo().getElementsByType("relation").get(elementModel.getValue(ParameterTypes.ElementId));
+					String connectsGroupString = newLinkInfo.getElementOption(ParameterTypes.ConnectsGroup);
+					boolean connectsGroup;
+					if (connectsGroupString == null)
+					{
+						connectsGroup = false;
+					}
+					else
+					{
+						connectsGroup = Boolean.parseBoolean(connectsGroupString);
+					}	
+
+					OrganizerLink link = new OrganizerLink(elementID, startBox, endBox, elementSubType, connectsGroup);
+					if (link.getConnectsGroup())
 					{
 						startBox.addSiblingLink(link);
 						endBox.addSiblingLink(link);
@@ -764,9 +786,9 @@ public class LASADActionReceiver {
 							// TODO Check to see if new thread is necessary
 							autoOrganizer.createNewThreadIfNecessary(removedLink);
 							
-							if (premisesAlreadyRemoved)
+							if (linksAlreadyRemoved)
 							{
-								this.setPremisesAlreadyRemoved(false);
+								this.setLinksAlreadyRemoved(false);
 							}
 							else
 							{
@@ -938,32 +960,36 @@ public class LASADActionReceiver {
 						return;
 					}
 
-					//String widthString = elementModel.getValue(ParameterTypes.Width);
-					int width = DEFAULT_WIDTH;
-					/*if (widthString != null)
+					ElementInfo newBoxInfo = controller.getMapInfo().getElementsByType("box").get(elementModel.getValue(ParameterTypes.ElementId));
+					if (newBoxInfo == null)
 					{
-						width = Integer.parseInt(widthString);
+						Logger.log("newBoxDimenions are null", Logger.DEBUG);
+					}
+
+					String widthString = newBoxInfo.getUiOption(ParameterTypes.Width);
+					String heightString = newBoxInfo.getUiOption(ParameterTypes.Height);
+					String canBeGroupedString = newBoxInfo.getElementOption(ParameterTypes.CanBeGrouped);
+					boolean canBeGrouped;
+					if (canBeGroupedString == null)
+					{
+						canBeGrouped = false;
 					}
 					else
 					{
-						Logger.log("Null widthString", Logger.DEBUG);
-						return;
-					}*/
-
-
-					//String heightString = elementModel.getValue(ParameterTypes.Height);
-					int height = DEFAULT_HEIGHT;
-					/*if (heightString != null)
-					{
-						height = Integer.parseInt(heightString);
+						canBeGrouped = Boolean.parseBoolean(canBeGroupedString);
 					}
-					else
-					{
-						Logger.log("Null heightString", Logger.DEBUG);
-						return;
-					}*/
 
-					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height)));
+					if (widthString == null || heightString == null)
+					{
+						Logger.log("width and/or height string(s) are null", Logger.DEBUG);
+					}
+
+					Logger.log("Width: " + widthString + "; Height: " + heightString, Logger.DEBUG);
+
+					int width = Integer.parseInt(widthString);
+					int height = Integer.parseInt(heightString);
+
+					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height, canBeGrouped)));
 				}
 
 				// If it's a relation, add it to the model
@@ -983,10 +1009,22 @@ public class LASADActionReceiver {
 					{
 						Logger.log("Error: sibling links could not be updated: null box", Logger.DEBUG);
 						return;
-					}			
+					}
 
-					OrganizerLink link = new OrganizerLink(elementID, startBox, endBox, elementSubType);
-					if (elementSubType.equalsIgnoreCase("Linked Premises"))
+					ElementInfo newLinkInfo = controller.getMapInfo().getElementsByType("relation").get(elementModel.getValue(ParameterTypes.ElementId));
+					String connectsGroupString = newLinkInfo.getElementOption(ParameterTypes.ConnectsGroup);
+					boolean connectsGroup;
+					if (connectsGroupString == null)
+					{
+						connectsGroup = false;
+					}
+					else
+					{
+						connectsGroup = Boolean.parseBoolean(connectsGroupString);
+					}	
+
+					OrganizerLink link = new OrganizerLink(elementID, startBox, endBox, elementSubType, connectsGroup);
+					if (link.getConnectsGroup())
 					{
 						startBox.addSiblingLink(link);
 						endBox.addSiblingLink(link);

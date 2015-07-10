@@ -49,7 +49,7 @@ public class StepCreateModifyAndDeleteRelation extends ContentPanel {
 	private Slider widthSl, lineWidthSl;
 
 	private ColorMenu panelColorMenu, lineColorMenu;
-	private CheckBox directed, noDetails;
+	private CheckBox directed, noDetails, connectsGroup;
 	private TextField<String> title;
 	private SliderField sfLineWidth, sfWidth;
 
@@ -80,6 +80,7 @@ public class StepCreateModifyAndDeleteRelation extends ContentPanel {
 
 		directed.reset();
 		noDetails.reset();
+		connectsGroup.reset();
 
 		sfLineWidth.reset();
 		sfWidth.reset();
@@ -119,6 +120,7 @@ public class StepCreateModifyAndDeleteRelation extends ContentPanel {
 		Vector<Parameter> elOptions = new Vector<Parameter>();
 		elOptions.add(new Parameter(ParameterTypes.Heading, title.getValue()));
 		elOptions.add(new Parameter(ParameterTypes.Endings, directed.getValue().toString()));
+		elOptions.add(new Parameter(ParameterTypes.ConnectsGroup, connectsGroup.getValue().toString()));
 
 		Vector<Parameter> uiOptions = new Vector<Parameter>();
 		// TODO: Width und Height waren hier klein geschrieben, sind jetzt aber auf den gro�-geschriebenen Wert abgebildet. Pr�fen ob das dennoch funktioniert...
@@ -494,6 +496,15 @@ public class StepCreateModifyAndDeleteRelation extends ContentPanel {
 			noDetails.setValue(Boolean.parseBoolean(elInfo.getElementOption(ParameterTypes.Details)));
 		}
 
+		connectsGroup = new CheckBox();
+		connectsGroup.setFieldLabel("Connects grouped boxes");
+		if(elInfo == null) {
+			connectsGroup.setValue(false);
+		}
+		else {
+			connectsGroup.setValue(Boolean.parseBoolean(elInfo.getElementOption(ParameterTypes.ConnectsGroup)));
+		}
+
 		Button saveButton = new Button("Save") {
 
 			@Override
@@ -502,6 +513,8 @@ public class StepCreateModifyAndDeleteRelation extends ContentPanel {
 
 				if (validateFields()) {
 					ElementInfo newElement = createNewElement(elInfo);
+
+					newElement.addElementOption(ParameterTypes.ConnectsGroup, connectsGroup.getValue().toString());
 					
 					if(elInfo != null) {
 						CreateModifyAndDeleteOntology.contributionToElement.remove(elInfo);
@@ -525,6 +538,7 @@ public class StepCreateModifyAndDeleteRelation extends ContentPanel {
 		addTopLevelElementForm.add(title);
 		addTopLevelElementForm.add(directed);
 		addTopLevelElementForm.add(noDetails);
+		addTopLevelElementForm.add(connectsGroup);
 		addTopLevelElementForm.add(panelColorRadioGroup);
 		addTopLevelElementForm.add(lineColorRadioGroup);
 		addTopLevelElementForm.add(sfLineWidth);
