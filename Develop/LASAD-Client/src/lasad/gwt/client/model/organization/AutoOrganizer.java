@@ -55,8 +55,11 @@ public class AutoOrganizer
 	// The map that this instance of AutoOrganizer corresponds to
 	private AbstractGraphMap map;
 	
+	// Keeps track of the boxes visited during function execution, must be cleaned before used
+	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
+	
 	// Keeps track of the boxes visited as well as the order in which the boxes are inserted
-	private ArrayList<LinkedBox> visitedList = new ArrayList<LinkedBox>();
+	private LinkedHashSet<LinkedBox> visitedLHSet = new LinkedHashSet<LinkedBox>();
 
 	// Instances of autoOrganizer: one per map.  String is mapID.
 	private static HashMap<String, AutoOrganizer> instances = new HashMap<String, AutoOrganizer>();
@@ -101,7 +104,7 @@ public class AutoOrganizer
 	 */
 	private int organizeThread(int level, LinkedBox root, ArrayList<Integer> xCoords, ArrayList<Integer> yCoords, LinkedHashSet<LinkedBox> neighborBoxes)
 	{
-		if(visitedList.contains(root) || root == null) return 0;
+		if(visitedLHSet.contains(root) || root == null) return 0;
 		
 		int span;
 		if(!neighborBoxes.contains(root)) span = neighborBoxes.size()+1; else span = neighborBoxes.size(); 
@@ -111,7 +114,7 @@ public class AutoOrganizer
 		xCoords.add(new Integer(-(span-1)));
 		yCoords.add(level);
 			
-		visitedList.add(root);
+		visitedLHSet.add(root);
 		childrenNeighbors.addAll(root.getChildBoxes());
 			
 		for(LinkedBox box : root.getSiblingBoxes())
@@ -119,18 +122,18 @@ public class AutoOrganizer
 			xCoords.add(new Integer(xCoords.get(xCoords.size()-1)+2));
 			yCoords.add(level);
 				
-			visitedList.add(box);
+			visitedLHSet.add(box);
 			childrenNeighbors.addAll(box.getChildBoxes());
 		}
 		
 		for(LinkedBox box : neighborBoxes){
-			if(visitedList.contains(box))
+			if(visitedLHSet.contains(box))
 				continue;
 			
 			xCoords.add(new Integer(xCoords.get(xCoords.size()-1)+2));
 			yCoords.add(level);
 				
-			visitedList.add(box);
+			visitedLHSet.add(box);
 			childrenNeighbors.addAll(box.getChildBoxes());
 		}
 			
@@ -153,6 +156,252 @@ public class AutoOrganizer
 		
 		return span;		
 	}
+	
+	/*
+	 * UNDER DEVELOPMENT
+	 * Given the ArrayList with an HashSet with the highest height roots, goes through the argument thread 
+	 * and determine in which level each box is, inserting the boxes in the ArrayList corresponding to their level
+	 */
+	private void discoverLevels(ArrayList<HashSet<LinkedBox>> levels, int currentLevel)
+	{
+		boolean newParent = false;
+		for(LinkedBox box : levels.get(currentLevel))
+		{
+			if(visited.contains(box)) {
+				visited.remove(box);//allow multiple converging paths
+				return; //stops cycle
+			}
+
+			visited.add(box);
+			
+			//Check if this box was inserted in any lower levels. If positive, remove it from there
+			for(int i = 0; i < currentLevel; i++)
+			{
+				if(levels.get(i).contains(box))
+				{
+					levels.get(i).remove(box);
+					levels.get(i).removeAll(box.getSiblingBoxes());
+				}
+			}
+			
+			for(LinkedBox child : box.getChildBoxes())
+			{
+				if(levels.size() == currentLevel+1)
+					levels.add(new HashSet<LinkedBox>());
+					
+				levels.get(currentLevel+1).add(child);
+				levels.get(currentLevel+1).addAll(child.getSiblingBoxes());
+				
+				for(LinkedBox parent : box.getParentBoxes())
+				{
+					if(!visited.contains(parent))
+					{
+						levels.get(currentLevel-1).add(parent);
+						newParent = true;
+					}	
+				}
+			}
+		}
+		
+		discoverLevels(levels, currentLevel+1);
+		
+		if(newParent)
+			discoverLevels(levels, currentLevel-1);
+		visited.removeAll(levels.get(currentLevel));//allow multiple converging paths
+	}
+	
+	/*
+	 * UNDER DEVELOPMENT
+	 * Given a root box, find out how high its tree goes (i.e., how many "generations" there are in its "family")
+	 */
+	private int getTreeHeight(LinkedBox root)
+	{
+		if(root.getChildBoxes().size() == 0)
+			return 1;
+		if(visited.contains(root)) //stops cycle
+		{
+			visited.remove(root);	//allow multiple converging paths
+			return 0;
+		}
+		
+		int maxHeight = 0;
+		int height = 0;
+		visited.add(root);
+		for(LinkedBox child : root.getChildBoxes())
+		{
+			height = getTreeHeight(child);
+			if(height > maxHeight)
+				maxHeight = height;
+		}
+		
+		visited.remove(root); //allow multiple converging paths
+		return maxHeight+1;
+	}
+	
+	/* UNDER DEVELOPMENT
+	 * Calculates the coordinates for each box in an argument thread
+	 * @param levels - ArrayList in which each element contains a HashSet of the boxes in the corresponding level
+	 * @param xCoords - stores the x coordinates calculated
+	 * @param bottomUp - when true place parents below children
+	 */
+	private void organizeThread(ArrayList<HashSet<LinkedBox>> levels, HashMap<LinkedBox, Integer> xCoords)
+	{
+		HashMap<LinkedBox, HashSet<LinkedBox>> sharedParents = new HashMap<LinkedBox, HashSet<LinkedBox>>();
+		HashMap<LinkedBox, HashSet<LinkedBox>> sharedChildren = new HashMap<LinkedBox, HashSet<LinkedBox>>();
+		ArrayList<LinkedBox> nonLevelZeroRoots = new ArrayList<LinkedBox>();
+		int lastX;
+		for(int i = 0; i < levels.size(); i++)
+		{
+			sharedChildren.clear();
+			sharedParents.clear();
+			nonLevelZeroRoots.clear();
+			lastX = -1;
+			
+			for(LinkedBox box : levels.get(i))
+			{
+				if(i > 0 && box.getNumParents() == 0 && !box.siblingHasParent())
+					nonLevelZeroRoots.add(box);
+				
+				for(LinkedBox child : box.getChildBoxes())
+				{
+					if(sharedChildren.get(child) == null)
+						sharedChildren.put(child, new HashSet<LinkedBox>());
+					sharedChildren.get(child).add(box);
+				}
+				for(LinkedBox parent : box.getParentBoxes())
+				{
+					if(sharedParents.get(parent) == null)
+						sharedParents.put(parent, new HashSet<LinkedBox>());
+					sharedParents.get(parent).add(box);
+				}
+				if(i == 0 && box.getNumChildren() == 0)
+				{
+					if(box.siblingHasChild()) continue;
+					xCoords.put(box, lastX+2);
+					lastX += 2;
+				}
+			}
+			int count;
+			if(i == 0)//set positions for the level 0
+			{
+				for(LinkedBox child : sharedChildren.keySet())
+				{
+					for(LinkedBox box : sharedChildren.get(child))
+					{
+
+						if(xCoords.get(box) == null)
+						{
+							xCoords.put(box, lastX+2); lastX += 2;
+							
+							for(LinkedBox sibling : box.getThisAndExtendedSiblings())
+							{
+								xCoords.put(sibling, lastX+2);
+								lastX += 2;
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				int lastPosition = -1;
+				int start = -1; int end;
+				for(LinkedBox parent : sharedParents.keySet())
+				{
+					LinkedBox first = null;
+					LinkedBox last = null;
+					ArrayList<LinkedBox> middle = new ArrayList<LinkedBox>();
+					for(LinkedBox box : sharedParents.get(parent))
+					{
+						if(xCoords.get(box) != null)
+						{
+							if(start < 0)
+								start = xCoords.get(box);
+							else if(xCoords.get(box) < start)
+								start = xCoords.get(box);
+							
+							continue;
+						}
+						if(first == null && box.getNumSiblings() > 0)
+							first = box;
+						else if(first != null && last == null && box.getNumSiblings() > 0)
+							last = box;
+						else if(last == null || !last.getThisAndExtendedSiblings().contains(box))
+							middle.add(box);
+					}
+					if(first != null)
+					{
+						for(LinkedBox sibling : first.getThisAndExtendedSiblings()){
+							xCoords.put(sibling, lastX+2); lastX += 2;
+						}
+						xCoords.put(first, lastX+2); lastX+=2; 
+						if(start < 0) start = lastX;
+					}
+					for(LinkedBox box : middle)
+					{
+						if(xCoords.get(box) != null) continue;
+						
+						xCoords.put(box, lastX+2); lastX+=2; 
+						if(start < 0) start = lastX;
+						
+						for(LinkedBox sibling : box.getThisAndExtendedSiblings()){
+							xCoords.put(sibling, lastX+2); lastX += 2;
+						}
+					}
+					if(last == null)
+						end = lastX;
+					else
+					{
+						xCoords.put(first, lastX+2); lastX+=2; end = lastX;
+						for(LinkedBox sibling : last.getThisAndExtendedSiblings()){
+							xCoords.put(sibling, lastX+2); lastX += 2;
+						}
+					}
+					
+					int parentPosition = xCoords.get(parent);
+					int childrenCenter = (end+start)/2;
+					if(parentPosition > childrenCenter)
+					{
+						int difference = parentPosition-childrenCenter;
+						for(LinkedBox box : sharedParents.get(parent))
+						{
+							xCoords.put(box, xCoords.get(box)+difference);
+						}
+						lastX += difference;
+					}
+					
+					else if(parentPosition < childrenCenter)
+					{	visited.clear();
+						recentralizeParent(parent, xCoords);
+						visited.clear();
+					}
+				}
+			}
+		}
+	}
+	
+	/*
+	* 	Recursively move parents in the X axis so they get aligned to their children 
+	*/
+	private void recentralizeParent(LinkedBox parent, HashMap<LinkedBox, Integer> xCoords)
+	{
+		//TO DO get all of parent's children average their position and change his to match that, 
+		//call this function to each of its parents
+		if(visited.contains(parent))
+			return;
+		visited.add(parent);
+		LinkedBox nextParent = null;
+		int sum = 0;
+		for(LinkedBox box : parent.getChildBoxes())
+		{
+			sum += xCoords.get(box);
+		}
+		
+		xCoords.put(parent, sum/parent.getNumChildren());
+		
+		for(LinkedBox box : parent.getParentBoxes())
+			recentralizeParent(box, xCoords);
+	}
 
 	/**
 	 * UNDER DEVELOPMENT
@@ -160,6 +409,111 @@ public class AutoOrganizer
 	 * "sibling" boxes (i.e. boxes attached via Linked Premises) are placed adjacently.
 	 */
 	public void organizeMap()
+	{	
+		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Running AutoOrganizer...", Logger.DEBUG);
+
+		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
+
+		int yCoord = INITIAL_Y;
+		int xCoord = INITIAL_X;
+		int newXCoord = 0;
+		int maxSpan = 0;
+		int lastSpan = 0;
+		int span = 0;
+		int init = 0;
+		int yMax = 0;
+		boolean bottomUp = true; //when true parents are below children
+	
+		HashMap<LinkedBox,Integer> yCoords = new HashMap<LinkedBox,Integer>();
+		HashMap<LinkedBox,Integer> xCoords = new HashMap<LinkedBox,Integer>();
+		visitedLHSet.clear();
+		
+		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Retrieving threads...", Logger.DEBUG);
+		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Number of threads: "+argModel.getArgThreads().size(), Logger.DEBUG);
+		HashSet<LinkedBox> roots = new HashSet<LinkedBox>();
+		
+		argModel.updateArgThreads();
+		
+		ArrayList<HashSet<LinkedBox>> levels = null;
+		
+		for (ArgumentThread argThread : argModel.getArgThreads())
+		{
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] All boxes in the thread: "+argThread, Logger.DEBUG);
+			
+			levels = new ArrayList<HashSet<LinkedBox>>();
+			
+			int maxHeight = 0;
+			int height;
+			for(LinkedBox box : argThread.getRootBoxes())
+			{
+				visited.clear();
+				height = getTreeHeight(box);
+				if(height > maxHeight)
+				{
+					maxHeight = height;
+					if(levels.size() == 0)
+						levels.add(new HashSet<LinkedBox>());
+					else 
+						levels.set(0, new HashSet<LinkedBox>());
+					levels.get(0).add(box);
+				}
+				else if(height == maxHeight)
+				{
+					levels.get(0).add(box);
+				}
+			}
+			visited.clear();
+			
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Got the roots: "+levels.get(0), Logger.DEBUG);
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Total number of roots: "+argThread.getRootBoxes().size(), Logger.DEBUG);
+			
+			discoverLevels(levels, 0);
+			visited.clear();
+			
+			organizeThread(levels, xCoords);
+			
+			//EVERYTHING FROM THIS POINT WAS JUST COPIED FROM THE PREVIOUS VERSION
+			/*maxSpan += lastSpan+span;
+			lastSpan = span;
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Shift: "+maxSpan, Logger.DEBUG);
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] X Coords (before shift): "+xCoords, Logger.DEBUG);
+			
+			for(int i = init; i < xCoords.size(); i++)
+			{
+				xCoords.set(i, xCoords.get(i)+maxSpan);
+			}
+		
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] X Coords (after shift): "+xCoords, Logger.DEBUG);
+			Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Y Coords "+yCoords, Logger.DEBUG);
+			
+			init = xCoords.size();
+			if(init-1 >= 0) 
+				if(yCoords.get(init-1) > yMax) yMax = yCoords.get(init-1);
+			*/
+			//xCoord = newXCoord;
+		}
+		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Going to update positions...", Logger.DEBUG);
+		int i = 0;
+		for(LinkedBox box : visitedLHSet)
+		{
+			xCoord = CENTER_X+(xCoords.get(i)-maxSpan/2)*X_SPACE;
+			yCoord = (yMax/2-yCoords.get(i))*Y_SPACE+CENTER_Y;
+			sendUpdatePositionToServer(box, xCoord, yCoord);
+			i++;
+		}
+		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Components organized... Boxes visitedLHSet: "+visitedLHSet.size(), Logger.DEBUG);
+		visitedLHSet.clear();
+
+		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Positions updated...", Logger.DEBUG);
+
+	}
+
+	/**
+	 * UNDER DEVELOPMENT
+	 * Organizes the map from bottom to top: Root "parents" start at the bottom, leading the way to children above.
+	 * "sibling" boxes (i.e. boxes attached via Linked Premises) are placed adjacently.
+	 */
+	/*public void organizeMap()
 	{
 		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Running AutoOrganizer...", Logger.DEBUG);
 
@@ -177,7 +531,7 @@ public class AutoOrganizer
 		ArrayList<Integer> yCoords = new ArrayList<Integer>();
 		ArrayList<Integer> xCoords = new ArrayList<Integer>();
 		ArrayList<ArgumentThread> threadList = new ArrayList<ArgumentThread>();
-		visitedList.clear();
+		visitedLHSet.clear();
 		
 		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Retrieving threads...", Logger.DEBUG);
 		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Number of threads: "+argModel.getArgThreads().size(), Logger.DEBUG);
@@ -222,20 +576,19 @@ public class AutoOrganizer
 		}
 		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Going to update positions...", Logger.DEBUG);
 		int i = 0;
-		int j = 0;
-		for(LinkedBox box : visitedList)
+		for(LinkedBox box : visitedLHSet)
 		{
 			xCoord = CENTER_X+(xCoords.get(i)-maxSpan/2)*X_SPACE;
 			yCoord = (yMax/2-yCoords.get(i))*Y_SPACE+CENTER_Y;
 			sendUpdatePositionToServer(box, xCoord, yCoord);
 			i++;
 		}
-		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Components organized... Boxes visitedList: "+visitedList.size(), Logger.DEBUG);
-		visitedList.clear();
+		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Components organized... Boxes visitedLHSet: "+visitedLHSet.size(), Logger.DEBUG);
+		visitedLHSet.clear();
 
 		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Positions updated...", Logger.DEBUG);
 
-	}
+	}*/
 
 	/**
 	 * Updates the sibling boxes (i.e. linked premises boxes) related to the creation of a new link.
