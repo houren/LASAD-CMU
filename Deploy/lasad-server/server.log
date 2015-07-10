@@ -18284,11 +18284,4942 @@ ACTION:
 	Category: Session
 	Command: HeartbeatRequest
 Waiting...size of ActionPackage list is 0 
+<<<<<<< HEAD
+Configuration Home: C:\Users\Darlan\Documents\GitHub\Kevin-LASAD\Deploy\lasad-server\conf\default
+first-----dropSQLString.appendlasad.actions-----
+else-----dropSQLString.appendlasad.element_parent_mapping-----
+else-----dropSQLString.appendlasad.elements-----
+else-----dropSQLString.appendlasad.map_to_user_restriction-----
+else-----dropSQLString.appendlasad.maps-----
+else-----dropSQLString.appendlasad.ontologies-----
+else-----dropSQLString.appendlasad.revisions-----
+else-----dropSQLString.appendlasad.templates-----
+else-----dropSQLString.appendlasad.users-----
+-----Clear All executed-----
+-----Create Table-----
+Waiting...size of ActionPackage list is 0 
+Server successfully started!
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Login" CATEGORY="Management">
+    <Parameter NAME="USERNAME" VALUE="d1" />
+    <Parameter NAME="PW" VALUE="d1" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="GetUsers" CATEGORY="Authoring">
+    <Parameter NAME="GET-ROLES" VALUE="TRUE" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : Administrator
+	Parameter: Role : Developer
+	Parameter: UserId : 0
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : Guest
+	Parameter: Role : Guest
+	Parameter: UserId : 1
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t1
+	Parameter: Role : Standard
+	Parameter: UserId : 2
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t2
+	Parameter: Role : Standard
+	Parameter: UserId : 3
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t3
+	Parameter: Role : Standard
+	Parameter: UserId : 4
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t4
+	Parameter: Role : Standard
+	Parameter: UserId : 5
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t5
+	Parameter: Role : Standard
+	Parameter: UserId : 6
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t6
+	Parameter: Role : Standard
+	Parameter: UserId : 7
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t7
+	Parameter: Role : Standard
+	Parameter: UserId : 8
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t8
+	Parameter: Role : Standard
+	Parameter: UserId : 9
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t9
+	Parameter: Role : Standard
+	Parameter: UserId : 10
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t10
+	Parameter: Role : Standard
+	Parameter: UserId : 11
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t11
+	Parameter: Role : Standard
+	Parameter: UserId : 12
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t12
+	Parameter: Role : Standard
+	Parameter: UserId : 13
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t13
+	Parameter: Role : Standard
+	Parameter: UserId : 14
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t14
+	Parameter: Role : Standard
+	Parameter: UserId : 15
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t15
+	Parameter: Role : Standard
+	Parameter: UserId : 16
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t16
+	Parameter: Role : Standard
+	Parameter: UserId : 17
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t17
+	Parameter: Role : Standard
+	Parameter: UserId : 18
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t18
+	Parameter: Role : Standard
+	Parameter: UserId : 19
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t19
+	Parameter: Role : Standard
+	Parameter: UserId : 20
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : t20
+	Parameter: Role : Standard
+	Parameter: UserId : 21
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d1
+	Parameter: Role : Developer
+	Parameter: UserId : 22
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d2
+	Parameter: Role : Developer
+	Parameter: UserId : 23
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d3
+	Parameter: Role : Developer
+	Parameter: UserId : 24
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d4
+	Parameter: Role : Developer
+	Parameter: UserId : 25
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d5
+	Parameter: Role : Developer
+	Parameter: UserId : 26
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d6
+	Parameter: Role : Developer
+	Parameter: UserId : 27
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d7
+	Parameter: Role : Developer
+	Parameter: UserId : 28
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d8
+	Parameter: Role : Developer
+	Parameter: UserId : 29
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d9
+	Parameter: Role : Developer
+	Parameter: UserId : 30
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d10
+	Parameter: Role : Developer
+	Parameter: UserId : 31
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d11
+	Parameter: Role : Developer
+	Parameter: UserId : 32
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d12
+	Parameter: Role : Developer
+	Parameter: UserId : 33
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d13
+	Parameter: Role : Developer
+	Parameter: UserId : 34
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d14
+	Parameter: Role : Developer
+	Parameter: UserId : 35
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d15
+	Parameter: Role : Developer
+	Parameter: UserId : 36
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d16
+	Parameter: Role : Developer
+	Parameter: UserId : 37
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d17
+	Parameter: Role : Developer
+	Parameter: UserId : 38
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d18
+	Parameter: Role : Developer
+	Parameter: UserId : 39
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d19
+	Parameter: Role : Developer
+	Parameter: UserId : 40
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d20
+	Parameter: Role : Developer
+	Parameter: UserId : 41
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : Bob
+	Parameter: Role : Teacher
+	Parameter: UserId : 42
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : Jay
+	Parameter: Role : Teacher
+	Parameter: UserId : 43
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : DFKI
+	Parameter: Role : Standard
+	Parameter: UserId : 44
+	Parameter: UserMaxId : 45
+ACTION: 
+	Category: Authoring
+	Command: AddUserToList
+	Parameter: UserName : d21
+	Parameter: Role : Developer
+	Parameter: UserId : 45
+	Parameter: UserMaxId : 45
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+IGNORE Action: ActionCategory 'Authoring' ActionCommand 'AddUserToList'
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="GetTemplates" CATEGORY="Management" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Allgemeine Argumentation (Einzelnutzer)
+	Parameter: Template : Allgemeine Argumentation (Einzelnutzer)
+	Parameter: TemplateId : 0
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Allgemeine Argumentation (Gruppennutzung)
+	Parameter: Template : Allgemeine Argumentation (Gruppennutzung)
+	Parameter: TemplateId : 1
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Argunaut
+	Parameter: Template : argunaut
+	Parameter: TemplateId : 2
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Belvedere
+	Parameter: Template : belvedere
+	Parameter: TemplateId : 3
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Harrell_DiagrammingOntology
+	Parameter: Template : Harrell_DiagrammingOntologyTemplate
+	Parameter: TemplateId : 4
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Metafora
+	Parameter: Template : Metafora
+	Parameter: TemplateId : 5
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : my_test
+	Parameter: Template : my_test_template
+	Parameter: TemplateId : 6
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : NewFeaturesOntology
+	Parameter: Template : NewFeaturesOntology
+	Parameter: TemplateId : 7
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Test2
+	Parameter: Template : Test2_Template
+	Parameter: TemplateId : 8
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Test
+	Parameter: Template : Test_Template
+	Parameter: TemplateId : 9
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Toulmin (Multi user)
+	Parameter: Template : toulmin_multiuser
+	Parameter: TemplateId : 10
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Toulmin (Single user)
+	Parameter: Template : toulmin_singleuser
+	Parameter: TemplateId : 11
+	Parameter: TemplateMaxId : 11
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="List" CATEGORY="Management" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: ListMap
+	Parameter: MapId : 1
+	Parameter: MapName : my_test_map
+	Parameter: CreatorId : 24
+	Parameter: CreatorName : d1
+	Parameter: TemplateTitle : my_test_template
+	Parameter: OntologyName : my_test
+	Parameter: TemplateName : my_test_template
+	Parameter: Created : 1436452891000
+	Parameter: Modified : 1436452891000
+	Parameter: ActiveUsers : 0
+	Parameter: Status : END
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="TemplateDetails" CATEGORY="Management">
+    <Parameter NAME="TEMPLATE" VALUE="Harrell_DiagrammingOntologyTemplate" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: TemplateDetails
+	Parameter: Status : OK
+	Parameter: Ontology : Harrell_DiagrammingOntology
+	Parameter: Template : Harrell_DiagrammingOntologyTemplate
+	Parameter: TemplateTitle : Harrell_DiagrammingOntologyTemplate
+	Parameter: TemplateMaxUsers : 30
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="TemplateDetails" CATEGORY="Management">
+    <Parameter NAME="TEMPLATE" VALUE="Harrell_DiagrammingOntologyTemplate" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: TemplateDetails
+	Parameter: Status : OK
+	Parameter: Ontology : Harrell_DiagrammingOntology
+	Parameter: Template : Harrell_DiagrammingOntologyTemplate
+	Parameter: TemplateTitle : Harrell_DiagrammingOntologyTemplate
+	Parameter: TemplateMaxUsers : 30
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="MapDetails" CATEGORY="Management">
+    <Parameter NAME="MAP-ID" VALUE="1" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: MapDetails
+	Parameter: Status : OK
+	Parameter: MapId : 1
+	Parameter: MapName : my_test_map
+	Parameter: CreatorName : d1
+	Parameter: CreatorId : 24
+	Parameter: OntologyName : my_test
+	Parameter: TemplateName : my_test_template
+	Parameter: TemplateTitle : my_test_template
+	Parameter: TemplateXML : <?xml version="1.0" encoding="UTF-8"?>
+<maptemplate uniquename="my_test_template" title="my_test_template" ontology="my_test">
+  <mapdetails>
+    <description />
+    <options maxuser="30" chatsystem="true" listofusers="true" minimap="false" track-cursor="false" selection-details="false" onlyauthorcanmodify="false" committextbyenter="true" straightlink="true" AutoGrowTextArea="false" organizetoptobottom="true" allowlinkstolinks="true" />
+  </mapdetails>
+</maptemplate>
+
+	Parameter: ActiveUsers : 0
+	Parameter: TemplateMaxUsers : 30
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Join" CATEGORY="Management">
+    <Parameter NAME="MAP-ID" VALUE="1" />
+    <Parameter NAME="SUMMARY" VALUE="TRUE" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: Join
+	Parameter: MapId : 1
+	Parameter: MapName : my_test_map
+	Parameter: OntologyName : my_test
+	Parameter: TemplateName : my_test_template
+	Parameter: Ontology : <?xml version="1.0" encoding="UTF-8"?>
+<ontology type="my_test"><elements><element elementtype="box" elementid="node" minquantity="0" maxquantity="0" quantity="0"><elementoptions heading="node" /><uisettings width="200" height="200" border="standard" background-color="red" /><childelements><element elementtype="text" elementid="node-text" minquantity="1" maxquantity="1" quantity="1"><elementoptions /><uisettings minheight="42" /><childelements /></element><element elementtype="awareness" elementid="author" minquantity="1" maxquantity="1" quantity="1"><elementoptions /><uisettings minheight="16" maxheight="16" /><childelements /></element></childelements></element><element elementtype="relation" elementid="link" minquantity="0" maxquantity="0" quantity="0"><elementoptions heading="link" endings="true" details="false" /><uisettings width="120" height="200" background-color="green" linewidth="2px" linecolor="green" /><childelements /></element></elements></ontology>
+
+	Parameter: Template : <?xml version="1.0" encoding="UTF-8"?>
+<maptemplate uniquename="my_test_template" title="my_test_template" ontology="my_test">
+  <mapdetails>
+    <description />
+    <options maxuser="30" chatsystem="true" listofusers="true" minimap="false" track-cursor="false" selection-details="false" onlyauthorcanmodify="false" committextbyenter="true" straightlink="true" AutoGrowTextArea="false" organizetoptobottom="true" allowlinkstolinks="true" />
+  </mapdetails>
+</maptemplate>
+
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: UserEvent
+	Command: UserJoin
+	Parameter: UserName : d1 (Developer)
+	Parameter: MapId : 1
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: UserEvent
+	Command: UserList
+	Parameter: UserName : d1 (Developer)
+	Parameter: MapId : 1
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Info
+	Command: JoinComplete
+	Parameter: MapId : 1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Leave" CATEGORY="Management">
+    <Parameter NAME="MAP-ID" VALUE="1" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Auth
+	Command: ForcedLogout
+	Parameter: Status : OK
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Management
+	Command: Leave
+	Parameter: MapId : 1
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: UserEvent
+	Command: UserLeave
+	Parameter: UserName : d1 (Developer)
+	Parameter: MapId : 1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="GetTemplates" CATEGORY="Management" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Allgemeine Argumentation (Einzelnutzer)
+	Parameter: Template : Allgemeine Argumentation (Einzelnutzer)
+	Parameter: TemplateId : 0
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Allgemeine Argumentation (Gruppennutzung)
+	Parameter: Template : Allgemeine Argumentation (Gruppennutzung)
+	Parameter: TemplateId : 1
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Argunaut
+	Parameter: Template : argunaut
+	Parameter: TemplateId : 2
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Belvedere
+	Parameter: Template : belvedere
+	Parameter: TemplateId : 3
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Harrell_DiagrammingOntology
+	Parameter: Template : Harrell_DiagrammingOntologyTemplate
+	Parameter: TemplateId : 4
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Metafora
+	Parameter: Template : Metafora
+	Parameter: TemplateId : 5
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : my_test
+	Parameter: Template : my_test_template
+	Parameter: TemplateId : 6
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : NewFeaturesOntology
+	Parameter: Template : NewFeaturesOntology
+	Parameter: TemplateId : 7
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Test2
+	Parameter: Template : Test2_Template
+	Parameter: TemplateId : 8
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Test
+	Parameter: Template : Test_Template
+	Parameter: TemplateId : 9
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Toulmin (Multi user)
+	Parameter: Template : toulmin_multiuser
+	Parameter: TemplateId : 10
+	Parameter: TemplateMaxId : 11
+ACTION: 
+	Category: Management
+	Command: AddTemplateToList
+	Parameter: Ontology : Toulmin (Single user)
+	Parameter: Template : toulmin_singleuser
+	Parameter: TemplateId : 11
+	Parameter: TemplateMaxId : 11
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+IGNORE Action: ActionCategory 'Management' ActionCommand 'AddTemplateToList'
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="List" CATEGORY="Management" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: ListMap
+	Parameter: MapId : 1
+	Parameter: MapName : my_test_map
+	Parameter: CreatorId : 24
+	Parameter: CreatorName : d1
+	Parameter: TemplateTitle : my_test_template
+	Parameter: OntologyName : my_test
+	Parameter: TemplateName : my_test_template
+	Parameter: Created : 1436452891000
+	Parameter: Modified : 1436452957000
+	Parameter: ActiveUsers : 0
+	Parameter: Status : END
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="TemplateDetails" CATEGORY="Management">
+    <Parameter NAME="TEMPLATE" VALUE="Harrell_DiagrammingOntologyTemplate" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: TemplateDetails
+	Parameter: Status : OK
+	Parameter: Ontology : Harrell_DiagrammingOntology
+	Parameter: Template : Harrell_DiagrammingOntologyTemplate
+	Parameter: TemplateTitle : Harrell_DiagrammingOntologyTemplate
+	Parameter: TemplateMaxUsers : 30
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateAndJoin" CATEGORY="Management">
+    <Parameter NAME="MAPNAME" VALUE="abc" />
+    <Parameter NAME="ONTOLOGY" VALUE="Harrell_DiagrammingOntology" />
+    <Parameter NAME="TEMPLATE" VALUE="Harrell_DiagrammingOntologyTemplate" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Authoring
+	Command: AddMapToList
+	Parameter: MapName : abc
+	Parameter: Template : Harrell_DiagrammingOntologyTemplate
+	Parameter: MapId : 2
+	Parameter: MapMaxId : 2
+ACTION: 
+	Category: Notify
+	Command: SessionCreated
+	Parameter: Message : A new session (abc ID:2) has been successfully created.
+IGNORE Action: ActionCategory 'Notify' ActionCommand 'SessionCreated'
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: Join
+	Parameter: MapId : 2
+	Parameter: MapName : abc
+	Parameter: OntologyName : Harrell_DiagrammingOntology
+	Parameter: TemplateName : Harrell_DiagrammingOntologyTemplate
+	Parameter: Ontology : <?xml version="1.0" encoding="UTF-8"?>
+<ontology type="Harrell_DiagrammingOntology">
+    <elements>
+        <element elementtype="box" elementid="Premise" minquantity="0" maxquantity="0" quantity="0">
+            <elementoptions heading="Premise" />
+            <uisettings width="200" height="200" border="standard" background-color="#FFCC00" />
+            <childelements>
+                <element elementtype="text" elementid="Premise-text" minquantity="1" maxquantity="1" quantity="1">
+                    <elementoptions />
+                    <uisettings minheight="42" />
+                    <childelements />
+                </element>
+                <element elementtype="awareness" elementid="author" minquantity="1" maxquantity="1" quantity="1">
+                    <elementoptions />
+                    <uisettings minheight="16" maxheight="16" />
+                    <childelements />
+                </element>
+            </childelements>
+        </element>
+        <element elementtype="box" elementid="Conclusion" minquantity="0" maxquantity="0" quantity="0">
+            <elementoptions heading="Conclusion" />
+            <uisettings width="200" height="200" border="standard" background-color="#99CCFF" />
+            <childelements>
+                <element elementtype="text" elementid="Conclusion-text" minquantity="1" maxquantity="1" quantity="1">
+                    <elementoptions />
+                    <uisettings minheight="42" />
+                    <childelements />
+                </element>
+                <element elementtype="awareness" elementid="author" minquantity="1" maxquantity="1" quantity="1">
+                    <elementoptions />
+                    <uisettings minheight="16" maxheight="16" />
+                    <childelements />
+                </element>
+            </childelements>
+        </element>
+        <element elementtype="box" elementid="Refutation" minquantity="0" maxquantity="0" quantity="0">
+            <elementoptions heading="Refutation" />
+            <uisettings width="200" height="200" border="standard" background-color="red" />
+            <childelements>
+                <element elementtype="text" elementid="Refutation-text" minquantity="1" maxquantity="1" quantity="1">
+                    <elementoptions />
+                    <uisettings minheight="42" />
+                    <childelements />
+                </element>
+                <element elementtype="awareness" elementid="author" minquantity="1" maxquantity="1" quantity="1">
+                    <elementoptions />
+                    <uisettings minheight="16" maxheight="16" />
+                    <childelements />
+                </element>
+            </childelements>
+        </element>
+        <element elementtype="box" elementid="Instructor-Comment" minquantity="0" maxquantity="0" quantity="0">
+            <elementoptions heading="Instructor-Comment" />
+            <uisettings width="200" height="200" border="standard" background-color="yellow" />
+            <childelements>
+                <element elementtype="text" elementid="Instructor-Comment-text" minquantity="1" maxquantity="1" quantity="1">
+                <elementoptions />
+                <uisettings minheight="42" />
+                <childelements />
+                </element>
+            <element elementtype="awareness" elementid="author" minquantity="1" maxquantity="1" quantity="1">
+                <elementoptions />
+                <uisettings minheight="16" maxheight="16" />
+                <childelements />
+            </element>
+            </childelements>
+        </element>
+        <element elementtype="relation" elementid="Support" minquantity="0" maxquantity="0" quantity="0">
+            <elementoptions heading="Support" endings="true" details="false" />
+            <uisettings width="120" height="200" background-color="green" linewidth="4px" linecolor="green" />
+            <childelements />
+        </element>
+        <element elementtype="relation" elementid="Objection" minquantity="0" maxquantity="0" quantity="0">
+            <elementoptions heading="Objection" endings="true" details="false" />
+            <uisettings width="120" height="200" background-color="red" linewidth="4px" linecolor="red" />
+            <childelements />
+        </element>
+        <element elementtype="relation" elementid="Linked Premises" minquantity="0" maxquantity="0" quantity="0">
+            <elementoptions heading="Linked Premises" endings="false" details="false" />
+            <uisettings width="120" height="200" background-color="blue" linewidth="6px" linecolor="blue" />
+            <childelements />
+        </element>
+        <element elementtype="relation" elementid="Instructor-Pointer" minquantity="0" maxquantity="0" quantity="0">
+            <elementoptions heading="Instructor-Pointer" endings="true" details="false" />
+            <uisettings width="120" height="200" background-color="#000000" linewidth="4px" linecolor="#000000" />
+            <childelements />
+        </element>
+    </elements>
+</ontology>
+
+	Parameter: Template : <?xml version="1.0" encoding="UTF-8"?>
+<maptemplate uniquename="Harrell_DiagrammingOntologyTemplate" title="Harrell_DiagrammingOntologyTemplate" ontology="Harrell_DiagrammingOntology">
+  <mapdetails>
+    <description>Template for Mara Harrell's class</description>
+    <options maxuser="30" chatsystem="true" listofusers="true" minimap="false" track-cursor="false" selection-details="false" onlyauthorcanmodify="false" committextbyenter="true" straightlink="true" AutoGrowTextArea="false" />
+  </mapdetails>
+</maptemplate>
+
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: UserEvent
+	Command: UserJoin
+	Parameter: UserName : d1 (Developer)
+	Parameter: MapId : 2
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: UserEvent
+	Command: UserList
+	Parameter: UserName : d1 (Developer)
+	Parameter: MapId : 2
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Info
+	Command: JoinComplete
+	Parameter: MapId : 2
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="box" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Conclusion" />
+    <Parameter NAME="POS-X" VALUE="2282" />
+    <Parameter NAME="POS-Y" VALUE="2355" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="text" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Conclusion-text" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="awareness" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="author" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+    <Parameter NAME="TIME" VALUE="CURRENT-TIME" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : box
+	Parameter: MapId : 2
+	Parameter: ElementId : Conclusion
+	Parameter: PosX : 2282
+	Parameter: PosY : 2355
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453009158
+	Parameter: NumActions : 3
+	Parameter: Id : 1
+	Parameter: UserName : d1
+	Parameter: RootElementId : 1
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : text
+	Parameter: MapId : 2
+	Parameter: Parent : 1
+	Parameter: ElementId : Conclusion-text
+	Parameter: UserName : d1
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453009158
+	Parameter: NumActions : 3
+	Parameter: Id : 2
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : awareness
+	Parameter: MapId : 2
+	Parameter: Parent : 1
+	Parameter: ElementId : author
+	Parameter: UserName : d1
+	Parameter: Time : 1436453009239
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453009158
+	Parameter: NumActions : 3
+	Parameter: Id : 3
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="1" />
+    <Parameter NAME="POS-X" VALUE="2238" />
+    <Parameter NAME="POS-Y" VALUE="2488" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 1
+	Parameter: PosX : 2238
+	Parameter: PosY : 2488
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453013136
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453013136
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="box" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Conclusion" />
+    <Parameter NAME="POS-X" VALUE="2496" />
+    <Parameter NAME="POS-Y" VALUE="2495" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="text" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Conclusion-text" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="awareness" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="author" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+    <Parameter NAME="TIME" VALUE="CURRENT-TIME" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : box
+	Parameter: MapId : 2
+	Parameter: ElementId : Conclusion
+	Parameter: PosX : 2496
+	Parameter: PosY : 2495
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453029578
+	Parameter: NumActions : 3
+	Parameter: Id : 4
+	Parameter: UserName : d1
+	Parameter: RootElementId : 2
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : text
+	Parameter: MapId : 2
+	Parameter: Parent : 4
+	Parameter: ElementId : Conclusion-text
+	Parameter: UserName : d1
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453029578
+	Parameter: NumActions : 3
+	Parameter: Id : 5
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : awareness
+	Parameter: MapId : 2
+	Parameter: Parent : 4
+	Parameter: ElementId : author
+	Parameter: UserName : d1
+	Parameter: Time : 1436453029650
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453029578
+	Parameter: NumActions : 3
+	Parameter: Id : 6
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="4" />
+    <Parameter NAME="POS-X" VALUE="2506" />
+    <Parameter NAME="POS-Y" VALUE="2499" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 4
+	Parameter: PosX : 2506
+	Parameter: PosY : 2499
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453033010
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453033010
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="1" />
+    <Parameter NAME="POS-X" VALUE="2222" />
+    <Parameter NAME="POS-Y" VALUE="2562.3333435058594" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 1
+	Parameter: PosX : 2222
+	Parameter: PosY : 2562.3333435058594
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453034225
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453034225
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="4" />
+    <Parameter NAME="POS-X" VALUE="2497" />
+    <Parameter NAME="POS-Y" VALUE="2580" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 4
+	Parameter: PosX : 2497
+	Parameter: PosY : 2580
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453039763
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453039763
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="box" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Premise" />
+    <Parameter NAME="POS-X" VALUE="2390" />
+    <Parameter NAME="POS-Y" VALUE="2470" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="text" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Premise-text" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="awareness" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="author" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+    <Parameter NAME="TIME" VALUE="CURRENT-TIME" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="relation" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Support" />
+    <Parameter NAME="PARENT" VALUE="1" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : box
+	Parameter: MapId : 2
+	Parameter: ElementId : Premise
+	Parameter: PosX : 2390
+	Parameter: PosY : 2470
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453044820
+	Parameter: NumActions : 4
+	Parameter: Id : 7
+	Parameter: UserName : d1
+	Parameter: RootElementId : 3
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : text
+	Parameter: MapId : 2
+	Parameter: Parent : 7
+	Parameter: ElementId : Premise-text
+	Parameter: UserName : d1
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453044820
+	Parameter: NumActions : 4
+	Parameter: Id : 8
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : awareness
+	Parameter: MapId : 2
+	Parameter: Parent : 7
+	Parameter: ElementId : author
+	Parameter: UserName : d1
+	Parameter: Time : 1436453044895
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453044820
+	Parameter: NumActions : 4
+	Parameter: Id : 9
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : relation
+	Parameter: MapId : 2
+	Parameter: ElementId : Support
+	Parameter: Parent : 1
+	Parameter: Parent : 7
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453044820
+	Parameter: NumActions : 4
+	Parameter: Id : 10
+	Parameter: UserName : d1
+	Parameter: RootElementId : 4
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="7" />
+    <Parameter NAME="POS-X" VALUE="2397" />
+    <Parameter NAME="POS-Y" VALUE="2386.3333435058594" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 7
+	Parameter: PosX : 2397
+	Parameter: PosY : 2386.3333435058594
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453046531
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453046531
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="relation" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Support" />
+    <Parameter NAME="PARENT" VALUE="4" />
+    <Parameter NAME="PARENT" VALUE="7" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : relation
+	Parameter: MapId : 2
+	Parameter: ElementId : Support
+	Parameter: Parent : 4
+	Parameter: Parent : 7
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453051448
+	Parameter: NumActions : 1
+	Parameter: Id : 11
+	Parameter: UserName : d1
+	Parameter: RootElementId : 5
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="box" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Premise" />
+    <Parameter NAME="POS-X" VALUE="2830" />
+    <Parameter NAME="POS-Y" VALUE="2448" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="text" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Premise-text" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="awareness" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="author" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+    <Parameter NAME="TIME" VALUE="CURRENT-TIME" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="relation" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Linked Premises" />
+    <Parameter NAME="PARENT" VALUE="7" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : box
+	Parameter: MapId : 2
+	Parameter: ElementId : Premise
+	Parameter: PosX : 2830
+	Parameter: PosY : 2448
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453058948
+	Parameter: NumActions : 4
+	Parameter: Id : 12
+	Parameter: UserName : d1
+	Parameter: RootElementId : 6
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : text
+	Parameter: MapId : 2
+	Parameter: Parent : 12
+	Parameter: ElementId : Premise-text
+	Parameter: UserName : d1
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453058948
+	Parameter: NumActions : 4
+	Parameter: Id : 13
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : awareness
+	Parameter: MapId : 2
+	Parameter: Parent : 12
+	Parameter: ElementId : author
+	Parameter: UserName : d1
+	Parameter: Time : 1436453059015
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453058948
+	Parameter: NumActions : 4
+	Parameter: Id : 14
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : relation
+	Parameter: MapId : 2
+	Parameter: ElementId : Linked Premises
+	Parameter: Parent : 7
+	Parameter: Parent : 12
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453058948
+	Parameter: NumActions : 4
+	Parameter: Id : 15
+	Parameter: UserName : d1
+	Parameter: RootElementId : 7
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="box" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Premise" />
+    <Parameter NAME="POS-X" VALUE="2190" />
+    <Parameter NAME="POS-Y" VALUE="2403" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="text" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Premise-text" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="awareness" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="author" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+    <Parameter NAME="TIME" VALUE="CURRENT-TIME" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : box
+	Parameter: MapId : 2
+	Parameter: ElementId : Premise
+	Parameter: PosX : 2190
+	Parameter: PosY : 2403
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453064788
+	Parameter: NumActions : 3
+	Parameter: Id : 16
+	Parameter: UserName : d1
+	Parameter: RootElementId : 8
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : text
+	Parameter: MapId : 2
+	Parameter: Parent : 16
+	Parameter: ElementId : Premise-text
+	Parameter: UserName : d1
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453064788
+	Parameter: NumActions : 3
+	Parameter: Id : 17
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : awareness
+	Parameter: MapId : 2
+	Parameter: Parent : 16
+	Parameter: ElementId : author
+	Parameter: UserName : d1
+	Parameter: Time : 1436453064859
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453064788
+	Parameter: NumActions : 3
+	Parameter: Id : 18
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="box" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Conclusion" />
+    <Parameter NAME="POS-X" VALUE="2906" />
+    <Parameter NAME="POS-Y" VALUE="2347" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="text" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Conclusion-text" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="awareness" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="author" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+    <Parameter NAME="TIME" VALUE="CURRENT-TIME" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="relation" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Support" />
+    <Parameter NAME="PARENT" VALUE="12" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : box
+	Parameter: MapId : 2
+	Parameter: ElementId : Conclusion
+	Parameter: PosX : 2906
+	Parameter: PosY : 2347
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453087637
+	Parameter: NumActions : 4
+	Parameter: Id : 19
+	Parameter: UserName : d1
+	Parameter: RootElementId : 9
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : text
+	Parameter: MapId : 2
+	Parameter: Parent : 19
+	Parameter: ElementId : Conclusion-text
+	Parameter: UserName : d1
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453087637
+	Parameter: NumActions : 4
+	Parameter: Id : 20
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : awareness
+	Parameter: MapId : 2
+	Parameter: Parent : 19
+	Parameter: ElementId : author
+	Parameter: UserName : d1
+	Parameter: Time : 1436453087711
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453087637
+	Parameter: NumActions : 4
+	Parameter: Id : 21
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : relation
+	Parameter: MapId : 2
+	Parameter: ElementId : Support
+	Parameter: Parent : 12
+	Parameter: Parent : 19
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453087637
+	Parameter: NumActions : 4
+	Parameter: Id : 22
+	Parameter: UserName : d1
+	Parameter: RootElementId : 10
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="relation" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Support" />
+    <Parameter NAME="PARENT" VALUE="7" />
+    <Parameter NAME="PARENT" VALUE="19" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : relation
+	Parameter: MapId : 2
+	Parameter: ElementId : Support
+	Parameter: Parent : 7
+	Parameter: Parent : 19
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453087778
+	Parameter: NumActions : 1
+	Parameter: Id : 23
+	Parameter: UserName : d1
+	Parameter: RootElementId : 11
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="19" />
+    <Parameter NAME="POS-X" VALUE="2650" />
+    <Parameter NAME="POS-Y" VALUE="2197.3333282470703" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 19
+	Parameter: PosX : 2650
+	Parameter: PosY : 2197.3333282470703
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453090604
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453090604
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="box" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Conclusion" />
+    <Parameter NAME="POS-X" VALUE="2262" />
+    <Parameter NAME="POS-Y" VALUE="2294" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="text" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Conclusion-text" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="awareness" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="author" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+    <Parameter NAME="TIME" VALUE="CURRENT-TIME" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="relation" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Support" />
+    <Parameter NAME="PARENT" VALUE="16" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : box
+	Parameter: MapId : 2
+	Parameter: ElementId : Conclusion
+	Parameter: PosX : 2262
+	Parameter: PosY : 2294
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453099143
+	Parameter: NumActions : 4
+	Parameter: Id : 24
+	Parameter: UserName : d1
+	Parameter: RootElementId : 12
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : text
+	Parameter: MapId : 2
+	Parameter: Parent : 24
+	Parameter: ElementId : Conclusion-text
+	Parameter: UserName : d1
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453099143
+	Parameter: NumActions : 4
+	Parameter: Id : 25
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : awareness
+	Parameter: MapId : 2
+	Parameter: Parent : 24
+	Parameter: ElementId : author
+	Parameter: UserName : d1
+	Parameter: Time : 1436453099259
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453099143
+	Parameter: NumActions : 4
+	Parameter: Id : 26
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : relation
+	Parameter: MapId : 2
+	Parameter: ElementId : Support
+	Parameter: Parent : 16
+	Parameter: Parent : 24
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453099143
+	Parameter: NumActions : 4
+	Parameter: Id : 27
+	Parameter: UserName : d1
+	Parameter: RootElementId : 13
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="24" />
+    <Parameter NAME="POS-X" VALUE="2191" />
+    <Parameter NAME="POS-Y" VALUE="2218" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 24
+	Parameter: PosX : 2191
+	Parameter: PosY : 2218
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453100896
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453100896
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="box" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Conclusion" />
+    <Parameter NAME="POS-X" VALUE="2485" />
+    <Parameter NAME="POS-Y" VALUE="2117" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="text" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Conclusion-text" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="awareness" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="author" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+    <Parameter NAME="TIME" VALUE="CURRENT-TIME" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="relation" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Support" />
+    <Parameter NAME="PARENT" VALUE="24" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : box
+	Parameter: MapId : 2
+	Parameter: ElementId : Conclusion
+	Parameter: PosX : 2485
+	Parameter: PosY : 2117
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453113739
+	Parameter: NumActions : 4
+	Parameter: Id : 28
+	Parameter: UserName : d1
+	Parameter: RootElementId : 14
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : text
+	Parameter: MapId : 2
+	Parameter: Parent : 28
+	Parameter: ElementId : Conclusion-text
+	Parameter: UserName : d1
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453113739
+	Parameter: NumActions : 4
+	Parameter: Id : 29
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : awareness
+	Parameter: MapId : 2
+	Parameter: Parent : 28
+	Parameter: ElementId : author
+	Parameter: UserName : d1
+	Parameter: Time : 1436453113806
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453113739
+	Parameter: NumActions : 4
+	Parameter: Id : 30
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : relation
+	Parameter: MapId : 2
+	Parameter: ElementId : Support
+	Parameter: Parent : 24
+	Parameter: Parent : 28
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453113739
+	Parameter: NumActions : 4
+	Parameter: Id : 31
+	Parameter: UserName : d1
+	Parameter: RootElementId : 15
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="28" />
+    <Parameter NAME="POS-X" VALUE="2355" />
+    <Parameter NAME="POS-Y" VALUE="2012.9791717529297" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 28
+	Parameter: PosX : 2355
+	Parameter: PosY : 2012.9791717529297
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453115914
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453115914
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="relation" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Support" />
+    <Parameter NAME="PARENT" VALUE="7" />
+    <Parameter NAME="PARENT" VALUE="28" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : relation
+	Parameter: MapId : 2
+	Parameter: ElementId : Support
+	Parameter: Parent : 7
+	Parameter: Parent : 28
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453121677
+	Parameter: NumActions : 1
+	Parameter: Id : 32
+	Parameter: UserName : d1
+	Parameter: RootElementId : 16
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="relation" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Support" />
+    <Parameter NAME="PARENT" VALUE="12" />
+    <Parameter NAME="PARENT" VALUE="28" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : relation
+	Parameter: MapId : 2
+	Parameter: ElementId : Support
+	Parameter: Parent : 12
+	Parameter: Parent : 28
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453121743
+	Parameter: NumActions : 1
+	Parameter: Id : 33
+	Parameter: UserName : d1
+	Parameter: RootElementId : 17
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="DeleteElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="32" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: DeleteElement
+	Parameter: MapId : 2
+	Parameter: Id : 32
+	Parameter: UserName : d1
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453129865
+	Parameter: NumActions : 1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="DeleteElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="15" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: DeleteElement
+	Parameter: MapId : 2
+	Parameter: Id : 15
+	Parameter: UserName : d1
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453129930
+	Parameter: NumActions : 1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="19" />
+    <Parameter NAME="POS-X" VALUE="2719" />
+    <Parameter NAME="POS-Y" VALUE="2123.6666870117188" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 19
+	Parameter: PosX : 2719
+	Parameter: PosY : 2123.6666870117188
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453134915
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453134915
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="DeleteElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="33" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: DeleteElement
+	Parameter: MapId : 2
+	Parameter: Id : 33
+	Parameter: UserName : d1
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453137752
+	Parameter: NumActions : 1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="8" />
+    <Parameter NAME="STATUS" VALUE="LOCK" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 8
+	Parameter: Status : LOCK
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453139218
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453139218
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="8" />
+    <Parameter NAME="TEXT" VALUE="" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 8
+	Parameter: Text : 
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453140898
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453140898
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="8" />
+    <Parameter NAME="STATUS" VALUE="UNLOCK" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 8
+	Parameter: Status : UNLOCK
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453140923
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453140923
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="relation" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Linked Premises" />
+    <Parameter NAME="PARENT" VALUE="7" />
+    <Parameter NAME="PARENT" VALUE="12" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : relation
+	Parameter: MapId : 2
+	Parameter: ElementId : Linked Premises
+	Parameter: Parent : 7
+	Parameter: Parent : 12
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453142621
+	Parameter: NumActions : 1
+	Parameter: Id : 34
+	Parameter: UserName : d1
+	Parameter: RootElementId : 18
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="relation" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Support" />
+    <Parameter NAME="PARENT" VALUE="19" />
+    <Parameter NAME="PARENT" VALUE="28" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : relation
+	Parameter: MapId : 2
+	Parameter: ElementId : Support
+	Parameter: Parent : 19
+	Parameter: Parent : 28
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453146856
+	Parameter: NumActions : 1
+	Parameter: Id : 35
+	Parameter: UserName : d1
+	Parameter: RootElementId : 19
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="box" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Conclusion" />
+    <Parameter NAME="POS-X" VALUE="2169" />
+    <Parameter NAME="POS-Y" VALUE="2091" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="text" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Conclusion-text" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="awareness" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+    <Parameter NAME="ELEMENT-ID" VALUE="author" />
+    <Parameter NAME="USERNAME" VALUE="d1" />
+    <Parameter NAME="TIME" VALUE="CURRENT-TIME" />
+  </Action>
+  <Action COMMAND="CreateElement" CATEGORY="Map">
+    <Parameter NAME="TYPE" VALUE="relation" />
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ELEMENT-ID" VALUE="Objection" />
+    <Parameter NAME="PARENT" VALUE="24" />
+    <Parameter NAME="PARENT" VALUE="LAST-ID" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : box
+	Parameter: MapId : 2
+	Parameter: ElementId : Conclusion
+	Parameter: PosX : 2169
+	Parameter: PosY : 2091
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453174783
+	Parameter: NumActions : 4
+	Parameter: Id : 36
+	Parameter: UserName : d1
+	Parameter: RootElementId : 20
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : text
+	Parameter: MapId : 2
+	Parameter: Parent : 36
+	Parameter: ElementId : Conclusion-text
+	Parameter: UserName : d1
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453174783
+	Parameter: NumActions : 4
+	Parameter: Id : 37
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : awareness
+	Parameter: MapId : 2
+	Parameter: Parent : 36
+	Parameter: ElementId : author
+	Parameter: UserName : d1
+	Parameter: Time : 1436453174850
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453174783
+	Parameter: NumActions : 4
+	Parameter: Id : 38
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: CreateElement
+	Parameter: Type : relation
+	Parameter: MapId : 2
+	Parameter: ElementId : Objection
+	Parameter: Parent : 24
+	Parameter: Parent : 36
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453174783
+	Parameter: NumActions : 4
+	Parameter: Id : 39
+	Parameter: UserName : d1
+	Parameter: RootElementId : 21
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="36" />
+    <Parameter NAME="POS-X" VALUE="2081" />
+    <Parameter NAME="POS-Y" VALUE="2029.6666717529297" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 36
+	Parameter: PosX : 2081
+	Parameter: PosY : 2029.6666717529297
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453176136
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453176136
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="1" />
+    <Parameter NAME="POS-X" VALUE="2400" />
+    <Parameter NAME="POS-Y" VALUE="2550" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 1
+	Parameter: PosX : 2400
+	Parameter: PosY : 2550
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453181449
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453181449
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="24" />
+    <Parameter NAME="POS-X" VALUE="3300" />
+    <Parameter NAME="POS-Y" VALUE="2550" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 24
+	Parameter: PosX : 3300
+	Parameter: PosY : 2550
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453181493
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453181494
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="4" />
+    <Parameter NAME="POS-X" VALUE="2700" />
+    <Parameter NAME="POS-Y" VALUE="2550" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 4
+	Parameter: PosX : 2700
+	Parameter: PosY : 2550
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453181519
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453181519
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="12" />
+    <Parameter NAME="POS-X" VALUE="2550" />
+    <Parameter NAME="POS-Y" VALUE="2400" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 12
+	Parameter: PosX : 2550
+	Parameter: PosY : 2400
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453181548
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453181548
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="36" />
+    <Parameter NAME="POS-X" VALUE="3150" />
+    <Parameter NAME="POS-Y" VALUE="2400" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 36
+	Parameter: PosX : 3150
+	Parameter: PosY : 2400
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453181585
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453181585
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="19" />
+    <Parameter NAME="POS-X" VALUE="2850" />
+    <Parameter NAME="POS-Y" VALUE="2250" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 19
+	Parameter: PosX : 2850
+	Parameter: PosY : 2250
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453181626
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453181626
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="28" />
+    <Parameter NAME="POS-X" VALUE="2850" />
+    <Parameter NAME="POS-Y" VALUE="2400" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 28
+	Parameter: PosX : 2850
+	Parameter: PosY : 2400
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453181666
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453181666
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="16" />
+    <Parameter NAME="POS-X" VALUE="3000" />
+    <Parameter NAME="POS-Y" VALUE="2550" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 16
+	Parameter: PosX : 3000
+	Parameter: PosY : 2550
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453181707
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453181707
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="7" />
+    <Parameter NAME="POS-X" VALUE="2250" />
+    <Parameter NAME="POS-Y" VALUE="2400" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 7
+	Parameter: PosX : 2250
+	Parameter: PosY : 2400
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453181742
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453181742
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="1" />
+    <Parameter NAME="POS-X" VALUE="2214.3333282470703" />
+    <Parameter NAME="POS-Y" VALUE="2575.3333435058594" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 1
+	Parameter: PosX : 2214.3333282470703
+	Parameter: PosY : 2575.3333435058594
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453199365
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453199365
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="4" />
+    <Parameter NAME="POS-X" VALUE="2537.3333129882812" />
+    <Parameter NAME="POS-Y" VALUE="2591" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 4
+	Parameter: PosX : 2537.3333129882812
+	Parameter: PosY : 2591
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453201400
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453201400
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="19" />
+    <Parameter NAME="POS-X" VALUE="2416" />
+    <Parameter NAME="POS-Y" VALUE="2201.9791564941406" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 19
+	Parameter: PosX : 2416
+	Parameter: PosY : 2201.9791564941406
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453208751
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453208751
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="1" />
+    <Parameter NAME="POS-X" VALUE="2168.3333320617676" />
+    <Parameter NAME="POS-Y" VALUE="2588.3333435058594" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 1
+	Parameter: PosX : 2168.3333320617676
+	Parameter: PosY : 2588.3333435058594
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453210896
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453210896
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="4" />
+    <Parameter NAME="POS-X" VALUE="2457" />
+    <Parameter NAME="POS-Y" VALUE="2612.312530517578" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 4
+	Parameter: PosX : 2457
+	Parameter: PosY : 2612.312530517578
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453212994
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453212994
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="4" />
+    <Parameter NAME="POS-X" VALUE="2407.999984741211" />
+    <Parameter NAME="POS-Y" VALUE="2589.312469482422" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 4
+	Parameter: PosX : 2407.999984741211
+	Parameter: PosY : 2589.312469482422
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453214404
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453214404
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="1" />
+    <Parameter NAME="POS-X" VALUE="2161.333333015442" />
+    <Parameter NAME="POS-Y" VALUE="2601.312530517578" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 1
+	Parameter: PosX : 2161.333333015442
+	Parameter: PosY : 2601.312530517578
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453215901
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453215901
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="7" />
+    <Parameter NAME="POS-X" VALUE="2317.3333282470703" />
+    <Parameter NAME="POS-Y" VALUE="2419.3333435058594" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 7
+	Parameter: PosX : 2317.3333282470703
+	Parameter: PosY : 2419.3333435058594
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453218680
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453218680
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="12" />
+    <Parameter NAME="POS-X" VALUE="2597" />
+    <Parameter NAME="POS-Y" VALUE="2428" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 12
+	Parameter: PosX : 2597
+	Parameter: PosY : 2428
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453220320
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453220320
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="4" />
+    <Parameter NAME="POS-X" VALUE="2422.312515258789" />
+    <Parameter NAME="POS-Y" VALUE="2604.000030517578" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 4
+	Parameter: PosX : 2422.312515258789
+	Parameter: PosY : 2604.000030517578
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453222367
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453222367
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="19" />
+    <Parameter NAME="POS-X" VALUE="2443" />
+    <Parameter NAME="POS-Y" VALUE="2207.979164123535" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 19
+	Parameter: PosX : 2443
+	Parameter: PosY : 2207.979164123535
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453224108
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453224108
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="28" />
+    <Parameter NAME="POS-X" VALUE="2780" />
+    <Parameter NAME="POS-Y" VALUE="2154.6874923706055" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 28
+	Parameter: PosX : 2780
+	Parameter: PosY : 2154.6874923706055
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453225961
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453225961
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="36" />
+    <Parameter NAME="POS-X" VALUE="3241.0000610351562" />
+    <Parameter NAME="POS-Y" VALUE="2216" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 36
+	Parameter: PosX : 3241.0000610351562
+	Parameter: PosY : 2216
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453228022
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453228022
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="24" />
+    <Parameter NAME="POS-X" VALUE="3193" />
+    <Parameter NAME="POS-Y" VALUE="2351.3333435058594" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 24
+	Parameter: PosX : 3193
+	Parameter: PosY : 2351.3333435058594
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453229693
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453229693
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="16" />
+    <Parameter NAME="POS-X" VALUE="2895.3333129882812" />
+    <Parameter NAME="POS-Y" VALUE="2429.3333435058594" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 16
+	Parameter: PosX : 2895.3333129882812
+	Parameter: PosY : 2429.3333435058594
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453232799
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453232799
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="28" />
+    <Parameter NAME="POS-X" VALUE="2760" />
+    <Parameter NAME="POS-Y" VALUE="2028" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 28
+	Parameter: PosX : 2760
+	Parameter: PosY : 2028
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453235666
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453235666
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="24" />
+    <Parameter NAME="POS-X" VALUE="2877.333251953125" />
+    <Parameter NAME="POS-Y" VALUE="2182.9791870117188" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 24
+	Parameter: PosX : 2877.333251953125
+	Parameter: PosY : 2182.9791870117188
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453238370
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453238370
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="24" />
+    <Parameter NAME="POS-X" VALUE="2892.3333129882812" />
+    <Parameter NAME="POS-Y" VALUE="2193.9791870117188" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 24
+	Parameter: PosX : 2892.3333129882812
+	Parameter: PosY : 2193.9791870117188
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453239972
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453239972
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="28" />
+    <Parameter NAME="POS-X" VALUE="2685" />
+    <Parameter NAME="POS-Y" VALUE="2023" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 28
+	Parameter: PosX : 2685
+	Parameter: PosY : 2023
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453241919
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453241919
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="36" />
+    <Parameter NAME="POS-X" VALUE="3030.333251953125" />
+    <Parameter NAME="POS-Y" VALUE="2031.3125" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 36
+	Parameter: PosX : 3030.333251953125
+	Parameter: PosY : 2031.3125
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453245401
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453245401
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="24" />
+    <Parameter NAME="POS-X" VALUE="2887.3333129882812" />
+    <Parameter NAME="POS-Y" VALUE="2192.3333282470703" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 24
+	Parameter: PosX : 2887.3333129882812
+	Parameter: PosY : 2192.3333282470703
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453254650
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453254650
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="16" />
+    <Parameter NAME="POS-X" VALUE="2872" />
+    <Parameter NAME="POS-Y" VALUE="2433" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 16
+	Parameter: PosX : 2872
+	Parameter: PosY : 2433
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453258414
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453258414
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="16" />
+    <Parameter NAME="POS-X" VALUE="2896" />
+    <Parameter NAME="POS-Y" VALUE="2434" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 16
+	Parameter: PosX : 2896
+	Parameter: PosY : 2434
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453260326
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453260326
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="16" />
+    <Parameter NAME="POS-X" VALUE="2892" />
+    <Parameter NAME="POS-Y" VALUE="2427" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 16
+	Parameter: PosX : 2892
+	Parameter: PosY : 2427
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453261846
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453261846
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="13" />
+    <Parameter NAME="STATUS" VALUE="LOCK" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 13
+	Parameter: Status : LOCK
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453300385
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453300385
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="12" />
+    <Parameter NAME="POS-X" VALUE="2024.6875" />
+    <Parameter NAME="POS-Y" VALUE="2421.6666564941406" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 12
+	Parameter: PosX : 2024.6875
+	Parameter: PosY : 2421.6666564941406
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453304388
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453304388
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="19" />
+    <Parameter NAME="POS-X" VALUE="2196.3125" />
+    <Parameter NAME="POS-Y" VALUE="2228.3541717529297" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 19
+	Parameter: PosX : 2196.3125
+	Parameter: PosY : 2228.3541717529297
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453307928
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453307928
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="16" />
+    <Parameter NAME="POS-X" VALUE="2647.3333740234375" />
+    <Parameter NAME="POS-Y" VALUE="2419" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 16
+	Parameter: PosX : 2647.3333740234375
+	Parameter: PosY : 2419
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453311172
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453311172
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="24" />
+    <Parameter NAME="POS-X" VALUE="2641" />
+    <Parameter NAME="POS-Y" VALUE="2221.6666717529297" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 24
+	Parameter: PosX : 2641
+	Parameter: PosY : 2221.6666717529297
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453315169
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453315169
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="28" />
+    <Parameter NAME="POS-X" VALUE="2459.6458435058594" />
+    <Parameter NAME="POS-Y" VALUE="2012" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 28
+	Parameter: PosX : 2459.6458435058594
+	Parameter: PosY : 2012
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453317902
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453317902
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="UpdateElement" CATEGORY="Map">
+    <Parameter NAME="MAP-ID" VALUE="2" />
+    <Parameter NAME="ID" VALUE="36" />
+    <Parameter NAME="POS-X" VALUE="2812" />
+    <Parameter NAME="POS-Y" VALUE="2012.3541717529297" />
+  </Action>
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Map
+	Command: UpdateElement
+	Parameter: MapId : 2
+	Parameter: Id : 36
+	Parameter: PosX : 2812
+	Parameter: PosY : 2012.3541717529297
+	Parameter: UserActionId : 91A09097D044E02F459215E132E8F02D-15102305841436453321008
+	Parameter: NumActions : 1
+	Parameter: Received : 1436453321008
+	Parameter: UserName : d1
+Waiting...size of ActionPackage list is 0 
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+Translating:ACTIONPACKAGE: 
+ACTION: 
+	Category: Session
+	Command: HeartbeatRequest
+Waiting...size of ActionPackage list is 0 
+processActionPackage -
+<ActionPackage>
+  <Action COMMAND="Heartbeat" CATEGORY="Session" />
+  <Parameter NAME="SESSION-ID" VALUE="91A09097D044E02F459215E132E8F02D-1510230584" />
+</ActionPackage>
+=======
 processActionPackage -
 <ActionPackage>
   <Action COMMAND="Heartbeat" CATEGORY="Session" />
   <Parameter NAME="SESSION-ID" VALUE="0D5A2C0235672A511B923BD46AA11B35-1837397217" />
 </ActionPackage>
+<<<<<<< HEAD
 Configuration Home: /Users/kevin/Kevin-LASAD/Deploy/lasad-server/conf/default
 com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
 
@@ -50051,3 +54982,6 @@ ACTION:
 	Command: Logout
 	Parameter: Status : OK
 Waiting...size of ActionPackage list is 0 
+=======
+>>>>>>> 0cff8b69a17d1480a56cafa59524e8459cf00c37
+>>>>>>> 527e628e3a71cceb7313e23f2b2bc252428ffd7c

@@ -217,6 +217,22 @@ public class LinkedBox
 	{
 		return findThisAndExtendedSiblings(this, new HashSet<LinkedBox>());
 	}
+	
+	//checks if a sibling or extended sibling has a child (ignores the children of the box used to call the function)
+	public boolean siblingHasChild(){
+		for(LinkedBox box : this.getThisAndExtendedSiblings())
+			if(box != this && box.getNumChildren() > 0)
+				return true;
+		return false;
+	}
+	
+	//checks if a sibling or extended sibling has a parent (ignores the parents of the box used to call the function)
+	public boolean siblingHasParent(){
+		for(LinkedBox box : this.getThisAndExtendedSiblings())
+			if(box != this && box.getNumParents() > 0)
+				return true;
+		return false;
+	}
 
 	// intialize currentBox as this and accumulated should be empty; RECURSIVE
 	private HashSet<LinkedBox> findThisAndExtendedSiblings(LinkedBox currentBox, HashSet<LinkedBox> accumulated)
