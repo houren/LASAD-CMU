@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.HashSet;
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.OrganizerLink;
+import lasad.gwt.client.model.organization.ThreadGrid;
 import java.util.Collection;
 import lasad.gwt.client.logger.Logger;
 
@@ -21,16 +22,19 @@ public class ArgumentThread
 	// HashMap allows for constant lookup time by BoxID
 	private HashMap<Integer, LinkedBox> boxMap;
 
+	private int height;
+	private int width;
+
 	private int threadID;
 
-	// Clear this before use in a method
-	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
+	private ThreadGrid grid;
 
 	public ArgumentThread()
 	{
 		this.boxMap = new HashMap<Integer, LinkedBox>();
 		numThreads++;
 		this.threadID = numThreads;
+		this.grid = new ThreadGrid(this);
 	}
 
 	public ArgumentThread(LinkedBox box)
@@ -39,6 +43,7 @@ public class ArgumentThread
 		this.boxMap.put(new Integer(box.getBoxID()), box);
 		numThreads++;
 		this.threadID = numThreads;
+		this.grid = new ThreadGrid(this);
 	}
 
 	public ArgumentThread(Collection<LinkedBox> boxes)
@@ -50,11 +55,17 @@ public class ArgumentThread
 		}
 		numThreads++;
 		this.threadID = numThreads;
+		this.grid = new ThreadGrid(this);
 	}
 
 	public Collection<LinkedBox> getBoxes()
 	{
 		return boxMap.values();
+	}
+
+	public ThreadGrid getGrid()
+	{
+		return grid;
 	}
 
 	public void addBox(LinkedBox box)
@@ -66,6 +77,7 @@ public class ArgumentThread
 		else
 		{
 			boxMap.put(new Integer(box.getBoxID()), box);
+			grid.addBox(box);
 		}
 	}
 
@@ -86,6 +98,7 @@ public class ArgumentThread
 			toRemove.removeLinksToSelf();
 			Integer boxIntID = new Integer(boxID);
 			LinkedBox returnValue = boxMap.remove(boxIntID);
+			grid.removeBox(toRemove);
 			return returnValue;
 		}
 		else
@@ -191,6 +204,7 @@ public class ArgumentThread
 	
 	//identify a cycle
 	// As used, start is initialiazed as the INITIAL currentBox and its siblings
+	/*
 	private boolean isCycle(HashSet<LinkedBox> start, LinkedBox currentBox){
 		if(start.contains(currentBox))
 		{
@@ -228,8 +242,84 @@ public class ArgumentThread
 		}
 		return false;
 	}
+	*/
+
+	/*
+	public LinkedBox getRootBox()
+	{
+		HashSet<LinkedBox> potentialRoots = new HashSet<LinkedBox>();
+		LinkedBox lowestBox = new LinkedBox(-1, -1, "", -1.0, Double.MAX_VALUE, -1, -1, false);
+
+		for (LinkedBox box : this.getBoxes())
+		{
+			if (box.getYTop() < lowestBox.getYTop())
+			{
+				lowestBox = box;
+			}
+			if (box.getNumParents() == 0)
+			{
+				potentialRoots.add(box);
+			}	
+		}
+
+		if (potentialRoots.size() == 0)
+		{
+			return lowestBox;
+		}
+		else
+		{
+			return this.getPotentialRootSpanningMostLevels(potentialRoots, new HashSet<LinkedBox>());
+		}
+	}
+	*/
+
+/*
+	private LinkedBox getPotentialRootSpanningMostLevels(HashSet<LinkedBox> potentialRoots, HashSet<LinkedBox> visited)
+	{
+		for(LinkedBox potentialRoot : potentialRoots)
+		{
+			if(!visited.contains(potentialRoot))
+			{
+				getVerticalTraversalDistance(potentialRoot);
+			}
+		}
+	}
+	*/
+
+	class IntAndVisited
+	{
+		private int myInt;
+		private HashSet<LinkedBox> visited;
+
+		public IntAndVisited()
+		{
+			myInt = 0;
+			visited = new HashSet<LinkedBox>();
+		}
+
+		public void addBox(LinkedBox box)
+		{
+			visited.add(box);
+		}
+
+		public void incMyInt()
+		{
+			myInt++;
+		}
+
+		public HashSet<LinkedBox> getVisited()
+		{
+			return visited;
+		}
+
+		public int getMyInt()
+		{
+			return myInt;
+		}
+	}
 
 	// RootBoxes are boxes that no have parents, nor do their siblings.  They are useful for a "starting point" when traversing a thread.
+	/*
 	public HashSet<LinkedBox> getRootBoxes()
 	{
 		HashSet<LinkedBox> rootBoxes = new HashSet<LinkedBox>();
@@ -298,6 +388,7 @@ public class ArgumentThread
 		
 		return rootBoxes;
 	}
+	*/
 
 	@Override
 	public int hashCode()
@@ -335,6 +426,7 @@ public class ArgumentThread
 	}
 
 	// Determines if a box is a root box (visited must be cleared before entering this function)
+	/*
 	private boolean isRoot(LinkedBox box)
 	{
 		if (!findIfBoxHasExtendedParents(box))
@@ -374,6 +466,7 @@ public class ArgumentThread
 			}
 		}
 	}
+	*/
 
 	public static void decNumThreads()
 	{

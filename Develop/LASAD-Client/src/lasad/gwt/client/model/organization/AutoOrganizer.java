@@ -26,6 +26,9 @@ import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
 
 import lasad.shared.communication.objects.ActionPackage;
 
+import java.io.StringWriter;
+import java.io.PrintWriter;
+
 /**
  * An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update links
  * in ArgumentMap representations where a type of relation can create groups of boxes. The overall map organizing function,
@@ -38,8 +41,8 @@ import lasad.shared.communication.objects.ActionPackage;
 public class AutoOrganizer
 {
 	// Space between organized nodes
-	private final int Y_SPACE = 150;
-	private final int X_SPACE = 150;
+	private final int Y_SPACE = 100;
+	private final int X_SPACE = 100;
 
 	// The maximum number of siblings (grouped boxes) a box can have
 	private final int MAX_SIBLINGS = 2;
@@ -237,6 +240,17 @@ public class AutoOrganizer
 		visited.remove(root); //allow multiple converging paths
 		return maxHeight+1;
 	}
+
+	private ArgumentThread organizeThread(ArgumentThread thread)
+	{
+		for (LinkedBox startBox : thread.getBoxes())
+		{
+			//startBox.setGridPosition(0,0);
+			//thread.getGrid().organizeGrid(startBox);
+		}
+
+		return thread;
+	}
 	
 	/* UNDER DEVELOPMENT
 	 * Calculates the coordinates for each box in an argument thread
@@ -403,12 +417,94 @@ public class AutoOrganizer
 			recentralizeParent(box, xCoords);
 	}
 
+	public void organizeMap()
+	{
+		try
+		{
+			Logger.log("Entered organizeMap", Logger.DEBUG);
+
+			ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
+			for (ArgumentThread argThread : argModel.getArgThreads())
+			{
+				argThread.getGrid().organizeGrid();
+			}
+
+			int numThreads = argModel.getArgThreads().size();
+			HashMap<Integer, ArgumentThread> threadsIndexed = new HashMap<Integer, ArgumentThread>();
+
+			int threadCount = 0;
+			for (ArgumentThread argThread : argModel.getArgThreads())
+			{
+				threadsIndexed.put(new Integer(threadCount), argThread);
+				threadCount++;
+			}
+
+			int maxHeight = Integer.MIN_VALUE;
+			int maxWidth = Integer.MIN_VALUE;
+			for (ArgumentThread argThread : argModel.getArgThreads())
+			{
+				for (LinkedBox box : argThread.getBoxes())
+				{
+					if (box.getHeight() > maxHeight)
+					{
+						maxHeight = box.getHeight();
+					}
+
+					if (box.getWidth() > maxWidth)
+					{
+						maxWidth = box.getWidth();
+					}
+				}
+			}
+
+			int half = threadCount / 2;
+			int gridOffsetWidth = 0;
+
+			int totalModelWidth = 0;
+			int totalModelHeight = 0;
+			for (ArgumentThread thread : argModel.getArgThreads())
+			{
+				totalModelWidth += thread.getGrid().getMaxX();
+				totalModelHeight += thread.getGrid().getMaxY();
+			}
+
+			final int START_X = CENTER_X - (totalModelWidth * maxWidth) / 2;
+			final int START_Y = CENTER_Y - (totalModelHeight * maxHeight) / 2;
+
+			for (int counter = 0; counter < threadCount; counter++)
+			{
+				ThreadGrid grid = threadsIndexed.get(counter).getGrid();
+				int maxHeightLevel = grid.getMaxY();
+				for (LinkedBox box : grid.getBoxes())
+				{
+					sendUpdatePositionToServer(box, START_X + gridOffsetWidth + box.getWidthLevel() * (maxWidth), START_Y + box.getHeightLevel() * (maxHeight));
+				}
+
+				gridOffsetWidth += grid.getMaxX();
+			}
+
+			Logger.log("Exiting organizeMap", Logger.DEBUG);
+		}
+		catch (Exception e)
+		{
+			Logger.log("EXCEPTION THROWN", Logger.DEBUG);
+			Logger.log("toSTRING: " + e.toString(), Logger.DEBUG);
+			Logger.log("MESSAGE: " + e.getMessage(), Logger.DEBUG);
+			Logger.log("STACK TRACE", Logger.DEBUG);
+			for (StackTraceElement stackFrame : e.getStackTrace())
+			{
+				Logger.log(stackFrame.toString(), Logger.DEBUG);
+			}
+		}
+	}
+
 	/**
 	 * UNDER DEVELOPMENT
 	 * Organizes the map from bottom to top: Root "parents" start at the bottom, leading the way to children above.
 	 * "sibling" boxes (i.e. boxes attached via group links) are placed adjacently.
 	 */
-	public void organizeMap()
+	/*
+	public void organizeMap(Object toShutTheCompilerUpWhileSimulatenouslyNotDeletingDarlansCodeAndInTheProcessCreatingALongVariableName)
 	{	
 		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Running AutoOrganizer...", Logger.DEBUG);
 
@@ -491,6 +587,7 @@ public class AutoOrganizer
 				if(yCoords.get(init-1) > yMax) yMax = yCoords.get(init-1);
 			*/
 			//xCoord = newXCoord;
+				/*
 		}
 		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Going to update positions...", Logger.DEBUG);
 		int i = 0;
@@ -507,6 +604,7 @@ public class AutoOrganizer
 		Logger.log("[lasad.gwt.client.communication.AutoOrganizer][run] Positions updated...", Logger.DEBUG);
 
 	}
+	*/
 
 	/**
 	 * UNDER DEVELOPMENT

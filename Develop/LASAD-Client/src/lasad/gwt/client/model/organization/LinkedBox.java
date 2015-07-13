@@ -3,6 +3,7 @@ package lasad.gwt.client.model.organization;
 import java.util.HashSet;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.logger.Logger;
+import lasad.gwt.client.model.organization.Coordinate;
 
 /**
  * LinkedBox is an alternative representation to AbstractBox, more conducive for map organization and modeling.  Each LinkedBox has its boxID
@@ -237,7 +238,8 @@ public class LinkedBox
 	// intialize currentBox as this and accumulated should be empty; RECURSIVE
 	private HashSet<LinkedBox> findThisAndExtendedSiblings(LinkedBox currentBox, HashSet<LinkedBox> accumulated)
 	{
-		//Logger.log("Entered findThisAndExtendedSiblings", Logger.DEBUG);
+
+		Logger.log("Entered findThisAndExtendedSiblings", Logger.DEBUG);
 		if (!accumulated.contains(currentBox))
 		{
 			accumulated.add(currentBox);
@@ -246,7 +248,7 @@ public class LinkedBox
 				accumulated = findThisAndExtendedSiblings(siblingBox, accumulated);
 			}
 		}
-
+		Logger.log("Returning from findThisAndExtendedSiblings", Logger.DEBUG);
 		return accumulated;
 	}
 
@@ -335,6 +337,17 @@ public class LinkedBox
 	public int getWidthLevel()
 	{
 		return widthLevel;
+	}
+
+	public Coordinate getGridPosition()
+	{
+		return new Coordinate(this.getWidthLevel(), this.getHeightLevel());
+	}
+
+	public void setGridPosition (int x, int y)
+	{
+		this.widthLevel = x;
+		this.heightLevel = y;
 	}
 
 	/**
