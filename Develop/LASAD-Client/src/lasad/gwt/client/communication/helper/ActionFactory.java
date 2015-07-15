@@ -589,6 +589,15 @@ public class ActionFactory {
 		return resultingActions;
 	}
 
+	public ActionPackage centerMap(String mapID)
+	{
+		ActionPackage p = new ActionPackage();
+		Action a = new Action(Commands.CenterMap, Categories.Map);
+		a.addParameter(ParameterTypes.MapId, mapID);
+		p.addAction(a);
+		return p;
+	}
+
 	public ActionPackage createLogin(String username, String pw, boolean pwencrypted) {
 		ActionPackage p = new ActionPackage();
 		Action a = new Action(Commands.Login, Categories.Management);

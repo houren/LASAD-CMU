@@ -421,12 +421,14 @@ public class AutoOrganizer
 	{
 		try
 		{
+			boolean isOrganizeTopToBottom = map.getMyViewSession().getController().getMapInfo().isOrganizeTopToBottom();
 			Logger.log("Entered organizeMap", Logger.DEBUG);
 
 			ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
 			for (ArgumentThread argThread : argModel.getArgThreads())
 			{
-				argThread.getGrid().organizeGrid();
+				// Because this is recursive we only need first box, then can break; boxes will now be on grid
+				argThread.organizeGrid(isOrganizeTopToBottom);
 			}
 
 			int numThreads = argModel.getArgThreads().size();
@@ -443,7 +445,7 @@ public class AutoOrganizer
 			int maxWidth = Integer.MIN_VALUE;
 			for (ArgumentThread argThread : argModel.getArgThreads())
 			{
-				for (LinkedBox box : argThread.getBoxes())
+				for (LinkedBox box : argThread.getGrid())
 				{
 					if (box.getHeight() > maxHeight)
 					{
@@ -464,24 +466,33 @@ public class AutoOrganizer
 			int totalModelHeight = 0;
 			for (ArgumentThread thread : argModel.getArgThreads())
 			{
-				totalModelWidth += thread.getGrid().getMaxX();
-				totalModelHeight += thread.getGrid().getMaxY();
+				totalModelWidth += thread.getMaxWidthLevelOnGrid();
+				totalModelHeight += thread.getMaxHeightLevelOnGrid();
 			}
 
 			final int START_X = CENTER_X - (totalModelWidth * maxWidth) / 2;
-			final int START_Y = CENTER_Y - (totalModelHeight * maxHeight) / 2;
+			final int START_Y = CENTER_Y + (totalModelHeight * maxHeight) / 2;
+
+			Logger.log("maxWidth: " + maxWidth, Logger.DEBUG);
+			Logger.log("maxHeight: " + maxHeight, Logger.DEBUG);
+			Logger.log("startX: " + START_X, Logger.DEBUG);
+			Logger.log("startY: " + START_Y, Logger.DEBUG);
 
 			for (int counter = 0; counter < threadCount; counter++)
 			{
-				ThreadGrid grid = threadsIndexed.get(counter).getGrid();
-				int maxHeightLevel = grid.getMaxY();
-				for (LinkedBox box : grid.getBoxes())
+				ArgumentThread thread = threadsIndexed.get(counter);
+				int maxHeightLevel = thread.getMaxHeightLevelOnGrid();
+				for (LinkedBox box : thread.getGrid())
 				{
-					sendUpdatePositionToServer(box, START_X + gridOffsetWidth + box.getWidthLevel() * (maxWidth), START_Y + box.getHeightLevel() * (maxHeight));
+					Logger.log("boxWidthLevel: " + box.getWidthLevel() + "; boxHeightLevel: " + box.getHeightLevel(), Logger.DEBUG);
+					sendUpdatePositionToServer(box, START_X + gridOffsetWidth + box.getWidthLevel() * maxWidth, START_Y - box.getHeightLevel() * (maxHeight));
 				}
 
-				gridOffsetWidth += grid.getMaxX();
+				gridOffsetWidth += thread.getMaxWidthLevelOnGrid();
+				Logger.log("counter: " + counter, Logger.DEBUG);
 			}
+
+			sendCenterMapToServer(map.getID());
 
 			Logger.log("Exiting organizeMap", Logger.DEBUG);
 		}
@@ -909,6 +920,12 @@ public class AutoOrganizer
 	private void sendUpdatePositionToServer(LinkedBox box, int x, int y)
 	{
 		communicator.sendActionPackage(actionBuilder.updateBoxPosition(map.getID(), box.getBoxID(), x, y));
+	}
+
+	private void sendCenterMapToServer(String mapID)
+	{
+		communicator.sendActionPackage(actionBuilder.centerMap(mapID));
+		Logger.log("Sent centerMap to server", Logger.DEBUG);
 	}
 
 	/*

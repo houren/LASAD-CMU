@@ -5,6 +5,7 @@ public enum Commands{
 	AddTemplateToList("AddTemplateToList"),
 	AddUserToList("AddUserToList"),
 	AuthoringFailed("AuthoringFailed"),
+	CenterMap("CenterMap"),
 	ConfirmationRequest("ConfirmationRequest"),
 	DeleteElement("DeleteElement"),
 	DeleteMapFromList("DeleteMapFromList"),

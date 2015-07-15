@@ -747,7 +747,13 @@ public class LASADActionReceiver {
 					
 					controller.updateElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)), a.getParameters());
 				}
-			} else if (a.getCmd().equals(Commands.UpdateCursorPosition)) {
+			}
+			else if (a.getCmd().equals(Commands.CenterMap))
+			{
+				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] CENTER-MAP", Logger.DEBUG);
+				this.centerMap(a);
+			}
+			else if (a.getCmd().equals(Commands.UpdateCursorPosition)) {
 
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] UPDATE-CURSOR-POSITION", Logger.DEBUG);
 				Logger.log(a.toString(), Logger.DEBUG_DETAILS);
@@ -1105,7 +1111,13 @@ public class LASADActionReceiver {
 					controller.updateElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)), a.getParameters());
 				}
 
-			} else if (a.getCmd().equals(Commands.UpdateCursorPosition)) {
+			}
+			else if (a.getCmd().equals(Commands.CenterMap))
+			{
+				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] CENTER-MAP", Logger.DEBUG);
+				this.centerMap(a);
+			}
+			else if (a.getCmd().equals(Commands.UpdateCursorPosition)) {
 
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] UPDATE-CURSOR-POSITION", Logger.DEBUG);
 				Logger.log(a.toString(), Logger.DEBUG_DETAILS);

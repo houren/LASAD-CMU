@@ -36,4 +36,25 @@ public class Coordinate
 	{
 		return y;
 	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (o instanceof Coordinate)
+		{
+			Coordinate oAsCoord = (Coordinate) o;
+			if (oAsCoord.getX() == this.getX() && oAsCoord.getY() == this.getY())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

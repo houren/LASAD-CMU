@@ -19,11 +19,11 @@ public class LinkedBox
 	private final int ERROR = -1;
 
 	// I.e. premise, conclusion, etc.
-	private final String type;
+	private String type;
 
 	// Be mindful of difference between boxID and rootID.
-	private final int boxID;
-	private final int rootID;
+	private int boxID;
+	private int rootID;
 
 	private int width;
 	private int height;
@@ -76,7 +76,7 @@ public class LinkedBox
 	}
 
 	// I don't want people to use the default constructor because this LinkedBox needs definitive IDs.  This just quiets the compiler.
-	private LinkedBox()
+	public LinkedBox()
 	{
 		this.boxID = ERROR;
 		this.rootID = ERROR;
@@ -329,6 +329,16 @@ public class LinkedBox
 		this.widthLevel = widthLevel;
 	}
 
+	public void incWidthLevel()
+	{
+		this.widthLevel++;
+	}
+
+	public void decWidthLevel()
+	{
+		this.widthLevel--;
+	}
+
 	public int getHeightLevel()
 	{
 		return heightLevel;
@@ -344,10 +354,16 @@ public class LinkedBox
 		return new Coordinate(this.getWidthLevel(), this.getHeightLevel());
 	}
 
-	public void setGridPosition (int x, int y)
+	public void setGridPosition(int x, int y)
 	{
 		this.widthLevel = x;
 		this.heightLevel = y;
+	}
+
+	public void setGridPosition(Coordinate coord)
+	{
+		this.widthLevel = coord.getX();
+		this.heightLevel = coord.getY();
 	}
 
 	/**
@@ -623,5 +639,79 @@ public class LinkedBox
 			}
 		}
 		return true;
+	}
+
+	public void setChildLinks(HashSet<OrganizerLink> childLinks)
+	{
+		this.childLinks = childLinks;
+	}
+
+	public void setParentLinks(HashSet<OrganizerLink> parentLinks)
+	{
+		this.parentLinks = parentLinks;
+	}
+
+	public void setSiblingLinks(HashSet<OrganizerLink> siblingLinks)
+	{
+		this.siblingLinks = siblingLinks;
+	}
+
+	public void setChildBoxes(HashSet<LinkedBox> childBoxes)
+	{
+		this.childBoxes = childBoxes;
+	}
+
+	public void setParentBoxes(HashSet<LinkedBox> parentBoxes)
+	{
+		this.parentBoxes = parentBoxes;
+	}
+
+	public void setSiblingBoxes(HashSet<LinkedBox> siblingBoxes)
+	{
+		this.siblingBoxes = siblingBoxes;
+	}
+
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+
+	public void setBoxID(int boxID)
+	{
+		this.boxID = boxID;
+	}
+
+	public void setRootID(int rootID)
+	{
+		this.rootID = rootID;
+	}
+
+	public void setCanBeGrouped(boolean canBeGrouped)
+	{
+		this.canBeGrouped = canBeGrouped;
+	}
+
+	public LinkedBox clone()
+	{
+		LinkedBox clone = new LinkedBox();
+		clone.setBoxID(this.boxID);
+		clone.setRootID(this.rootID);
+		clone.setType(this.type);
+		clone.setXLeft(this.xLeft);
+		clone.setYTop(this.yTop);
+		clone.setWidth(this.width);
+		clone.setHeight(this.height);
+		clone.setXCenter(this.xCenter);
+		clone.setYCenter(this.yCenter);
+		clone.setChildLinks(this.childLinks);
+		clone.setParentLinks(this.parentLinks);
+		clone.setSiblingLinks(this.siblingLinks);
+		clone.setChildBoxes(this.childBoxes);
+		clone.setParentBoxes(this.parentBoxes);
+		clone.setSiblingBoxes(this.siblingBoxes);
+		clone.setHeightLevel(this.heightLevel);
+		clone.setWidthLevel(this.widthLevel);
+		clone.setCanBeGrouped(this.canBeGrouped);
+		return clone;
 	}
 }

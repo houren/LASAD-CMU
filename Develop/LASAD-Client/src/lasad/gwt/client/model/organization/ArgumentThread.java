@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.HashSet;
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.OrganizerLink;
-import lasad.gwt.client.model.organization.ThreadGrid;
 import java.util.Collection;
 import lasad.gwt.client.logger.Logger;
+import lasad.gwt.client.model.organization.Coordinate;
 
 /**
  *	An argument thread is a connected chain of boxes on the argument map space.
@@ -18,6 +18,8 @@ import lasad.gwt.client.logger.Logger;
 
 public class ArgumentThread
 {
+	private final int SPACE = 2;
+
 	private static int numThreads = 0;
 	// HashMap allows for constant lookup time by BoxID
 	private HashMap<Integer, LinkedBox> boxMap;
@@ -27,35 +29,29 @@ public class ArgumentThread
 
 	private int threadID;
 
-	private ThreadGrid grid;
+	private HashSet<LinkedBox> grid;
 
 	public ArgumentThread()
 	{
 		this.boxMap = new HashMap<Integer, LinkedBox>();
 		numThreads++;
 		this.threadID = numThreads;
-		this.grid = new ThreadGrid(this);
+		this.grid = new HashSet<LinkedBox>();
 	}
 
 	public ArgumentThread(LinkedBox box)
 	{
-		this.boxMap = new HashMap<Integer, LinkedBox>();
-		this.boxMap.put(new Integer(box.getBoxID()), box);
-		numThreads++;
-		this.threadID = numThreads;
-		this.grid = new ThreadGrid(this);
+		this();
+		this.addBox(box);
 	}
 
 	public ArgumentThread(Collection<LinkedBox> boxes)
 	{
-		this.boxMap = new HashMap<Integer, LinkedBox>();
+		this();
 		for (LinkedBox box : boxes)
 		{
-			addBox(box);
+			this.addBox(box);
 		}
-		numThreads++;
-		this.threadID = numThreads;
-		this.grid = new ThreadGrid(this);
 	}
 
 	public Collection<LinkedBox> getBoxes()
@@ -63,7 +59,7 @@ public class ArgumentThread
 		return boxMap.values();
 	}
 
-	public ThreadGrid getGrid()
+	public HashSet<LinkedBox> getGrid()
 	{
 		return grid;
 	}
@@ -77,7 +73,6 @@ public class ArgumentThread
 		else
 		{
 			boxMap.put(new Integer(box.getBoxID()), box);
-			grid.addBox(box);
 		}
 	}
 
@@ -98,7 +93,6 @@ public class ArgumentThread
 			toRemove.removeLinksToSelf();
 			Integer boxIntID = new Integer(boxID);
 			LinkedBox returnValue = boxMap.remove(boxIntID);
-			grid.removeBox(toRemove);
 			return returnValue;
 		}
 		else
@@ -471,6 +465,544 @@ public class ArgumentThread
 	public static void decNumThreads()
 	{
 		numThreads--;
+	}
+
+	public void organizeGrid(final boolean isOrganizeTopToBottom)
+	{
+		grid.clear();
+		for (LinkedBox box : this.getBoxes())
+		{
+			organizeGridRecursive(box, 0, 0, new HashSet<LinkedBox>(), isOrganizeTopToBottom);
+			break;
+		}
+
+		/*HashMap<Integer, HashSet<LinkedBox>> boxesByHeightLevel = sortByHeightLevel(grid);
+
+		int rootLevel;
+		int minLevel = Integer.MAX_VALUE;;
+		int maxLevel = Integer.MIN_VALUE;;
+
+		for (Integer i : boxesByHeightLevel.keySet())
+		{
+			if (i < minLevel)
+			{
+				minLevel = i;
+			}
+
+			if (i > maxLevel)
+			{
+				maxLevel = i;
+			}
+		}
+
+		if (isOrganizeTopToBottom)
+		{
+			rootLevel = maxLevel;
+		}
+		else
+		{
+			rootLevel = minLevel;
+		}
+
+		int range = maxLevel - minLevel + 1;
+
+		for (int counter = 0; counter < range; counter++)
+		{
+			centerChildrenOfGroups(boxesByHeightLevel.get(rootLevel));
+
+			if (isOrganizeTopToBottom)
+			{
+				rootLevel--;
+			}
+			else
+			{
+				rootLevel++;
+			}
+		}*/
+	}
+/*
+	public HashMap<Integer, HashSet<LinkedBox>> sortByHeightLevel(HashSet<LinkedBox> myGrid)
+	{
+		int minHeightLevel = Integer.MAX_VALUE;
+		int maxHeightLevel = Integer.MIN_VALUE;
+
+		for (LinkedBox box : myGrid)
+		{
+			if (box.getHeightLevel() < minHeightLevel)
+			{
+				minHeightLevel = box.getHeightLevel();
+			}
+
+			if (box.getHeightLevel() > maxHeightLevel)
+			{
+				maxHeightLevel = box.getHeightLevel();
+			}
+		}
+
+		HashMap<Integer, HashSet<LinkedBox>> toReturn = new HashMap<Integer, HashSet<LinkedBox>>();
+
+		for (int counter = minHeightLevel; counter <= maxHeightLevel; counter++)
+		{
+			HashSet<LinkedBox> boxesInLevel = new HashSet<LinkedBox>();
+			for (LinkedBox box : myGrid)
+			{
+				if (box.getHeightLevel() == counter)
+				{
+					boxesInLevel.add(box);
+				}
+			}
+
+			toReturn.put(new Integer(counter), boxesInLevel);
+		}
+
+		return toReturn;
+	}
+
+	public void centerChildrenOfGroups(Collection<LinkedBox> boxesAtLevel)
+	{
+		if (!visited.contains(box))
+		{
+			int groupSize = box.getThisAndExtendedSiblings().size();
+			HashSet<LinkedBox> children = box.getChildBoxes();
+			int numChildren = box.getNumChildren();
+
+			for (LinkedBox child : children)
+			{
+				shiftHeightLevelAndAbove(child, );
+				break;
+			}
+		}
+		for (LinkedBox box :)
+	}
+*/
+	private void organizeGridRecursive(LinkedBox box, final int widthLevel, final int heightLevel, HashSet<LinkedBox> visited, final boolean isOrganizeTopToBottom)
+	{
+		if (!visited.contains(box))
+		{
+			visited.add(box);
+
+			LinkedBox boxAlreadyOnGrid = this.getBoxOnGrid(box);
+
+			if (boxAlreadyOnGrid == null)
+			{
+				Logger.log("The following box was not on the grid..." + box.toStringShort(), Logger.DEBUG);
+				box.setGridPosition(widthLevel, heightLevel);
+
+				if (box.getNumSiblings() == 0)
+				{
+					putSoloBoxOnGrid(box);
+				}
+				else
+				{
+					putGroupOnGrid(sortGroup(box.getThisAndExtendedSiblings(), box.getWidthLevel(), box.getHeightLevel()));
+				}
+			}
+			else
+			{
+				Logger.log("The following box was aleady on the grid..." + box.toStringShort(), Logger.DEBUG);
+				box.setGridPosition(boxAlreadyOnGrid.getGridPosition());
+			}
+
+			for (LinkedBox child : box.getChildBoxes())
+			{
+				if (isOrganizeTopToBottom)
+				{
+					organizeGridRecursive(child, box.getWidthLevel(), box.getHeightLevel() - SPACE, visited, isOrganizeTopToBottom);
+				}
+				else
+				{
+					organizeGridRecursive(child, box.getWidthLevel(), box.getHeightLevel() + SPACE, visited, isOrganizeTopToBottom);	
+				}
+			}
+
+			for (LinkedBox parent : box.getParentBoxes())
+			{
+				if (isOrganizeTopToBottom)
+				{
+					organizeGridRecursive(parent, box.getWidthLevel(), box.getHeightLevel() + SPACE, visited, isOrganizeTopToBottom);
+				}
+				else
+				{
+					organizeGridRecursive(parent, box.getWidthLevel(), box.getHeightLevel() - SPACE, visited, isOrganizeTopToBottom);	
+				}
+			}
+		}
+	}
+
+	public HashSet<LinkedBox> sortGroup(HashSet<LinkedBox> group, int origWidthLevel, int origHeightLevel)
+	{
+		int groupSize = group.size();
+
+		LinkedBox original = null;
+		for (LinkedBox box : group)
+		{
+			if (box.getGridPosition().equals(new Coordinate(origWidthLevel, origHeightLevel)))
+			{
+				original = box.clone();
+				group.remove(box);
+			}
+		}
+
+		if (original == null)
+		{
+			Logger.log("original was null", Logger.DEBUG);
+			return group;
+		}
+
+		boolean needFirstEnd = true;
+		int farthestLeftLevel = origWidthLevel - groupSize + 1;
+
+		if (original.getNumSiblings() == 1)
+		{
+			farthestLeftLevel = origWidthLevel;
+			needFirstEnd = false;
+		}
+
+		int farthestRightLevel = (groupSize - 1) * SPACE + farthestLeftLevel;
+
+		int counter = 1;
+
+		for (LinkedBox box : group)
+		{
+			if (box.getNumSiblings() == 1)
+			{
+				if (needFirstEnd)
+				{
+					box.setGridPosition(farthestLeftLevel, origHeightLevel);
+				}
+				else
+				{
+					box.setGridPosition(farthestRightLevel, origHeightLevel);
+				}
+			}
+			else
+			{
+				int levelToSet = farthestLeftLevel + counter * SPACE;
+				if (levelToSet == origWidthLevel)
+				{
+					box.setGridPosition(levelToSet + SPACE, origHeightLevel);
+					counter += 2;
+				}
+				else
+				{
+					box.setGridPosition(levelToSet, origHeightLevel);
+					counter++;
+				}
+			}
+		}
+
+		group.add(original);
+		return group;
+	}
+
+	public int getMaxWidthLevelOnGrid()
+	{
+		Logger.log("Entered getMaxX", Logger.DEBUG);
+		int maxX = Integer.MIN_VALUE;
+
+		for (LinkedBox box : grid)
+		{
+			Coordinate coordinate = box.getGridPosition();
+			if (coordinate.getX() > maxX)
+			{
+				maxX = coordinate.getX();
+			}
+		}
+		Logger.log("Exiting getMaxX", Logger.DEBUG);
+		return maxX;
+	}
+
+	public int getMaxHeightLevelOnGrid()
+	{
+		Logger.log("Entered getMaxY", Logger.DEBUG);
+		int maxY = Integer.MIN_VALUE;
+
+		for (LinkedBox box : grid)
+		{
+			Coordinate coordinate = box.getGridPosition();
+			if (coordinate.getY() > maxY)
+			{
+				maxY = coordinate.getY();
+			}
+		}
+		Logger.log("Exiting getMaxY", Logger.DEBUG);
+		return maxY;
+	}
+
+	public HashSet<LinkedBox> getBoxesOnGridAtHeightLevel(int heightLevel)
+	{
+		HashSet boxesAtHeightLevel = new HashSet<LinkedBox>();
+		for (LinkedBox box : grid)
+		{
+			if (box.getHeightLevel() == heightLevel)
+			{
+				boxesAtHeightLevel.add(box);
+			}
+		}
+
+		return boxesAtHeightLevel;
+	}
+
+	public LinkedBox makeRoomFor(LinkedBox box, boolean boxWasThere)
+	{
+		int widthLevel = box.getWidthLevel();
+		int heightLevel = box.getHeightLevel();
+
+		for (LinkedBox boxOnGrid : getBoxesOnGridAtHeightLevel(heightLevel))
+		{
+			int thisWidthLevel = boxOnGrid.getWidthLevel();
+			HashSet<LinkedBox> thisAndExtended = boxOnGrid.getThisAndExtendedSiblings();
+
+			int farthestLeftLevel = Integer.MAX_VALUE;
+			int farthestRightLevel = Integer.MIN_VALUE;
+
+			if (thisAndExtended.size() > 1)
+			{
+				for (LinkedBox groupedBox : thisAndExtended)
+				{
+					if (thisWidthLevel < farthestLeftLevel)
+					{
+						farthestLeftLevel = thisWidthLevel;
+					}
+
+					if (thisWidthLevel > farthestRightLevel)
+					{
+						farthestRightLevel = thisWidthLevel;
+					}
+				}
+
+				// If an interesting group was there, set the box to the right edge of the group and reput it on the grid
+				if (widthLevel >= farthestLeftLevel && widthLevel < farthestRightLevel)
+				{
+					box.setWidthLevel(farthestRightLevel);
+					return putSoloBoxOnGrid(box);
+				}
+			}
+		}
+
+		// If we made it this far, there was no intersecting group so we may proceed normally
+		for (LinkedBox boxOnGrid : grid)
+		{
+			if (boxOnGrid.getWidthLevel() > widthLevel)
+			{
+				boxOnGrid.incWidthLevel();
+			}
+			else
+			{
+				boxOnGrid.decWidthLevel();
+			}
+		}
+
+		if (boxWasThere)
+		{
+			box.incWidthLevel();
+		}
+
+		return box;
+	}
+
+	public HashSet<LinkedBox> makeRoomFor(HashSet<LinkedBox> group, boolean boxWasThere, int groupFarthestLeftLevel, int groupFarthestRightLevel)
+	{
+		for (LinkedBox box : group)
+		{
+			for (LinkedBox boxOnGrid : getBoxesOnGridAtHeightLevel(box.getHeightLevel()))
+			{
+				HashSet<LinkedBox> thisAndExtended = boxOnGrid.getThisAndExtendedSiblings();
+
+				if (thisAndExtended.size() > 1)
+				{
+					int farthestLeftLevel = Integer.MAX_VALUE;
+					int farthestRightLevel = Integer.MIN_VALUE;
+
+					for (LinkedBox groupedBox : thisAndExtended)
+					{
+						int thisWidthLevel = groupedBox.getWidthLevel();
+						if (thisWidthLevel < farthestLeftLevel)
+						{
+							farthestLeftLevel = thisWidthLevel;
+						}
+
+						if (thisWidthLevel > farthestRightLevel)
+						{
+							farthestRightLevel = thisWidthLevel;
+						}
+					}
+
+					// If an interesting group was there, move the boxes to the right edge of the group and farther and reput it on the grid
+					if (groupFarthestLeftLevel >= farthestLeftLevel && groupFarthestRightLevel <= farthestRightLevel)
+					{
+						for (LinkedBox boxToShift : group)
+						{
+							boxToShift.setWidthLevel(boxToShift.getWidthLevel() - groupFarthestLeftLevel + farthestRightLevel);
+						}
+
+						return putGroupOnGrid(group);
+					}
+				}
+			}
+
+			break;
+		}
+
+		// If we've made it this far, there's no intersecting group and we can proceed normally
+		for (LinkedBox boxOnGrid : grid)
+		{
+			if (boxOnGrid.getWidthLevel() > groupFarthestRightLevel)
+			{
+				boxOnGrid.incWidthLevel();	
+			}
+			else
+			{
+				boxOnGrid.setWidthLevel(boxOnGrid.getWidthLevel() - groupFarthestLeftLevel);
+				boxOnGrid.decWidthLevel();
+			}
+		}
+
+		if (boxWasThere)
+		{
+			for (LinkedBox box : group)
+			{
+				box.incWidthLevel();
+			}
+		}
+
+		return group;
+	}
+
+	private void putBoxOnGridFromGroup(LinkedBox box)
+	{
+		grid.add(box);
+	}
+
+	public LinkedBox putSoloBoxOnGrid(LinkedBox box)
+	{
+		if (this.getBoxOnGridAt(box.getGridPosition()) == null)
+		{
+			if ((this.getBoxOnGridAt(box.getWidthLevel() + 1, box.getHeightLevel()) != null) || (this.getBoxOnGridAt(box.getWidthLevel() - 1, box.getHeightLevel()) != null))
+			{
+				box = this.makeRoomFor(box, false);
+			}
+		}
+		else
+		{
+			box = this.makeRoomFor(box, true);
+		}
+
+		grid.add(box);
+		return box;
+
+	}
+
+	public HashSet<LinkedBox> putGroupOnGrid(HashSet<LinkedBox> group)
+	{
+		boolean foundBoxInTheWay = false;
+		int farthestLeftLevel = Integer.MAX_VALUE;
+		int farthestRightLevel = Integer.MIN_VALUE;
+		int thisWidthLevel = 0;
+
+		for (LinkedBox box : group)
+		{
+			thisWidthLevel = box.getWidthLevel();
+
+			if (thisWidthLevel < farthestLeftLevel)
+			{
+				farthestLeftLevel = thisWidthLevel;
+			}
+
+			if (thisWidthLevel > farthestRightLevel)
+			{
+				farthestRightLevel = thisWidthLevel;
+			}
+
+			if (this.getBoxOnGridAt(box.getGridPosition()) != null)
+			{
+				foundBoxInTheWay = true;
+			}
+		}
+
+		if (foundBoxInTheWay)
+		{
+			group = this.makeRoomFor(group, true, farthestLeftLevel, farthestRightLevel);
+
+			for (LinkedBox box : group)
+			{
+				putBoxOnGridFromGroup(box);
+			}
+		}
+		else
+		{
+			// Just getting height level from first box for check
+			for (LinkedBox box : group)
+			{
+				if ((this.getBoxOnGridAt(farthestLeftLevel - 1, box.getHeightLevel()) != null) || (this.getBoxOnGridAt(farthestRightLevel + 1, box.getHeightLevel()) != null))
+				{
+					foundBoxInTheWay = true;
+				}
+				break;
+			}
+
+			if (!foundBoxInTheWay)
+			{
+				for (LinkedBox box : group)
+				{
+					putBoxOnGridFromGroup(box);
+				}
+			}
+			else
+			{
+				group = this.makeRoomFor(group, false, farthestLeftLevel, farthestRightLevel);
+
+				for (LinkedBox box : group)
+				{
+					putBoxOnGridFromGroup(box);
+				}
+			}
+		}
+
+		return group;
+	}
+
+	public LinkedBox getBoxOnGridAt(Coordinate location)
+	{
+		LinkedBox returnBox = null;
+		for (LinkedBox box : grid)
+		{
+			if (box.getGridPosition().equals(location))
+			{
+				returnBox = box;
+				break;
+			}
+		}
+		return returnBox;
+	}
+
+	public LinkedBox getBoxOnGridAt(int widthLevel, int heightLevel)
+	{
+		Coordinate searchCoord = new Coordinate(widthLevel, heightLevel);
+		LinkedBox returnBox = null;
+		for (LinkedBox box : grid)
+		{
+			if (box.getGridPosition().equals(searchCoord))
+			{
+				returnBox = box;
+				break;
+			}
+		}
+		return returnBox;
+	}
+
+	public LinkedBox getBoxOnGrid(LinkedBox boxToFind)
+	{
+		LinkedBox returnBox = null;
+		for (LinkedBox box : grid)
+		{
+			if (box.equals(boxToFind))
+			{
+				returnBox = box;
+				break;
+			}
+		}
+		return returnBox;
 	}
 
 	@Override
