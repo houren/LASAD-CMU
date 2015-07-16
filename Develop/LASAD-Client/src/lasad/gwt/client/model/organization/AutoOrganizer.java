@@ -484,6 +484,7 @@ public class AutoOrganizer
 				int maxHeightLevel = thread.getMaxHeightLevelOnGrid();
 				for (LinkedBox box : thread.getGrid())
 				{
+					Logger.log(box.toStringShort(), Logger.DEBUG);
 					Logger.log("boxWidthLevel: " + box.getWidthLevel() + "; boxHeightLevel: " + box.getHeightLevel(), Logger.DEBUG);
 					sendUpdatePositionToServer(box, START_X + gridOffsetWidth + box.getWidthLevel() * maxWidth, START_Y - box.getHeightLevel() * (maxHeight));
 				}

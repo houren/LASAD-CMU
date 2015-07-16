@@ -238,8 +238,6 @@ public class LinkedBox
 	// intialize currentBox as this and accumulated should be empty; RECURSIVE
 	private HashSet<LinkedBox> findThisAndExtendedSiblings(LinkedBox currentBox, HashSet<LinkedBox> accumulated)
 	{
-
-		Logger.log("Entered findThisAndExtendedSiblings", Logger.DEBUG);
 		if (!accumulated.contains(currentBox))
 		{
 			accumulated.add(currentBox);
@@ -248,7 +246,6 @@ public class LinkedBox
 				accumulated = findThisAndExtendedSiblings(siblingBox, accumulated);
 			}
 		}
-		Logger.log("Returning from findThisAndExtendedSiblings", Logger.DEBUG);
 		return accumulated;
 	}
 
