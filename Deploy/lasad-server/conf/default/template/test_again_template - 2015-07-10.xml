@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<maptemplate uniquename="test_again_template" title="test_again_template" ontology="test_again">
-  <mapdetails>
-    <description />
-    <options maxuser="30" chatsystem="true" listofusers="true" minimap="false" track-cursor="false" selection-details="false" onlyauthorcanmodify="false" committextbyenter="true" straightlink="true" AutoGrowTextArea="false" organizetoptobottom="false" allowlinkstolinks="false" />
-  </mapdetails>
-</maptemplate>
-

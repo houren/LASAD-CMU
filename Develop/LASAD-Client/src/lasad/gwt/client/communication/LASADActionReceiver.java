@@ -596,8 +596,6 @@ public class LASADActionReceiver {
 						Logger.log("width and/or height string(s) are null", Logger.DEBUG);
 					}
 
-					Logger.log("Width: " + widthString + "; Height: " + heightString, Logger.DEBUG);
-
 					int width = Integer.parseInt(widthString);
 					int height = Integer.parseInt(heightString);
 
@@ -659,7 +657,6 @@ public class LASADActionReceiver {
 
 					if (siblingsAlreadyUpdated)
 					{
-						Logger.log("Did not update sibling links", Logger.DEBUG);
 						this.setSiblingsAlreadyUpdated(false);
 					}
 					else
@@ -712,7 +709,8 @@ public class LASADActionReceiver {
 						Logger.log(rootBox.toString(), Logger.DEBUG);
 					}
 				}	
-				*/			
+				*/
+				Logger.log(argModel.toString(), Logger.DEBUG);			
 			}
 			else if (a.getCmd().equals(Commands.UpdateElement)) {
 
@@ -802,7 +800,7 @@ public class LASADActionReceiver {
 							}
 						}
 					}
-
+					Logger.log(argModel.toString(), Logger.DEBUG);	
 					//Logger.log("Arg Model at end of delete:\n" + argModel.toString(), Logger.DEBUG);
 					// End Kevin Loughlin
 
@@ -990,8 +988,6 @@ public class LASADActionReceiver {
 						Logger.log("width and/or height string(s) are null", Logger.DEBUG);
 					}
 
-					Logger.log("Width: " + widthString + "; Height: " + heightString, Logger.DEBUG);
-
 					int width = Integer.parseInt(widthString);
 					int height = Integer.parseInt(heightString);
 
@@ -1053,7 +1049,6 @@ public class LASADActionReceiver {
 
 					if (siblingsAlreadyUpdated)
 					{
-						Logger.log("Did not update sibling links", Logger.DEBUG);
 						this.setSiblingsAlreadyUpdated(false);
 					}
 					else
@@ -1138,7 +1133,7 @@ public class LASADActionReceiver {
 				}
 				catch (Exception e)
 				{
-					Logger.log("Can not delete element, because ELEMENT-ID is no int!", Logger.DEBUG_ERRORS);
+					Logger.log("Can not delete element, because ELEMENT-ID is not int!", Logger.DEBUG_ERRORS);
 				}
 
 				// Kevin Loughlin

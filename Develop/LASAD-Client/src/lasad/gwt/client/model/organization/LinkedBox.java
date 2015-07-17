@@ -159,7 +159,7 @@ public class LinkedBox
 	public void setXCenter(double xCenter)
 	{
 		this.xCenter = xCenter;
-		this.xLeft = this.width / 2.0 - xCenter;
+		this.xLeft = xCenter - this.width / 2.0;
 	}
 
 	public double getYTop()
@@ -181,7 +181,7 @@ public class LinkedBox
 	public void setYCenter(double yCenter)
 	{
 		this.yCenter = yCenter;
-		this.yTop = this.height / 2.0 - yCenter;
+		this.yTop = yCenter - this.height / 2.0;
 	}
 
 	public HashSet<OrganizerLink> getChildLinks()

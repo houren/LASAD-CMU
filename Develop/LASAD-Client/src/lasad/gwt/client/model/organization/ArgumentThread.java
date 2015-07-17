@@ -8,6 +8,7 @@ import lasad.gwt.client.model.organization.OrganizerLink;
 import java.util.Collection;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.organization.Coordinate;
+import lasad.gwt.client.model.organization.IntPair;
 
 /**
  *	An argument thread is a connected chain of boxes on the argument map space.
@@ -72,7 +73,7 @@ public class ArgumentThread
 		}
 		else
 		{
-			boxMap.put(new Integer(box.getBoxID()), box);
+			boxMap.put(box.getBoxID(), box);
 		}
 	}
 
@@ -91,8 +92,7 @@ public class ArgumentThread
 		if (toRemove != null)
 		{
 			toRemove.removeLinksToSelf();
-			Integer boxIntID = new Integer(boxID);
-			LinkedBox returnValue = boxMap.remove(boxIntID);
+			LinkedBox returnValue = boxMap.remove(boxID);
 			return returnValue;
 		}
 		else
@@ -172,8 +172,7 @@ public class ArgumentThread
 
 	public LinkedBox getBoxByBoxID(int boxID)
 	{
-		Integer id = new Integer(boxID);
-		return boxMap.get(id);
+		return boxMap.get(boxID);
 	}
 
 	public LinkedBox getBoxByRootID(int rootID)
@@ -335,40 +334,6 @@ public class ArgumentThread
 	}
 	*/
 
-	class IntPair
-	{
-		int min;
-		int max;
-
-		public IntPair(int min, int max)
-		{
-			this.min = min;
-			this.max = max;
-		}
-
-		public int getMin()
-		{
-			return min;
-		}
-
-		public int getMax()
-		{
-			return max;
-		}
-
-		public int calcRoot(boolean isOrganizeTopToBottom)
-		{
-			if (isOrganizeTopToBottom)
-			{
-				return max;
-			}
-			else
-			{
-				return min;
-			}
-		}
-	}
-
 	public IntPair determineMinMaxHeightLevels()
 	{
 		int minLevel = Integer.MAX_VALUE;
@@ -391,6 +356,31 @@ public class ArgumentThread
 
 		return new IntPair(minLevel, maxLevel);
 	}
+
+	public IntPair determineMinMaxWidthLevels()
+	{
+		int minLevel = Integer.MAX_VALUE;
+		int maxLevel = Integer.MIN_VALUE;
+
+		for (LinkedBox box : grid)
+		{
+			int widthLevel = box.getWidthLevel();
+
+			if (widthLevel < minLevel)
+			{
+				minLevel = widthLevel;
+			}
+
+			if (widthLevel > maxLevel)
+			{
+				maxLevel = widthLevel;
+			}
+		}
+
+		return new IntPair(minLevel, maxLevel);
+	}
+
+
 
 	public void organizeGrid(final boolean isOrganizeTopToBottom)
 	{
@@ -703,6 +693,20 @@ public class ArgumentThread
 		return maxY;
 	}
 
+	public HashSet<LinkedBox> getBoxesOnGridAtWidthLevel(int widthLevel)
+	{
+		HashSet boxesAtWidthLevel = new HashSet<LinkedBox>();
+		for (LinkedBox box : grid)
+		{
+			if (box.getWidthLevel() == widthLevel)
+			{
+				boxesAtWidthLevel.add(box);
+			}
+		}
+
+		return boxesAtWidthLevel;
+	}
+
 	public HashSet<LinkedBox> getBoxesOnGridAtHeightLevel(int heightLevel)
 	{
 		HashSet boxesAtHeightLevel = new HashSet<LinkedBox>();
@@ -715,6 +719,32 @@ public class ArgumentThread
 		}
 
 		return boxesAtHeightLevel;
+	}
+
+	public HashSet<LinkedBox> getBoxesOnGridAtRootLevel(final boolean isOrganizeTopToBottom)
+	{
+		IntPair minMaxLevels = determineMinMaxHeightLevels();
+		if (isOrganizeTopToBottom)
+		{
+			return getBoxesOnGridAtHeightLevel(minMaxLevels.getMax());
+		}
+		else
+		{
+			return getBoxesOnGridAtHeightLevel(minMaxLevels.getMin());
+		}
+	}
+
+	public HashSet<LinkedBox> getBoxesOnGridAtEndLevel(final boolean isOrganizeTopToBottom)
+	{
+		IntPair minMaxLevels = determineMinMaxHeightLevels();
+		if (isOrganizeTopToBottom)
+		{
+			return getBoxesOnGridAtHeightLevel(minMaxLevels.getMin());
+		}
+		else
+		{
+			return getBoxesOnGridAtHeightLevel(minMaxLevels.getMax());
+		}
 	}
 
 	public LinkedBox makeRoomForSoloBox(LinkedBox box, boolean boxWasThere)
@@ -877,6 +907,13 @@ public class ArgumentThread
 			box = this.makeRoomForSoloBox(box, true);
 		}
 
+		LinkedBox boxAlreadyThere = this.getBoxOnGridAt(box.getGridPosition());
+		if (boxAlreadyThere != null)
+		{
+			Logger.log("putGroupOnGrid Error.", Logger.DEBUG);
+			Logger.log(box.toStringShort() + " wants to be placed where " + boxAlreadyThere.toStringShort() + " already is, which is " + box.getWidthLevel() + ", " + box.getHeightLevel(), Logger.DEBUG);
+		}
+
 		grid.add(box);
 
 		return box;
@@ -922,6 +959,16 @@ public class ArgumentThread
 			if (foundBoxInTheWay)
 			{
 				group = this.makeRoomForGroup(group, false, farthestLeftLevel, farthestRightLevel);
+			}
+		}
+
+		for (LinkedBox box : group)
+		{
+			LinkedBox boxAlreadyThere = this.getBoxOnGridAt(box.getGridPosition());
+			if (boxAlreadyThere != null)
+			{
+				Logger.log("putGroupOnGrid Error.", Logger.DEBUG);
+				Logger.log(box.toStringShort() + " wants to be placed where " + boxAlreadyThere.toStringShort() + " already is, which is " + box.getWidthLevel() + ", " + box.getHeightLevel(), Logger.DEBUG);
 			}
 		}
 
