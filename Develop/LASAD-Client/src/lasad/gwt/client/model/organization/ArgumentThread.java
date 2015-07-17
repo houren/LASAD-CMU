@@ -195,90 +195,6 @@ public class ArgumentThread
 		this.removeBoxByBoxID(newBox.getBoxID());
 		this.addBox(newBox);
 	}
-	
-	//identify a cycle
-	// As used, start is initialiazed as the INITIAL currentBox and its siblings
-	/*
-	private boolean isCycle(HashSet<LinkedBox> start, LinkedBox currentBox){
-		if(start.contains(currentBox))
-		{
-			visited.addAll(start);
-			
-			for(LinkedBox box : start)
-			{
-				for(LinkedBox childBox : box.getChildBoxes())
-				{
-					if(isCycle(start, childBox))
-						return true;
-				}
-			}
-		}
-		else
-		{
-			HashSet<LinkedBox> siblings = new HashSet<LinkedBox>(currentBox.getSiblingBoxes());
-			siblings.add(currentBox);
-			
-			for(LinkedBox box : siblings)
-			{
-				for(LinkedBox childBox : box.getChildBoxes())
-				{
-					if(start.contains(childBox)){
-						visited.addAll(siblings);
-						return true;
-					}if(visited.contains(childBox)){
-						return false;
-					}if(isCycle(start, childBox)){
-						visited.addAll(siblings);
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
-	*/
-
-	/*
-	public LinkedBox getRootBox()
-	{
-		HashSet<LinkedBox> potentialRoots = new HashSet<LinkedBox>();
-		LinkedBox lowestBox = new LinkedBox(-1, -1, "", -1.0, Double.MAX_VALUE, -1, -1, false);
-
-		for (LinkedBox box : this.getBoxes())
-		{
-			if (box.getYTop() < lowestBox.getYTop())
-			{
-				lowestBox = box;
-			}
-			if (box.getNumParents() == 0)
-			{
-				potentialRoots.add(box);
-			}	
-		}
-
-		if (potentialRoots.size() == 0)
-		{
-			return lowestBox;
-		}
-		else
-		{
-			return this.getPotentialRootSpanningMostLevels(potentialRoots, new HashSet<LinkedBox>());
-		}
-	}
-	*/
-
-/*
-	private LinkedBox getPotentialRootSpanningMostLevels(HashSet<LinkedBox> potentialRoots, HashSet<LinkedBox> visited)
-	{
-		for(LinkedBox potentialRoot : potentialRoots)
-		{
-			if(!visited.contains(potentialRoot))
-			{
-				getVerticalTraversalDistance(potentialRoot);
-			}
-		}
-	}
-	*/
 
 	class IntAndVisited
 	{
@@ -311,78 +227,6 @@ public class ArgumentThread
 			return myInt;
 		}
 	}
-
-	// RootBoxes are boxes that no have parents, nor do their siblings.  They are useful for a "starting point" when traversing a thread.
-	/*
-	public HashSet<LinkedBox> getRootBoxes()
-	{
-		HashSet<LinkedBox> rootBoxes = new HashSet<LinkedBox>();
-		for (LinkedBox box : boxMap.values())
-		{
-			visited.clear();
-			if (isRoot(box))
-			{
-				rootBoxes.addAll(visited);
-				//break;
-			}
-		}
-		visited.clear();
-		
-		//when the threads has boxes but no root is found, the root is a cycle
-		if(boxMap.values().size() > 0 && rootBoxes.size() == 0)
-		{
-			Logger.log("[lasad.gwt.client.communication.ArgumentThread][run] Starting Cycle detection", Logger.DEBUG);
-			boolean hasParent;
-			HashSet<LinkedBox> start = new HashSet<LinkedBox>();
-			HashSet<LinkedBox> verified = new HashSet<LinkedBox>();
-			
-			for (LinkedBox box : boxMap.values())
-			{
-				hasParent = false;
-				visited.clear();
-				start.clear();
-				start.addAll(box.getSiblingBoxes());
-				start.add(box);
-				if(verified.contains(box))
-					continue;
-				verified.addAll(start);
-				
-				Logger.log("[lasad.gwt.client.communication.ArgumentThread][run] Gonna run isCycle, box: "+box, Logger.DEBUG);
-				if (isCycle(start, box))
-				{
-					LinkedBox root = null;
-					int minParents = Integer.MAX_VALUE;
-					int numParents;
-					Logger.log("[lasad.gwt.client.communication.ArgumentThread][run] Finding the best box to be root", Logger.DEBUG);
-					for(LinkedBox cBox : visited)
-					{
-						numParents = cBox.getParentBoxes().size();
-						for(LinkedBox sibling : cBox.getSiblingBoxes())
-							numParents += sibling.getParentBoxes().size();
-						
-						if(numParents < minParents)
-						{
-							minParents = numParents;
-							root = cBox;
-						}
-					}
-					
-					if(root != null)
-					{
-						rootBoxes.addAll(root.getSiblingBoxes());
-						rootBoxes.add(root);
-						break;
-					}
-					Logger.log("[lasad.gwt.client.communication.ArgumentThread][run] Assigning roots: "+rootBoxes, Logger.DEBUG);
-				}
-			}
-		
-			visited.clear();
-		}
-		
-		return rootBoxes;
-	}
-	*/
 
 	@Override
 	public int hashCode()
@@ -419,52 +263,133 @@ public class ArgumentThread
 		}
 	}
 
-	// Determines if a box is a root box (visited must be cleared before entering this function)
-	/*
-	private boolean isRoot(LinkedBox box)
+	public static void decNumThreads()
 	{
-		if (!findIfBoxHasExtendedParents(box))
-		{
-			return true;
-		}
-		return false;
+		numThreads--;
 	}
-
-	// Recursive method, determines if a box or its siblings has parents (and thus wouldn't be a rootBox);
-	// Visited must be cleared before calling this function
-	private boolean findIfBoxHasExtendedParents(LinkedBox box)
+/*
+	public void fixOverlaps()
 	{
-		if (box.getNumParents() > 0)
+		int rootLevel;
+		int minLevel = Integer.MAX_VALUE;;
+		int maxLevel = Integer.MIN_VALUE;;
+
+		IntPair returnData = determineMinMaxHeightLevels();
+
+		int minLevel = returnData.getMin();
+		int maxLevel = returnData.getMax();
+		int rootLevel = returnData.calcRoot(isOrganizeTopToBottom);
+		int range = maxLevel - minLevel;
+
+		int currentLevel = rootLevel;
+
+		for (int counter = 0; counter <= range; counter++)
 		{
-			return true;
-		}
-		else
-		{
-			if (visited.contains(box))
+			fixRowSpacing(getBoxesOnGridAtHeightLevel(currentLevel));
+
+			if (isOrganizeTopToBottom)
 			{
-				return false;
+				currentLevel--;
 			}
 			else
 			{
-				visited.add(box);
-				HashSet<LinkedBox> siblingBoxes = box.getSiblingBoxes();
-
-				for (LinkedBox siblingBox : siblingBoxes)
-				{
-					if(findIfBoxHasExtendedParents(siblingBox))
-					{
-						return true;
-					}
-				}
-				return false;
+				currentLevel++;
 			}
+		}
+	}
+
+	public void fixRowSpacing(HashSet<LinkedBox> row)
+	{
+		HashSet<LinkedBox> loopController = new HashSet<LinkedBox>(row);
+		Vector<LinkedBox> boxesLeftToRight = new Vector<LinkedBox>();
+		LinkedBox leftBox = null;
+
+		for (LinkedBox counter : loopController)
+		{
+			int minWidth = Integer.MAX_VALUE;
+
+			for (LinkedBox box : row)
+			{
+				if (box.getWidthLevel() < minWidth)
+				{
+					leftBox = box;
+				}
+			}
+
+			if (leftBox != null)
+			{
+				boxesLeftToRight.add(leftBox);
+				row.remove(leftBox);
+			}
+		}
+
+		int numLevelsToMove = 0;
+		for (LinkedBox box : boxesLeftToRight)
+		{
+			if ()
+			if (grid.getBoxAt)
+			grid.remove(box);
+			box.setWidthLevel(box.getWidthLevel() + numLevelsToMove);
+			grid.add(box);
 		}
 	}
 	*/
 
-	public static void decNumThreads()
+	class IntPair
 	{
-		numThreads--;
+		int min;
+		int max;
+
+		public IntPair(int min, int max)
+		{
+			this.min = min;
+			this.max = max;
+		}
+
+		public int getMin()
+		{
+			return min;
+		}
+
+		public int getMax()
+		{
+			return max;
+		}
+
+		public int calcRoot(boolean isOrganizeTopToBottom)
+		{
+			if (isOrganizeTopToBottom)
+			{
+				return max;
+			}
+			else
+			{
+				return min;
+			}
+		}
+	}
+
+	public IntPair determineMinMaxHeightLevels()
+	{
+		int minLevel = Integer.MAX_VALUE;
+		int maxLevel = Integer.MIN_VALUE;
+
+		for (LinkedBox box : grid)
+		{
+			int heightLevel = box.getHeightLevel();
+
+			if (heightLevel < minLevel)
+			{
+				minLevel = heightLevel;
+			}
+
+			if (heightLevel > maxLevel)
+			{
+				maxLevel = heightLevel;
+			}
+		}
+
+		return new IntPair(minLevel, maxLevel);
 	}
 
 	public void organizeGrid(final boolean isOrganizeTopToBottom)
@@ -475,116 +400,83 @@ public class ArgumentThread
 			organizeGridRecursive(box, 0, 0, new HashSet<LinkedBox>(), isOrganizeTopToBottom);
 			break;
 		}
-		/*
-		HashMap<Integer, HashSet<LinkedBox>> boxesByHeightLevel = sortByHeightLevel(grid);
 
-		int rootLevel;
-		int minLevel = Integer.MAX_VALUE;;
-		int maxLevel = Integer.MIN_VALUE;;
+		IntPair returnData = determineMinMaxHeightLevels();
 
-		for (Integer i : boxesByHeightLevel.keySet())
+		int minLevel = returnData.getMin();
+		int maxLevel = returnData.getMax();
+		int rootLevel = returnData.calcRoot(isOrganizeTopToBottom);
+		int range = maxLevel - minLevel;
+
+		int currentLevel = rootLevel;
+
+		for (int counter = 0; counter <= range; counter++)
 		{
-			if (i < minLevel)
-			{
-				minLevel = i;
-			}
-
-			if (i > maxLevel)
-			{
-				maxLevel = i;
-			}
-		}
-
-		if (isOrganizeTopToBottom)
-		{
-			rootLevel = maxLevel;
-		}
-		else
-		{
-			rootLevel = minLevel;
-		}
-
-		int range = maxLevel - minLevel + 1;
-
-		for (int counter = 0; counter < range; counter++)
-		{
-			centerChildrenOfGroups(boxesByHeightLevel.get(rootLevel), isOrganizeTopToBottom);
+			centerChildrenOfGroups(getBoxesOnGridAtHeightLevel(currentLevel), isOrganizeTopToBottom);
 
 			if (isOrganizeTopToBottom)
 			{
-				rootLevel--;
+				currentLevel--;
 			}
 			else
 			{
-				rootLevel++;
+				currentLevel++;
 			}
 		}
-		*/
+		
 	}
 
-	/*
-	public HashMap<Integer, HashSet<LinkedBox>> sortByHeightLevel(HashSet<LinkedBox> myGrid)
+	public void centerChildrenOfGroups(HashSet<LinkedBox> boxesAtLevel, final boolean isOrganizeTopToBottom)
 	{
-		int minHeightLevel = Integer.MAX_VALUE;
-		int maxHeightLevel = Integer.MIN_VALUE;
+		HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
 
-		for (LinkedBox box : myGrid)
+		for (LinkedBox box : boxesAtLevel)
 		{
-			if (box.getHeightLevel() < minHeightLevel)
+			if (!visited.contains(box))
 			{
-				minHeightLevel = box.getHeightLevel();
-			}
+				HashSet<LinkedBox> thisAndExtendedSibs = box.getThisAndExtendedSiblings();
+				visited.addAll(thisAndExtendedSibs);
+				int numParentsSharing = thisAndExtendedSibs.size();
 
-			if (box.getHeightLevel() > maxHeightLevel)
-			{
-				maxHeightLevel = box.getHeightLevel();
-			}
-		}
-
-		HashMap<Integer, HashSet<LinkedBox>> toReturn = new HashMap<Integer, HashSet<LinkedBox>>();
-
-		for (int counter = minHeightLevel; counter <= maxHeightLevel; counter++)
-		{
-			HashSet<LinkedBox> boxesInLevel = new HashSet<LinkedBox>();
-			for (LinkedBox box : myGrid)
-			{
-				if (box.getHeightLevel() == counter)
+				int leftMostParentWidth = Integer.MAX_VALUE;
+				for (LinkedBox sharer : thisAndExtendedSibs)
 				{
-					boxesInLevel.add(box);
+					if (sharer.getWidthLevel() < leftMostParentWidth)
+					{
+						leftMostParentWidth = sharer.getWidthLevel();
+					}
+				}
+				int numChildren = box.getNumChildren();
+				int leftMostChildWidth = Integer.MAX_VALUE;
+
+				for (LinkedBox child : box.getChildBoxes())
+				{
+					if (child.getWidthLevel() < leftMostChildWidth)
+					{
+						leftMostChildWidth = child.getWidthLevel();
+					}
+				}
+				int widthLeftChildShouldBe = leftMostParentWidth + numParentsSharing - numChildren;
+				int numLevelsToMove = widthLeftChildShouldBe - leftMostChildWidth;
+
+				for (LinkedBox child : box.getChildBoxes())
+				{
+					shiftHeightLevelAndAboveOrBelow(child.getHeightLevel(), numLevelsToMove, isOrganizeTopToBottom);
+					break;
 				}
 			}
-
-			toReturn.put(new Integer(counter), boxesInLevel);
-		}
-
-		return toReturn;
-	}
-
-	public void centerChildrenOfGroups(Collection<LinkedBox> boxesAtLevel, final boolean isOrganizeTopToBottom)
-	{
-		if (!visited.contains(box))
-		{
-			int groupSize = box.getThisAndExtendedSiblings().size();
-			HashSet<LinkedBox> children = box.getChildBoxes();
-			int numChildren = box.getNumChildren();
-
-			for (LinkedBox child : children)
-			{
-				shiftHeightLevelAndAbove(child, isOrganizeTopToBottom);
-				break;
-			}
 		}
 	}
 
-	public void shiftHeightLevelAndAboveOrBelow(LinkedBox box, final boolean isOrganizeTopToBottom)
+	public void shiftHeightLevelAndAboveOrBelow(int heightLevel, int amount, final boolean isOrganizeTopToBottom)
 	{
 		if (isOrganizeTopToBottom)
 		{
 			for (LinkedBox onGrid : grid)
 			{
-				if (box.getHeightLevel() >= onGrid.getHeightLevel())
+				if (heightLevel >= onGrid.getHeightLevel())
 				{
-					onGrid.decWidthLevel();
+					onGrid.setWidthLevel(onGrid.getWidthLevel() + amount);
 				}
 			}
 		}
@@ -592,14 +484,14 @@ public class ArgumentThread
 		{
 			for (LinkedBox onGrid : grid)
 			{
-				if (box.getHeightLevel() <= onGrid.getHeightLevel())
+				if (heightLevel <= onGrid.getHeightLevel())
 				{
-					onGrid.decWidthLevel();
+					onGrid.setWidthLevel(onGrid.getWidthLevel() + amount);
 				}
 			}
 		}
 	}
-	*/
+	
 
 	private void organizeGridRecursive(LinkedBox box, final int widthLevel, final int heightLevel, HashSet<LinkedBox> visited, final boolean isOrganizeTopToBottom)
 	{
@@ -611,7 +503,6 @@ public class ArgumentThread
 
 			if (boxAlreadyOnGrid == null)
 			{
-				Logger.log("The following box was not on the grid..." + box.toStringShort(), Logger.DEBUG);
 				box.setGridPosition(widthLevel, heightLevel);
 				//putSoloBoxOnGrid(box);
 
@@ -627,7 +518,6 @@ public class ArgumentThread
 			}
 			else
 			{
-				Logger.log("The following box was aleady on the grid..." + box.toStringShort(), Logger.DEBUG);
 				box.setGridPosition(boxAlreadyOnGrid.getGridPosition());
 			}
 			/*
@@ -785,7 +675,6 @@ public class ArgumentThread
 
 	public int getMaxWidthLevelOnGrid()
 	{
-		Logger.log("Entered getMaxX", Logger.DEBUG);
 		int maxX = Integer.MIN_VALUE;
 
 		for (LinkedBox box : grid)
@@ -796,13 +685,11 @@ public class ArgumentThread
 				maxX = coordinate.getX();
 			}
 		}
-		Logger.log("Exiting getMaxX", Logger.DEBUG);
 		return maxX;
 	}
 
 	public int getMaxHeightLevelOnGrid()
 	{
-		Logger.log("Entered getMaxY", Logger.DEBUG);
 		int maxY = Integer.MIN_VALUE;
 
 		for (LinkedBox box : grid)
@@ -813,7 +700,6 @@ public class ArgumentThread
 				maxY = coordinate.getY();
 			}
 		}
-		Logger.log("Exiting getMaxY", Logger.DEBUG);
 		return maxY;
 	}
 

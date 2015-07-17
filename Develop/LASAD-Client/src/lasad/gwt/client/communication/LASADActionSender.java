@@ -111,7 +111,7 @@ public class LASADActionSender {
 	 * @param actionSet
 	 */
 	public void sendActionPackage(final ActionPackage actionSet) {
-
+		Logger.log("arrived at sendActionPackage", Logger.DEBUG);
 		if(connectEventService()) {
 			LASADStatusBar.getInstance().setConnectionBusy(true);
 
@@ -120,6 +120,7 @@ public class LASADActionSender {
 			//Add extra parameters from by url parameters
 			LASAD_Client.getInstance().urlParameterConfig.addParamsToActionPackage(actionSet);
 			
+			Logger.log("just before myservlet", Logger.DEBUG);
 			// Send actions to server via GWT RPC and Servlet
 			myServlet.doActionOnServer(actionSet, new AsyncCallback<Void>() {
 

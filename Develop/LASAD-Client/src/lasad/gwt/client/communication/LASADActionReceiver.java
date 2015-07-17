@@ -1305,7 +1305,8 @@ public class LASADActionReceiver {
 			processManagementAction(a);
 		} else if (a.getCategory().equals(Categories.FeedbackAuthoring)) {
 			processFeedbackAuthoringAction(a);
-		}else if (a.getCategory().equals(Categories.Error)) {
+		}
+		else if (a.getCategory().equals(Categories.Error)) {
 			LASADInfo.display("Error", a.getParameterValue(ParameterTypes.Message));
 		} else if (a.getCategory().equals(Categories.Notify)) {
 			

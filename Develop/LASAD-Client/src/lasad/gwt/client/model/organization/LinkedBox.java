@@ -638,6 +638,12 @@ public class LinkedBox
 		return true;
 	}
 
+	public void setPosition(int xLeft, int yTop)
+	{
+		setXLeft(xLeft);
+		setYTop(yTop);
+	}
+
 	public void setChildLinks(HashSet<OrganizerLink> childLinks)
 	{
 		this.childLinks = childLinks;

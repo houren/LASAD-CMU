@@ -20,7 +20,8 @@ public enum Categories {
 	Questionnaire("Questionnaire"), 
 	File("File"),
 	Heartbeat("Heartbeat"),
-	FeedbackAuthoring("FeedbackAuthoring");
+	FeedbackAuthoring("FeedbackAuthoring"),
+	CenterMap("CenterMap");
 	
 	private String oldCategories;
 

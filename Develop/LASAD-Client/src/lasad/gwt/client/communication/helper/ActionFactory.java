@@ -105,6 +105,15 @@ public class ActionFactory {
 		p.addAction(a);
 		return p;
 	}
+
+	public ActionPackage centerMap(String mapID)
+	{
+		ActionPackage p = new ActionPackage();
+		Action a = new Action(Commands.CenterMap, Categories.Map);
+		a.addParameter(ParameterTypes.MapId, mapID);
+		p.addAction(a);
+		return p;
+	}
 	
 	public ActionPackage updateLinkPosition(String mapID, int linkID, float per) {
 		ActionPackage p = new ActionPackage();
@@ -587,15 +596,6 @@ public class ActionFactory {
 			}
 		}
 		return resultingActions;
-	}
-
-	public ActionPackage centerMap(String mapID)
-	{
-		ActionPackage p = new ActionPackage();
-		Action a = new Action(Commands.CenterMap, Categories.Map);
-		a.addParameter(ParameterTypes.MapId, mapID);
-		p.addAction(a);
-		return p;
 	}
 
 	public ActionPackage createLogin(String username, String pw, boolean pwencrypted) {
