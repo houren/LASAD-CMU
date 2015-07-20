@@ -19,7 +19,8 @@ import lasad.gwt.client.model.organization.IntPair;
 
 public class ArgumentThread
 {
-	private final int SPACE = 2;
+	private final int HOR_SPACE = 2;
+	private final int VERT_SPACE = 1;
 
 	private static int numThreads = 0;
 	// HashMap allows for constant lookup time by BoxID
@@ -380,7 +381,7 @@ public class ArgumentThread
 
 		for (int counter = 0; counter <= range; counter++)
 		{
-			centerChildrenOfGroups(getBoxesOnGridAtHeightLevel(currentLevel), isOrganizeTopToBottom);
+			centerSharedChildren(getBoxesOnGridAtHeightLevel(currentLevel), isOrganizeTopToBottom);
 
 			if (isOrganizeTopToBottom)
 			{
@@ -392,6 +393,66 @@ public class ArgumentThread
 			}
 		}
 		
+	}
+
+	public void centerSharedChildren(HashSet<LinkedBox> boxesAtLevel, final boolean isOrganizeTopToBottom)
+	{
+		HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
+		HashSet<LinkedBox> otherBoxes = new HashSet<LinkedBox>();
+		otherBoxes.addAll(boxesAtLevel);
+
+		for (LinkedBox boxA : boxesAtLevel)
+		{
+			if (!visited.contains(boxA))
+			{
+				otherBoxes.remove(boxA);
+			
+				HashSet<LinkedBox> parentGroup = new HashSet<LinkedBox>();
+				parentGroup.add(boxA);
+				HashSet<LinkedBox> childGroup = boxA.getChildBoxes();
+
+				for (LinkedBox boxB : otherBoxes)
+				{
+					HashSet<LinkedBox> childrenB = boxB.getChildBoxes();
+					if (childGroup.size() == childrenB.size() && childGroup.containsAll(childrenB))
+					{
+						parentGroup.add(boxB);
+						otherBoxes.remove(boxB);
+					}
+				}
+
+				visited.addAll(parentGroup);
+
+				int numParentsSharing = parentGroup.size();
+
+				int leftMostParentWidth = Integer.MAX_VALUE;
+				for (LinkedBox sharer : parentGroup)
+				{
+					if (sharer.getWidthLevel() < leftMostParentWidth)
+					{
+						leftMostParentWidth = sharer.getWidthLevel();
+					}
+				}
+
+				int numChildren = childGroup.size();
+				int leftMostChildWidth = Integer.MAX_VALUE;
+				for (LinkedBox child : childGroup)
+				{
+					if (child.getWidthLevel() < leftMostChildWidth)
+					{
+						leftMostChildWidth = child.getWidthLevel();
+					}
+				}
+				int widthLeftChildShouldBe = leftMostParentWidth + numParentsSharing - numChildren;
+				int numLevelsToMove = widthLeftChildShouldBe - leftMostChildWidth;
+
+				for (LinkedBox child : childGroup)
+				{
+					shiftHeightLevelAndAboveOrBelow(child.getHeightLevel(), numLevelsToMove, isOrganizeTopToBottom);
+					break;
+				}
+			}
+		}
 	}
 
 	public void centerChildrenOfGroups(HashSet<LinkedBox> boxesAtLevel, final boolean isOrganizeTopToBottom)
@@ -508,11 +569,11 @@ public class ArgumentThread
 			{
 				if (isOrganizeTopToBottom)
 				{
-					organizeGridRecursive(child, box.getWidthLevel(), box.getHeightLevel() - SPACE, visited, isOrganizeTopToBottom);
+					organizeGridRecursive(child, box.getWidthLevel(), box.getHeightLevel() - VERT_SPACE, visited, isOrganizeTopToBottom);
 				}
 				else
 				{
-					organizeGridRecursive(child, box.getWidthLevel(), box.getHeightLevel() + SPACE, visited, isOrganizeTopToBottom);	
+					organizeGridRecursive(child, box.getWidthLevel(), box.getHeightLevel() + VERT_SPACE, visited, isOrganizeTopToBottom);	
 				}
 			}
 
@@ -520,11 +581,11 @@ public class ArgumentThread
 			{
 				if (isOrganizeTopToBottom)
 				{
-					organizeGridRecursive(parent, box.getWidthLevel(), box.getHeightLevel() + SPACE, visited, isOrganizeTopToBottom);
+					organizeGridRecursive(parent, box.getWidthLevel(), box.getHeightLevel() + VERT_SPACE, visited, isOrganizeTopToBottom);
 				}
 				else
 				{
-					organizeGridRecursive(parent, box.getWidthLevel(), box.getHeightLevel() - SPACE, visited, isOrganizeTopToBottom);	
+					organizeGridRecursive(parent, box.getWidthLevel(), box.getHeightLevel() - VERT_SPACE, visited, isOrganizeTopToBottom);	
 				}
 			}
 		}
@@ -592,11 +653,11 @@ public class ArgumentThread
 			{
 				if (shouldIncrease)
 				{
-					visited = assignGridPositionToSibling(sibling, shouldIncrease, widthLevel + SPACE, heightLevel, visited);
+					visited = assignGridPositionToSibling(sibling, shouldIncrease, widthLevel + HOR_SPACE, heightLevel, visited);
 				}
 				else
 				{
-					visited = assignGridPositionToSibling(sibling, shouldIncrease, widthLevel - SPACE, heightLevel, visited);
+					visited = assignGridPositionToSibling(sibling, shouldIncrease, widthLevel - HOR_SPACE, heightLevel, visited);
 				}
 			}
 		}
@@ -617,12 +678,12 @@ public class ArgumentThread
 		{
 			if (isFirstSibling)
 			{
-				siblingGroup.addAll(assignGridPositionToSibling(sibling, true, origWidthLevel + SPACE, origHeightLevel, siblingGroup));
+				siblingGroup.addAll(assignGridPositionToSibling(sibling, true, origWidthLevel + HOR_SPACE, origHeightLevel, siblingGroup));
 				isFirstSibling = false;
 			}
 			else
 			{
-				siblingGroup.addAll(assignGridPositionToSibling(sibling, false, origWidthLevel - SPACE, origHeightLevel, siblingGroup));
+				siblingGroup.addAll(assignGridPositionToSibling(sibling, false, origWidthLevel - HOR_SPACE, origHeightLevel, siblingGroup));
 			}
 
 		}
@@ -636,7 +697,7 @@ public class ArgumentThread
 			}
 		}
 
-		int farthestRightLevel = farthestLeftLevel + (siblingGroup.size() - 1) * SPACE;
+		int farthestRightLevel = farthestLeftLevel + (siblingGroup.size() - 1) * HOR_SPACE;
 
 		return new GroupWithLeftAndRight(siblingGroup, farthestLeftLevel, farthestRightLevel);
 	}

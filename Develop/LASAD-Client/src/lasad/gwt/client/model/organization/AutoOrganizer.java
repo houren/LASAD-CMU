@@ -41,7 +41,7 @@ import java.io.PrintWriter;
  */
 public class AutoOrganizer
 {
-	private final double MIN_SPACE = 50.0;
+	private final double MIN_SPACE = 25.0;
 	// The maximum number of siblings (grouped boxes) a box can have
 	private final int MAX_SIBLINGS = 2;
 
@@ -430,13 +430,13 @@ public class AutoOrganizer
 
 		if (isOrganizeTopToBottom)
 		{
-			edgeCoordY = Double.MAX_VALUE;
+			edgeCoordY = Double.MIN_VALUE;
 			for (ArgumentThread argThread : argModel.getArgThreads())
 			{
 				for (LinkedBox box : argThread.getBoxesOnGridAtEndLevel(isOrganizeTopToBottom))
 				{
 					double boxLowerEdge = box.getYTop() + box.getHeight();
-					if (boxLowerEdge <= edgeCoordY)
+					if (boxLowerEdge >= edgeCoordY)
 					{
 						edgeSum += box.getXCenter();
 						edgeBoxes.add(box);
@@ -466,7 +466,7 @@ public class AutoOrganizer
 		{
 			if (isOrganizeTopToBottom)
 			{
-				map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) + 190 - map.getInnerHeight());
+				map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) + 10 - map.getInnerHeight());
 			}
 			else
 			{
