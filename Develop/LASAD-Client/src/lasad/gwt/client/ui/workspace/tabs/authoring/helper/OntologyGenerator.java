@@ -14,6 +14,8 @@ import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.XMLParser;
 
+import lasad.gwt.client.logger.Logger;
+
 
 
 public class OntologyGenerator {
@@ -58,6 +60,7 @@ public class OntologyGenerator {
 			try {
 				options.setAttribute(OntologyParameterTypeConverter.getOntologyValueByParamter(option), e.getElementOptions().get(option));
 			} catch (Exception e1) {
+				Logger.log("Failed to set attribute", Logger.DEBUG);
 				e1.printStackTrace();
 			}
 		}

@@ -48,7 +48,8 @@ public final class OntologyParameterTypeConverter {
 			put("editable", ParameterTypes.Editable);
 			put("defaultURL", ParameterTypes.DefaultURL);
 			put("configbutton", ParameterTypes.ConfigButton);
-
+			put("canbegrouped", ParameterTypes.CanBeGrouped);
+			put("connectsgroup", ParameterTypes.ConnectsGroup);
 		}
 	};
 
