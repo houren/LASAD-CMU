@@ -332,7 +332,7 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 		this.add(simple);
 	}
 	protected abstract void onClickSendCreateLinkWithElementsToServer(ElementInfo info, String mapID, String startElementID, String endElementID);
-	protected abstract  AbstractMVController getMyController();
+	protected abstract AbstractMVController getMyController();
 	protected abstract void setMyController();
 
 	protected TreeMap<String, AbstractBox> getBoxes() {

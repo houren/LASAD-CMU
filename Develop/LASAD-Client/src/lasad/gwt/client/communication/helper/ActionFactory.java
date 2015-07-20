@@ -370,6 +370,7 @@ public class ActionFactory {
 //		Action a = new Action("DELETE-ELEMENT", "MAP");
 		a.addParameter(ParameterTypes.MapId, mapID);
 		a.addParameter(ParameterTypes.Id, String.valueOf(id));
+		a.addParameter(ParameterTypes.LinksAlreadyRemoved, "false");
 		return a;
 	}
 
@@ -379,6 +380,20 @@ public class ActionFactory {
 //		Action a = new Action("DELETE-ELEMENT", "MAP");
 		a.addParameter(ParameterTypes.MapId, mapID);
 		a.addParameter(ParameterTypes.Id, String.valueOf(id));
+		a.addParameter(ParameterTypes.LinksAlreadyRemoved, "false");
+
+		p.addAction(a);
+		return p;
+	}
+
+	public ActionPackage autoOrganizerRemoveElement(String mapID, int id)
+	{
+		ActionPackage p = new ActionPackage();
+		Action a = new Action(Commands.DeleteElement, Categories.Map);
+//		Action a = new Action("DELETE-ELEMENT", "MAP");
+		a.addParameter(ParameterTypes.MapId, mapID);
+		a.addParameter(ParameterTypes.Id, String.valueOf(id));
+		a.addParameter(ParameterTypes.LinksAlreadyRemoved, "true");
 
 		p.addAction(a);
 		return p;
@@ -509,6 +524,18 @@ public class ActionFactory {
 		return p;
 	}
 
+	public ActionPackage autoOrganizerCreateLinkWithElements(ElementInfo info, String mapID, String startElementID, String endElementID) {
+		ActionPackage p = new ActionPackage();
+
+		Vector<Action> b = autoOrganizerCreateLinkWithElementsAction(info, mapID, startElementID, endElementID, null);
+		if (b.size() > 0) {
+			for (Action c : b) {
+				p.addAction(c);
+			}
+		}
+		return p;
+	}
+
 	public ActionPackage createLinkWithElements(ElementInfo info, String mapID, String startElementID, String endElementID, Vector<AbstractExtendedElement> existingChildElements) {
 		ActionPackage p = new ActionPackage();
 
@@ -531,6 +558,7 @@ public class ActionFactory {
 		a.addParameter(ParameterTypes.ElementId, String.valueOf(info.getElementID()));
 		a.addParameter(ParameterTypes.Parent, startID);
 		a.addParameter(ParameterTypes.Parent, endID);
+		a.addParameter(ParameterTypes.SiblingsAlreadyUpdated, "false");
 
 		resultingActions.add(a);
 
@@ -597,7 +625,85 @@ public class ActionFactory {
 		}
 		return resultingActions;
 	}
+	
 
+	private Vector<Action> autoOrganizerCreateLinkWithElementsAction(ElementInfo info, String mapID, String startID, String endID, Vector<AbstractExtendedElement> existingChildElements) {
+
+		Vector<Action> resultingActions = new Vector<Action>();
+
+		Action a = new Action(Commands.CreateElement, Categories.Map);
+		a.addParameter(ParameterTypes.Type, info.getElementType());
+		a.addParameter(ParameterTypes.MapId, mapID);
+		a.addParameter(ParameterTypes.ElementId, String.valueOf(info.getElementID()));
+		a.addParameter(ParameterTypes.Parent, startID);
+		a.addParameter(ParameterTypes.Parent, endID);
+		a.addParameter(ParameterTypes.SiblingsAlreadyUpdated, "true");
+
+		resultingActions.add(a);
+
+		if (existingChildElements == null) {
+			Collection<ElementInfo> childElements = info.getChildElements().values();
+			for (ElementInfo childElement : childElements) {
+				Logger.log("Creating action for ChildElement: " + childElement.getElementType(), Logger.DEBUG);
+
+				// Initializing loop variable and changing it in case there're
+				// no existing child elements
+				int quantity = childElement.getQuantity();
+				int i = 0;
+				while (i < quantity) {
+					Action b = new Action(Commands.CreateElement, Categories.Map);
+//					Action b = new Action("CREATE-ELEMENT", "MAP");
+					b.addParameter(ParameterTypes.Type, childElement.getElementType());
+					b.addParameter(ParameterTypes.MapId, mapID);
+					b.addParameter(ParameterTypes.Parent, "LAST-ID");
+					b.addParameter(ParameterTypes.ElementId, String.valueOf(childElement.getElementID()));
+
+					if (childElement.getElementType().equals("rating")) {
+						b.addParameter(ParameterTypes.Score, childElement.getElementOption(ParameterTypes.Score));
+					} else if (childElement.getElementType().equals("awareness")) {
+						b.addParameter(ParameterTypes.Time, "CURRENT-TIME"); // The time will
+						// be filled in
+						// by the server
+					}
+					if (b != null) {
+						resultingActions.add(b);
+					}
+
+					i++;
+				}
+			}
+		} else {
+			for (AbstractExtendedElement element : existingChildElements) {
+				Logger.log("Creating action for ChildElement: " + element.getConfig().getElementType(), Logger.DEBUG);
+				Action b = new Action(Commands.CreateElement, Categories.Map);
+//				Action b = new Action("CREATE-ELEMENT", "MAP");
+				b.addParameter(ParameterTypes.Type, element.getConfig().getElementType());
+				b.addParameter(ParameterTypes.MapId, mapID);
+				b.addParameter(ParameterTypes.Parent, "LAST-ID");
+				b.addParameter(ParameterTypes.ElementId, String.valueOf(element.getConfig().getElementID()));
+
+				if (element.getConfig().getElementType().equals("rating")) {
+					b.addParameter(ParameterTypes.Score, element.getConfig().getElementOption(ParameterTypes.Score));
+				} else if (element.getConfig().getElementType().equals("text")) {
+					String text;
+					if (element.getConnectedModel().getValue(ParameterTypes.Text) == null) {
+						text = "";
+					} else {
+						text = element.getConnectedModel().getValue(ParameterTypes.Text);
+					}
+					b.addParameter(ParameterTypes.Text, text);
+				} else if (element.getConfig().getElementType().equals("awareness")) {
+					b.addParameter(ParameterTypes.Time, "CURRENT-TIME"); // The time will be
+					// filled in by the
+					// server
+				}
+				if (b != null) {
+					resultingActions.add(b);
+				}
+			}
+		}
+		return resultingActions;
+	}
 	public ActionPackage createLogin(String username, String pw, boolean pwencrypted) {
 		ActionPackage p = new ActionPackage();
 		Action a = new Action(Commands.Login, Categories.Management);

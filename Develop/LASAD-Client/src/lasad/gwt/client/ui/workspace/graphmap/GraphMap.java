@@ -1,5 +1,6 @@
 package lasad.gwt.client.ui.workspace.graphmap;
 
+import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.helper.connection.Connection;
 import lasad.gwt.client.helper.connection.GenericStraightTwoEndedConnection;
@@ -106,9 +107,11 @@ public abstract class GraphMap extends AbstractGraphMap{
 						focusHandler.releaseAllFocus();
 					} 
 					else if (be.getType() == Events.OnContextMenu) {
-						be.preventDefault();
-						eventContextMenu(be.getClientX() - getAbsoluteLeft() + getHScrollPosition(), be.getClientY() - getAbsoluteTop() + getVScrollPosition());
-
+						Logger.log("be.getTarget().getClassName(): "+be.getTarget().getClassName(), Logger.DEBUG);
+						if(!be.getTarget().getClassName().equals("extendedTextElement-TextArea-EditMode")){
+							be.preventDefault();
+							eventContextMenu(be.getClientX() - getAbsoluteLeft() + getHScrollPosition(), be.getClientY() - getAbsoluteTop() + getVScrollPosition());
+						}
 					}
 					be.cancelBubble();
 				}

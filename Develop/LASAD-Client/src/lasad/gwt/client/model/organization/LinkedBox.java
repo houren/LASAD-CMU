@@ -214,6 +214,44 @@ public class LinkedBox
 		return siblingBoxes;
 	}
 
+	public OrganizerLink getConnectingLink(LinkedBox relatedBox)
+	{
+		if (this.getChildBoxes().contains(relatedBox))
+		{
+			for (OrganizerLink childLink : this.getChildLinks())
+			{
+				if (childLink.getEndBox().equals(relatedBox))
+				{
+					return childLink;
+				}
+			}
+		}
+
+		if (this.getParentBoxes().contains(relatedBox))
+		{
+			for (OrganizerLink parentLink : this.getParentLinks())
+			{
+				if (parentLink.getStartBox().equals(relatedBox))
+				{
+					return parentLink;
+				}
+			}
+		}
+
+		if (this.getSiblingBoxes().contains(relatedBox))
+		{
+			for (OrganizerLink siblingLink : this.getSiblingLinks())
+			{
+				if (siblingLink.getStartBox().equals(relatedBox) || siblingLink.getEndBox().equals(relatedBox))
+				{
+					return siblingLink;
+				}
+			}
+		}
+
+		return null;
+	}
+
 	public HashSet<LinkedBox> getThisAndExtendedSiblings()
 	{
 		return findThisAndExtendedSiblings(this, new HashSet<LinkedBox>());
@@ -278,19 +316,18 @@ public class LinkedBox
 
 	public void removeChildLink(OrganizerLink link)
 	{
-		this.childLinks.remove(link);
 		this.childBoxes.remove(link.getEndBox());
+		this.childLinks.remove(link);
 	}
 
 	public void removeParentLink(OrganizerLink link)
 	{
-		this.parentLinks.remove(link);
 		this.parentBoxes.remove(link.getStartBox());
+		this.parentLinks.remove(link);
 	}
 
 	public void removeSiblingLink(OrganizerLink link)
 	{
-		this.siblingLinks.remove(link);
 		if (link.getStartBox().equals(this))
 		{
 			this.siblingBoxes.remove(link.getEndBox());
@@ -299,6 +336,7 @@ public class LinkedBox
 		{
 			this.siblingBoxes.remove(link.getStartBox());
 		}
+		this.siblingLinks.remove(link);
 	}
 
 	public int getNumChildren()
@@ -314,6 +352,20 @@ public class LinkedBox
 	public int getNumSiblings()
 	{
 		return siblingLinks.size();
+	}
+
+	public int getNumRelations()
+	{
+		return getNumChildren() + getNumParents() + getNumSiblings();
+	}
+
+	public HashSet<LinkedBox> getRelatedBoxes()
+	{
+		HashSet<LinkedBox> relatedBoxes = new HashSet<LinkedBox>();
+		relatedBoxes.addAll(this.getChildBoxes());
+		relatedBoxes.addAll(this.getParentBoxes());
+		relatedBoxes.addAll(this.getSiblingBoxes());
+		return relatedBoxes;
 	}
 
 	public void setHeightLevel(int heightLevel)
@@ -363,38 +415,46 @@ public class LinkedBox
 		this.heightLevel = coord.getY();
 	}
 
-	/**
-	 *	Gets rid of the traces of itself in children/parents/siblings by removing the links to itself from those boxes.
-	 *	Will be key for removal from map/model later on.
-	 */
-	public void removeLinksToSelf()
+	public void removeLinkTo(LinkedBox boxBeingRemoved)
 	{
-		HashSet<OrganizerLink> childLinks = this.getChildLinks();
-		HashSet<OrganizerLink> parentLinks = this.getParentLinks();
-		HashSet<OrganizerLink> siblingLinks = this.getSiblingLinks();
-
-		// Remove references to self in children
-		for (OrganizerLink childLink : childLinks)
+		if (this.getChildBoxes().contains(boxBeingRemoved))
 		{
-			childLink.getEndBox().removeParentLink(childLink);
-		}
-
-		// Remove references to self in parents
-		for (OrganizerLink parentLink : parentLinks)
-		{
-			parentLink.getStartBox().removeChildLink(parentLink);
-		}
-
-		// Remove references to self in siblings
-		for (OrganizerLink siblingLink : siblingLinks)
-		{
-			if (siblingLink.getStartBox().equals(this)) 
+			for (OrganizerLink link : this.getChildLinks())
 			{
-				siblingLink.getEndBox().removeSiblingLink(siblingLink);
+				if (link.getEndBox().equals(boxBeingRemoved))
+				{
+					this.removeChildLink(link);
+					return;
+				}
 			}
-			else if (siblingLink.getEndBox().equals(this)) 
+		}
+
+		if (this.getParentBoxes().contains(boxBeingRemoved))
+		{
+			for (OrganizerLink link : this.getParentLinks())
 			{
-				siblingLink.getStartBox().removeSiblingLink(siblingLink);
+				if (link.getStartBox().equals(boxBeingRemoved))
+				{
+					this.removeParentLink(link);
+					return;
+				}
+			}
+		}
+
+		if (this.getSiblingBoxes().contains(boxBeingRemoved))
+		{
+			for (OrganizerLink link : this.getSiblingLinks())
+			{
+				if (link.getStartBox().equals(boxBeingRemoved))
+				{
+					this.removeSiblingLink(link);
+					return;
+				}
+				else if (link.getEndBox().equals(boxBeingRemoved))
+				{
+					this.removeSiblingLink(link);
+					return;
+				}
 			}
 		}
 	}

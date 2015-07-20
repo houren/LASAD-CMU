@@ -2,6 +2,7 @@ package lasad.gwt.client.ui.workspace.argumentmap;
 
 import java.util.Iterator;
 import java.util.TreeMap;
+import java.util.Map;
 
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.communication.LASADActionSender;
@@ -63,6 +64,9 @@ import com.google.gwt.xml.client.impl.DOMParseException;
 
 // Added by Kevin Loughlin for auto organize
 import lasad.gwt.client.model.organization.AutoOrganizer;
+
+import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteContributionDialog;
+import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteRelationDialog;
 
 public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
@@ -136,14 +140,73 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	}
 
 	@Override
-	public void createMenuBar() {
-
+	public void createMenuBar()
+	{
+		Button itemLASAD = new Button("LASAD");
+		Button itemFile = new Button("File");
 		Button itemEdit = new Button(myConstants.EditMenu());
-		Button itemAdd = new Button(myConstants.AddMenu());
+		Button itemView = new Button("View");
+
+		Menu lasadMenu = createLASADmenu();
+		Menu fileMenu = createFileMenu();
+		Menu editMenu = createEditMenu();
+		Menu viewMenu = createViewMenu();
+
+		itemLASAD.setMenu(lasadMenu);
+		itemFile.setMenu(fileMenu);
+		itemEdit.setMenu(editMenu);
+		itemView.setMenu(viewMenu);
+
+		this.add(itemLASAD);
+		this.add(itemFile);
+		this.add(itemEdit);
+		this.add(itemView);
+
+		Button itemGroup = new Button(myConstants.GroupTools());
+		Menu groupMenu = createGroupMenu();
+		itemGroup.setMenu(groupMenu);
+
+		if (groupMenu.getItemCount() > 0)
+		{
+			this.add(itemGroup);
+		}
+
+		if (myMapInfo.isFeedback())
+		{
+			itemFeedback = new Button("Feedback");
+			Menu feedbackMenu = createFeedbackMenu();
+			itemFeedback.setMenu(feedbackMenu);
+			this.add(itemFeedback);
+		}
+
+		if (editionStyle == ArgumentEditionStyleEnum.TABLE)
+		{
+			createZoomMenu();
+		}
+
+		if (LASAD_Client.getInstance().getRole().equalsIgnoreCase("developer"))
+		{
+			Button itemDebug = new Button("Debug");
+			Menu debugMenu = createDebugMenu();
+			itemDebug.setMenu(debugMenu);
+			this.add(itemDebug);
+		}
+	}
+
+		/*
+		//Button itemAdd = new Button(myConstants.AddMenu());
 		Button itemGroup = new Button(myConstants.GroupTools());
 
-		Menu editMenu = createEditMenu();
-		Menu addMenu = createAddMenu();
+
+
+		//itemEdit.setMenu(editMenu);
+		//itemAdd.setMenu(addMenu);
+		
+
+		//this.add(itemEdit);
+		//this.add(itemAdd);
+
+		//Menu addMenu = createAddMenu();
 		Menu groupMenu = createGroupMenu();
 		Menu debugMenu = createDebugMenu();
 
@@ -159,17 +222,20 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		}
 
 		// TODO Zhenyu Geng
+		/*
 		Button itemExtraFunctions = new Button("Extras...");
 		Menu extraFunctionsMenu = createExtraFunctions();
 		itemExtraFunctions.setMenu(extraFunctionsMenu);
 		this.add(itemExtraFunctions);
-
+		*/
+		/*
 		if (myMapInfo.isFeedback()) {
 			itemFeedback = new Button("Feedback");
 			Menu feedbackMenu = createFeedbackMenu();
 			itemFeedback.setMenu(feedbackMenu);
 			this.add(itemFeedback);
 		}
+		*/
 
 		// Outsourced to Map Login Screen
 		// if (myMapInfo.getOntologyName().equalsIgnoreCase("argunaut") || myMapInfo.getOntologyName().equalsIgnoreCase("largo"))
@@ -180,6 +246,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		// this.add(itemParse);
 		// }
 
+		/*
 		if (editionStyle == ArgumentEditionStyleEnum.TABLE) {
 			createZoomMenu();
 		}
@@ -189,19 +256,17 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			itemDebug.setMenu(debugMenu);
 			this.add(itemDebug);
 		}
-	}
+		*/
 
 	// TODO Zhenyu
 	private Menu createExtraFunctions() {
 		Menu extramenu = new Menu();
-		MenuItem screenshot = screenshotAction();
+		MenuItem screenshot = createScreenshotItem();
 		extramenu.add(screenshot);
 
 		// Added by Kevin Loughlin
 		//if (myMapInfo.isAutoOrganize() )
 		//{
-			MenuItem autoOrganizeItem = autoOrganizeAction();
-			extramenu.add(autoOrganizeItem);
 		//}
 
 		// MenuItem rearchBox = createRearchBox();
@@ -212,70 +277,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	}
 
 	// TODO Zhenyu
-	private MenuItem createRearchBox() {
-		final MenuItem rearchbox = new MenuItem("search the Text of Boxes.....");
-		rearchbox.addSelectionListener(new SelectionListener<MenuEvent>() {
-
-			@Override
-			public void componentSelected(MenuEvent ce) {
-				// TODO Auto-generated method stub
-				final Window w = new Window();
-				w.setHeading("Searching Boxes");
-				FormData formData = new FormData("-20");
-
-				com.extjs.gxt.ui.client.widget.form.FormPanel simple = new com.extjs.gxt.ui.client.widget.form.FormPanel();
-				simple.setBorders(false);
-				simple.setBodyBorder(false);
-				simple.setLabelWidth(55);
-				simple.setPadding(5);
-				simple.setHeaderVisible(false);
-
-				final TextField<String> keyword = new TextField<String>();
-				keyword.setFieldLabel("Keywords");
-				keyword.setEmptyText("Please input the keywords....");
-				keyword.setAllowBlank(false);
-				simple.add(keyword, formData);
-
-				final SimpleComboBox<String> combo = new SimpleComboBox<String>();
-				combo.setFieldLabel("where");
-				combo.add("all maps");
-				combo.add("this map");
-				combo.setSimpleValue("all maps");
-				simple.add(combo, formData);
-
-				Button b = new Button("Submit");
-				b.addSelectionListener(new SelectionListener<ButtonEvent>() {
-					public void componentSelected(ButtonEvent ce) {
-						if (keyword.getValue() != null) {
-							// communicator.sendActionPackage(actionBuilder.searchForBoxes(keyword.getValue(),combo.getSelectedIndex()+"",""+myMapInfo.getMapID()));
-							w.setVisible(false);
-						}
-					}
-				});
-				simple.addButton(b);
-
-				w.add(simple);
-				w.show();
-
-			}
-
-		});
-
-		return rearchbox;
-	}
-
-	// TODO Zhenyu
-	public static native void captureMap(String id) /*-{
-		$wnd.captureScreenShot(id);
-	}-*/;
-
-	// TODO Zhenyu
-	public static native String showMap() /*-{
-		return $wnd.getImage();
-	}-*/;
-
-	// TODO Zhenyu
-	private MenuItem screenshotAction() {
+	protected MenuItem createScreenshotItem() {
 		final MenuItem screenshot = new MenuItem("Create a screenshot");
 		screenshot.addSelectionListener(new SelectionListener<MenuEvent>() {
 			@Override
@@ -423,28 +425,70 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		});
 
 		return screenshot;
-
 	}
 
-	// Added By Kevin Loughlin for autoOrganize Menu functionality
-	private MenuItem autoOrganizeAction()
-	{
-		final MenuItem autoOrganizeItem = new MenuItem("Auto organize this map");
+	// TODO Zhenyu
+	private MenuItem createRearchBox() {
+		final MenuItem rearchbox = new MenuItem("search the Text of Boxes.....");
+		rearchbox.addSelectionListener(new SelectionListener<MenuEvent>() {
 
-		autoOrganizeItem.addSelectionListener(new SelectionListener<MenuEvent>()
-		{
 			@Override
-			public void componentSelected(MenuEvent ce)
-			{
-				Logger.log("[lasad.gwt.client.ui.workspace.argumentmap.ArgumentMapMenuBar][autoOrganizeAction] Starting autoOrganize...", Logger.DEBUG);
-				AutoOrganizer autoOrganizer = new AutoOrganizer(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap() );
-				autoOrganizer.organizeMap();
-				Logger.log("[lasad.gwt.client.ui.workspace.argumentmap.ArgumentMapMenuBar][autoOrganizeAction] Completed autoOrganize...", Logger.DEBUG);
+			public void componentSelected(MenuEvent ce) {
+				// TODO Auto-generated method stub
+				final Window w = new Window();
+				w.setHeading("Searching Boxes");
+				FormData formData = new FormData("-20");
+
+				com.extjs.gxt.ui.client.widget.form.FormPanel simple = new com.extjs.gxt.ui.client.widget.form.FormPanel();
+				simple.setBorders(false);
+				simple.setBodyBorder(false);
+				simple.setLabelWidth(55);
+				simple.setPadding(5);
+				simple.setHeaderVisible(false);
+
+				final TextField<String> keyword = new TextField<String>();
+				keyword.setFieldLabel("Keywords");
+				keyword.setEmptyText("Please input the keywords....");
+				keyword.setAllowBlank(false);
+				simple.add(keyword, formData);
+
+				final SimpleComboBox<String> combo = new SimpleComboBox<String>();
+				combo.setFieldLabel("where");
+				combo.add("all maps");
+				combo.add("this map");
+				combo.setSimpleValue("all maps");
+				simple.add(combo, formData);
+
+				Button b = new Button("Submit");
+				b.addSelectionListener(new SelectionListener<ButtonEvent>() {
+					public void componentSelected(ButtonEvent ce) {
+						if (keyword.getValue() != null) {
+							// communicator.sendActionPackage(actionBuilder.searchForBoxes(keyword.getValue(),combo.getSelectedIndex()+"",""+myMapInfo.getMapID()));
+							w.setVisible(false);
+						}
+					}
+				});
+				simple.addButton(b);
+
+				w.add(simple);
+				w.show();
+
 			}
+
 		});
 
-		return autoOrganizeItem;
+		return rearchbox;
 	}
+
+	// TODO Zhenyu
+	public static native void captureMap(String id) /*-{
+		$wnd.captureScreenShot(id);
+	}-*/;
+
+	// TODO Zhenyu
+	public static native String showMap() /*-{
+		return $wnd.getImage();
+	}-*/;
 
 	@Override
 	protected void handleCreateNewBoxItemSelectionEvent(MenuEvent me, final ElementInfo currentElement) {
@@ -495,26 +539,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		debugMenu.add(getBoxPairsOfDifferentUsers);
 
 		return debugMenu;
-	}
-
-	private Menu createEditMenu() {
-		Menu menu = new Menu();
-		// TODO Re-implement the undo function
-		// MenuItem editUndoItem = createEditUndoItem();
-		// menu.add(editUndoItem);
-		MenuItem findContribution = createFindContributionItem();
-		menu.add(findContribution);
-
-		MenuItem saveItem = createSaveItem();
-		menu.add(saveItem);
-
-		// MenuItem loadItem = createLoadItem();
-		// menu.add(loadItem);
-
-		MenuItem logOutItem = createLogOutItem();
-		menu.add(logOutItem);
-
-		return menu;
 	}
 
 	private Menu createFeedbackMenu() {
@@ -614,54 +638,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		});
 
 		return editAttributeItem;
-	}
-
-	private MenuItem createSaveItem() {
-		final MenuItem saveItem = new MenuItem("Export map...");
-		saveItem.addSelectionListener(new SelectionListener<MenuEvent>() {
-			@Override
-			public void componentSelected(MenuEvent ce) {
-				MapToXMLConverter conv = new MapToXMLConverter(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap(),
-						ArgumentMapMenuBar.this.myMapInfo.getXmlOntology(), ArgumentMapMenuBar.this.myMapInfo.getXmlTemplate());
-
-				// Send the xml-string as a post request to servlet
-				// Get the file name via http-response, then open file location
-				RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL() + "saveToXmlServlet");
-				RequestCallback handler = new RequestCallback() {
-
-					@Override
-					public void onError(Request request, Throwable e) {
-						if (DebugSettings.debug_errors)
-							Logger.log(e.toString(), Logger.DEBUG_ERRORS);
-					}
-
-					@Override
-					public void onResponseReceived(Request request, Response response) {
-						// Browser will open a save file dialog box
-						com.google.gwt.user.client.Window.open(GWT.getModuleBaseURL() + "saveToXmlServlet", "_blank", "enabled");
-					}
-				};
-				try {
-					builder.sendRequest(conv.getXmlString(), handler);
-				} catch (RequestException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		return saveItem;
-	}
-
-	private MenuItem createLogOutItem() {
-		final MenuItem logOutItem = new MenuItem("Logout");
-		logOutItem.addSelectionListener(new SelectionListener<MenuEvent>() {
-			@Override
-			public void componentSelected(MenuEvent me) {
-				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				logOutItem.getParentMenu().hide();
-				LASAD_Client.getInstance().logOut();
-			}
-		});
-		return logOutItem;
 	}
 
 	private MenuItem deleteFeedbackItem() {
@@ -974,4 +950,240 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return LARGOItem;
 	}
 
+
+	protected Menu createLASADmenu()
+	{
+		Menu menu = new Menu();
+
+		MenuItem logOut = createLogOutItem();
+		menu.add(logOut);
+
+		return menu;
+	}
+
+	protected Menu createFileMenu()
+	{
+		Menu menu = new Menu();
+
+		MenuItem exportItem = createExportItem();
+		menu.add(exportItem);
+
+		MenuItem screenshot = createScreenshotItem();
+		menu.add(screenshot);
+
+		MenuItem closeMap = createCloseMapItem();
+		menu.add(closeMap);
+
+		return menu;
+	}
+
+	protected Menu createEditMenu() {
+		Menu menu = new Menu();
+		// TODO Re-implement the undo function
+		// MenuItem editUndoItem = createEditUndoItem();
+		// menu.add(editUndoItem);
+		//MenuItem findContribution = createFindContributionItem();
+		//menu.add(findContribution);
+
+		//MenuItem saveItem = createSaveItem();
+		//menu.add(saveItem);
+
+		// MenuItem loadItem = createLoadItem();
+		// menu.add(loadItem);
+
+		MenuItem addItem = createAddItem();
+		menu.add(addItem);
+
+		MenuItem deleteItem = createDeleteItem();
+		menu.add(deleteItem);
+
+		MenuItem autoOrganizeItem = createAutoOrganizeItem();
+		menu.add(autoOrganizeItem);
+
+		return menu;
+	}
+
+	protected Menu createViewMenu()
+	{
+		Menu menu = new Menu();
+		// TODO Re-implement the undo function
+		// MenuItem editUndoItem = createEditUndoItem();
+		// menu.add(editUndoItem);
+		MenuItem findContribution = createFindContributionItem();
+		menu.add(findContribution);
+
+		return menu;
+	}
+
+	protected MenuItem createLogOutItem() {
+		final MenuItem logOutItem = new MenuItem("Logout");
+		logOutItem.addSelectionListener(new SelectionListener<MenuEvent>() {
+			@Override
+			public void componentSelected(MenuEvent me) {
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
+				logOutItem.getParentMenu().hide();
+				LASAD_Client.getInstance().logOut();
+			}
+		});
+		return logOutItem;
+	}
+
+	protected MenuItem createExportItem() {
+		final MenuItem saveItem = new MenuItem("Export map...");
+		saveItem.addSelectionListener(new SelectionListener<MenuEvent>() {
+			@Override
+			public void componentSelected(MenuEvent ce) {
+				MapToXMLConverter conv = new MapToXMLConverter(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap(),
+						ArgumentMapMenuBar.this.myMapInfo.getXmlOntology(), ArgumentMapMenuBar.this.myMapInfo.getXmlTemplate());
+
+				// Send the xml-string as a post request to servlet
+				// Get the file name via http-response, then open file location
+				RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL() + "saveToXmlServlet");
+				RequestCallback handler = new RequestCallback() {
+
+					@Override
+					public void onError(Request request, Throwable e) {
+						if (DebugSettings.debug_errors)
+							Logger.log(e.toString(), Logger.DEBUG_ERRORS);
+					}
+
+					@Override
+					public void onResponseReceived(Request request, Response response) {
+						// Browser will open a save file dialog box
+						com.google.gwt.user.client.Window.open(GWT.getModuleBaseURL() + "saveToXmlServlet", "_blank", "enabled");
+					}
+				};
+				try {
+					builder.sendRequest(conv.getXmlString(), handler);
+				} catch (RequestException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		return saveItem;
+	}
+
+	
+
+	protected MenuItem createCloseMapItem()
+	{
+		MenuItem closeItem = new MenuItem("Close");
+		closeItem.addSelectionListener(new SelectionListener<MenuEvent>()
+		{
+			@Override
+			public void componentSelected(MenuEvent ce)
+			{
+				communicator.sendActionPackage(actionBuilder.leaveMap(ArgumentMapMenuBar.this.getMyMapInfo().getMapID()));
+			}
+		});
+		return closeItem;
+	}
+
+	protected MenuItem createAddItem()
+	{
+		MenuItem addItem = new MenuItem("Add");
+		addItem.setSubMenu(createBoxLinkMenu(true));
+		return addItem;
+	}
+
+	protected MenuItem createDeleteItem()
+	{
+		MenuItem deleteItem = new MenuItem("Delete");
+		deleteItem.setSubMenu(createBoxLinkMenu(false));
+		return deleteItem;
+	}
+
+	protected Menu createBoxLinkMenu(final boolean useSubList)
+	{
+		Menu boxLinkMenu = new Menu();
+		boxLinkMenu.add(createContributionItem(useSubList));
+		boxLinkMenu.add(createRelationItem(useSubList));
+		return boxLinkMenu;
+	}
+
+	protected MenuItem createContributionItem(final boolean useSubList)
+	{
+		MenuItem boxMenu = new MenuItem(myConstants.ContributionMenuItem());
+		if (useSubList)
+		{
+			Menu subBoxes = new Menu();
+
+			// Collect box types
+			
+			Map<String, ElementInfo> boxes = myMapInfo.getElementsByType("box");
+			if(boxes != null) {
+				for (ElementInfo info : boxes.values()) {
+					subBoxes.add(createNewBoxItem(info));
+				}
+			}
+
+			boxMenu.setSubMenu(subBoxes);
+		}
+		else
+		{
+			boxMenu.addSelectionListener(new SelectionListener<MenuEvent>()
+			{
+				@Override
+				public void componentSelected(MenuEvent me)
+				{
+					DeleteContributionDialog boxDialog = new DeleteContributionDialog(getMyMapSpace().getMyMap().getID());
+					boxDialog.show();
+				}
+			});
+		}
+		return boxMenu;
+	}
+
+	protected MenuItem createRelationItem(final boolean useSubList)
+	{
+		// Creates the sub menu for link types
+		MenuItem linkMenu = new MenuItem(myConstants.RelationMenuItem());
+		if (useSubList)
+		{
+			Menu subLinks = new Menu();
+
+			// Collect link types
+			Map<String, ElementInfo> relations = myMapInfo.getElementsByType("relation");
+			if(relations != null) {
+				for (ElementInfo info : relations.values()) {
+					subLinks.add(createNewLinkItem(info));
+				}
+			}
+			
+			linkMenu.setSubMenu(subLinks);
+		}
+		else
+		{
+			linkMenu.addSelectionListener(new SelectionListener<MenuEvent>()
+			{
+				@Override
+				public void componentSelected(MenuEvent me)
+				{
+					DeleteRelationDialog linkDialog = new DeleteRelationDialog(getMyMapSpace().getMyMap().getID());
+					linkDialog.show();
+				}
+			});
+		}
+		return linkMenu;
+	}
+
+	// Added By Kevin Loughlin for autoOrganize Menu functionality
+	protected MenuItem createAutoOrganizeItem()
+	{
+		final MenuItem autoOrganizeItem = new MenuItem("Auto organize this map");
+
+		autoOrganizeItem.addSelectionListener(new SelectionListener<MenuEvent>()
+		{
+			@Override
+			public void componentSelected(MenuEvent ce)
+			{
+				Logger.log("[lasad.gwt.client.ui.workspace.argumentmap.ArgumentMapMenuBar][autoOrganizeAction] Starting autoOrganize...", Logger.DEBUG);
+				AutoOrganizer autoOrganizer = new AutoOrganizer(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap() );
+				autoOrganizer.organizeMap();
+				Logger.log("[lasad.gwt.client.ui.workspace.argumentmap.ArgumentMapMenuBar][autoOrganizeAction] Completed autoOrganize...", Logger.DEBUG);
+			}
+		});
+
+		return autoOrganizeItem;
+	}
 }

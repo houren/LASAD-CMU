@@ -14,7 +14,7 @@ import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.model.argument.MVController;
 import lasad.gwt.client.model.ElementInfo;
 
-// I'm aware that importing from the same package is unnecessary, but I do it in case I chnage the package of this class ever.
+// I'm aware that importing from the same package is unnecessary, but I do it in case I change the package of this class ever.
 import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.model.organization.ArgumentThread;
 import lasad.gwt.client.model.organization.LinkedBox;
@@ -170,6 +170,8 @@ public class AutoOrganizer
 				{
 					sendUpdatePositionToServer(box);
 				}
+
+				lastRowEndY = CENTER_Y - MIN_SPACE;
 			}
 
 			positionMap(isOrganizeTopToBottom);
@@ -501,8 +503,7 @@ public class AutoOrganizer
 			String startBoxStringID = Integer.toString(link.getStartBox().getBoxID());
 			String endBoxStringID = Integer.toString(link.getEndBox().getBoxID());
 
-			ActionPackage myPackage = actionBuilder.createLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID);
-			LASADActionReceiver.getInstance().setSiblingsAlreadyUpdated(true);
+			ActionPackage myPackage = actionBuilder.autoOrganizerCreateLinkWithElements(linkInfo, map.getID(), startBoxStringID, endBoxStringID);
 			communicator.sendActionPackage(myPackage);
 		}
 	}
@@ -543,8 +544,7 @@ public class AutoOrganizer
 
 		for (OrganizerLink link : linksToRemove)
 		{
-			ActionPackage myPackage = actionBuilder.removeElement(map.getID(), link.getLinkID());
-			LASADActionReceiver.getInstance().setLinksAlreadyRemoved(true);
+			ActionPackage myPackage = actionBuilder.autoOrganizerRemoveElement(map.getID(), link.getLinkID());
 			communicator.sendActionPackage(myPackage);
 		}
 	}
@@ -558,9 +558,9 @@ public class AutoOrganizer
 		//Logger.log("Entered createNewThreadIfNecessary", Logger.DEBUG);
 		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
 		ArgumentThread startArgThread = argModel.getBoxThread(removedLink.getStartBox());
-		HashSet<LinkedBox> allThreadBoxes = new HashSet<LinkedBox>(startArgThread.getBoxes());
+		HashSet<LinkedBox> startThreadBoxes = new HashSet<LinkedBox>(startArgThread.getBoxes());
 		HashSet<LinkedBox> boxesReached = visitRecursive(removedLink.getEndBox(), new HashSet<LinkedBox>());
-		if (boxesReached.size() == allThreadBoxes.size() && boxesReached.containsAll(allThreadBoxes))
+		if (boxesReached.size() == startThreadBoxes.size() && boxesReached.containsAll(startThreadBoxes))
 		{
 			// They're still in the same thread
 			return;
@@ -568,24 +568,10 @@ public class AutoOrganizer
 		else
 		{
 			ArgumentThread newThread = new ArgumentThread();
-			startArgThread.removeBoxes(boxesReached);
 			newThread.addBoxes(boxesReached);
 			argModel.addArgThread(newThread);
-		}
-	}
 
-	/**
-	 *	Checks to see if the removal of the passed box warrants the removal of a new Thread, and removes the thread if needed
-	 *	@param removedBox - The box removed from the model
-	 */
-	public void removeThreadIfNecessary(LinkedBox removedBox)
-	{
-		//Logger.log("Entered removeThreadIfNecessary", Logger.DEBUG);
-		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
-		ArgumentThread argThread = argModel.getBoxThread(removedBox);
-		if (argThread.getBoxes().size() == 0)
-		{
-			argModel.removeArgThread(argThread);
+			startArgThread.removeBoxes(boxesReached);
 		}
 	}
 

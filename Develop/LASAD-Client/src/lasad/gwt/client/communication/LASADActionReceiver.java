@@ -96,9 +96,6 @@ public class LASADActionReceiver {
 	private List<Integer> elementReplay;
 	private ReplayInitializer init;
 
-	private boolean siblingsAlreadyUpdated = false;
-	private boolean linksAlreadyRemoved = false;
-
 	private static int counterID = -1;
 
 	// David Drexler Edit-END
@@ -110,17 +107,8 @@ public class LASADActionReceiver {
 		return myInstance;
 	}
 
-	private LASADActionReceiver() {
-	}
-
-	public void setSiblingsAlreadyUpdated(boolean alreadyUpdated)
+	private LASADActionReceiver()
 	{
-		this.siblingsAlreadyUpdated = alreadyUpdated;
-	}
-
-	public void setLinksAlreadyRemoved(boolean alreadyRemoved)
-	{
-		this.linksAlreadyRemoved = alreadyRemoved;
 	}
 
 	public void doActionPackage(ActionPackage p) {
@@ -441,8 +429,6 @@ public class LASADActionReceiver {
 
 		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(controller.getMapID());
 
-		//Logger.log("Arg model before performing action\n" + argModel.toString(), Logger.DEBUG);
-
 		Logger.log("[lasad.gwt.client.communication.LASADActionReceiver][processMapAction] Processing map action...", Logger.DEBUG);
 
 		AutoOrganizer autoOrganizer = AutoOrganizer.getInstanceByMapID(controller.getMapID());
@@ -655,15 +641,14 @@ public class LASADActionReceiver {
 						argModel.removeArgThread(endBoxThread);
 					}
 
-					if (siblingsAlreadyUpdated)
+					String siblingsAlreadyUpdated = a.getParameterValue(ParameterTypes.SiblingsAlreadyUpdated);
+
+					if (siblingsAlreadyUpdated != null)
 					{
-						this.setSiblingsAlreadyUpdated(false);
-					}
-					else
-					{
-						// This will change the alreadyUpdate field for us
-						autoOrganizer.updateSiblingLinks(link);
-						//Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
+						if (!Boolean.parseBoolean(siblingsAlreadyUpdated))
+						{
+							autoOrganizer.updateSiblingLinks(link);
+						}
 					}
 				}
 
@@ -695,22 +680,7 @@ public class LASADActionReceiver {
 
 						Logger.log("WARNING: There is no highlight for this feedback", Logger.DEBUG);
 					}
-				}
-
-				// Testing to see if root boxes assign correctly, they work as of 26 June 2015
-				/*
-				for (ArgumentThread thread : argModel.getArgThreads())
-				{
-					HashSet<LinkedBox> rootBoxes = thread.getRootBoxes();
-					Logger.log("\nNew thread\n", Logger.DEBUG);
-
-					for (LinkedBox rootBox : rootBoxes)
-					{
-						Logger.log(rootBox.toString(), Logger.DEBUG);
-					}
 				}	
-				*/
-				Logger.log(argModel.toString(), Logger.DEBUG);			
 			}
 			else if (a.getCmd().equals(Commands.UpdateElement)) {
 
@@ -756,7 +726,9 @@ public class LASADActionReceiver {
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] UPDATE-CURSOR-POSITION", Logger.DEBUG);
 				Logger.log(a.toString(), Logger.DEBUG_DETAILS);
 				controller.updateElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)), a.getParameters());
-			} else if (a.getCmd().equals(Commands.DeleteElement)) {
+			}
+			else if (a.getCmd().equals(Commands.DeleteElement))
+			{
 
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] DELETE-ELEMENT", Logger.DEBUG);
 
@@ -774,8 +746,6 @@ public class LASADActionReceiver {
 					}
 
 					// Kevin Loughlin
-
-					//Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
 					Object removedObj = argModel.removeEltByEltID(elementID);
 
 					if (removedObj != null)
@@ -790,18 +760,12 @@ public class LASADActionReceiver {
 							// TODO Check to see if new thread is necessary
 							autoOrganizer.createNewThreadIfNecessary(removedLink);
 							
-							if (linksAlreadyRemoved)
-							{
-								this.setLinksAlreadyRemoved(false);
-							}
-							else
+							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)))
 							{
 								autoOrganizer.determineLinksToRemove(removedLink);
 							}
 						}
 					}
-					Logger.log(argModel.toString(), Logger.DEBUG);	
-					//Logger.log("Arg Model at end of delete:\n" + argModel.toString(), Logger.DEBUG);
 					// End Kevin Loughlin
 
 				} else {
@@ -1047,15 +1011,14 @@ public class LASADActionReceiver {
 						argModel.removeArgThread(endBoxThread);
 					}
 
-					if (siblingsAlreadyUpdated)
+					String siblingsAlreadyUpdated = a.getParameterValue(ParameterTypes.SiblingsAlreadyUpdated);
+
+					if (siblingsAlreadyUpdated != null)
 					{
-						this.setSiblingsAlreadyUpdated(false);
-					}
-					else
-					{
-						// This will change the alreadyUpdate field for us
-						autoOrganizer.updateSiblingLinks(link);
-						//Logger.log("Model after update Sibling Links" + argModel.toString(), Logger.DEBUG);
+						if (!Boolean.parseBoolean(siblingsAlreadyUpdated))
+						{
+							autoOrganizer.updateSiblingLinks(link);
+						}
 					}
 				}
 
@@ -1118,40 +1081,56 @@ public class LASADActionReceiver {
 				Logger.log(a.toString(), Logger.DEBUG_DETAILS);
 				controller.updateElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)), a.getParameters());
 
-			} else if (a.getCmd().equals(Commands.DeleteElement)) {
+			}
+			else if (a.getCmd().equals(Commands.DeleteElement))
+			{
 
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] DELETE-ELEMENT", Logger.DEBUG);
 
 				int elementID = Integer.parseInt(a.getParameterValue(ParameterTypes.Id));
-				if (controller.getElement(elementID).getType().equalsIgnoreCase("FEEDBACK-AGENT")) {
-					processRemoveFeedbackAgent(controller, a);
-				}
+				if (controller.getElement(elementID) != null) {
+					if (controller.getElement(elementID).getType().equalsIgnoreCase("FEEDBACK-AGENT")) {
+						processRemoveFeedbackAgent(controller, a);
+					}
+					try {
+						controller.deleteElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)),
+								a.getParameterValue(ParameterTypes.UserName));
+					}catch (Exception e) {
+						e.printStackTrace();
+						Logger.log("Can not delete element, because ID is not int!", Logger.DEBUG_ERRORS);
+					}
 
-				try {
-					controller.deleteElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)),
-							a.getParameterValue(ParameterTypes.UserName));
-				}
-				catch (Exception e)
-				{
-					Logger.log("Can not delete element, because ELEMENT-ID is not int!", Logger.DEBUG_ERRORS);
-				}
+					// Kevin Loughlin
 
-				// Kevin Loughlin
+					Object removedObj = argModel.removeEltByEltID(elementID);
 
-				//Logger.log("Arg Model at start of delete:\n" + argModel.toString(), Logger.DEBUG);
-				argModel.removeEltByEltID(elementID);
-
-				//Logger.log("Arg Model at end of delete:\n" + argModel.toString(), Logger.DEBUG);
-				// End Kevin Loughlin
-			} 
+					if (removedObj != null)
+					{
+						if (removedObj instanceof LinkedBox)
+						{
+							argModel.removeEmptyThreads();
+						}
+						else if (removedObj instanceof OrganizerLink)
+						{
+							OrganizerLink removedLink = (OrganizerLink) removedObj;
+							// TODO Check to see if new thread is necessary
+							autoOrganizer.createNewThreadIfNecessary(removedLink);
+							
+							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)))
+							{
+								autoOrganizer.determineLinksToRemove(removedLink);
+							}
+						}
+					}	
+					// End Kevin Loughlin
+				} 
+			}
 			
 			else if (a.getCategory().equals(Categories.Error)) {
 				LASADInfo.display("Error", a.getParameterValue(ParameterTypes.Message));
 			}
 
 		}
-
-		//Logger.log(argModel.toString(), Logger.DEBUG);
 	}
 
 	private void processRegisterFeedbackAgent(MVController controller, Action a) {

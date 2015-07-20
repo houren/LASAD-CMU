@@ -136,7 +136,7 @@ public class OrganizerLink
 		if (object instanceof OrganizerLink)
 		{
 			OrganizerLink link = (OrganizerLink) object;
-			if (startBox.equals(link.getStartBox()) && endBox.equals(link.getEndBox()) && link.getType().equalsIgnoreCase(type))
+			if (startBox.equals(link.getStartBox()) && endBox.equals(link.getEndBox()))
 			{
 				return true;
 			}

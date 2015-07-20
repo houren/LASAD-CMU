@@ -88,10 +88,10 @@ public class ArgumentThread
 	// Helper for removeEltByEltID
 	private LinkedBox removeBoxByBoxID(int boxID)
 	{
-		LinkedBox toRemove = this.getBoxByBoxID(boxID);
-		if (toRemove != null)
+		LinkedBox boxToRemove = this.getBoxByBoxID(boxID);
+		if (boxToRemove != null)
 		{
-			toRemove.removeLinksToSelf();
+			this.removeLinksTo(boxToRemove);
 			LinkedBox returnValue = boxMap.remove(boxID);
 			return returnValue;
 		}
@@ -165,6 +165,18 @@ public class ArgumentThread
 		}
 	}
 
+	public void removeLinksTo(LinkedBox boxBeingRemoved)
+	{
+		HashSet<LinkedBox> relatedBoxes = boxBeingRemoved.getRelatedBoxes();
+		for (LinkedBox box : this.getBoxes())
+		{
+			if (relatedBoxes.contains(box))
+			{
+				box.removeLinkTo(boxBeingRemoved);
+			}
+		}
+	}
+
 	public boolean contains(LinkedBox box)
 	{
 		return boxMap.containsValue(box);
@@ -193,38 +205,6 @@ public class ArgumentThread
 	{
 		this.removeBoxByBoxID(newBox.getBoxID());
 		this.addBox(newBox);
-	}
-
-	class IntAndVisited
-	{
-		private int myInt;
-		private HashSet<LinkedBox> visited;
-
-		public IntAndVisited()
-		{
-			myInt = 0;
-			visited = new HashSet<LinkedBox>();
-		}
-
-		public void addBox(LinkedBox box)
-		{
-			visited.add(box);
-		}
-
-		public void incMyInt()
-		{
-			myInt++;
-		}
-
-		public HashSet<LinkedBox> getVisited()
-		{
-			return visited;
-		}
-
-		public int getMyInt()
-		{
-			return myInt;
-		}
 	}
 
 	@Override
@@ -379,8 +359,6 @@ public class ArgumentThread
 
 		return new IntPair(minLevel, maxLevel);
 	}
-
-
 
 	public void organizeGrid(final boolean isOrganizeTopToBottom)
 	{

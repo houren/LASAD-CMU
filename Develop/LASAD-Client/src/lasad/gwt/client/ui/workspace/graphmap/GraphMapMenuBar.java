@@ -31,6 +31,9 @@ import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 
+// Added by Kevin Loughlin for auto organize
+import lasad.gwt.client.model.organization.AutoOrganizer;
+
 import lasad.gwt.client.logger.Logger;
 
 public abstract class GraphMapMenuBar extends ToolBar {
@@ -127,6 +130,7 @@ public abstract class GraphMapMenuBar extends ToolBar {
 //		}
 //	}
 
+	
 	protected Menu createAddMenu() {
 		Menu addMenu = new Menu();
 
@@ -164,7 +168,8 @@ public abstract class GraphMapMenuBar extends ToolBar {
 		return addMenu;
 	}
 	
-	private MenuItem createNewBoxItem(final ElementInfo currentElement) {
+	
+	protected MenuItem createNewBoxItem(final ElementInfo currentElement) {
 
 		MenuItem boxItem = new MenuItem(currentElement.getElementOption(ParameterTypes.Heading));
 		boxItem.addSelectionListener(new SelectionListener<MenuEvent>() {
@@ -185,13 +190,12 @@ public abstract class GraphMapMenuBar extends ToolBar {
 	 */
 	protected abstract void handleCreateNewBoxItemSelectionEvent(MenuEvent me, final ElementInfo currentElement);
 
-	private MenuItem createNewLinkItem(final ElementInfo currentElement) {
+	protected MenuItem createNewLinkItem(final ElementInfo currentElement) {
 		MenuItem linkItem = new MenuItem(currentElement.getElementOption(ParameterTypes.Heading));
 		linkItem.addSelectionListener(new SelectionListener<MenuEvent>() {
 
 			@Override
 			public void componentSelected(MenuEvent ce) {
-				Logger.log("Made it to component selected", Logger.DEBUG);
 				TreeMap<String, AbstractBox> boxes = new TreeMap<String, AbstractBox>();
 				TreeMap<String, AbstractLink> links = new TreeMap<String, AbstractLink>();
 				List<Component> mapComponents = GraphMapMenuBar.this.getMyMapSpace().getMyMap().getItems();
@@ -327,56 +331,6 @@ public abstract class GraphMapMenuBar extends ToolBar {
 		
 		setDebugSettingsItem.setSubMenu(settings);
 		return setDebugSettingsItem; 
-	}
-	
-	protected MenuItem createFindContributionItem() {
-		final MenuItem findContributionItem = new MenuItem(myConstants.SearchMenuItem());
-		findContributionItem.addSelectionListener(new SelectionListener<MenuEvent>() {
-			@Override
-			public void componentSelected(MenuEvent me) {
-				GraphMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				findContributionItem.getParentMenu().hide();
-				final MessageBox box = MessageBox.prompt(myConstants.FindContributionTitle(), myConstants.FindContributionText());
-				box.addCallback(new Listener<MessageBoxEvent>() {
-					public void handleEvent(MessageBoxEvent be) {
-						if (be.getButtonClicked().getText().equalsIgnoreCase("OK")) {
-							if (be.getValue() == null) {
-								LASADInfo.display("Error", "No valid value entered.");
-							} else {
-								List<Component> mapComponents = GraphMapMenuBar.this.getMyMapSpace().getMyMap().getItems();
-								String searchValue = be.getValue();
-								boolean elementFound = false;
-								int i = 0;
-
-								while (elementFound == false && i < mapComponents.size()) {
-									if (mapComponents.get(i) instanceof AbstractBox) {
-										AbstractBox foundBox = (AbstractBox) mapComponents.get(i);
-										if (foundBox.getConnectedModel().getValue(ParameterTypes.RootElementId).equals(searchValue)) {
-											foundBox.getElement().scrollIntoView();
-											foundBox.getMap().getLayoutTarget().dom.setScrollLeft(foundBox.getPosition(true).x - foundBox.getMap().getInnerWidth() / 2 + foundBox.getWidth() / 2);
-											foundBox.getMap().getLayoutTarget().dom.setScrollTop(foundBox.getPosition(true).y - foundBox.getMap().getInnerHeight() / 2 + foundBox.getHeight() / 2);
-											elementFound = true;
-										}
-									} else if (mapComponents.get(i) instanceof AbstractLinkPanel) {
-										AbstractLinkPanel foundLinkPanel = ((AbstractLinkPanel) mapComponents.get(i));
-										if (foundLinkPanel.getMyLink().getConnectedModel().getValue(ParameterTypes.RootElementId).equals(searchValue)) {
-											foundLinkPanel.getMyLink().getMap().getLayoutTarget().dom.setScrollLeft(foundLinkPanel.getPosition(true).x - foundLinkPanel.getMyLink().getMap().getInnerWidth() / 2 + foundLinkPanel.getWidth() / 2);
-											foundLinkPanel.getMyLink().getMap().getLayoutTarget().dom.setScrollTop(foundLinkPanel.getPosition(true).y - foundLinkPanel.getMyLink().getMap().getInnerHeight() / 2 + foundLinkPanel.getHeight() / 2);
-											elementFound = true;
-										}
-									}
-									i++;
-								}
-								if (!elementFound) {
-									LASADInfo.display("Error", "There is no such contribution");
-								}
-							}
-						}
-					}
-				});
-			}
-		});
-		return findContributionItem;
 	}
 	
 //	private MenuItem deleteFeedbackItem() {
@@ -1033,4 +987,59 @@ public abstract class GraphMapMenuBar extends ToolBar {
 //			}
 //		}
 //	}
+
+	public GraphMapInfo getMyMapInfo()
+	{
+		return this.myMapInfo;
+	}
+
+	protected MenuItem createFindContributionItem() {
+		final MenuItem findContributionItem = new MenuItem(myConstants.SearchMenuItem());
+		findContributionItem.addSelectionListener(new SelectionListener<MenuEvent>() {
+			@Override
+			public void componentSelected(MenuEvent me) {
+				GraphMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
+				findContributionItem.getParentMenu().hide();
+				final MessageBox box = MessageBox.prompt(myConstants.FindContributionTitle(), myConstants.FindContributionText());
+				box.addCallback(new Listener<MessageBoxEvent>() {
+					public void handleEvent(MessageBoxEvent be) {
+						if (be.getButtonClicked().getText().equalsIgnoreCase("OK")) {
+							if (be.getValue() == null) {
+								LASADInfo.display("Error", "No valid value entered.");
+							} else {
+								List<Component> mapComponents = GraphMapMenuBar.this.getMyMapSpace().getMyMap().getItems();
+								String searchValue = be.getValue();
+								boolean elementFound = false;
+								int i = 0;
+
+								while (elementFound == false && i < mapComponents.size()) {
+									if (mapComponents.get(i) instanceof AbstractBox) {
+										AbstractBox foundBox = (AbstractBox) mapComponents.get(i);
+										if (foundBox.getConnectedModel().getValue(ParameterTypes.RootElementId).equals(searchValue)) {
+											foundBox.getElement().scrollIntoView();
+											foundBox.getMap().getLayoutTarget().dom.setScrollLeft(foundBox.getPosition(true).x - foundBox.getMap().getInnerWidth() / 2 + foundBox.getWidth() / 2);
+											foundBox.getMap().getLayoutTarget().dom.setScrollTop(foundBox.getPosition(true).y - foundBox.getMap().getInnerHeight() / 2 + foundBox.getHeight() / 2);
+											elementFound = true;
+										}
+									} else if (mapComponents.get(i) instanceof AbstractLinkPanel) {
+										AbstractLinkPanel foundLinkPanel = ((AbstractLinkPanel) mapComponents.get(i));
+										if (foundLinkPanel.getMyLink().getConnectedModel().getValue(ParameterTypes.RootElementId).equals(searchValue)) {
+											foundLinkPanel.getMyLink().getMap().getLayoutTarget().dom.setScrollLeft(foundLinkPanel.getPosition(true).x - foundLinkPanel.getMyLink().getMap().getInnerWidth() / 2 + foundLinkPanel.getWidth() / 2);
+											foundLinkPanel.getMyLink().getMap().getLayoutTarget().dom.setScrollTop(foundLinkPanel.getPosition(true).y - foundLinkPanel.getMyLink().getMap().getInnerHeight() / 2 + foundLinkPanel.getHeight() / 2);
+											elementFound = true;
+										}
+									}
+									i++;
+								}
+								if (!elementFound) {
+									LASADInfo.display("Error", "There is no such contribution");
+								}
+							}
+						}
+					}
+				});
+			}
+		});
+		return findContributionItem;
+	}
 }

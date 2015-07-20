@@ -83,6 +83,16 @@ public class ArgumentModel
 		return null;
 	}
 
+	public HashSet<LinkedBox> getBoxes()
+	{
+		HashSet<LinkedBox> boxes = new HashSet<LinkedBox>();
+		for (ArgumentThread argThread : this.getArgThreads())
+		{
+			boxes.addAll(argThread.getBoxes());
+		}
+		return boxes;
+	}
+
 	public LinkedBox getBoxByBoxID(int boxID)
 	{
 		LinkedBox returnBox = null;
@@ -123,85 +133,6 @@ public class ArgumentModel
 			}
 		}
 		return null;
-	}
-	
-	private ArrayList<LinkedBox> discoverArgThread(LinkedBox rootBox){
-		ArrayList<LinkedBox> siblings = new ArrayList<LinkedBox>();
-		siblings.add(rootBox);
-		siblings.addAll(rootBox.getSiblingBoxes());
-		
-		visited.addAll(siblings);
-		
-		ArrayList<LinkedBox> allBranch = new ArrayList<LinkedBox>();
-		allBranch.addAll(siblings);
-		
-		for(LinkedBox box : siblings){
-			for(LinkedBox childBox : box.getChildBoxes())
-			{
-				if(!visited.contains(childBox))
-				{
-					allBranch.addAll(discoverArgThread(childBox));
-				}else{
-					allBranch.add(childBox);
-					return allBranch;
-				}
-			}
-		}
-		return allBranch;
-	}
-	
-	//guarantees that the ArgThreads listed correspond to the current state of the map
-	public void updateArgThreads()
-	{
-		HashSet<LinkedBox> allBoxes = new HashSet<LinkedBox>();
-		for(ArgumentThread argThread : this.getArgThreads()){
-			allBoxes.addAll(argThread.getBoxes());
-			this.removeArgThread(argThread);
-		}
-		
-		ArrayList<ArrayList<LinkedBox>> threads = new ArrayList<ArrayList<LinkedBox>>();
-		visited.clear();
-		ArrayList<LinkedBox> thread;
-		for(LinkedBox box : allBoxes)
-		{
-			if(visited.contains(box)) continue;
-			thread = discoverArgThread(box);
-			
-			boolean partOfOther = false;
-			LinkedBox lastChild = thread.get(thread.size()-1);
-			HashSet<LinkedBox> firstParents = thread.get(0).getParentBoxes();
-			for(ArrayList<LinkedBox> set : threads)
-			{
-				if(partOfOther)
-					break;
-				
-				if(set.contains(lastChild))
-				{
-					thread.remove(lastChild);
-					set.addAll(thread);
-					partOfOther = true;
-					break;
-				}
-				
-				for(LinkedBox parent : firstParents)
-				{
-					if(set.contains(parent))
-					{
-						set.addAll(thread);
-						partOfOther = true;
-						break;
-					}
-				}
-			}
-			
-			if(!partOfOther)
-				threads.add(thread);
-		}
-		
-		for(ArrayList<LinkedBox> set : threads)
-		{
-			this.addArgThread(new ArgumentThread(set));
-		}
 	}
 
 	public HashSet<ArgumentThread> getArgThreads()
