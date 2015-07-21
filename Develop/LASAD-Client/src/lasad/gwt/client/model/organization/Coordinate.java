@@ -1,5 +1,11 @@
 package lasad.gwt.client.model.organization;
 
+/**
+ *	A representation of a coordinate point on the chessBoard grid for ArgumentGrid and autoOrganizer.  NOT the pixel location of a box,
+ *	but rather the column and row indicator.
+ *	@author Kevin Loughlin
+ *	@since 15 July 2015
+ */
 public class Coordinate
 {
 	private int x;

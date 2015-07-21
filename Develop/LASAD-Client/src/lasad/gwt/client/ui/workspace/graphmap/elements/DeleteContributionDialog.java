@@ -2,9 +2,6 @@ package lasad.gwt.client.ui.workspace.graphmap.elements;
 
 import java.util.HashSet;
 
-import lasad.gwt.client.model.AbstractMVController;
-import lasad.gwt.client.model.ElementInfo;
-
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
@@ -21,34 +18,26 @@ import com.google.gwt.user.client.Element;
 
 import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.model.organization.LinkedBox;
-
-import lasad.gwt.client.logger.Logger;
+import lasad.gwt.client.model.AbstractMVController;
+import lasad.gwt.client.model.argument.MVController;
 
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.communication.LASADActionSender;
 import lasad.gwt.client.communication.helper.ActionFactory;
-import lasad.gwt.client.model.argument.MVController;
 
 /**
- * This class creates the dialog box for when the user selects to add a relation via the argument map drop down menu.
- * If creating links via dragging, see AbstractCreateLinkDialog (link only) and AbstractCreateBoxLinkDialog (link and box).
- * Documentation added by Kevin Loughlin, 16 June 2015
- * Modified by Kevin Loughlin 6 July 2015 to add limitations on what types of links can be added and when.
- * @author Unknown
+ * 	This class creates the dialog box for when the user selects to delete a contirbution via the argument map drop down menu.
+ * 	@author Kevin Loughlin
+ *	@since 20 July 2015, Updated 21 July 2015
  */
+public class DeleteContributionDialog extends Window
+{
+	private FormData formData;
 
-public class DeleteContributionDialog extends Window {
+	// The box where the user selects the contribution to be deleted
+	private SimpleComboBox<String> boxSelector = new SimpleComboBox<String>();
 
-//	private final LASADActionSender communicator = LASADActionSender.getInstance();
-//	private final ActionFactory actionBuilder = ActionFactory.getInstance();
-//	private MVController myController;
-
-	protected FormData formData;
-	protected SimpleComboBox<String> boxSelector = new SimpleComboBox<String>();
-
-	protected String correspondingMapId;
-
-	// Maps ROOTELEMENTID to corresponding element
+	private String correspondingMapId;
 
 	private ArgumentModel argModel;
 	private HashSet<LinkedBox> boxes;
@@ -56,6 +45,10 @@ public class DeleteContributionDialog extends Window {
 	private final ActionFactory actionBuilder = ActionFactory.getInstance();
 	private MVController myController = null;
 
+	/**
+	 *	Constructor
+	 *	@param mapId - The id of the map from which we will extract the argument model and boxes
+	 */
 	public DeleteContributionDialog(String mapId)
 	{
 		this.correspondingMapId = mapId;
@@ -64,7 +57,8 @@ public class DeleteContributionDialog extends Window {
 	}
 
 	@Override
-	protected void onRender(Element parent, int index) {
+	protected void onRender(Element parent, int index)
+	{
 		super.onRender(parent, index);
 		this.setAutoHeight(true);
 		this.setWidth(200);
@@ -73,15 +67,19 @@ public class DeleteContributionDialog extends Window {
 		createForm();
 	}
 
-	private void createForm() {
+	/*
+	 *	Creates the dialog based from the specifications of onRender
+	 */
+	private void createForm()
+	{
 		FormPanel simple = new FormPanel();
 		simple.setFrame(true);
 		simple.setHeaderVisible(false);
 		simple.setAutoHeight(true);
-
-		// Fill combo boxes
 		boxSelector.setFieldLabel("<font color=\"#000000\">" + "Contribution" + "</font>");
 		boxSelector.setAllowBlank(false);
+
+		// Add the rootIDs to the comboBox
 		for (LinkedBox box : boxes)
 		{
 			Integer rootID = box.getRootID();
@@ -90,7 +88,7 @@ public class DeleteContributionDialog extends Window {
 
 		simple.add(boxSelector, formData);
 
-		// Filter comboEnd depending on comboStart selection
+		// Set the controller once a selection is made
 		boxSelector.addSelectionChangedListener(new SelectionChangedListener<SimpleComboValue<String>>()
 		{
 			@Override
@@ -98,13 +96,12 @@ public class DeleteContributionDialog extends Window {
 			{
 				if (getMyController() == null)
 				{
-//					myController = LASAD_Client.getMVCController(correspondingMapId);
 					setMyController();
 				}
 			}	
 		});
 
-		// Okay Button
+		// Okay Button will send the remove element request to the server when clicked
 		Button btnOkay = new Button("Ok");
 		btnOkay.addSelectionListener(new SelectionListener<ButtonEvent>()
 		{
@@ -112,21 +109,14 @@ public class DeleteContributionDialog extends Window {
 			@Override
 			public void componentSelected(ButtonEvent ce)
 			{
-				try
-				{
-					int rootID = Integer.parseInt(boxSelector.getRawValue());
-					onClickSendRemoveElementToServer(correspondingMapId, rootID);
-					DeleteContributionDialog.this.hide();
-				}
-				catch (Exception e)
-				{
-					Logger.log("EXCEPTION THROWN IN DELETE CONTRIBUTION", Logger.DEBUG);
-				}
+				int rootID = Integer.parseInt(boxSelector.getRawValue());
+				onClickSendRemoveElementToServer(correspondingMapId, rootID);
+				DeleteContributionDialog.this.hide();
 			}
 		});
 		simple.addButton(btnOkay);
 
-		// Cancel Button
+		// Cancel button will hide the dialog
 		Button btnCancel = new Button("Cancel");
 		btnCancel.addSelectionListener(new SelectionListener<ButtonEvent>()
 		{
@@ -144,18 +134,24 @@ public class DeleteContributionDialog extends Window {
 
 		this.add(simple);
 	}
-	protected void onClickSendRemoveElementToServer(String mapID, int rootID)
+
+	/*
+	 *	Sends the request to the server to remove the element.  Be sure to send the boxID, not rootID.
+	 *	@param mapID - The ID of the map
+	 *	@param rootID - The box's rootID, used to find the box and then extract its boxID
+	 */
+	private void onClickSendRemoveElementToServer(String mapID, int rootID)
 	{
 		int boxID = argModel.getBoxByRootID(rootID).getBoxID();
 		communicator.sendActionPackage(actionBuilder.removeElement(mapID, boxID));
 	}
 
-	protected AbstractMVController getMyController()
+	private AbstractMVController getMyController()
 	{
 		return myController;
 	}
 
-	protected void setMyController()
+	private void setMyController()
 	{
 		myController = LASAD_Client.getMVCController(correspondingMapId);
 	}

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import lasad.gwt.client.model.organization.ArgumentThread;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.model.organization.EdgeCoords;
 
 
 /**
@@ -134,6 +135,50 @@ public class ArgumentModel
 	{
 		return argThreads;
 	}
+
+	// Remember, top left is (0,0), not bottom left
+	public EdgeCoords calcEdgeCoords()
+	{
+		double top = Double.MAX_VALUE;
+		double left = Double.MAX_VALUE;
+
+		double bottom = Double.MIN_VALUE;
+		double right = Double.MIN_VALUE;
+
+		for (ArgumentThread thread : this.getArgThreads())
+		{
+			for (LinkedBox box : thread.getBoxes())
+			{
+				double yTop = box.getYTop();
+				double yBottom = yTop + box.getHeight();
+
+				double xLeft = box.getXLeft();
+				double xRight = xLeft + box.getWidth();
+
+				if (yTop < top)
+				{
+					top = yTop;
+				}
+
+				if (yBottom > bottom)
+				{
+					bottom = yBottom;
+				}
+
+				if (xLeft < left)
+				{
+					left = xLeft;
+				}
+
+				if (xRight > right)
+				{
+					right = xRight;
+				}
+			}
+		}
+
+		return new EdgeCoords(top, right, bottom, left);
+	} 
 
 	@Override
 	public String toString()

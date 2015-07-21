@@ -1,11 +1,6 @@
 package lasad.gwt.client.ui.workspace.graphmap.elements;
 
-import lasad.gwt.client.model.AbstractMVController;
-import lasad.gwt.client.model.ElementInfo;
-import lasad.gwt.client.ui.box.AbstractBox;
-import lasad.gwt.client.ui.link.AbstractLink;
-import lasad.gwt.client.ui.workspace.LASADInfo;
-import lasad.shared.communication.objects.parameters.ParameterTypes;
+import java.util.HashSet;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -24,48 +19,41 @@ import com.google.gwt.user.client.Element;
 import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.OrganizerLink;
-import lasad.gwt.client.model.organization.ArgumentThread;
-import lasad.gwt.client.model.organization.AutoOrganizer;
-import lasad.gwt.client.logger.Logger;
+import lasad.gwt.client.model.AbstractMVController;
+import lasad.gwt.client.model.argument.MVController;
 
+import lasad.gwt.client.ui.workspace.LASADInfo;
 import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
 
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.communication.LASADActionSender;
 import lasad.gwt.client.communication.helper.ActionFactory;
-import lasad.gwt.client.model.argument.MVController;
-
-import java.util.HashSet;
 
 /**
- * This class creates the dialog box for when the user selects to add a relation via the argument map drop down menu.
- * If creating links via dragging, see AbstractCreateLinkDialog (link only) and AbstractCreateBoxLinkDialog (link and box).
- * Documentation added by Kevin Loughlin, 16 June 2015
- * Modified by Kevin Loughlin 6 July 2015 to add limitations on what types of links can be added and when.
- * @author Unknown
+ *	This class creates the dialog box for when the user selects to delete a relation via the argument map drop down menu.
+ *	As of right now, it only supports deleting links between boxes, not links between a box and another link.
+ *	@author Kevin Loughlin
+ *	@since 20 July 2015, Updated 21 July 2015
  */
-
-public class DeleteRelationDialog extends Window {
-
-//	private final LASADActionSender communicator = LASADActionSender.getInstance();
-//	private final ActionFactory actionBuilder = ActionFactory.getInstance();
-//	private MVController myController;
-
-	protected FormData formData;
-	protected SimpleComboBox<String> comboStart = new SimpleComboBox<String>();
-	protected SimpleComboBox<String> comboEnd = new SimpleComboBox<String>();
-	protected String correspondingMapId;
-
-	// Maps ROOTELEMENTID to corresponding element
+public class DeleteRelationDialog extends Window
+{
+	private FormData formData;
+	private SimpleComboBox<String> comboStart = new SimpleComboBox<String>();
+	private SimpleComboBox<String> comboEnd = new SimpleComboBox<String>();
+	private String correspondingMapId;
 	private ArgumentModel argModel;
 	private HashSet<LinkedBox> boxes;
 	private final LASADActionSender communicator = LASADActionSender.getInstance();
 	private final ActionFactory actionBuilder = ActionFactory.getInstance();
 	private MVController myController = null;
-
 	protected boolean allowLinksToLinks;
 
-	public DeleteRelationDialog(String mapId) {
+	/**
+	 *	Constructor
+	 *	@param mapId - The id of the map from which we will extract the argument model and boxes
+	 */
+	public DeleteRelationDialog(String mapId)
+	{
 		this.correspondingMapId = mapId;
 		this.argModel = ArgumentModel.getInstanceByMapID(mapId);
 		this.boxes = argModel.getBoxes();
@@ -82,15 +70,19 @@ public class DeleteRelationDialog extends Window {
 		createForm();
 	}
 
-	private void createForm() {
+	/*
+	 *	Creates the dialog based from the specifications of onRender
+	 */
+	private void createForm()
+	{
 		FormPanel simple = new FormPanel();
 		simple.setFrame(true);
 		simple.setHeaderVisible(false);
 		simple.setAutoHeight(true);
-
-		// Fill combo boxes
 		comboStart.setFieldLabel("<font color=\"#000000\">" + "Start" + "</font>");
 		comboStart.setAllowBlank(false);
+
+		// Fills the start combo box with all available box root IDs
 		for (LinkedBox box : argModel.getBoxes())
 		{
 			if (box.getNumRelations() > 0)
@@ -105,20 +97,6 @@ public class DeleteRelationDialog extends Window {
 		comboEnd.setFieldLabel("<font color=\"#000000\">" + "End" + "</font>");
 		comboEnd.setAllowBlank(false);
 
-		/*
-		if (this.getAllowLinksToLinks())
-		{
-			for(Map.Entry<String, AbstractLink> entry : links.entrySet())
-			{
-				String details = entry.getValue().getElementInfo().getElementOption(ParameterTypes.Details);
-				if (details == null || details.equalsIgnoreCase("true"))
-				{
-					comboEnd.add(entry.getKey());
-				}
-			}
-		}
-		*/
-
 		comboEnd.setEnabled(false);
 		simple.add(comboEnd, formData);
 
@@ -129,18 +107,21 @@ public class DeleteRelationDialog extends Window {
 			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se)
 			{
 				comboEnd.removeAll();
-				// Important to use rootID
+
+				// Important to remember to fetch box by rootID
 				LinkedBox startBox = argModel.getBoxByRootID(Integer.parseInt(comboStart.getRawValue()));
 				HashSet<LinkedBox> relatedBoxes = startBox.getRelatedBoxes();
 
+				// Add related boxes to end combo box
 				for (LinkedBox box : relatedBoxes)
 				{
 					Integer rootID = box.getRootID();
 					comboEnd.add(rootID.toString());
 				}
 
-				if (getMyController() == null) {
-//					myController = LASAD_Client.getMVCController(correspondingMapId);
+				// Set the controller and enable the end combo box
+				if (getMyController() == null)
+				{
 					setMyController();
 				}
 
@@ -148,6 +129,7 @@ public class DeleteRelationDialog extends Window {
 			}
 		});
 
+		// Essentially same thing as the combo start box, just selected after
 		comboEnd.addSelectionChangedListener(new SelectionChangedListener<SimpleComboValue<String>>()
 		{
 
@@ -165,14 +147,14 @@ public class DeleteRelationDialog extends Window {
 					comboStart.add(rootID.toString());
 				}
 
-				if (getMyController() == null) {
-//					myController = LASAD_Client.getMVCController(correspondingMapId);
+				if (getMyController() == null)
+				{
 					setMyController();
 				}
 			}
 		});
 
-		// Okay Button
+		// Upon click of the okay button, find the link between the two listed boxes and delete it
 		Button btnOkay = new Button("Ok");
 		btnOkay.addSelectionListener(new SelectionListener<ButtonEvent>()
 		{
@@ -190,14 +172,13 @@ public class DeleteRelationDialog extends Window {
 				{
 					LASADInfo.display("Error", "Link does not exist between these boxes.");
 				}
-				//communicator.sendActionPackage(actionBuilder.createLinkWithElements(config, correspondingMapId, startId, endId));
 				
 				DeleteRelationDialog.this.hide();
 			}
 		});
 		simple.addButton(btnOkay);
 
-		// Cancel Button
+		// Cancel Button hides dialog
 		Button btnCancel = new Button("Cancel");
 		btnCancel.addSelectionListener(new SelectionListener<ButtonEvent>()
 		{
@@ -215,15 +196,21 @@ public class DeleteRelationDialog extends Window {
 
 		this.add(simple);
 	}
-	protected void onClickSendRemoveElementToServer(String mapID, int linkID)
+
+	/*
+	 *	Sends the command to remove the element
+	 */
+	private void onClickSendRemoveElementToServer(String mapID, int linkID)
 	{
 		communicator.sendActionPackage(actionBuilder.removeElement(mapID, linkID));
 	}
-	protected AbstractMVController getMyController()
+
+	private AbstractMVController getMyController()
 	{
 		return myController;
 	}
-	protected void setMyController()
+
+	private void setMyController()
 	{
 		myController = LASAD_Client.getMVCController(correspondingMapId);
 	}

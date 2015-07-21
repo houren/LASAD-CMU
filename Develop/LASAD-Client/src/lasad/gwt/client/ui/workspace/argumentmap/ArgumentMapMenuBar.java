@@ -62,12 +62,18 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.xml.client.impl.DOMParseException;
 
-// Added by Kevin Loughlin for auto organize
 import lasad.gwt.client.model.organization.AutoOrganizer;
-
+import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.model.organization.EdgeCoords;
 import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteContributionDialog;
 import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteRelationDialog;
 
+/**
+ *	Finishes the implementation of the map's menu bar.
+ *	@author Unknown
+ *	@since Unknown, Last Updated 21 July 2015 by Kevin Loughlin
+ */
 public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
 	private final LASADActionSender communicator = LASADActionSender.getInstance();
@@ -193,87 +199,171 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		}
 	}
 
-		/*
-		//Button itemAdd = new Button(myConstants.AddMenu());
-		Button itemGroup = new Button(myConstants.GroupTools());
-
-
-
-		//itemEdit.setMenu(editMenu);
-		//itemAdd.setMenu(addMenu);
-		
-
-		//this.add(itemEdit);
-		//this.add(itemAdd);
-
-		//Menu addMenu = createAddMenu();
-		Menu groupMenu = createGroupMenu();
-		Menu debugMenu = createDebugMenu();
-
-		itemEdit.setMenu(editMenu);
-		itemAdd.setMenu(addMenu);
-		itemGroup.setMenu(groupMenu);
-
-		this.add(itemEdit);
-		this.add(itemAdd);
-
-		if (groupMenu.getItemCount() > 0) {
-			this.add(itemGroup);
-		}
-
-		// TODO Zhenyu Geng
-		/*
-		Button itemExtraFunctions = new Button("Extras...");
-		Menu extraFunctionsMenu = createExtraFunctions();
-		itemExtraFunctions.setMenu(extraFunctionsMenu);
-		this.add(itemExtraFunctions);
-		*/
-		/*
-		if (myMapInfo.isFeedback()) {
-			itemFeedback = new Button("Feedback");
-			Menu feedbackMenu = createFeedbackMenu();
-			itemFeedback.setMenu(feedbackMenu);
-			this.add(itemFeedback);
-		}
-		*/
-
-		// Outsourced to Map Login Screen
-		// if (myMapInfo.getOntologyName().equalsIgnoreCase("argunaut") || myMapInfo.getOntologyName().equalsIgnoreCase("largo"))
-		// {
-		// Button itemParse = new Button("Load Map");
-		// Menu parseMenu = createParseMenu();
-		// itemParse.setMenu(parseMenu);
-		// this.add(itemParse);
-		// }
-
-		/*
-		if (editionStyle == ArgumentEditionStyleEnum.TABLE) {
-			createZoomMenu();
-		}
-
-		if (LASAD_Client.getInstance().getRole().equalsIgnoreCase("developer")) {
-			Button itemDebug = new Button("Debug");
-			itemDebug.setMenu(debugMenu);
-			this.add(itemDebug);
-		}
-		*/
-
 	// TODO Zhenyu
-	private Menu createExtraFunctions() {
-		Menu extramenu = new Menu();
-		MenuItem screenshot = createScreenshotItem();
-		extramenu.add(screenshot);
+	protected MenuItem altCreateScreenshotItem()
+	{
+		final MenuItem screenshot = new MenuItem("Create a screenshot");
+		screenshot.addSelectionListener(new SelectionListener<MenuEvent>()
+		{
+			@Override
+			public void componentSelected(MenuEvent me)
+			{
+				// extend the size of map to adjust itself to the windows
+				((ArgumentMap) myMapSpace.getMyMap()).extendMapDimension(Direction.RIGHT,
+						(myMapSpace.getMyMap().getMapDimensionSize().width / myMapSpace.getMyMap().getOffsetWidth() + 1)
+								* myMapSpace.getMyMap().getOffsetWidth() - myMapSpace.getMyMap().getMapDimensionSize().width);
+				((ArgumentMap) myMapSpace.getMyMap()).extendMapDimension(Direction.DOWN,
+						(myMapSpace.getMyMap().getMapDimensionSize().height / myMapSpace.getMyMap().getOffsetHeight() + 1)
+								* myMapSpace.getMyMap().getOffsetHeight() - myMapSpace.getMyMap().getMapDimensionSize().height);
 
-		// Added by Kevin Loughlin
-		//if (myMapInfo.isAutoOrganize() )
-		//{
-		//}
+				// show the time of this process
+				MessageBox box = new MessageBox();
+				box.setButtons(MessageBox.YESNO);
+				box.setIcon(MessageBox.QUESTION);
+				// box.setTitle(myConstants.CloseMapHeader());
+				box.setMessage("This Process will last " +
+				// 3
+				// * (myMapSpace.getMyMap().getMapDimensionSize().width * myMapSpace.getMyMap().getMapDimensionSize().height)
+				// / (60 * myMapSpace.getMyMap().getOffsetHeight() * myMapSpace.getMyMap().getOffsetWidth())
+				// +
+						"several minutes, do you want to continue? ");
+				box.addCallback(new Listener<MessageBoxEvent>()
+				{
+					public void handleEvent(MessageBoxEvent be)
+					{
+						if (be.getButtonClicked().getItemId().equals(Dialog.YES)) {
+							// save position in order to return to this position after screenshot
+							final int leftBefore = myMapSpace.getMyMap().getBody().getScrollLeft();
+							final int topBefore = myMapSpace.getMyMap().getBody().getScrollTop();
 
-		// MenuItem rearchBox = createRearchBox();
-		// extramenu.add(rearchBox);
+							ExportScreenShotDialogue.getInstance().showLoadingScreen();
+							// roll map to the beginning
 
-		return extramenu;
 
+							EdgeCoords edgeCoords = ArgumentModel.getInstanceByMapID(myMapInfo.getMapID()).calcEdgeCoords();
+							final int top = edgeCoords.getTop();
+							final int left = edgeCoords.getLeft();
+							final int right = edgeCoords.getRight();
+							final int bottom = edgeCoords.getBottom();
+							final int width = right - left;
+							final int height = bottom - top;
+
+							myMapSpace.getMyMap().getBody().scrollTo("top", top);
+							myMapSpace.getMyMap().getBody().scrollTo("left", left);
+
+							// make a screen shot
+							captureMap(myMapSpace.getMyMap().getBody().getId());
+
+							Timer t = new Timer() {
+								// the size of the windows
+								int interval_H = myMapSpace.getMyMap().getOffsetHeight();
+								int interval_W = myMapSpace.getMyMap().getOffsetWidth();
+								int position_H = top;
+								int position_W = left;
+								int sum = 0;
+								boolean isFinished = false;
+								int numOfAllImages = width * height / (myMapSpace.getMyMap().getOffsetHeight() * myMapSpace.getMyMap().getOffsetWidth());
+
+								public void run() {
+									if (!isFinished) {
+										RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()
+												+ "ScreenShot");
+										RequestCallback handler = new RequestCallback() {
+
+											@Override
+											public void onError(Request request, Throwable e) {
+												if (DebugSettings.debug_errors)
+													Logger.log(e.toString(), Logger.DEBUG_ERRORS);
+											}
+
+											@Override
+											public void onResponseReceived(Request request, Response response) {
+												// Browser will open a save file dialog box
+												// System.err.println("ScreenShot sendet!");
+											}
+										};
+
+										// update the step of the process
+										if (numOfAllImages != 0)
+										{
+											ExportScreenShotDialogue.getInstance().updateProgress((float) sum / numOfAllImages);
+										}
+
+										try {
+											// get the screenshot and send it to the servlet
+											String map_temp = showMap();
+											map_temp = map_temp.substring(map_temp.indexOf(",") + 1);
+											builder.sendRequest(LASAD_Client.getInstance().getUsername() + "_" + myMapInfo.getMapID() + sum
+													+ ":" + map_temp, handler);
+										} catch (RequestException e) {
+											e.printStackTrace();
+										}
+										// if not end roll the map to next window
+										if (position_H < bottom) {
+											if (position_W < right) {
+												position_W += interval_W;
+											} else {
+												position_H += interval_H;
+												position_W = left;
+											}
+
+											myMapSpace.getMyMap().getBody().scrollTo("top", position_H);
+											myMapSpace.getMyMap().getBody().scrollTo("left", position_W);
+											captureMap(myMapSpace.getMyMap().getBody().getId());
+											sum++;
+										} else {
+											ExportScreenShotDialogue.getInstance().updateProgress((float) 1);
+											// return to previous position
+											myMapSpace.getMyMap().getBody().scrollTo("top", topBefore);
+											myMapSpace.getMyMap().getBody().scrollTo("left", leftBefore);
+											isFinished = true;
+											RequestBuilder builder_end = new RequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()
+													+ "ScreenShotMerge");
+											try {
+												// calculate the cols and rows of the image
+												int cols = width / interval_W;
+												int rows = height / interval_H;
+												
+												String format = LASAD_Client.getInstance().getUsername() + "_" + myMapInfo.getMapID() + ","
+														+ rows + ":" + cols;
+
+												builder_end.sendRequest(format, new RequestCallback() {
+													@Override
+													public void onError(Request request, Throwable e) {
+														if (DebugSettings.debug_errors)
+															Logger.log(e.toString(), Logger.DEBUG_ERRORS);
+													}
+
+													@Override
+													public void onResponseReceived(Request request, Response response) {
+														// Browser will open a save file dialog box
+														ExportScreenShotDialogue.getInstance().closeLoadingScreen();
+														com.google.gwt.user.client.Window.open(GWT.getModuleBaseURL() + "ScreenShotMerge",
+																"_blank", "enabled");
+														// System.err.println("Screenshot mergen!");
+													}
+												});
+												this.cancel();
+											} catch (RequestException e1) {
+												// TODO Auto-generated catch block
+												e1.printStackTrace();
+											}
+										}
+									}
+								}
+							};
+
+							// delay running for 3 seconds
+							t.scheduleRepeating(3000);
+						}
+					}
+
+				});
+				box.show();
+			}
+		});
+
+		return screenshot;
 	}
 
 	// TODO Zhenyu
@@ -427,10 +517,10 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return screenshot;
 	}
 
-	// TODO Zhenyu
-	private MenuItem createRearchBox() {
-		final MenuItem rearchbox = new MenuItem("search the Text of Boxes.....");
-		rearchbox.addSelectionListener(new SelectionListener<MenuEvent>() {
+	// TODO Zhenyu, currently unused
+	private MenuItem createSearchBox() {
+		final MenuItem searchbox = new MenuItem("search the Text of Boxes.....");
+		searchbox.addSelectionListener(new SelectionListener<MenuEvent>() {
 
 			@Override
 			public void componentSelected(MenuEvent ce) {
@@ -477,7 +567,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
 		});
 
-		return rearchbox;
+		return searchbox;
 	}
 
 	// TODO Zhenyu
@@ -652,305 +742,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return deleteFeedbackItem;
 	}
 
-	private MenuItem createLoadItem() {
-		final MenuItem loadItem = new MenuItem("Load Map");
-		loadItem.addSelectionListener(new SelectionListener<MenuEvent>() {
-			@Override
-			public void componentSelected(MenuEvent ce) {
-				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				// The dialog window
-				final Window window = new Window();
-
-				// Create a FormPanel and point it at a service.
-				final FormPanel form = new FormPanel();
-				form.setAction(GWT.getModuleBaseURL() + "fileupload");
-
-				// set the form to use the POST method, and multipart MIME
-				// encoding for file upload
-				form.setEncoding(FormPanel.ENCODING_MULTIPART);
-				form.setMethod(FormPanel.METHOD_POST);
-
-				// Create a panel to hold all of the form widgets.
-				VerticalPanel panel = new VerticalPanel();
-				form.setWidget(panel);
-
-				// Create a FileUpload widget.
-				final FileUpload upload = new FileUpload();
-				upload.setName("uploadFormElement");
-				upload.setStyleName("x-btn");
-				panel.add(upload);
-
-				// Add a 'submit' button.
-				com.google.gwt.user.client.ui.Button submit = new com.google.gwt.user.client.ui.Button("Submit", new ClickHandler() {
-
-					@Override
-					public void onClick(ClickEvent event) {
-						form.submit();
-					}
-				});
-
-				submit.setStyleName("x-btn");
-				panel.add(submit);
-
-				form.addSubmitHandler(new FormPanel.SubmitHandler() {
-
-					public void onSubmit(SubmitEvent event) {
-
-					}
-				});
-
-				form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-
-					@Override
-					public void onSubmitComplete(SubmitCompleteEvent event) {
-						window.hide();
-						String result = event.getResults();
-						result = result.replaceAll("THISISABRACKETSUBSTITUTE1", "<");
-						result = result.replaceAll("THISISABRACKETSUBSTITUTE2", ">");
-
-						// the following if-block is needed because of some
-						// compiled-mode problems
-						if (result.contains("<pre>")) {
-							result = result.replaceAll("<pre>", "");
-							result = result.replaceAll("</pre>", "");
-						}
-
-						// the following if-block is needed because of some
-						// parser problems
-						if (result.contains("nbsp")) {
-							result = result.replaceAll("&nbsp;", " ");
-						}
-
-						String template = myMapInfo.getTemplateName();
-						MVController newController = (MVController) ArgumentMapMenuBar.this.myMapSpace.getSession().getController();
-
-						// new XMLLoader(myMapSpace, ArgumentMapMenuBar.this.myMapSpace.getSession().getController(), result);
-					}
-				});
-				window.setSize(240, 70);
-				window.setHeading("Choose XML-File");
-				window.add(form);
-				window.show();
-			}
-		});
-		return loadItem;
-	}
-
-	private Menu createParseMenu() {
-		Menu menu = new Menu();
-		MenuItem argunautItem = null;
-		if (myMapInfo.getOntologyName().equalsIgnoreCase("argunaut")) {
-			argunautItem = createFileUploadItem();
-			menu.add(argunautItem);
-		}
-
-		else if (myMapInfo.getOntologyName().equalsIgnoreCase("largo")) {
-			MenuItem largoItem = createLoadFromXmlFileItem();
-			menu.add(largoItem);
-		}
-		return menu;
-	}
-
-	private MenuItem createFileUploadItem() {
-		MenuItem fileUploadItem = new MenuItem("File upload");
-		fileUploadItem.addSelectionListener(new SelectionListener<MenuEvent>() {
-			@Override
-			public void componentSelected(MenuEvent me) {
-				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				// The dialog window
-				final Window window = new Window();
-
-				// Create a FormPanel and point it at a service.
-				final FormPanel form = new FormPanel();
-				form.setAction(GWT.getModuleBaseURL() + "fileupload");
-
-				// set the form to use the POST method, and multipart MIME
-				// encoding for file upload
-				form.setEncoding(FormPanel.ENCODING_MULTIPART);
-				form.setMethod(FormPanel.METHOD_POST);
-
-				// Create a panel to hold all of the form widgets.
-				VerticalPanel panel = new VerticalPanel();
-				form.setWidget(panel);
-
-				// Create a FileUpload widget.
-				final FileUpload upload = new FileUpload();
-				upload.setName("uploadFormElement");
-				upload.setStyleName("x-btn");
-				panel.add(upload);
-
-				// Add a 'submit' button.
-				com.google.gwt.user.client.ui.Button submit = new com.google.gwt.user.client.ui.Button("Submit", new ClickHandler() {
-
-					@Override
-					public void onClick(ClickEvent event) {
-						form.submit();
-					}
-				});
-				submit.setStylePrimaryName("x-btn");
-				panel.add(submit);
-
-				form.addSubmitHandler(new FormPanel.SubmitHandler() {
-
-					public void onSubmit(SubmitEvent event) {
-
-					}
-				});
-
-				form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-
-					@Override
-					public void onSubmitComplete(SubmitCompleteEvent event) {
-						window.hide();
-						String result = event.getResults();
-						result = result.replaceAll("THISISABRACKETSUBSTITUTE1", "<");
-						result = result.replaceAll("THISISABRACKETSUBSTITUTE2", ">");
-
-						// the following if-block is needed because of some
-						// compiled-mode problems
-						if (result.contains("<pre>")) {
-							result = result.replaceAll("<pre>", "");
-							result = result.replaceAll("</pre>", "");
-						}
-
-						// the following if-block is needed because of some
-						// parser problems
-						if (result.contains("nbsp")) {
-							result = result.replaceAll("&nbsp;", " ");
-						}
-
-						MVController newController = (MVController) ArgumentMapMenuBar.this.myMapSpace.getSession().getController();
-						ArgunautParser parser = new ArgunautParser(result, (ArgumentMapSpace) myMapSpace, newController);
-						try {
-							if (result.trim().equals("")) {
-								MessageBox.info("No gml text found", "Please enter a proper gml-file text!", null);
-							} else {
-								parser.parseText();
-							}
-						} catch (DOMParseException e) {
-							MessageBox.alert("Error", "The gml-file does not match the argunaut pattern!\n " + e.toString(), null);
-							e.printStackTrace();
-						} catch (Exception e) {
-							MessageBox.alert("Unknown Error",
-									"An error occured in class ArgumentMapMenuBar.java. Contact the system developer for further information.\n "
-											+ e.toString(), null);
-							MessageBox.alert("Unknown Error", e.toString(), null);
-							e.printStackTrace();
-						}
-					}
-				});
-				window.setSize(240, 70);
-				window.setHeading("Choose XML-File");
-				window.add(form);
-				window.show();
-
-			}
-		});
-		return fileUploadItem;
-	}
-
-	private MenuItem createLoadFromXmlFileItem() {
-		MenuItem LARGOItem = new MenuItem("Load from XML-File");
-		LARGOItem.addSelectionListener(new SelectionListener<MenuEvent>() {
-			@Override
-			public void componentSelected(MenuEvent me) {
-				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				// The dialog window
-				final Window window = new Window();
-
-				// Create a FormPanel and point it at a service.
-				final FormPanel form = new FormPanel();
-				form.setAction(GWT.getModuleBaseURL() + "fileupload");
-
-				// set the form to use the POST method, and multipart MIME
-				// encoding for file upload
-				form.setEncoding(FormPanel.ENCODING_MULTIPART);
-				form.setMethod(FormPanel.METHOD_POST);
-
-				// Create a panel to hold all of the form widgets.
-				VerticalPanel panel = new VerticalPanel();
-				form.setWidget(panel);
-
-				// Create a FileUpload widget.
-				final FileUpload upload = new FileUpload();
-				upload.setName("uploadFormElement");
-				upload.setStyleName("x-btn");
-				panel.add(upload);
-
-				// Add a 'submit' button.
-				com.google.gwt.user.client.ui.Button submit = new com.google.gwt.user.client.ui.Button("Submit", new ClickHandler() {
-
-					@Override
-					public void onClick(ClickEvent event) {
-						form.submit();
-					}
-				});
-				submit.setStyleName("x-btn");
-				panel.add(submit);
-
-				form.addSubmitHandler(new FormPanel.SubmitHandler() {
-
-					public void onSubmit(SubmitEvent event) {
-
-					}
-				});
-
-				form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-
-					@Override
-					public void onSubmitComplete(SubmitCompleteEvent event) {
-						window.hide();
-						String result = event.getResults();
-						result = result.replaceAll("THISISABRACKETSUBSTITUTE1", "<");
-						result = result.replaceAll("THISISABRACKETSUBSTITUTE2", ">");
-
-						// the following if-block is needed because of some
-						// compiled-mode problems
-						if (result.contains("<pre>")) {
-							result = result.replaceAll("<pre>", "");
-							result = result.replaceAll("</pre>", "");
-						}
-
-						// the following if-block is needed because of some
-						// parser problems
-						if (result.contains("nbsp")) {
-							result = result.replaceAll("&nbsp;", " ");
-						}
-
-						String template = myMapInfo.getTemplateName();
-						MVController newController = (MVController) ArgumentMapMenuBar.this.myMapSpace.getSession().getController();
-
-						LARGOParser parser = new LARGOParser(result, template, (ArgumentMapSpace) myMapSpace, newController);
-						try {
-							if (result.trim().equals("")) {
-								MessageBox.info("No xml text found", "Please enter a proper xml-file text!", null);
-							} else {
-								parser.parseText();
-							}
-						} catch (DOMParseException e) {
-							MessageBox.alert("Error", "The xml-file does not match the largo pattern!", null);
-							e.printStackTrace();
-						} catch (Exception e) {
-							MessageBox
-									.alert("Unknown Error",
-											"An error occured in class ArgumentMapMenuBar.java. Contact the system developer for further information.",
-											null);
-							e.printStackTrace();
-						}
-					}
-				});
-				window.setSize(240, 70);
-				window.setHeading("Choose XML-File");
-				window.add(form);
-				window.show();
-
-			}
-		});
-
-		return LARGOItem;
-	}
-
-
+	/*
+	 *	Create the menu for logging out
+	 */
 	protected Menu createLASADmenu()
 	{
 		Menu menu = new Menu();
@@ -961,6 +755,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return menu;
 	}
 
+	/*
+	 *	Create menu for file operations (closing, exporting, etc)
+	 */
 	protected Menu createFileMenu()
 	{
 		Menu menu = new Menu();
@@ -968,7 +765,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		MenuItem exportItem = createExportItem();
 		menu.add(exportItem);
 
-		MenuItem screenshot = createScreenshotItem();
+		MenuItem screenshot = altCreateScreenshotItem();
 		menu.add(screenshot);
 
 		MenuItem closeMap = createCloseMapItem();
@@ -977,19 +774,15 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return menu;
 	}
 
+	/*
+	 *	Create the menu for editing (add, delete, autoOrganize, maybe undo if we implement that, etc.)
+	 */
 	protected Menu createEditMenu() {
 		Menu menu = new Menu();
+
 		// TODO Re-implement the undo function
 		// MenuItem editUndoItem = createEditUndoItem();
 		// menu.add(editUndoItem);
-		//MenuItem findContribution = createFindContributionItem();
-		//menu.add(findContribution);
-
-		//MenuItem saveItem = createSaveItem();
-		//menu.add(saveItem);
-
-		// MenuItem loadItem = createLoadItem();
-		// menu.add(loadItem);
 
 		MenuItem addItem = createAddItem();
 		menu.add(addItem);
@@ -1003,19 +796,22 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return menu;
 	}
 
+	/*
+	 *	Create the menu for viewing (all there is right now is finding a contribution)
+	 */
 	protected Menu createViewMenu()
 	{
 		Menu menu = new Menu();
-		// TODO Re-implement the undo function
-		// MenuItem editUndoItem = createEditUndoItem();
-		// menu.add(editUndoItem);
 		MenuItem findContribution = createFindContributionItem();
 		menu.add(findContribution);
-
 		return menu;
 	}
 
-	protected MenuItem createLogOutItem() {
+	/*
+	 *	Create the subitem of the LASAD menu that allows a user to logout when clicked
+	 */
+	protected MenuItem createLogOutItem()
+	{
 		final MenuItem logOutItem = new MenuItem("Logout");
 		logOutItem.addSelectionListener(new SelectionListener<MenuEvent>() {
 			@Override
@@ -1028,7 +824,11 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return logOutItem;
 	}
 
-	protected MenuItem createExportItem() {
+	/*
+	 *	Subitem of the file menu that allows the user to export the map
+	 */
+	protected MenuItem createExportItem()
+	{
 		final MenuItem saveItem = new MenuItem("Export map...");
 		saveItem.addSelectionListener(new SelectionListener<MenuEvent>() {
 			@Override
@@ -1063,8 +863,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return saveItem;
 	}
 
-	
-
+	/*
+	 *	Subitem of the file menu that lets the user close the current map and return to the map overview screen when clicked
+	 */
 	protected MenuItem createCloseMapItem()
 	{
 		MenuItem closeItem = new MenuItem("Close");
@@ -1079,6 +880,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return closeItem;
 	}
 
+	/*
+	 *	Subitem of the edit menu that allows an alternative way to click and drag for adding an item to the map
+	 */
 	protected MenuItem createAddItem()
 	{
 		MenuItem addItem = new MenuItem("Add");
@@ -1086,6 +890,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return addItem;
 	}
 
+	/*
+	 *	Subitem of the edit menu that allows an alternative way to clicking for deleting an item from the map
+	 */
 	protected MenuItem createDeleteItem()
 	{
 		MenuItem deleteItem = new MenuItem("Delete");
@@ -1093,6 +900,11 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return deleteItem;
 	}
 
+	/*
+	 *	Provides "Contribution" and "relation" as options
+	 *	@param useSubList - If true, (the case of add), provides the types of contributions relations as subitems.
+	 *	If false, make contribution and relation respond to clicks to create a dialog to delete items
+	 */
 	protected Menu createBoxLinkMenu(final boolean useSubList)
 	{
 		Menu boxLinkMenu = new Menu();
@@ -1101,6 +913,10 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return boxLinkMenu;
 	}
 
+	/*
+	 *	Create the item listed as contribution for the add and delete subitems.
+	 *	@param useSubList - if true, add the types of contributions as subitems.  If false, make the contribution button clickable.
+	 */
 	protected MenuItem createContributionItem(final boolean useSubList)
 	{
 		MenuItem boxMenu = new MenuItem(myConstants.ContributionMenuItem());
@@ -1134,6 +950,10 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return boxMenu;
 	}
 
+	/*
+	 *	Create the item listed as relation for the add and delete subitems.
+	 *	@param useSubList - if true, add the types of relations as subitems.  If false, make the relation button clickable.
+	 */
 	protected MenuItem createRelationItem(final boolean useSubList)
 	{
 		// Creates the sub menu for link types
@@ -1167,7 +987,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return linkMenu;
 	}
 
-	// Added By Kevin Loughlin for autoOrganize Menu functionality
+	/*
+	 *	Subitem of the edit menu that autoOrganizes the map when pressed
+	 */
 	protected MenuItem createAutoOrganizeItem()
 	{
 		final MenuItem autoOrganizeItem = new MenuItem("Auto organize this map");
@@ -1177,13 +999,10 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			@Override
 			public void componentSelected(MenuEvent ce)
 			{
-				Logger.log("[lasad.gwt.client.ui.workspace.argumentmap.ArgumentMapMenuBar][autoOrganizeAction] Starting autoOrganize...", Logger.DEBUG);
 				AutoOrganizer autoOrganizer = new AutoOrganizer(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap() );
 				autoOrganizer.organizeMap();
-				Logger.log("[lasad.gwt.client.ui.workspace.argumentmap.ArgumentMapMenuBar][autoOrganizeAction] Completed autoOrganize...", Logger.DEBUG);
 			}
 		});
-
 		return autoOrganizeItem;
 	}
 }

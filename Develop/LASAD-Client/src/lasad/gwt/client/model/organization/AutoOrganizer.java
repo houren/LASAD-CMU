@@ -33,11 +33,13 @@ import lasad.shared.communication.objects.ActionPackage;
  * built for maps using Mara Harrell's template, this class can be applied to any map from any template.  There is a model that updates
  * with every change to the map.  Thus, we don't need to start from scratch and gather components every time these methods are called.
  * @author Kevin Loughlin and Darlan Santana Farias
- * @since 12 June 2015, Updated 6 July 2015
+ * @since 12 June 2015, Updated 21 July 2015
  */
 public class AutoOrganizer
 {
+	// The minimum number of pixels between boxes, set as a double for rounding/accuracy purposes
 	private final double MIN_SPACE = 50.0;
+
 	// The maximum number of siblings (grouped boxes) a box can have
 	private final int MAX_SIBLINGS = 2;
 
@@ -80,19 +82,25 @@ public class AutoOrganizer
 		return instances.get(mapID);
 	}
 
+	/**
+	 *	Organizes the map either top to bottom or bottom to top.  A clean-up function for the workspace.
+	 */
 	public void organizeMap()
 	{
+		// Whether to sort from top to bottom or bottom to top
 		boolean isOrganizeTopToBottom = map.getMyViewSession().getController().getMapInfo().isOrganizeTopToBottom();
 
 		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
+
+		// Organize the grid by height and width "levels" (think chess board)
 		for (ArgumentThread argThread : argModel.getArgThreads())
 		{
-			// Because this is recursive we only need first box, then can break; boxes will now be on grid
 			argThread.getGrid().organize(isOrganizeTopToBottom, new HashSet(argThread.getBoxes()));
 		}
 
-		double lastColumnEndX = CENTER_X;
-		double lastRowEndY = CENTER_Y;
+		// The base X and Y coordinates for the column/row, that is updated for spacing (may also be adjusted due to box sizes)
+		double columnXcoord = CENTER_X;
+		double rowYcoord = CENTER_Y;
 
 		for (ArgumentThread argThread : argModel.getArgThreads())
 		{
@@ -108,7 +116,7 @@ public class AutoOrganizer
 				LinkedBox fattestBox = null;
 				for (LinkedBox box : column)
 				{
-					box.setXLeft(lastColumnEndX);
+					box.setXLeft(columnXcoord);
 					if (box.getWidth() > fattestWidth)
 					{
 						fattestBox = box;
@@ -116,6 +124,7 @@ public class AutoOrganizer
 					}
 				}
 
+				// Center the boxes on the column line
 				if (fattestBox != null)
 				{
 					double center = fattestBox.getXCenter();
@@ -124,10 +133,11 @@ public class AutoOrganizer
 						box.setXCenter(center);
 					}
 
-					lastColumnEndX = fattestBox.getXLeft() + fattestBox.getWidth();
+					columnXcoord = fattestBox.getXLeft() + fattestBox.getWidth();
 				}
 
-				lastColumnEndX += MIN_SPACE;
+				// Add space between columns
+				columnXcoord += MIN_SPACE;
 			}
 
 			IntPair minMaxRow = grid.determineMinMaxHeightLevels();
@@ -142,7 +152,7 @@ public class AutoOrganizer
 
 				for (LinkedBox box : row)
 				{
-					box.setYTop(lastRowEndY);
+					box.setYTop(rowYcoord);
 					if (box.getHeight() > tallestHeight)
 					{
 						tallestBox = box;
@@ -152,27 +162,28 @@ public class AutoOrganizer
 
 				if (tallestBox != null)
 				{
-					lastRowEndY = tallestBox.getYTop() + tallestBox.getHeight();
+					rowYcoord = tallestBox.getYTop() + tallestBox.getHeight();
 				}
 
-				lastRowEndY += MIN_SPACE;	
+				// Add space between rows
+				rowYcoord += MIN_SPACE;	
 			}
 
+			// Send the new positions to the server
 			for (LinkedBox box : grid.getBoxes())
 			{
 				sendUpdatePositionToServer(box);
 			}
 
-			if (grid.size() != argThread.getBoxes().size())
-			{
-				Logger.log("ERROR: Grid and thread size don't match.", Logger.DEBUG);
-			}
+			rowYcoord = CENTER_Y;
 
-			lastRowEndY = CENTER_Y;
+			Logger.log(argThread.getGrid().toString(), Logger.DEBUG);
 		}
 
-		positionMap(isOrganizeTopToBottom);
+		// Position the cursor of the map
+		positionMapCursor(isOrganizeTopToBottom);
 
+		// Free some memory for speed (garbage collector will take the nullified values)
 		for (ArgumentThread argThread : argModel.getArgThreads())
 		{
 			argThread.getGrid().clear();
@@ -187,7 +198,6 @@ public class AutoOrganizer
 	 */
 	public void updateSiblingLinks(OrganizerLink link)
 	{
-		//Logger.log("Entered updateSiblingLinks", Logger.DEBUG);
 		HashSet<OrganizerLink> linksToCreate = new HashSet<OrganizerLink>();
 
 		// The original link data
@@ -284,7 +294,6 @@ public class AutoOrganizer
 	*/
 	private VisitedAndLinksHolder updateRecursive(LinkedBox startBox, LinkedBox END_BOX, OrganizerLink LINK_DATA, VisitedAndLinksHolder holder)
 	{
-		//Logger.log("Entered update recursive.", Logger.DEBUG);
 		if (!holder.getVisited().contains(startBox))
 		{
 			holder.addVisited(startBox);
@@ -297,7 +306,6 @@ public class AutoOrganizer
 				holder = updateRecursive(siblingBox, END_BOX, LINK_DATA, holder);
 			}
 		}
-
 		return holder;
 	}
 
@@ -309,7 +317,6 @@ public class AutoOrganizer
 	 */
 	public int groupedBoxesCanBeCreated(OrganizerLink link)
 	{
-		//Logger.log("Entered GroupedBoxesCanBeCreated", Logger.DEBUG);
 		LinkedBox startBox = link.getStartBox();
 		LinkedBox endBox = link.getEndBox();
 
@@ -368,7 +375,6 @@ public class AutoOrganizer
 	 */
 	private boolean isCompatible(LinkedBox startBox, LinkedBox endBox)
 	{
-		//Logger.log("INSIDE isCompatible", Logger.DEBUG);
 		HashSet<LinkedBox> startChildBoxes = startBox.getChildBoxes();
 		HashSet<LinkedBox> endChildBoxes = endBox.getChildBoxes();
 		
@@ -392,10 +398,8 @@ public class AutoOrganizer
 	}
 
 	/*
-	 *	Updates a box position on the map, might need to add to redraw the relations because we're losing arrow heads on them for some reason.
-	 *	@param box - The box whose position we will update
-	 *	@param x - The new x coordinate for the box
-	 *	@param y - The new y coordinate for the box
+	 *	Updates a box position on the map
+	 *	@param box - The box whose position we will update with its new coordinates
 	 */
 	private void sendUpdatePositionToServer(LinkedBox box)
 	{
@@ -404,14 +408,14 @@ public class AutoOrganizer
 		communicator.sendActionPackage(actionBuilder.updateBoxPosition(map.getID(), box.getBoxID(), intX, intY));
 	}
 
-	private void positionMap(final boolean isOrganizeTopToBottom)
+	/*
+	 *	Positions the map cursor either with the top most box(es) at the top of the map or bottom-most at the bottom
+	 *	@param isOrganizeTopToBottom - if true, put the bottom boxes at the bottom of the screen, false do other option
+	 *	The "edge" is the bottom of the bottom row of boxes in the case of true, top of the top row in case of false
+	 */
+	private void positionMapCursor(final boolean isOrganizeTopToBottom)
 	{
 		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
-		// Scroll the map to the center of all boxes
-		int xsum = 0;
-		int ysum = 0;
-		int numberOfObjects = 0;
-
 		double edgeCoordY;
 		HashSet<LinkedBox> edgeBoxes = new HashSet<LinkedBox>();
 		double edgeSum = 0.0;
@@ -475,7 +479,6 @@ public class AutoOrganizer
 	 */
 	private void addLinksToVisual(HashSet<OrganizerLink> linksToCreate)
 	{
-		//Logger.log("Entered addLinksToVisual", Logger.DEBUG);	
 		String elementType = "relation";
 
 		MVController controller = LASAD_Client.getMVCController(map.getID());
@@ -504,7 +507,6 @@ public class AutoOrganizer
 	 */
 	public void determineLinksToRemove(OrganizerLink removedLink)
 	{
-		//ogger.log("Entered determineLinksToRemove", Logger.DEBUG);
 		HashSet<OrganizerLink> linksToRemove = new HashSet<OrganizerLink>();
 
 		if (!removedLink.getConnectsGroup())
@@ -527,7 +529,6 @@ public class AutoOrganizer
 	 */
 	private void removeLinksFromVisual(HashSet<OrganizerLink> linksToRemove)
 	{
-		//Logger.log("Entered removeLinksFromVisual", Logger.DEBUG);
 		MVController controller = LASAD_Client.getMVCController(map.getID());
 
 		for (OrganizerLink link : linksToRemove)
@@ -543,7 +544,6 @@ public class AutoOrganizer
 	 */
 	public void createNewThreadIfNecessary(OrganizerLink removedLink)
 	{
-		//Logger.log("Entered createNewThreadIfNecessary", Logger.DEBUG);
 		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
 		ArgumentThread startArgThread = argModel.getBoxThread(removedLink.getStartBox());
 		HashSet<LinkedBox> startThreadBoxes = new HashSet<LinkedBox>(startArgThread.getBoxes());
@@ -570,7 +570,6 @@ public class AutoOrganizer
 	 */
 	private HashSet<LinkedBox> visitRecursive(LinkedBox box, HashSet<LinkedBox> boxesReached)
 	{
-		//Logger.log("Entered visit recursive.", Logger.DEBUG);
 		if (!boxesReached.contains(box))
 		{
 			boxesReached.add(box);

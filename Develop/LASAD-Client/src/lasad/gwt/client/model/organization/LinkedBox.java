@@ -6,14 +6,13 @@ import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.organization.Coordinate;
 
 /**
- * LinkedBox is an alternative representation to AbstractBox, more conducive for map organization and modeling.  Each LinkedBox has its boxID
- * and rootID, as well as all its types of Links (i.e. an OrganizerLink that points to the next box). This allows for an easy
- * organization of all Links on the map, as they can be followed in a chain similar to a linked list.  This class is key to AutoOrganizer.
- * All names within this class are self-explanatory.
- * @author Kevin Loughlin
- * @since 11 June 2015, Updated 6 July 2015
+ *	LinkedBox is an alternative representation to AbstractBox, more conducive for map organization and modeling.  Each LinkedBox has its boxID
+ * 	and rootID, as well as all its types of Links (i.e. an OrganizerLink that points to the next box). This allows for an easy
+ * 	organization of all Links on the map, as they can be followed in a chain similar to a linked list.  This class is key to AutoOrganizer.
+ * 	All names within this class are self-explanatory.
+ * 	@author Kevin Loughlin
+ * 	@since 11 June 2015, Updated 21 July 2015
  */
-
 public class LinkedBox
 {
 	private final int ERROR = -1;
@@ -28,7 +27,7 @@ public class LinkedBox
 	private int width;
 	private int height;
 
-	// Note: updating xLeft will class methods will automatically update xCenter and vice-versa.  Same is true for y equivalents.
+	// Note: updating xLeft with class methods will automatically update xCenter and vice-versa.  Same is true for y equivalents.
 	private double xLeft;
 	private double yTop;
 
@@ -214,6 +213,11 @@ public class LinkedBox
 		return siblingBoxes;
 	}
 
+	/**
+	 *	Gets the link that connects this with
+	 *	@param relatedBox
+	 *	@return the connecting link or null if it does not exist
+	 */
 	public OrganizerLink getConnectingLink(LinkedBox relatedBox)
 	{
 		if (this.getChildBoxes().contains(relatedBox))
@@ -252,25 +256,12 @@ public class LinkedBox
 		return null;
 	}
 
+	/**
+	 *	Returns this box and it's extended siblings (its siblings and any siblings of those siblings)
+	 */
 	public HashSet<LinkedBox> getThisAndExtendedSiblings()
 	{
 		return findThisAndExtendedSiblings(this, new HashSet<LinkedBox>());
-	}
-	
-	//checks if a sibling or extended sibling has a child (ignores the children of the box used to call the function)
-	public boolean siblingHasChild(){
-		for(LinkedBox box : this.getThisAndExtendedSiblings())
-			if(box != this && box.getNumChildren() > 0)
-				return true;
-		return false;
-	}
-	
-	//checks if a sibling or extended sibling has a parent (ignores the parents of the box used to call the function)
-	public boolean siblingHasParent(){
-		for(LinkedBox box : this.getThisAndExtendedSiblings())
-			if(box != this && box.getNumParents() > 0)
-				return true;
-		return false;
 	}
 
 	// intialize currentBox as this and accumulated should be empty; RECURSIVE
@@ -287,7 +278,7 @@ public class LinkedBox
 		return accumulated;
 	}
 
-	// I naturally avoid duplicates in all add methods by implementing this with HashSet.  Takes care of updating boxes too.
+	// I naturally avoid duplicates in all add methods by implementing these with HashSet.  Takes care of updating box sets too.
 	public void addChildLink(OrganizerLink link)
 	{
 		this.childLinks.add(link);
@@ -296,7 +287,6 @@ public class LinkedBox
 
 	public void addParentLink(OrganizerLink link)
 	{
-
 		this.parentLinks.add(link);
 		this.parentBoxes.add(link.getStartBox());
 	}
@@ -359,6 +349,9 @@ public class LinkedBox
 		return getNumChildren() + getNumParents() + getNumSiblings();
 	}
 
+	/**
+	 *	Gets ALL directly related boxes (parents, chidlren, and immediate siblings)
+	 */
 	public HashSet<LinkedBox> getRelatedBoxes()
 	{
 		HashSet<LinkedBox> relatedBoxes = new HashSet<LinkedBox>();
@@ -368,6 +361,10 @@ public class LinkedBox
 		return relatedBoxes;
 	}
 
+	/**
+	 *	Height level should not be confused with height.  Height level is for ArgumentGrid (the chessBoard setup), where as height is the
+	 *	height of this box in pixels.  Same is true for width.
+	 */
 	public void setHeightLevel(int heightLevel)
 	{
 		this.heightLevel = heightLevel;
@@ -398,6 +395,9 @@ public class LinkedBox
 		return widthLevel;
 	}
 
+	/*
+	 *	Gets the chessboard position, for ex (column 4, row 3)
+	 */
 	public Coordinate getGridPosition()
 	{
 		return new Coordinate(this.getWidthLevel(), this.getHeightLevel());
@@ -415,6 +415,9 @@ public class LinkedBox
 		this.heightLevel = coord.getY();
 	}
 
+	/**
+	 *	Removes this box's link to boxBeingRemoved if there is one
+	 */
 	public void removeLinkTo(LinkedBox boxBeingRemoved)
 	{
 		if (this.getChildBoxes().contains(boxBeingRemoved))

@@ -1,5 +1,10 @@
 package lasad.gwt.client.model.organization;
 
+/**
+ *	Support for a pair of integers, which I am using as a max and min together in the same class for easier returns and speed.
+ *	@author Kevin Loughlin
+ *	@since 10 July 2015
+ */
 public class IntPair
 {
 	int min;
@@ -21,6 +26,9 @@ public class IntPair
 		return max;
 	}
 
+	/**
+	 *	The root is the top (max) height level if isOrganizeTopToBottom is true and the opposite if false
+	 */
 	public int calcRoot(boolean isOrganizeTopToBottom)
 	{
 		if (isOrganizeTopToBottom)

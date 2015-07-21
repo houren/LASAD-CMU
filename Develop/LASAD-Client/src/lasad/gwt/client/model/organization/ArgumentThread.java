@@ -12,7 +12,7 @@ import lasad.gwt.client.model.organization.ArgumentGrid;
  *	An argument thread is a connected chain of boxes on the argument map space.
  *  This class is useful for AutoOrganizer.
  *	@author Kevin Loughlin
- *	@since 19 June 2015, Updated 30 June 2015
+ *	@since 19 June 2015, Updated 21 July 2015
  */
 
 public class ArgumentThread
@@ -26,6 +26,7 @@ public class ArgumentThread
 
 	private int threadID;
 
+	// The chessboard set up used for auto organization of the map
 	private ArgumentGrid grid;
 
 	public ArgumentThread()
@@ -144,7 +145,6 @@ public class ArgumentThread
 					}
 				}
 			}
-
 			return null;
 		}
 		else

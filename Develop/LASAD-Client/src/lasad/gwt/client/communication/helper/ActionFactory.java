@@ -386,6 +386,7 @@ public class ActionFactory {
 		return p;
 	}
 
+	// Hack for autoOrganizer to prevent mutual recursion endless loop between LASADActionReceiver and AutoOrganizer.
 	public ActionPackage autoOrganizerRemoveElement(String mapID, int id)
 	{
 		ActionPackage p = new ActionPackage();
@@ -524,6 +525,7 @@ public class ActionFactory {
 		return p;
 	}
 
+	// Hack for autoOrganizer to prevent mutual recursion endless loop between LASADActionReceiver and AutoOrganizer.
 	public ActionPackage autoOrganizerCreateLinkWithElements(ElementInfo info, String mapID, String startElementID, String endElementID) {
 		ActionPackage p = new ActionPackage();
 
@@ -626,7 +628,7 @@ public class ActionFactory {
 		return resultingActions;
 	}
 	
-
+	// Hack for autoOrganizer to prevent mutual recursion endless loop between LASADActionReceiver and AutoOrganizer.
 	private Vector<Action> autoOrganizerCreateLinkWithElementsAction(ElementInfo info, String mapID, String startID, String endID, Vector<AbstractExtendedElement> existingChildElements) {
 
 		Vector<Action> resultingActions = new Vector<Action>();

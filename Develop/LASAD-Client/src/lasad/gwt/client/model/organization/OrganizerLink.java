@@ -5,7 +5,7 @@ import lasad.gwt.client.model.organization.LinkedBox;
  * OrganizerLink is, like LinkedBox is to AbstractBox, a way of representing an AbstractLinkPanel (and/or an AbstractLink) that is more
  * friendly to AutoOrganizer.  The important info for updating a link via an Action is contained within an OrganizerLink.
  * @author Kevin Loughlin
- * @since 17 June 2015, Updated 6 July 2015
+ * @since 17 June 2015, Updated 21 July 2015
  */
 public class OrganizerLink
 {
