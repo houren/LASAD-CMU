@@ -1,9 +1,7 @@
 package lasad.gwt.client.model.organization;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 
 import lasad.gwt.client.communication.helper.ActionFactory;
 import lasad.gwt.client.communication.LASADActionSender;
@@ -21,14 +19,12 @@ import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.GroupedBoxesStatusCodes;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.model.organization.IntPair;
+import lasad.gwt.client.model.organization.ArgumentGrid;
 
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
 
 import lasad.shared.communication.objects.ActionPackage;
-
-import java.io.StringWriter;
-import java.io.PrintWriter;
 
 /**
  * An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update links
@@ -41,7 +37,7 @@ import java.io.PrintWriter;
  */
 public class AutoOrganizer
 {
-	private final double MIN_SPACE = 25.0;
+	private final double MIN_SPACE = 50.0;
 	// The maximum number of siblings (grouped boxes) a box can have
 	private final int MAX_SIBLINGS = 2;
 
@@ -51,12 +47,6 @@ public class AutoOrganizer
 
 	// The map that this instance of AutoOrganizer corresponds to
 	private AbstractGraphMap map;
-	
-	// Keeps track of the boxes visited during function execution, must be cleaned before used
-	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
-	
-	// Keeps track of the boxes visited as well as the order in which the boxes are inserted
-	private LinkedHashSet<LinkedBox> visitedLHSet = new LinkedHashSet<LinkedBox>();
 
 	// Instances of autoOrganizer: one per map.  String is mapID.
 	private static HashMap<String, AutoOrganizer> instances = new HashMap<String, AutoOrganizer>();
@@ -92,102 +82,96 @@ public class AutoOrganizer
 
 	public void organizeMap()
 	{
-		try
+		boolean isOrganizeTopToBottom = map.getMyViewSession().getController().getMapInfo().isOrganizeTopToBottom();
+
+		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
+		for (ArgumentThread argThread : argModel.getArgThreads())
 		{
-			boolean isOrganizeTopToBottom = map.getMyViewSession().getController().getMapInfo().isOrganizeTopToBottom();
-			Logger.log("Entered organizeMap", Logger.DEBUG);
+			// Because this is recursive we only need first box, then can break; boxes will now be on grid
+			argThread.getGrid().organize(isOrganizeTopToBottom, new HashSet(argThread.getBoxes()));
+		}
 
-			ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
-			for (ArgumentThread argThread : argModel.getArgThreads())
+		double lastColumnEndX = CENTER_X - MIN_SPACE;
+		double lastRowEndY = CENTER_Y - MIN_SPACE;
+
+		for (ArgumentThread argThread : argModel.getArgThreads())
+		{
+			ArgumentGrid grid = argThread.getGrid();
+			IntPair minMaxColumn = grid.determineMinMaxWidthLevels();
+			int minWidthLevel = minMaxColumn.getMin();
+			int maxWidthLevel = minMaxColumn.getMax();
+
+			for (int columnCount = minWidthLevel; columnCount <= maxWidthLevel; columnCount++)
 			{
-				// Because this is recursive we only need first box, then can break; boxes will now be on grid
-				argThread.organizeGrid(isOrganizeTopToBottom);
-			}
-
-			double lastColumnEndX = CENTER_X - MIN_SPACE;
-			double lastRowEndY = CENTER_Y - MIN_SPACE;
-
-			for (ArgumentThread argThread : argModel.getArgThreads())
-			{
-				IntPair minMaxColumn = argThread.determineMinMaxWidthLevels();
-				int minWidthLevel = minMaxColumn.getMin();
-				int maxWidthLevel = minMaxColumn.getMax();
-
-				for (int columnCount = minWidthLevel; columnCount <= maxWidthLevel; columnCount++)
+				HashSet<LinkedBox> column = grid.getBoxesAtWidthLevel(columnCount);
+				int fattestWidth = Integer.MIN_VALUE;
+				LinkedBox fattestBox = null;
+				for (LinkedBox box : column)
 				{
-					HashSet<LinkedBox> column = argThread.getBoxesOnGridAtWidthLevel(columnCount);
-					int fattestWidth = Integer.MIN_VALUE;
-					LinkedBox fattestBox = null;
+					box.setXLeft(lastColumnEndX + MIN_SPACE);
+					if (box.getWidth() > fattestWidth)
+					{
+						fattestBox = box;
+						fattestWidth = fattestBox.getWidth();
+					}
+				}
+
+				if (fattestBox != null)
+				{
+					double center = fattestBox.getXCenter();
 					for (LinkedBox box : column)
 					{
-						box.setXLeft(lastColumnEndX + MIN_SPACE);
-						if (box.getWidth() > fattestWidth)
-						{
-							fattestBox = box;
-							fattestWidth = fattestBox.getWidth();
-						}
+						box.setXCenter(center);
 					}
 
-					if (fattestBox != null)
-					{
-						double center = fattestBox.getXCenter();
-						for (LinkedBox box : column)
-						{
-							box.setXCenter(center);
-						}
-
-						lastColumnEndX = fattestBox.getXLeft() + fattestBox.getWidth();
-					}
+					lastColumnEndX = fattestBox.getXLeft() + fattestBox.getWidth();
 				}
-
-				IntPair minMaxRow = argThread.determineMinMaxHeightLevels();
-				int minHeightLevel = minMaxRow.getMin();
-				int maxHeightLevel = minMaxRow.getMax();
-
-				for (int rowCount = maxHeightLevel; rowCount >= minHeightLevel; rowCount--)
-				{
-					HashSet<LinkedBox> row = argThread.getBoxesOnGridAtHeightLevel(rowCount);
-					int tallestHeight = Integer.MIN_VALUE;
-					LinkedBox tallestBox = null;
-
-					for (LinkedBox box : row)
-					{
-						box.setYTop(lastRowEndY + MIN_SPACE);
-						if (box.getHeight() > tallestHeight)
-						{
-							tallestBox = box;
-							tallestHeight = tallestBox.getHeight();
-						}
-					}
-
-					if (tallestBox != null)
-					{
-						lastRowEndY = tallestBox.getYTop() + tallestBox.getHeight();
-					}	
-				}
-
-				for (LinkedBox box : argThread.getGrid())
-				{
-					sendUpdatePositionToServer(box);
-				}
-
-				lastRowEndY = CENTER_Y - MIN_SPACE;
 			}
 
-			positionMap(isOrganizeTopToBottom);
+			IntPair minMaxRow = grid.determineMinMaxHeightLevels();
+			int minHeightLevel = minMaxRow.getMin();
+			int maxHeightLevel = minMaxRow.getMax();
 
-			Logger.log("Exiting organizeMap", Logger.DEBUG);
-		}
-		catch (Exception e)
-		{
-			Logger.log("EXCEPTION THROWN", Logger.DEBUG);
-			Logger.log("toSTRING: " + e.toString(), Logger.DEBUG);
-			Logger.log("MESSAGE: " + e.getMessage(), Logger.DEBUG);
-			Logger.log("STACK TRACE", Logger.DEBUG);
-			for (StackTraceElement stackFrame : e.getStackTrace())
+			for (int rowCount = maxHeightLevel; rowCount >= minHeightLevel; rowCount--)
 			{
-				Logger.log(stackFrame.toString(), Logger.DEBUG);
+				HashSet<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
+				int tallestHeight = Integer.MIN_VALUE;
+				LinkedBox tallestBox = null;
+
+				for (LinkedBox box : row)
+				{
+					box.setYTop(lastRowEndY + MIN_SPACE);
+					if (box.getHeight() > tallestHeight)
+					{
+						tallestBox = box;
+						tallestHeight = tallestBox.getHeight();
+					}
+				}
+
+				if (tallestBox != null)
+				{
+					lastRowEndY = tallestBox.getYTop() + tallestBox.getHeight();
+				}	
 			}
+
+			for (LinkedBox box : grid.getBoxes())
+			{
+				sendUpdatePositionToServer(box);
+			}
+
+			if (grid.size() != argThread.getBoxes().size())
+			{
+				Logger.log("ERROR: Grid and thread size don't match.", Logger.DEBUG);
+			}
+
+			lastRowEndY = CENTER_Y - MIN_SPACE;
+		}
+
+		positionMap(isOrganizeTopToBottom);
+
+		for (ArgumentThread argThread : argModel.getArgThreads())
+		{
+			argThread.getGrid().clear();
 		}
 	}
 
@@ -433,7 +417,7 @@ public class AutoOrganizer
 			edgeCoordY = Double.MIN_VALUE;
 			for (ArgumentThread argThread : argModel.getArgThreads())
 			{
-				for (LinkedBox box : argThread.getBoxesOnGridAtEndLevel(isOrganizeTopToBottom))
+				for (LinkedBox box : argThread.getGrid().getBoxesAtEndLevel(isOrganizeTopToBottom))
 				{
 					double boxLowerEdge = box.getYTop() + box.getHeight();
 					if (boxLowerEdge >= edgeCoordY)
@@ -450,7 +434,7 @@ public class AutoOrganizer
 			edgeCoordY = Double.MIN_VALUE;
 			for (ArgumentThread argThread : argModel.getArgThreads())
 			{
-				for (LinkedBox box : argThread.getBoxesOnGridAtEndLevel(isOrganizeTopToBottom))
+				for (LinkedBox box : argThread.getGrid().getBoxesAtEndLevel(isOrganizeTopToBottom))
 				{
 					if (box.getYTop() >= edgeCoordY)
 					{
@@ -466,7 +450,7 @@ public class AutoOrganizer
 		{
 			if (isOrganizeTopToBottom)
 			{
-				map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) + 10 - map.getInnerHeight());
+				map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) - map.getInnerHeight());
 			}
 			else
 			{

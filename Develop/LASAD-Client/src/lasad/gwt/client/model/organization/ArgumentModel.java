@@ -2,8 +2,6 @@ package lasad.gwt.client.model.organization;
 
 import java.util.HashSet;
 import java.util.HashMap;
-import java.util.Collection;
-import java.util.ArrayList;
 
 // Aware that this is unnecessary, I just do it as a reminder in case I change location
 import lasad.gwt.client.model.organization.ArgumentThread;
@@ -23,9 +21,6 @@ public class ArgumentModel
 
 	// One model instance per map, where String is mapID
 	private static HashMap<String, ArgumentModel> instances = new HashMap<String, ArgumentModel>();
-	
-	// Clear this before use in a method
-	private HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
 
 	// Just for this class, if we need to create a new instance below
 	private ArgumentModel()
