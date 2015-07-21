@@ -91,8 +91,8 @@ public class AutoOrganizer
 			argThread.getGrid().organize(isOrganizeTopToBottom, new HashSet(argThread.getBoxes()));
 		}
 
-		double lastColumnEndX = CENTER_X - MIN_SPACE;
-		double lastRowEndY = CENTER_Y - MIN_SPACE;
+		double lastColumnEndX = CENTER_X;
+		double lastRowEndY = CENTER_Y;
 
 		for (ArgumentThread argThread : argModel.getArgThreads())
 		{
@@ -108,7 +108,7 @@ public class AutoOrganizer
 				LinkedBox fattestBox = null;
 				for (LinkedBox box : column)
 				{
-					box.setXLeft(lastColumnEndX + MIN_SPACE);
+					box.setXLeft(lastColumnEndX);
 					if (box.getWidth() > fattestWidth)
 					{
 						fattestBox = box;
@@ -126,6 +126,8 @@ public class AutoOrganizer
 
 					lastColumnEndX = fattestBox.getXLeft() + fattestBox.getWidth();
 				}
+
+				lastColumnEndX += MIN_SPACE;
 			}
 
 			IntPair minMaxRow = grid.determineMinMaxHeightLevels();
@@ -140,7 +142,7 @@ public class AutoOrganizer
 
 				for (LinkedBox box : row)
 				{
-					box.setYTop(lastRowEndY + MIN_SPACE);
+					box.setYTop(lastRowEndY);
 					if (box.getHeight() > tallestHeight)
 					{
 						tallestBox = box;
@@ -151,7 +153,9 @@ public class AutoOrganizer
 				if (tallestBox != null)
 				{
 					lastRowEndY = tallestBox.getYTop() + tallestBox.getHeight();
-				}	
+				}
+
+				lastRowEndY += MIN_SPACE;	
 			}
 
 			for (LinkedBox box : grid.getBoxes())
@@ -164,7 +168,7 @@ public class AutoOrganizer
 				Logger.log("ERROR: Grid and thread size don't match.", Logger.DEBUG);
 			}
 
-			lastRowEndY = CENTER_Y - MIN_SPACE;
+			lastRowEndY = CENTER_Y;
 		}
 
 		positionMap(isOrganizeTopToBottom);
