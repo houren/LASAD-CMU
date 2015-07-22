@@ -180,6 +180,8 @@ public class AutoOrganizer
 			Logger.log(argThread.getGrid().toString(), Logger.DEBUG);
 		}
 
+		Logger.log(argModel.toString(), Logger.DEBUG);
+
 		// Position the cursor of the map
 		positionMapCursor(isOrganizeTopToBottom);
 
@@ -188,6 +190,8 @@ public class AutoOrganizer
 		{
 			argThread.getGrid().clear();
 		}
+
+		Logger.log(argModel.toString(), Logger.DEBUG);
 	}
 
 	/**
@@ -458,7 +462,7 @@ public class AutoOrganizer
 		{
 			if (isOrganizeTopToBottom)
 			{
-				map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) - map.getInnerHeight());
+				map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) + 10 - map.getInnerHeight());
 			}
 			else
 			{
@@ -511,15 +515,22 @@ public class AutoOrganizer
 
 		if (!removedLink.getConnectsGroup())
 		{
-			LinkedBox removedLinkStartBox = removedLink.getStartBox();
-			int numSiblings = removedLinkStartBox.getNumSiblings();
-			HashSet<OrganizerLink> siblingLinks = removedLinkStartBox.getSiblingLinks();
-			for (OrganizerLink link : siblingLinks)
-			{
-				linksToRemove.add(link);
-			}
+			LinkedBox startBox = removedLink.getStartBox();
 
-			removeLinksFromVisual(linksToRemove);
+			if (startBox != null)
+			{
+				HashSet<OrganizerLink> siblingLinks = startBox.getSiblingLinks();
+				for (OrganizerLink link : siblingLinks)
+				{
+					linksToRemove.add(link);
+				}
+
+				removeLinksFromVisual(linksToRemove);
+			}
+			else
+			{
+				Logger.log("No necesito hacer nada, links boxes have already been removed", Logger.DEBUG);
+			}
 		}
 	}
 
@@ -545,21 +556,55 @@ public class AutoOrganizer
 	public void createNewThreadIfNecessary(OrganizerLink removedLink)
 	{
 		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
-		ArgumentThread startArgThread = argModel.getBoxThread(removedLink.getStartBox());
-		HashSet<LinkedBox> startThreadBoxes = new HashSet<LinkedBox>(startArgThread.getBoxes());
-		HashSet<LinkedBox> boxesReached = visitRecursive(removedLink.getEndBox(), new HashSet<LinkedBox>());
-		if (boxesReached.size() == startThreadBoxes.size() && boxesReached.containsAll(startThreadBoxes))
+
+		LinkedBox startBox = removedLink.getStartBox();
+		LinkedBox endBox = removedLink.getEndBox();
+
+		ArgumentThread originalThread = null;
+
+		HashSet<LinkedBox> boxesReached = new HashSet<LinkedBox>();
+
+		if (startBox != null)
 		{
-			// They're still in the same thread
-			return;
+			originalThread = argModel.getBoxThread(startBox);
+			if (endBox != null)
+			{
+				boxesReached = visitRecursive(endBox, new HashSet<LinkedBox>());
+			}
+		}
+		else if (endBox != null)
+		{
+			originalThread = argModel.getBoxThread(endBox);
+			if (startBox != null)
+			{
+				boxesReached = visitRecursive(startBox, new HashSet<LinkedBox>());
+			}
 		}
 		else
 		{
-			ArgumentThread newThread = new ArgumentThread();
-			newThread.addBoxes(boxesReached);
-			argModel.addArgThread(newThread);
+			Logger.log("Nothing to do, links boxes have already been removed", Logger.DEBUG);
+			return;
+		}
 
-			startArgThread.removeBoxes(boxesReached);
+		if (originalThread != null)
+		{
+			HashSet<LinkedBox> origThreadBoxes = new HashSet<LinkedBox>(originalThread.getBoxes());
+			if (boxesReached.size() == origThreadBoxes.size() && boxesReached.containsAll(origThreadBoxes))
+			{
+				// They're still in the same thread
+				return;
+			}
+			else
+			{
+				ArgumentThread newThread = new ArgumentThread(boxesReached);
+				argModel.addArgThread(newThread);
+				originalThread.removeBoxes(boxesReached);
+			}
+		}
+		else
+		{
+			Logger.log("ERROR: original thread is null", Logger.DEBUG);
+			return;
 		}
 	}
 

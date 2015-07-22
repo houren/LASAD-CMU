@@ -69,8 +69,8 @@ public class LinkedBox
 		this.childBoxes = new HashSet<LinkedBox>();
 		this.parentBoxes = new HashSet<LinkedBox>();
 		this.siblingBoxes = new HashSet<LinkedBox>();
-		this.heightLevel = 0;
-		this.widthLevel = 0;
+		this.heightLevel = Integer.MIN_VALUE;
+		this.widthLevel = Integer.MAX_VALUE;
 		this.canBeGrouped = canBeGrouped;
 	}
 
@@ -92,8 +92,8 @@ public class LinkedBox
 		this.childBoxes = new HashSet<LinkedBox>();
 		this.parentBoxes = new HashSet<LinkedBox>();
 		this.siblingBoxes = new HashSet<LinkedBox>();
-		this.heightLevel = ERROR;
-		this.widthLevel = ERROR;
+		this.heightLevel = Integer.MIN_VALUE;
+		this.widthLevel = Integer.MAX_VALUE;
 		this.canBeGrouped = false;
 	}
 
@@ -418,6 +418,7 @@ public class LinkedBox
 	/**
 	 *	Removes this box's link to boxBeingRemoved if there is one
 	 */
+	/*
 	public void removeLinkTo(LinkedBox boxBeingRemoved)
 	{
 		if (this.getChildBoxes().contains(boxBeingRemoved))
@@ -461,6 +462,7 @@ public class LinkedBox
 			}
 		}
 	}
+	*/
 
 	public boolean hasChildLinkWith(LinkedBox other)
 	{
@@ -650,7 +652,7 @@ public class LinkedBox
 	// Just outputs the box's boxID and rootID, not its children and parents and siblings
 	public String toStringShort()
 	{
-		StringBuilder buffer = new StringBuilder("\n\t\t\t\tBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID) + "; Box Type: " + type);
+		StringBuilder buffer = new StringBuilder("\n\t\t\t\tBox RootID: " + Integer.toString(rootID) + "; widthLevel: " + widthLevel + "; heightLevel: " + heightLevel);
 		return buffer.toString();
 	}
 
@@ -660,7 +662,7 @@ public class LinkedBox
 	@Override
 	public String toString()
 	{
-		StringBuilder buffer = new StringBuilder("\n\t\tBEGIN BOX\n\t\tBox RootID: " + Integer.toString(rootID) + "; Box ID " + Integer.toString(boxID) + "; Box Type: " + type + "; xCenter: " + xCenter + "; yCenter: " + yCenter);
+		StringBuilder buffer = new StringBuilder(this.toStringShort());
 		buffer.append("\n\t\t\tCHILD BOXES...");
 		for (OrganizerLink childLink : childLinks)
 		{

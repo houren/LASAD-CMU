@@ -586,6 +586,8 @@ public class LASADActionReceiver {
 					int height = Integer.parseInt(heightString);
 
 					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height, canBeGrouped)));
+					Logger.log(argModel.toString(), Logger.DEBUG);
+
 				}
 
 				// If it's a relation, add it to the model
@@ -650,6 +652,8 @@ public class LASADActionReceiver {
 							autoOrganizer.updateSiblingLinks(link);
 						}
 					}
+
+					Logger.log(argModel.toString(), Logger.DEBUG);
 				}
 
 				// End Kevin Loughlin
@@ -680,7 +684,7 @@ public class LASADActionReceiver {
 
 						Logger.log("WARNING: There is no highlight for this feedback", Logger.DEBUG);
 					}
-				}	
+				}
 			}
 			else if (a.getCmd().equals(Commands.UpdateElement)) {
 
@@ -729,10 +733,11 @@ public class LASADActionReceiver {
 			}
 			else if (a.getCmd().equals(Commands.DeleteElement))
 			{
-
+				Logger.log("DELETE FROM GRAPH", Logger.DEBUG);
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] DELETE-ELEMENT", Logger.DEBUG);
 
 				int elementID = Integer.parseInt(a.getParameterValue(ParameterTypes.Id));
+				String elementType = controller.getElement(elementID).getType();
 				if (controller.getElement(elementID) != null) {
 					if (controller.getElement(elementID).getType().equalsIgnoreCase("FEEDBACK-AGENT")) {
 						processRemoveFeedbackAgent(controller, a);
@@ -746,26 +751,33 @@ public class LASADActionReceiver {
 					}
 
 					// Kevin Loughlin
-					Object removedObj = argModel.removeEltByEltID(elementID);
-
-					if (removedObj != null)
+					
+					if (elementType.equalsIgnoreCase("box") || elementType.equalsIgnoreCase("relation"))
 					{
-						if (removedObj instanceof LinkedBox)
+						Object removedObj = argModel.removeEltByEltID(elementID);
+						if (removedObj != null)
 						{
-							argModel.removeEmptyThreads();
-						}
-						else if (removedObj instanceof OrganizerLink)
-						{
-							OrganizerLink removedLink = (OrganizerLink) removedObj;
-							// TODO Check to see if new thread is necessary
-							autoOrganizer.createNewThreadIfNecessary(removedLink);
-							
-							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)))
+							if (removedObj instanceof OrganizerLink)
 							{
-								autoOrganizer.determineLinksToRemove(removedLink);
+								OrganizerLink removedLink = (OrganizerLink) removedObj;
+
+								autoOrganizer.createNewThreadIfNecessary(removedLink);
+								argModel.removeExcessThreads();
+
+								if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)))
+								{
+									autoOrganizer.determineLinksToRemove(removedLink);
+								}
+							}
+							else
+							{
+								argModel.removeExcessThreads();
 							}
 						}
+
+						Logger.log(argModel.toString(), Logger.DEBUG);
 					}
+
 					// End Kevin Loughlin
 
 				} else {
@@ -956,6 +968,8 @@ public class LASADActionReceiver {
 					int height = Integer.parseInt(heightString);
 
 					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height, canBeGrouped)));
+					Logger.log(argModel.toString(), Logger.DEBUG);
+
 				}
 
 				// If it's a relation, add it to the model
@@ -1020,6 +1034,8 @@ public class LASADActionReceiver {
 							autoOrganizer.updateSiblingLinks(link);
 						}
 					}
+
+					Logger.log(argModel.toString(), Logger.DEBUG);
 				}
 
 				// End Kevin Loughlin
@@ -1084,10 +1100,11 @@ public class LASADActionReceiver {
 			}
 			else if (a.getCmd().equals(Commands.DeleteElement))
 			{
-
+				Logger.log("DELETE FROM GRAPH", Logger.DEBUG);
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] DELETE-ELEMENT", Logger.DEBUG);
 
 				int elementID = Integer.parseInt(a.getParameterValue(ParameterTypes.Id));
+				String elementType = controller.getElement(elementID).getType();
 				if (controller.getElement(elementID) != null) {
 					if (controller.getElement(elementID).getType().equalsIgnoreCase("FEEDBACK-AGENT")) {
 						processRemoveFeedbackAgent(controller, a);
@@ -1101,31 +1118,37 @@ public class LASADActionReceiver {
 					}
 
 					// Kevin Loughlin
-
-					Object removedObj = argModel.removeEltByEltID(elementID);
-
-					if (removedObj != null)
+					
+					if (elementType.equalsIgnoreCase("box") || elementType.equalsIgnoreCase("relation"))
 					{
-						if (removedObj instanceof LinkedBox)
+						Object removedObj = argModel.removeEltByEltID(elementID);
+						if (removedObj != null)
 						{
-							argModel.removeEmptyThreads();
-						}
-						else if (removedObj instanceof OrganizerLink)
-						{
-							OrganizerLink removedLink = (OrganizerLink) removedObj;
-							// TODO Check to see if new thread is necessary
-							autoOrganizer.createNewThreadIfNecessary(removedLink);
-							
-							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)))
+							if (removedObj instanceof OrganizerLink)
 							{
-								autoOrganizer.determineLinksToRemove(removedLink);
+								OrganizerLink removedLink = (OrganizerLink) removedObj;
+
+								autoOrganizer.createNewThreadIfNecessary(removedLink);
+								argModel.removeExcessThreads();
+
+								if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)))
+								{
+									autoOrganizer.determineLinksToRemove(removedLink);
+								}
+							}
+							else
+							{
+								argModel.removeExcessThreads();
 							}
 						}
-					}	
+
+						Logger.log(argModel.toString(), Logger.DEBUG);
+					}
+
 					// End Kevin Loughlin
-				} 
-			}
-			
+
+				}
+			} 
 			else if (a.getCategory().equals(Categories.Error)) {
 				LASADInfo.display("Error", a.getParameterValue(ParameterTypes.Message));
 			}

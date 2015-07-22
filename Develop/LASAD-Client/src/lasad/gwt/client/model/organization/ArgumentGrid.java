@@ -63,12 +63,12 @@ public class ArgumentGrid
 		int minLevel = returnData.getMin();
 		int maxLevel = returnData.getMax();
 		int rootLevel = returnData.calcRoot(isOrganizeTopToBottom);
-		int range = maxLevel - minLevel;
 		int currentLevel = rootLevel;
 
-		for (int counter = 0; counter <= range; counter++)
+		// Don't do the last level, because usually it won't have children, and if it does, we don't care
+		for (int counter = minLevel; counter < maxLevel; counter++)
 		{
-			centerSharedChildren(getBoxesAtHeightLevel(currentLevel), isOrganizeTopToBottom);
+			centerSharedChildren(getBoxesAtHeightLevel(currentLevel));
 
 			if (isOrganizeTopToBottom)
 			{
@@ -82,7 +82,7 @@ public class ArgumentGrid
 	}
 
 	/*
-	 *	Recurisve helper for organize that visits each box, assigns it a widthlevel and heightlevel, and puts it on the grid
+	 *	Recursive helper for organize that visits each box, assigns it a widthlevel and heightlevel, and puts it on the grid
 	 *	@param box - the box to be put, initiliazed as any box from the thread (all boxes will be visited via recursion)
 	 *	@param widthLevel - The widthLevel to be assigned, initialize as 0
 	 *	@param heightLevel - The heightLevel to be assigned, initialize as 0
@@ -149,8 +149,8 @@ public class ArgumentGrid
 		}
 	}
 
-	// Centers shared children above the parents sharing them
-	private void centerSharedChildren(HashSet<LinkedBox> boxesAtLevel, final boolean isOrganizeTopToBottom)
+	// Centers shared children above/below the parents sharing them
+	private void centerSharedChildren(HashSet<LinkedBox> boxesAtLevel)
 	{
 		HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
 		HashSet<LinkedBox> otherBoxes = new HashSet<LinkedBox>();
@@ -200,37 +200,25 @@ public class ArgumentGrid
 				int widthLeftChildShouldBe = leftMostParentWidth + numParentsSharing - numChildren;
 				int numLevelsToMove = widthLeftChildShouldBe - leftMostChildWidth;
 
-				for (LinkedBox child : childGroup)
+				if (numLevelsToMove != 0)
 				{
-					shiftBoxesAtHeightLevelAndAboveOrBelow(child.getHeightLevel(), numLevelsToMove, isOrganizeTopToBottom);
-					break;
+					for (LinkedBox child : childGroup)
+					{
+						shiftBoxesAtHeightLevel(child.getHeightLevel(), numLevelsToMove);
+						break;
+					}
 				}
 			}
 		}
 	}
 
-	// Shifts the boxes at the height level and above/below (depending on isOrganizeTopToBottom) by amount to maintain alignment
-	private void shiftBoxesAtHeightLevelAndAboveOrBelow(int heightLevel, int amount, final boolean isOrganizeTopToBottom)
+	// Shifts the boxes at the height level by amount to maintain alignment
+	private void shiftBoxesAtHeightLevel(final int heightLevel, final int amount)
 	{
-		if (isOrganizeTopToBottom)
+		// If box on grid is level or below, move
+		for (LinkedBox boxOnGrid : getBoxesAtHeightLevel(heightLevel))
 		{
-			for (LinkedBox boxOnGrid : grid)
-			{
-				if (heightLevel >= boxOnGrid.getHeightLevel())
-				{
-					boxOnGrid.setWidthLevel(boxOnGrid.getWidthLevel() + amount);
-				}
-			}
-		}
-		else
-		{
-			for (LinkedBox boxOnGrid : grid)
-			{
-				if (heightLevel <= boxOnGrid.getHeightLevel())
-				{
-					boxOnGrid.setWidthLevel(boxOnGrid.getWidthLevel() + amount);
-				}
-			}
+			boxOnGrid.setWidthLevel(boxOnGrid.getWidthLevel() + amount);
 		}
 	}
 
@@ -327,18 +315,43 @@ public class ArgumentGrid
 		siblingGroup.add(original);
 
 		boolean isFirstSibling = true;
+		boolean firstSibShouldInc;
+		Integer centerWidthGrid = calcCenterWidthLevel(grid);
+		if (centerWidthGrid == null || centerWidthGrid > origWidthLevel)
+		{
+			firstSibShouldInc = true;
+		}
+		else
+		{
+			firstSibShouldInc = false;
+		}
+
 		for (LinkedBox sibling : original.getSiblingBoxes())
 		{
-			if (isFirstSibling)
+			if (firstSibShouldInc)
 			{
-				siblingGroup.addAll(assignGridPositionToSibling(sibling, true, origWidthLevel + HOR_SPACE, origHeightLevel, siblingGroup));
-				isFirstSibling = false;
+				if (isFirstSibling)
+				{
+					siblingGroup.addAll(assignGridPositionToSibling(sibling, true, origWidthLevel + HOR_SPACE, origHeightLevel, siblingGroup));
+					isFirstSibling = false;
+				}
+				else
+				{
+					siblingGroup.addAll(assignGridPositionToSibling(sibling, false, origWidthLevel - HOR_SPACE, origHeightLevel, siblingGroup));
+				}
 			}
 			else
 			{
-				siblingGroup.addAll(assignGridPositionToSibling(sibling, false, origWidthLevel - HOR_SPACE, origHeightLevel, siblingGroup));
+				if (isFirstSibling)
+				{
+					siblingGroup.addAll(assignGridPositionToSibling(sibling, false, origWidthLevel - HOR_SPACE, origHeightLevel, siblingGroup));
+					isFirstSibling = false;
+				}
+				else
+				{
+					siblingGroup.addAll(assignGridPositionToSibling(sibling, true, origWidthLevel + HOR_SPACE, origHeightLevel, siblingGroup));
+				}
 			}
-
 		}
 		int farthestLeftLevel = Integer.MAX_VALUE;
 
@@ -471,35 +484,124 @@ public class ArgumentGrid
 		}
 	}
 
+	private Integer calcCenterWidthLevel(HashSet<LinkedBox> group)
+	{
+		int numBoxes = group.size();
+		if (numBoxes == 0)
+		{
+			return null;
+		}
+
+		double sum = 0.0;
+		for (LinkedBox box : group)
+		{
+			sum += box.getWidthLevel();
+		}
+
+		return new Integer((int) Math.round(sum / numBoxes));
+	}
+
 	// moves boxes out of the way for a solo box
-	private LinkedBox makeRoomForSoloBox(LinkedBox box, boolean boxWasThere)
+	private LinkedBox makeRoomForSoloBox(LinkedBox box)
 	{
 		int widthLevel = box.getWidthLevel();
 		int heightLevel = box.getHeightLevel();
+		LinkedBox boxInWay = null;
 
 		// If we made it this far, there was no intersecting group so we may proceed normally
-		for (LinkedBox boxOnGrid : getBoxesAtHeightLevel(heightLevel))
+		for (LinkedBox gridBox : getBoxesAtHeightLevel(heightLevel))
 		{
-			if (boxOnGrid.getWidthLevel() > widthLevel)
+			if (gridBox.getWidthLevel() > widthLevel)
 			{
-				boxOnGrid.incWidthLevel();
+				gridBox.incWidthLevel();
+			}
+			else if (gridBox.getWidthLevel() < widthLevel)
+			{
+				gridBox.decWidthLevel();
 			}
 			else
 			{
-				boxOnGrid.decWidthLevel();
+				boxInWay = gridBox;
 			}
 		}
-
-		if (boxWasThere)
+		
+		if (boxInWay != null)
 		{
-			box.incWidthLevel();
+			LinkedBox boxOnGrid = findBoxOnGrid(boxInWay);
+			if (boxOnGrid == null)
+			{
+				Logger.log("boxOnGrid is null", Logger.DEBUG);
+				return box;
+			}
+
+			Integer centerWidthInt = calcCenterWidthLevel(grid);
+			if (centerWidthInt != null)
+			{
+				int centerWidth = centerWidthInt;
+				boolean boxOnGridMoreChildren;
+				if (boxOnGrid.getNumChildren() > box.getNumChildren())
+				{
+					boxOnGridMoreChildren = true;
+				}
+				else
+				{
+					boxOnGridMoreChildren = false;
+				}
+
+				if (widthLevel < centerWidth)
+				{
+					if (boxOnGridMoreChildren)
+					{
+						boxOnGrid.incWidthLevel();
+						box.decWidthLevel();
+					}
+					else
+					{
+						boxOnGrid.decWidthLevel();
+						box.incWidthLevel();
+					}
+
+				}
+				else if (widthLevel > centerWidth)
+				{
+					if (boxOnGridMoreChildren)
+					{
+						boxOnGrid.decWidthLevel();
+						box.incWidthLevel();
+					}
+					else
+					{
+						boxOnGrid.incWidthLevel();
+						box.decWidthLevel();
+					}
+				}
+				else
+				{
+					boxOnGrid.decWidthLevel();
+					box.incWidthLevel();
+				}
+			}
+			else
+			{
+				Logger.log("ERROR: centerWidth of grid should not be null", Logger.DEBUG);
+			}
 		}
 
 		return box;
 	}
 
+	private HashSet<LinkedBox> shiftGroup(HashSet<LinkedBox> group, final int range)
+	{
+		for (LinkedBox box : group)
+		{
+			box.setWidthLevel(box.getWidthLevel() + range);
+		}
+
+		return group;
+	}
+
 	// Moves boxes out of the way for a group of siblings boxes
-	private HashSet<LinkedBox> makeRoomForGroup(HashSet<LinkedBox> group, boolean boxWasThere, int groupFarthestLeftLevel, int groupFarthestRightLevel)
+	private HashSet<LinkedBox> makeRoomForGroup(HashSet<LinkedBox> group, boolean boxesOverlap, int groupFarthestLeftLevel, int groupFarthestRightLevel)
 	{
 		int heightLevel = 0;
 		for (LinkedBox box : group)
@@ -508,27 +610,127 @@ public class ArgumentGrid
 			break;
 		}
 
+		HashSet<LinkedBox> boxesInWay = new HashSet<LinkedBox>();
+		HashSet<LinkedBox> boxesToRight = new HashSet<LinkedBox>();
+		HashSet<LinkedBox> boxesToLeft = new HashSet<LinkedBox>();
+
 		int range = groupFarthestRightLevel - groupFarthestLeftLevel;
 		// If we've made it this far, there's no intersecting group and we can proceed normally
 		for (LinkedBox boxOnGrid : getBoxesAtHeightLevel(heightLevel))
 		{
 			if (boxOnGrid.getWidthLevel() > groupFarthestRightLevel)
 			{
-				boxOnGrid.incWidthLevel();	
+				boxOnGrid.incWidthLevel();
+				boxesToRight.add(boxOnGrid);	
+			}
+			else if (boxOnGrid.getWidthLevel() < groupFarthestLeftLevel)
+			{
+				boxOnGrid.decWidthLevel();
+				boxesToLeft.add(boxOnGrid);
 			}
 			else
 			{
-				boxOnGrid.setWidthLevel(boxOnGrid.getWidthLevel() - range);
-				boxOnGrid.decWidthLevel();
+				boxesInWay.add(boxOnGrid);
 			}
 		}
 
-		if (boxWasThere)
+		if (boxesInWay.size() > 0)
 		{
-			for (LinkedBox box : group)
+			Integer centerWidthGridInt = calcCenterWidthLevel(grid);
+			Integer widthBoxesInWayInt = calcCenterWidthLevel(boxesInWay);
+			boolean shouldInc = true;
+
+			if (centerWidthGridInt != null)
 			{
-				box.incWidthLevel();
+				int centerWidthGrid = centerWidthGridInt;
+				int widthBoxesInWay = widthBoxesInWayInt;
+
+				int numGroupChildren = 0;
+				for (LinkedBox box : group)
+				{
+					numGroupChildren += box.getNumChildren();
+				}
+
+				int numBoxesInWayChildren = 0;
+				for (LinkedBox box : boxesInWay)
+				{
+					numBoxesInWayChildren += box.getNumChildren();
+				}
+
+				boolean boxesInWayMoreChildren;
+				if (numBoxesInWayChildren > numGroupChildren)
+				{
+					boxesInWayMoreChildren = true;
+				}
+				else
+				{
+					boxesInWayMoreChildren = false;
+				}
+
+				if (widthBoxesInWay < centerWidthGrid)
+				{
+					if (boxesInWayMoreChildren)
+					{
+						boxesInWay = shiftGroup(boxesInWay, range + 1);
+						boxesToRight = shiftGroup(boxesToRight, range);
+						shouldInc = false;
+					}
+					else
+					{
+						boxesInWay = shiftGroup(boxesInWay, -1*(range + 1));
+						boxesToLeft = shiftGroup(boxesToLeft, -1 * range);
+						shouldInc = true;
+					}
+
+				}
+				else if (widthBoxesInWay > centerWidthGrid)
+				{
+					if (boxesInWayMoreChildren)
+					{
+						boxesInWay = shiftGroup(boxesInWay, -1*(range + 1));
+						boxesToLeft = shiftGroup(boxesToLeft, -1 * range);
+						shouldInc = true;
+					}
+					else
+					{
+						boxesInWay = shiftGroup(boxesInWay, range + 1);
+						boxesToRight = shiftGroup(boxesToRight, range);
+						shouldInc = false;
+					}
+				}
+				else
+				{
+					boxesInWay = shiftGroup(boxesInWay, -1*(range + 1));
+					boxesToLeft = shiftGroup(boxesToLeft, -1 * range);
+					shouldInc = true;
+				}
 			}
+			else
+			{
+				Logger.log("ERROR: centerWidthGrid should not be null", Logger.DEBUG);
+			}
+
+			HashSet<LinkedBox> boxesToMove = new HashSet<LinkedBox>();
+			boxesToMove.addAll(boxesToLeft);
+			boxesToMove.addAll(boxesInWay);
+			boxesToMove.addAll(boxesToRight);
+
+			for (LinkedBox box : boxesToMove)
+			{
+				findBoxOnGrid(box).setWidthLevel(box.getWidthLevel());
+			}
+
+			if (boxesOverlap)
+			{
+				if (shouldInc)
+				{
+					group = shiftGroup(group, 1);
+				}
+				else
+				{
+					group = shiftGroup(group, -1);
+				}
+			}	
 		}
 
 		return group;
@@ -541,12 +743,12 @@ public class ArgumentGrid
 		{
 			if ((this.getBoxAt(box.getWidthLevel() + 1, box.getHeightLevel()) != null) || (this.getBoxAt(box.getWidthLevel() - 1, box.getHeightLevel()) != null))
 			{
-				box = this.makeRoomForSoloBox(box, false);
+				box = this.makeRoomForSoloBox(box);
 			}
 		}
 		else
 		{
-			box = this.makeRoomForSoloBox(box, true);
+			box = this.makeRoomForSoloBox(box);
 		}
 
 		LinkedBox boxAlreadyThere = this.getBoxAt(box.getGridPosition());
@@ -694,11 +896,11 @@ public class ArgumentGrid
 			buffer.append("\n");
 		}
 
-		buffer.append("\t----");
+		buffer.append("\t-----");
 
 		for (int currentColumn = minWidth; currentColumn <= maxWidth; currentColumn++)
 		{
-			buffer.append("----");
+			buffer.append("-----");
 		}
 
 		buffer.append("\n\t\t");

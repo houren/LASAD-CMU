@@ -2,6 +2,7 @@ package lasad.gwt.client.model.organization;
 
 import java.util.HashSet;
 import java.util.HashMap;
+import java.util.Collection;
 
 // Aware that this is unnecessary, I just do it as a reminder in case I change location
 import lasad.gwt.client.model.organization.ArgumentThread;
@@ -45,22 +46,34 @@ public class ArgumentModel
 
 	public void addArgThread(ArgumentThread argThread)
 	{
+		argThread.setThreadID(this.getNumArgThreads() + 1);
 		this.argThreads.add(argThread);
 	}
 
 	public void removeArgThread(ArgumentThread argThread)
 	{
 		this.argThreads.remove(argThread);
-		ArgumentThread.decNumThreads();
 	}
 
-	public void removeEmptyThreads()
+	public void removeExcessThreads()
 	{
 		for (ArgumentThread argThread : argThreads)
 		{
-			if (argThread.getBoxes().size() == 0)
+			Collection<LinkedBox> boxes = argThread.getBoxes();
+			if (boxes.size() == 0)
 			{
 				this.removeArgThread(argThread);
+			}
+			else if (boxes.size() > 1)
+			{
+				for (LinkedBox box : boxes)
+				{
+					if (box.getNumRelations() == 0)
+					{
+						this.removeArgThread(argThread);
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -136,6 +149,11 @@ public class ArgumentModel
 		return argThreads;
 	}
 
+	public int getNumArgThreads()
+	{
+		return argThreads.size();
+	}
+
 	// Remember, top left is (0,0), not bottom left
 	public EdgeCoords calcEdgeCoords()
 	{
@@ -187,7 +205,7 @@ public class ArgumentModel
 		StringBuilder buffer = new StringBuilder("\n***********\nBEGIN ARGUMENT MODEL\n***********");
 		for (ArgumentThread argThread : this.argThreads)
 		{
-			buffer.append("\n\tThread " + counter);
+			buffer.append("\n\tThread " + argThread.getThreadID());
 			buffer.append(argThread.toString());
 			counter++;
 		}

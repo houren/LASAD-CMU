@@ -17,7 +17,6 @@ import lasad.gwt.client.model.organization.ArgumentGrid;
 
 public class ArgumentThread
 {
-	private static int numThreads = 0;
 	// HashMap allows for constant lookup time by BoxID
 	private HashMap<Integer, LinkedBox> boxMap;
 
@@ -32,8 +31,7 @@ public class ArgumentThread
 	public ArgumentThread()
 	{
 		this.boxMap = new HashMap<Integer, LinkedBox>();
-		numThreads++;
-		this.threadID = numThreads;
+		this.threadID = 0;
 		this.grid = new ArgumentGrid();
 	}
 
@@ -50,6 +48,16 @@ public class ArgumentThread
 		{
 			this.addBox(box);
 		}
+	}
+
+	public void setThreadID(int threadID)
+	{
+		this.threadID = threadID;
+	}
+
+	public int getThreadID()
+	{
+		return threadID;
 	}
 
 	public Collection<LinkedBox> getBoxes()
@@ -85,19 +93,11 @@ public class ArgumentThread
 	// Helper for removeEltByEltID
 	private LinkedBox removeBoxByBoxID(int boxID)
 	{
-		LinkedBox boxToRemove = this.getBoxByBoxID(boxID);
-		if (boxToRemove != null)
-		{
-			this.removeLinksTo(boxToRemove);
-			LinkedBox returnValue = boxMap.remove(boxID);
-			return returnValue;
-		}
-		else
-		{
-			return null;
-		}
+		return boxMap.remove(this.getBoxByBoxID(boxID));
 	}
 
+	// Elt ID is boxID for boxes.  Whoever came up with the idea to give boxes two separate ID's is killing me.
+	// I just spent an hour debugging to realize the error was that I used rootID instead of boxID.
 	public Object removeEltByEltID(int eltID)
 	{
 		Object returnValue = this.removeBoxByBoxID(eltID);
@@ -110,8 +110,22 @@ public class ArgumentThread
 					if (childLink.getLinkID() == eltID)
 					{
 						returnValue = childLink.clone();
-						childLink.getEndBox().removeParentLink(childLink);
-						box.removeChildLink(childLink);
+
+						LinkedBox startBox = childLink.getStartBox();
+						LinkedBox endBox = childLink.getEndBox();
+
+						// We might have already removed the start box from the link
+						if (startBox != null)
+						{
+							startBox.removeChildLink(childLink);
+						}
+
+						// We might have already removed the end box from the link
+						if (endBox != null)
+						{
+							endBox.removeParentLink(childLink);
+						}
+
 						return returnValue;
 					}
 				}
@@ -121,8 +135,22 @@ public class ArgumentThread
 					if (parentLink.getLinkID() == eltID)
 					{
 						returnValue = parentLink.clone();
-						parentLink.getStartBox().removeChildLink(parentLink);
-						box.removeParentLink(parentLink);
+
+						LinkedBox startBox = parentLink.getStartBox();
+						LinkedBox endBox = parentLink.getEndBox();
+
+						// We might have already removed the start box from the link
+						if (startBox != null)
+						{
+							startBox.removeChildLink(parentLink);
+						}
+
+						// We might have already removed the end box from the link
+						if (endBox != null)
+						{
+							endBox.removeParentLink(parentLink);
+						}
+
 						return returnValue;
 					}
 				}
@@ -132,15 +160,20 @@ public class ArgumentThread
 					if (siblingLink.getLinkID() == eltID)
 					{
 						returnValue = siblingLink.clone();
-						if (box.equals(siblingLink.getStartBox()))
+
+						LinkedBox startBox = siblingLink.getStartBox();
+						LinkedBox endBox = siblingLink.getEndBox();
+
+						if (startBox!= null)
 						{
-							siblingLink.getEndBox().removeSiblingLink(siblingLink);
+							startBox.removeSiblingLink(siblingLink);
 						}
-						else
+
+						if (endBox != null)
 						{
-							siblingLink.getStartBox().removeSiblingLink(siblingLink);
+							endBox.removeSiblingLink(siblingLink);
 						}
-						box.removeSiblingLink(siblingLink);
+
 						return returnValue;
 					}
 				}
@@ -161,6 +194,7 @@ public class ArgumentThread
 		}
 	}
 
+	/*
 	public void removeLinksTo(LinkedBox boxBeingRemoved)
 	{
 		HashSet<LinkedBox> relatedBoxes = boxBeingRemoved.getRelatedBoxes();
@@ -172,6 +206,7 @@ public class ArgumentThread
 			}
 		}
 	}
+	*/
 
 	public boolean contains(LinkedBox box)
 	{
@@ -236,11 +271,6 @@ public class ArgumentThread
 		{
 			return false;
 		}
-	}
-
-	public static void decNumThreads()
-	{
-		numThreads--;
 	}
 
 	@Override
