@@ -1,5 +1,6 @@
 package lasad.gwt.client.ui.common.elements;
 
+import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.ElementInfo;
 import lasad.gwt.client.ui.common.AbstractExtendedElement;
 import lasad.gwt.client.ui.common.ExtendedElementContainerInterface;
@@ -15,8 +16,21 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.EventListener;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.dom.client.DomEvent;
+import com.google.gwt.event.shared.HasHandlers;
+import com.google.gwt.event.dom.client.HasKeyDownHandlers;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 
-public abstract class AbstractExtendedTextElement extends AbstractExtendedElement {
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+
+public abstract class AbstractExtendedTextElement extends AbstractExtendedElement{
 
 	protected final boolean DEBUG = false;
 
@@ -138,6 +152,7 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 							AbstractExtendedTextElement.this.getContainer().getFocusHandler().setFocus(AbstractExtendedTextElement.this);
 						}
 					} else if (code == Events.OnBlur.getEventCode()) {
+						Logger.log("OnBlur!", Logger.DEBUG);
 						be.stopPropagation();
 						if (!AbstractExtendedTextElement.this.isActiveViewMode()) {
 							// Focus was lost by TABULATOR
@@ -146,6 +161,7 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 						}
 						// BM Modification
 					} else if (code == Events.OnKeyDown.getEventCode()) {
+						Logger.log("Key down event: "+be, Logger.DEBUG);
 						if (autoResize) {
 							autoSizeTextArea();
 						}
@@ -440,6 +456,11 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 				// .getConnectedModel().getId()));
 				sendRequestLockElement(this.getConnectedModel().getValue(ParameterTypes.MapId), this.getConnectedModel().getId());
 			} else {
+				//Modified by Darlan Santana Farias
+					//resize the box when losing focus
+					//added this line so the box get resized after pasting content, intead of only when typing
+				this.autoSizeTextArea();
+				
 				if (DEBUG)
 					LASADInfo.display("setElementFocus", "UNLOCK");
 				// communicator.sendActionPackage(actionBuilder.unlockElement(this

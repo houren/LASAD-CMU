@@ -106,13 +106,18 @@ public abstract class GraphMap extends AbstractGraphMap{
 					else if ((be.getType() == Events.OnClick && clicked) || be.getType() == Events.OnDoubleClick) {
 						focusHandler.releaseAllFocus();
 					} 
-					else if (be.getType() == Events.OnContextMenu) {
+					else if (be.getType() == Events.OnContextMenu){
+						//Modified by Darlan Santana Farias (DSF) in July 2015
+						//If the user is trying to access the context menu
+							// and the selected element is a text area, then it shows the default context menu
+							// otherwise, it shows LASAD's context menu
 						Logger.log("be.getTarget().getClassName(): "+be.getTarget().getClassName(), Logger.DEBUG);
 						if(!be.getTarget().getClassName().equals("extendedTextElement-TextArea-EditMode")){
 							be.preventDefault();
 							eventContextMenu(be.getClientX() - getAbsoluteLeft() + getHScrollPosition(), be.getClientY() - getAbsoluteTop() + getVScrollPosition());
 						}
 					}
+					//end of DSF's modifications
 					be.cancelBubble();
 				}
 			};
