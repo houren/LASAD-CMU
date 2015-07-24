@@ -5,10 +5,11 @@ import lasad.gwt.client.model.organization.LinkedBox;
  * OrganizerLink is, like LinkedBox is to AbstractBox, a way of representing an AbstractLinkPanel (and/or an AbstractLink) that is more
  * friendly to AutoOrganizer.  The important info for updating a link via an Action is contained within an OrganizerLink.
  * @author Kevin Loughlin
- * @since 17 June 2015, Updated 21 July 2015
+ * @since 17 June 2015, Updated 23 July 2015
  */
 public class OrganizerLink
 {
+	private static int lastLinkID = -1;
 	// Be mindful of difference between boxID and rootID.
 	private LinkedBox startBox;
 	private LinkedBox endBox;
@@ -28,6 +29,7 @@ public class OrganizerLink
 	public OrganizerLink(int linkID, LinkedBox startBox, LinkedBox endBox, String type, boolean connectsGroup)
 	{
 		this.linkID = linkID;
+		lastLinkID = this.linkID;
 		this.startBox = startBox;
 		this.endBox = endBox;
 		this.type = type;
@@ -39,7 +41,8 @@ public class OrganizerLink
 	 */
 	public OrganizerLink(LinkedBox startBox, LinkedBox endBox, String type, boolean connectsGroup)
 	{
-		this.linkID = -1;
+		this.linkID = lastLinkID + 1;
+		lastLinkID = this.linkID;
 		this.startBox = startBox;
 		this.endBox = endBox;
 		this.type = type;
@@ -49,7 +52,8 @@ public class OrganizerLink
 	// Don't use the default constructor, hence why it's set as private and does nothing other than shutting the compiler up
 	private OrganizerLink()
 	{
-		this.linkID = -1;
+		this.linkID = lastLinkID + 1;
+		lastLinkID = this.linkID;
 		this.connectsGroup = false;
 	}
 
@@ -150,5 +154,10 @@ public class OrganizerLink
 			return false;
 		}
 	}
-	//TODO not necessary for my purposes right now, but a toString method is always nice. Self reminder to come back and write it.
+
+	@Override
+	public String toString()
+	{
+		return new String("linkID: " + linkID + "; type: " + type + "; startBox: " + startBox.getRootID() + "; endBox: " + endBox.getRootID());
+	}
 }

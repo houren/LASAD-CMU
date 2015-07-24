@@ -1,6 +1,11 @@
 package lasad.gwt.client.model.organization;
 
 import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.Map;
+import java.util.Collection;
+
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.organization.Coordinate;
@@ -34,14 +39,13 @@ public class LinkedBox
 	private double xCenter;
 	private double yCenter;
 
-	private HashSet<OrganizerLink> childLinks;
+	// In these hashmaps, integer is linkID
+	private HashMap<Integer, OrganizerLink> childLinks;
+	private HashMap<Integer, OrganizerLink> parentLinks;
+	private HashMap<Integer, OrganizerLink> siblingLinks;
+
 	private HashSet<LinkedBox> childBoxes;
-
-	private HashSet<OrganizerLink> parentLinks;
 	private HashSet<LinkedBox> parentBoxes;
-
-	// siblingLinks are those that are of subType "Linked Premises" and are thus handled differently
-	private HashSet<OrganizerLink> siblingLinks;
 	private HashSet<LinkedBox> siblingBoxes;
 
 	// Height and width level will be used like a coordinate grid once we come to organizeMap() of AutoOrganizer
@@ -63,9 +67,9 @@ public class LinkedBox
 		this.height = height;
 		this.xCenter = xLeft + width / 2.0;
 		this.yCenter = yTop + height / 2.0;
-		this.childLinks = new HashSet<OrganizerLink>();
-		this.parentLinks = new HashSet<OrganizerLink>();
-		this.siblingLinks = new HashSet<OrganizerLink>();
+		this.childLinks = new HashMap<Integer, OrganizerLink>();
+		this.parentLinks = new HashMap<Integer, OrganizerLink>();
+		this.siblingLinks = new HashMap<Integer, OrganizerLink>();
 		this.childBoxes = new HashSet<LinkedBox>();
 		this.parentBoxes = new HashSet<LinkedBox>();
 		this.siblingBoxes = new HashSet<LinkedBox>();
@@ -86,9 +90,9 @@ public class LinkedBox
 		this.height = ERROR;
 		this.xCenter = ERROR;
 		this.yCenter = ERROR;
-		this.childLinks = new HashSet<OrganizerLink>();
-		this.parentLinks = new HashSet<OrganizerLink>();
-		this.siblingLinks = new HashSet<OrganizerLink>();
+		this.childLinks = new HashMap<Integer, OrganizerLink>();
+		this.parentLinks = new HashMap<Integer, OrganizerLink>();
+		this.siblingLinks = new HashMap<Integer, OrganizerLink>();
 		this.childBoxes = new HashSet<LinkedBox>();
 		this.parentBoxes = new HashSet<LinkedBox>();
 		this.siblingBoxes = new HashSet<LinkedBox>();
@@ -120,6 +124,35 @@ public class LinkedBox
 	public int getWidth()
 	{
 		return width;
+	}
+
+	public OrganizerLink getLinkByLinkID(int linkID)
+	{
+		OrganizerLink returnLink = childLinks.get(linkID);
+		if (returnLink == null)
+		{
+			returnLink = parentLinks.get(linkID);
+			if (returnLink == null)
+			{
+				returnLink = siblingLinks.get(linkID);
+			}
+		}
+
+		return returnLink;
+	}
+
+	public OrganizerLink removeLinkByLinkID(int linkID)
+	{
+		OrganizerLink returnLink = this.removeChildLinkByID(linkID);
+		if (returnLink == null)
+		{
+			returnLink = this.removeParentLinkByID(linkID);
+			if (returnLink == null)
+			{
+				returnLink = this.removeSiblingLinkByID(linkID);
+			}
+		}
+		return returnLink;
 	}
 
 	public void setWidth(int width)
@@ -183,19 +216,19 @@ public class LinkedBox
 		this.yTop = yCenter - this.height / 2.0;
 	}
 
-	public HashSet<OrganizerLink> getChildLinks()
+	public Collection<OrganizerLink> getChildLinks()
 	{
-		return childLinks;
+		return childLinks.values();
 	}
 
-	public HashSet<OrganizerLink> getParentLinks()
+	public Collection<OrganizerLink> getParentLinks()
 	{
-		return parentLinks;
+		return parentLinks.values();
 	}
 
-	public HashSet<OrganizerLink> getSiblingLinks()
+	public Collection<OrganizerLink> getSiblingLinks()
 	{
-		return siblingLinks;
+		return siblingLinks.values();
 	}
 
 	public HashSet<LinkedBox> getChildBoxes()
@@ -281,19 +314,19 @@ public class LinkedBox
 	// I naturally avoid duplicates in all add methods by implementing these with HashSet.  Takes care of updating box sets too.
 	public void addChildLink(OrganizerLink link)
 	{
-		this.childLinks.add(link);
+		this.childLinks.put(link.getLinkID(), link);
 		this.childBoxes.add(link.getEndBox());
 	}
 
 	public void addParentLink(OrganizerLink link)
 	{
-		this.parentLinks.add(link);
+		this.parentLinks.put(link.getLinkID(), link);
 		this.parentBoxes.add(link.getStartBox());
 	}
 
 	public void addSiblingLink(OrganizerLink link)
 	{
-		this.siblingLinks.add(link);
+		this.siblingLinks.put(link.getLinkID(), link);
 		if (link.getStartBox().equals(this))
 		{
 			this.siblingBoxes.add(link.getEndBox());
@@ -304,29 +337,56 @@ public class LinkedBox
 		}
 	}
 
-	public void removeChildLink(OrganizerLink link)
+	public OrganizerLink removeChildLink(OrganizerLink link)
 	{
-		this.childBoxes.remove(link.getEndBox());
-		this.childLinks.remove(link);
+		return this.removeChildLinkByID(link.getLinkID());
 	}
 
-	public void removeParentLink(OrganizerLink link)
+	private OrganizerLink removeChildLinkByID(int linkID)
 	{
-		this.parentBoxes.remove(link.getStartBox());
-		this.parentLinks.remove(link);
+		OrganizerLink removedLink = this.childLinks.remove(linkID);
+		if (removedLink != null)
+		{
+			this.childBoxes.remove(removedLink.getEndBox());
+		}
+		return removedLink;
 	}
 
-	public void removeSiblingLink(OrganizerLink link)
+	public OrganizerLink removeParentLink(OrganizerLink link)
 	{
-		if (link.getStartBox().equals(this))
+		return this.removeParentLinkByID(link.getLinkID());
+	}
+
+	private OrganizerLink removeParentLinkByID(int linkID)
+	{
+		OrganizerLink removedLink = this.parentLinks.remove(linkID);
+		if (removedLink != null)
 		{
-			this.siblingBoxes.remove(link.getEndBox());
+			this.parentBoxes.remove(removedLink.getStartBox());
 		}
-		else
+		return removedLink;
+	}
+
+	public OrganizerLink removeSiblingLink(OrganizerLink link)
+	{
+		return this.removeSiblingLinkByID(link.getLinkID());
+	}
+
+	private OrganizerLink removeSiblingLinkByID(int linkID)
+	{
+		OrganizerLink removedLink = this.siblingLinks.remove(linkID);
+		if (removedLink != null)
 		{
-			this.siblingBoxes.remove(link.getStartBox());
-		}
-		this.siblingLinks.remove(link);
+			if (removedLink.getStartBox().equals(this))
+			{
+				this.siblingBoxes.remove(removedLink.getEndBox());
+			}
+			else
+			{
+				this.siblingBoxes.remove(removedLink.getStartBox());
+			}
+		}	
+		return removedLink;
 	}
 
 	public int getNumChildren()
@@ -418,7 +478,6 @@ public class LinkedBox
 	/**
 	 *	Removes this box's link to boxBeingRemoved if there is one
 	 */
-	/*
 	public void removeLinkTo(LinkedBox boxBeingRemoved)
 	{
 		if (this.getChildBoxes().contains(boxBeingRemoved))
@@ -462,7 +521,6 @@ public class LinkedBox
 			}
 		}
 	}
-	*/
 
 	public boolean hasChildLinkWith(LinkedBox other)
 	{
@@ -565,8 +623,6 @@ public class LinkedBox
 	 */
 	private VisitedAndBoolHolder extendedSiblingRecursive(LinkedBox box, LinkedBox BOX_TO_FIND, VisitedAndBoolHolder holder)
 	{
-		//Logger.log("Entered extendedSiblingRecursive", Logger.DEBUG);
-
 		if (!holder.getVisited().contains(box))
 		{
 			holder.addVisited(box);
@@ -627,7 +683,7 @@ public class LinkedBox
 		if (object instanceof LinkedBox)
 		{
 			LinkedBox otherBox = (LinkedBox) object;
-			if (this.boxID == otherBox.getBoxID() || this.rootID == otherBox.getRootID())
+			if (this.boxID == otherBox.getBoxID())
 			{
 				return true;
 			}
@@ -650,10 +706,22 @@ public class LinkedBox
 	}
 
 	// Just outputs the box's boxID and rootID, not its children and parents and siblings
-	public String toStringShort()
+	public String toStringShort(final boolean shouldIndentMore)
 	{
-		StringBuilder buffer = new StringBuilder("\n\t\t\t\tBox RootID: " + Integer.toString(rootID) + "; widthLevel: " + widthLevel + "; heightLevel: " + heightLevel);
-		return buffer.toString();
+		
+		if (shouldIndentMore)
+		{
+			String afterIndents = new String("BOX: " + rootID + "\n\t\t\t\t\tAlt Box ID: " + boxID + "; widthLevel: " + widthLevel + "; heightLevel: " + heightLevel);
+			StringBuilder buffer = new StringBuilder("\n\t\t\t\t" + afterIndents);
+			return buffer.toString();
+		}
+		else
+		{
+			String afterIndents = new String("BOX: " + rootID + "\n\t\t\tAlt Box ID: " + boxID + "; widthLevel: " + widthLevel + "; heightLevel: " + heightLevel);
+			StringBuilder buffer = new StringBuilder("\n\t\t" + afterIndents);
+			return buffer.toString();
+		}
+			
 	}
 
 	/**
@@ -662,28 +730,21 @@ public class LinkedBox
 	@Override
 	public String toString()
 	{
-		StringBuilder buffer = new StringBuilder(this.toStringShort());
+		StringBuilder buffer = new StringBuilder(this.toStringShort(false));
 		buffer.append("\n\t\t\tCHILD BOXES...");
-		for (OrganizerLink childLink : childLinks)
+		for (LinkedBox childBox : this.getChildBoxes())
 		{
-			buffer.append(childLink.getEndBox().toStringShort());
+			buffer.append(childBox.toStringShort(true));
 		}
 		buffer.append("\n\t\t\tPARENT BOXES...");
-		for (OrganizerLink parentLink : parentLinks)
+		for (LinkedBox parentBox : this.getParentBoxes())
 		{
-			buffer.append(parentLink.getStartBox().toStringShort());
+			buffer.append(parentBox.toStringShort(true));
 		}
 		buffer.append("\n\t\t\tSIBLING BOXES...");
-		for (OrganizerLink siblingLink : siblingLinks)
+		for (LinkedBox siblingBox : this.getSiblingBoxes())
 		{
-			if (siblingLink.getEndBox().equals(this))
-			{
-				buffer.append(siblingLink.getStartBox().toStringShort());
-			}
-			else if (siblingLink.getStartBox().equals(this))
-			{
-				buffer.append(siblingLink.getEndBox().toStringShort());
-			}
+			buffer.append(siblingBox.toStringShort(true));
 		}
 		buffer.append("\n\t\tEND BOX\n");
 		return buffer.toString();
@@ -709,34 +770,34 @@ public class LinkedBox
 		setYTop(yTop);
 	}
 
-	public void setChildLinks(HashSet<OrganizerLink> childLinks)
+	public void setChildLinks(Map<Integer, OrganizerLink> childLinks)
 	{
-		this.childLinks = childLinks;
+		this.childLinks = new HashMap(childLinks);
 	}
 
-	public void setParentLinks(HashSet<OrganizerLink> parentLinks)
+	public void setParentLinks(Map<Integer, OrganizerLink> parentLinks)
 	{
-		this.parentLinks = parentLinks;
+		this.parentLinks = new HashMap(parentLinks);
 	}
 
-	public void setSiblingLinks(HashSet<OrganizerLink> siblingLinks)
+	public void setSiblingLinks(Map<Integer, OrganizerLink> siblingLinks)
 	{
-		this.siblingLinks = siblingLinks;
+		this.siblingLinks = new HashMap(siblingLinks);
 	}
 
-	public void setChildBoxes(HashSet<LinkedBox> childBoxes)
+	public void setChildBoxes(Collection<LinkedBox> childBoxes)
 	{
-		this.childBoxes = childBoxes;
+		this.childBoxes = new HashSet(childBoxes);
 	}
 
-	public void setParentBoxes(HashSet<LinkedBox> parentBoxes)
+	public void setParentBoxes(Collection<LinkedBox> parentBoxes)
 	{
-		this.parentBoxes = parentBoxes;
+		this.parentBoxes = new HashSet(parentBoxes);
 	}
 
-	public void setSiblingBoxes(HashSet<LinkedBox> siblingBoxes)
+	public void setSiblingBoxes(Collection<LinkedBox> siblingBoxes)
 	{
-		this.siblingBoxes = siblingBoxes;
+		this.siblingBoxes = new HashSet(siblingBoxes);
 	}
 
 	public void setType(String type)

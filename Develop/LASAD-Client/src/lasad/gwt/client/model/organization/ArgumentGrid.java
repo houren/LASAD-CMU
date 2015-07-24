@@ -1,6 +1,8 @@
 package lasad.gwt.client.model.organization;
 
 import java.util.HashSet;
+import java.util.ArrayList;
+
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.organization.Coordinate;
@@ -48,6 +50,7 @@ public class ArgumentGrid
 	 */
 	public void organize(final boolean isOrganizeTopToBottom, HashSet<LinkedBox> boxesToPutOnGrid)
 	{
+		Logger.log("Entered organize", Logger.DEBUG);
 		// Remember to clear the grid before organization, since boxes must be reaccumulated
 		this.clear();
 
@@ -65,6 +68,22 @@ public class ArgumentGrid
 		int rootLevel = returnData.calcRoot(isOrganizeTopToBottom);
 		int currentLevel = rootLevel;
 
+		for (int counter = minLevel; counter < maxLevel; counter++)
+		{
+			eliminateGroupInterference(getBoxesAtHeightLevel(currentLevel));
+
+			if (isOrganizeTopToBottom)
+			{
+				currentLevel--;
+			}
+			else
+			{
+				currentLevel++;
+			}
+		}
+
+		Logger.log("Made it past eliminateGroupInterference", Logger.DEBUG);
+
 		// Don't do the last level, because usually it won't have children, and if it does, we don't care
 		for (int counter = minLevel; counter < maxLevel; counter++)
 		{
@@ -79,6 +98,75 @@ public class ArgumentGrid
 				currentLevel++;
 			}
 		}
+
+		Logger.log("Exiting organize", Logger.DEBUG);
+	}
+
+	private void eliminateGroupInterference(HashSet<LinkedBox> boxes)
+	{
+		Logger.log("Entered eliminateGroupInterference", Logger.DEBUG);
+		int size = boxes.size();
+		ArrayList<LinkedBox> orderedRow = new ArrayList<LinkedBox>(size);
+		for (int i = 0; i < size; i++)
+		{
+			LinkedBox nextLowest = getNextLowest(boxes);
+			if (nextLowest != null)
+			{
+				orderedRow.add(nextLowest);
+				boxes.remove(nextLowest);
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		Logger.log("Made it past getNextLowest", Logger.DEBUG);
+
+		for (int i = 0; i < size - 2; i++)
+		{
+			LinkedBox left = orderedRow.get(i);
+			LinkedBox middle = orderedRow.get(i + 1);
+
+			if (left.getNumSiblings() > 0 && middle.getNumSiblings() == 0)
+			{
+				int tempWidth = middle.getWidthLevel();
+				for (int j = i + 2; j < size; j++)
+				{
+					LinkedBox next = orderedRow.get(j);
+					int numSib = next.getNumSiblings();
+					if (numSib > 0)
+					{
+						middle.setWidthLevel(next.getWidthLevel());
+						next.setWidthLevel(tempWidth);
+						if (numSib == 1)
+						{
+							i++;
+						}
+						break;
+					}
+				}
+			}
+		}
+
+		Logger.log("Made it past swapping columns", Logger.DEBUG);
+	}
+
+	private LinkedBox getNextLowest(HashSet<LinkedBox> boxes)
+	{
+		int leftWidth = Integer.MAX_VALUE;
+		LinkedBox leftBox = null;
+		for (LinkedBox box : boxes)
+		{
+			int widthLevel = box.getWidthLevel();
+			if (widthLevel < leftWidth)
+			{
+				leftWidth = widthLevel;
+				leftBox = box;
+			}
+		}
+
+		return leftBox;
 	}
 
 	/*
@@ -508,6 +596,39 @@ public class ArgumentGrid
 		int heightLevel = box.getHeightLevel();
 		LinkedBox boxInWay = null;
 
+		// Check for intersecting groups
+		/*
+		for (LinkedBox boxOnGrid : getBoxesOnGridAtHeightLevel(heightLevel))
+		{
+			int thisWidthLevel = boxOnGrid.getWidthLevel();
+			HashSet<LinkedBox> thisAndExtended = boxOnGrid.getThisAndExtendedSiblings();
+			int farthestLeftLevel = Integer.MAX_VALUE;
+			int farthestRightLevel = Integer.MIN_VALUE;
+			if (thisAndExtended.size() > 1)
+			{
+				for (LinkedBox groupedBox : thisAndExtended)
+				{
+					if (thisWidthLevel < farthestLeftLevel)
+					{
+						farthestLeftLevel = thisWidthLevel;
+					}
+					if (thisWidthLevel > farthestRightLevel)
+					{
+						farthestRightLevel = thisWidthLevel;
+					}
+				}
+				// If an interesting group was there, set the box to the right edge of the group and reput it on the grid
+				if (widthLevel >= farthestLeftLevel && widthLevel <= farthestRightLevel)
+				{
+					int centerWidth = this.calcCenterWidthLevel(grid);
+					int 
+					box.setWidthLevel(farthestRightLevel + HOR_SPACE);
+					return makeRoomFor(box, true);
+				}
+			}
+		}
+		*/
+
 		// If we made it this far, there was no intersecting group so we may proceed normally
 		for (LinkedBox gridBox : getBoxesAtHeightLevel(heightLevel))
 		{
@@ -609,6 +730,36 @@ public class ArgumentGrid
 			heightLevel = box.getHeightLevel();
 			break;
 		}
+
+		/*
+		for (LinkedBox boxOnGrid : getBoxesOnGridAtHeightLevel(heightLevel))
+		{
+			int thisWidthLevel = boxOnGrid.getWidthLevel();
+			HashSet<LinkedBox> thisAndExtended = boxOnGrid.getThisAndExtendedSiblings();
+			int farthestLeftLevel = Integer.MAX_VALUE;
+			int farthestRightLevel = Integer.MIN_VALUE;
+			if (thisAndExtended.size() > 1)
+			{
+				for (LinkedBox groupedBox : thisAndExtended)
+				{
+					if (thisWidthLevel < farthestLeftLevel)
+					{
+						farthestLeftLevel = thisWidthLevel;
+					}
+					if (thisWidthLevel > farthestRightLevel)
+					{
+						farthestRightLevel = thisWidthLevel;
+					}
+				}
+				// If an interesting group was there, set the box to the right edge of the group and reput it on the grid
+				if (widthLevel >= farthestLeftLevel && widthLevel < farthestRightLevel)
+				{
+					box.setWidthLevel(farthestRightLevel + 1);
+					return makeRoomFor(boxOnGrid, true);
+				}
+			}
+		}
+		*/
 
 		HashSet<LinkedBox> boxesInWay = new HashSet<LinkedBox>();
 		HashSet<LinkedBox> boxesToRight = new HashSet<LinkedBox>();
@@ -754,8 +905,8 @@ public class ArgumentGrid
 		LinkedBox boxAlreadyThere = this.getBoxAt(box.getGridPosition());
 		if (boxAlreadyThere != null)
 		{
-			Logger.log("putGroupOnGrid Error.", Logger.DEBUG);
-			Logger.log(box.toStringShort() + " wants to be placed where " + boxAlreadyThere.toStringShort() + " already is, which is " + box.getWidthLevel() + ", " + box.getHeightLevel(), Logger.DEBUG);
+			Logger.log("putSoloBoxOnGrid Error.", Logger.DEBUG);
+			Logger.log(box.toStringShort(false) + " wants to be placed where " + boxAlreadyThere.toStringShort(false) + " already is, which is " + box.getWidthLevel() + ", " + box.getHeightLevel(), Logger.DEBUG);
 		}
 
 		grid.add(box);
@@ -812,7 +963,7 @@ public class ArgumentGrid
 			if (boxAlreadyThere != null)
 			{
 				Logger.log("putGroupOnGrid Error.", Logger.DEBUG);
-				Logger.log(box.toStringShort() + " wants to be placed where " + boxAlreadyThere.toStringShort() + " already is, which is " + box.getWidthLevel() + ", " + box.getHeightLevel(), Logger.DEBUG);
+				Logger.log(box.toStringShort(false) + " wants to be placed where " + boxAlreadyThere.toStringShort(false) + " already is, which is " + box.getWidthLevel() + ", " + box.getHeightLevel(), Logger.DEBUG);
 			}
 		}
 

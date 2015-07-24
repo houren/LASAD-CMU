@@ -12,7 +12,7 @@ import lasad.gwt.client.model.organization.ArgumentGrid;
  *	An argument thread is a connected chain of boxes on the argument map space.
  *  This class is useful for AutoOrganizer.
  *	@author Kevin Loughlin
- *	@since 19 June 2015, Updated 21 July 2015
+ *	@since 19 June 2015, Updated 23 July 2015
  */
 
 public class ArgumentThread
@@ -20,8 +20,7 @@ public class ArgumentThread
 	// HashMap allows for constant lookup time by BoxID
 	private HashMap<Integer, LinkedBox> boxMap;
 
-	private int height;
-	private int width;
+	private static int assigner = Integer.MIN_VALUE;
 
 	private int threadID;
 
@@ -31,8 +30,9 @@ public class ArgumentThread
 	public ArgumentThread()
 	{
 		this.boxMap = new HashMap<Integer, LinkedBox>();
-		this.threadID = 0;
 		this.grid = new ArgumentGrid();
+		threadID = assigner;
+		assigner++;
 	}
 
 	public ArgumentThread(LinkedBox box)
@@ -48,16 +48,6 @@ public class ArgumentThread
 		{
 			this.addBox(box);
 		}
-	}
-
-	public void setThreadID(int threadID)
-	{
-		this.threadID = threadID;
-	}
-
-	public int getThreadID()
-	{
-		return threadID;
 	}
 
 	public Collection<LinkedBox> getBoxes()
@@ -90,111 +80,34 @@ public class ArgumentThread
 		}
 	}
 
-	// Helper for removeEltByEltID
-	private LinkedBox removeBoxByBoxID(int boxID)
+	public LinkedBox removeBoxByBoxID(int boxID)
 	{
-		return boxMap.remove(this.getBoxByBoxID(boxID));
+		return boxMap.remove(boxID);
 	}
 
-	// Elt ID is boxID for boxes.  Whoever came up with the idea to give boxes two separate ID's is killing me.
-	// I just spent an hour debugging to realize the error was that I used rootID instead of boxID.
-	public Object removeEltByEltID(int eltID)
+	public OrganizerLink removeLinkByLinkID(int linkID)
 	{
-		Object returnValue = this.removeBoxByBoxID(eltID);
-		if (returnValue == null)
+		OrganizerLink finalReturn = null;
+		boolean isFirstBox = true;
+		for (LinkedBox box : this.getBoxes())
 		{
-			for (LinkedBox box : boxMap.values())
+			OrganizerLink returnLink = box.removeLinkByLinkID(linkID);
+			if (returnLink != null)
 			{
-				for (OrganizerLink childLink : box.getChildLinks())
+				if (isFirstBox)
 				{
-					if (childLink.getLinkID() == eltID)
-					{
-						returnValue = childLink.clone();
-
-						LinkedBox startBox = childLink.getStartBox();
-						LinkedBox endBox = childLink.getEndBox();
-
-						// We might have already removed the start box from the link
-						if (startBox != null)
-						{
-							startBox.removeChildLink(childLink);
-						}
-
-						// We might have already removed the end box from the link
-						if (endBox != null)
-						{
-							endBox.removeParentLink(childLink);
-						}
-
-						return returnValue;
-					}
+					isFirstBox = false;
+					finalReturn = returnLink;
 				}
-
-				for (OrganizerLink parentLink : box.getParentLinks())
+				else
 				{
-					if (parentLink.getLinkID() == eltID)
-					{
-						returnValue = parentLink.clone();
-
-						LinkedBox startBox = parentLink.getStartBox();
-						LinkedBox endBox = parentLink.getEndBox();
-
-						// We might have already removed the start box from the link
-						if (startBox != null)
-						{
-							startBox.removeChildLink(parentLink);
-						}
-
-						// We might have already removed the end box from the link
-						if (endBox != null)
-						{
-							endBox.removeParentLink(parentLink);
-						}
-
-						return returnValue;
-					}
-				}
-
-				for (OrganizerLink siblingLink : box.getSiblingLinks())
-				{
-					if (siblingLink.getLinkID() == eltID)
-					{
-						returnValue = siblingLink.clone();
-
-						LinkedBox startBox = siblingLink.getStartBox();
-						LinkedBox endBox = siblingLink.getEndBox();
-
-						if (startBox!= null)
-						{
-							startBox.removeSiblingLink(siblingLink);
-						}
-
-						if (endBox != null)
-						{
-							endBox.removeSiblingLink(siblingLink);
-						}
-
-						return returnValue;
-					}
+					return returnLink;
 				}
 			}
-			return null;
 		}
-		else
-		{
-			return returnValue;
-		}
+		return finalReturn;
 	}
 
-	public void removeBoxes(Collection<LinkedBox> boxes)
-	{
-		for (LinkedBox box : boxes)
-		{
-			this.removeBoxByBoxID(box.getBoxID());
-		}
-	}
-
-	/*
 	public void removeLinksTo(LinkedBox boxBeingRemoved)
 	{
 		HashSet<LinkedBox> relatedBoxes = boxBeingRemoved.getRelatedBoxes();
@@ -206,7 +119,14 @@ public class ArgumentThread
 			}
 		}
 	}
-	*/
+
+	public void removeBoxes(Collection<LinkedBox> boxes)
+	{
+		for (LinkedBox box : boxes)
+		{
+			this.removeBoxByBoxID(box.getBoxID());
+		}
+	}
 
 	public boolean contains(LinkedBox box)
 	{
@@ -238,6 +158,7 @@ public class ArgumentThread
 		this.addBox(newBox);
 	}
 
+	// Guarantees uniqueness
 	@Override
 	public int hashCode()
 	{

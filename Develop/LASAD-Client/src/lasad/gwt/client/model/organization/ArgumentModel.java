@@ -9,13 +9,14 @@ import lasad.gwt.client.model.organization.ArgumentThread;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.EdgeCoords;
+import lasad.gwt.client.logger.Logger;
 
 
 /**
  *	An argument model is simply a vector of threads, i.e. a vector separate chains of arguments on the map space.
  *	This format of modeling is more conducive to support for AutoOrganizer.
  *	@author Kevin Loughlin
- *	@since 19 June 2015, Updated 30 June 2015
+ *	@since 19 June 2015, Updated 23 July 2015
  */
 public class ArgumentModel
 {
@@ -46,7 +47,6 @@ public class ArgumentModel
 
 	public void addArgThread(ArgumentThread argThread)
 	{
-		argThread.setThreadID(this.getNumArgThreads() + 1);
 		this.argThreads.add(argThread);
 	}
 
@@ -57,35 +57,45 @@ public class ArgumentModel
 
 	public void removeExcessThreads()
 	{
+		HashSet<ArgumentThread> threadsToRemove = new HashSet<ArgumentThread>();
 		for (ArgumentThread argThread : argThreads)
 		{
 			Collection<LinkedBox> boxes = argThread.getBoxes();
 			if (boxes.size() == 0)
 			{
-				this.removeArgThread(argThread);
+				threadsToRemove.add(argThread);
 			}
-			else if (boxes.size() > 1)
-			{
-				for (LinkedBox box : boxes)
-				{
-					if (box.getNumRelations() == 0)
-					{
-						this.removeArgThread(argThread);
-						break;
-					}
-				}
-			}
+		}
+		for (ArgumentThread argThread : threadsToRemove)
+		{
+			this.removeArgThread(argThread);
 		}
 	}
 
-	public Object removeEltByEltID(int eltID)
+	public LinkedBox removeBoxByBoxID(int boxID)
 	{
+		Logger.log("Entering argModel removeBoxByBoxID", Logger.DEBUG);
 		for (ArgumentThread argThread : argThreads)
 		{
-			Object removed = argThread.removeEltByEltID(eltID);
-			if (removed != null)
+			LinkedBox removedBox = argThread.removeBoxByBoxID(boxID);
+			if (removedBox != null)
 			{
-				return removed;
+				return removedBox;
+			}
+		}
+
+		return null;
+	}
+
+	public OrganizerLink removeLinkByLinkID(int linkID)
+	{
+		Logger.log("Entering argModel removeLinkByLinkID", Logger.DEBUG);
+		for (ArgumentThread argThread : argThreads)
+		{
+			OrganizerLink removedLink = argThread.removeLinkByLinkID(linkID);
+			if (removedLink != null)
+			{
+				return removedLink;
 			}
 		}
 
@@ -134,14 +144,24 @@ public class ArgumentModel
 	// Returns the argument thread of the provided box, else null
 	public ArgumentThread getBoxThread(LinkedBox box)
 	{
+		boolean threadFound = false;
+		ArgumentThread returnThread = null;
 		for (ArgumentThread thread : argThreads)
 		{
 			if (thread.contains(box))
 			{
-				return thread;
+				if (threadFound)
+				{
+					Logger.log("ERROR: Multiple threads contain box " + box.getRootID(), Logger.DEBUG);
+				}
+				else
+				{
+					returnThread = thread;
+					threadFound = true;
+				}
 			}
 		}
-		return null;
+		return returnThread;
 	}
 
 	public HashSet<ArgumentThread> getArgThreads()
@@ -196,7 +216,89 @@ public class ArgumentModel
 		}
 
 		return new EdgeCoords(top, right, bottom, left);
-	} 
+	}
+
+	/**
+	 *	Checks to see if the removal of the passed link warrants the creation of a new Thread, and creates the thread if needed
+	 *	@param removedLink - The link removed from the model
+	 */
+	public void createNewThreadIfNecessary(OrganizerLink removedLink)
+	{
+		LinkedBox startBox = removedLink.getStartBox();
+		LinkedBox endBox = removedLink.getEndBox();
+
+		HashSet<LinkedBox> origThreadBoxes = new HashSet<LinkedBox>();
+
+		HashSet<LinkedBox> possibleNewThreadBoxes = new HashSet<LinkedBox>();
+
+		if (startBox != null && endBox != null)
+		{
+			origThreadBoxes = visitRecursive(startBox, new HashSet<LinkedBox>());
+			possibleNewThreadBoxes = visitRecursive(endBox, new HashSet<LinkedBox>());
+		}
+		else
+		{
+			Logger.log("Nothing to do, link's boxes have already been removed", Logger.DEBUG);
+			return;
+		}
+
+		if (origThreadBoxes.size() == possibleNewThreadBoxes.size() && origThreadBoxes.containsAll(possibleNewThreadBoxes))
+		{
+			// They're still in the same thread
+			return;
+		}
+		else
+		{
+			ArgumentThread newThread = new ArgumentThread(possibleNewThreadBoxes);
+			this.addArgThread(newThread);
+			this.getBoxThread(startBox).removeBoxes(possibleNewThreadBoxes);
+		}
+	}
+
+	/*
+	 *	Goes through all the boxes directly/indirectly attached to box to see if we can reach all from the original thread
+	 *	@param box - The box currently being visited, should be initialized as the endBox of the deleted link
+	 *	@param boxesReached - The boxes so far reached, should be initialized as a new, empty HashSet
+	 */
+	private HashSet<LinkedBox> visitRecursive(LinkedBox box, HashSet<LinkedBox> boxesReached)
+	{
+		if (!boxesReached.contains(box))
+		{
+			boxesReached.add(box);
+			for (LinkedBox childBox : box.getChildBoxes())
+			{
+				boxesReached = visitRecursive(childBox, boxesReached);
+			}
+
+			for (LinkedBox parentBox : box.getParentBoxes())
+			{
+				boxesReached = visitRecursive(parentBox, boxesReached);
+			}
+
+			for (LinkedBox siblingBox : box.getSiblingBoxes())
+			{
+				boxesReached = visitRecursive(siblingBox, boxesReached);
+			}
+		}
+
+		return boxesReached;
+	}
+
+	// This is a "just in case" method that gets called to verify that there isn't an error with the argModel.
+	public void removeLinksTo(LinkedBox removedBox)
+	{
+		ArgumentThread thread = this.getBoxThread(removedBox);
+		if (thread != null)
+		{
+			Logger.log("ERROR: thread of removed box was not null. Fixing.", Logger.DEBUG);
+			thread.removeBoxByBoxID(removedBox.getBoxID());
+		}
+
+		for (ArgumentThread argThread : this.getArgThreads())
+		{
+			argThread.removeLinksTo(removedBox);
+		}
+	}
 
 	@Override
 	public String toString()
@@ -205,7 +307,7 @@ public class ArgumentModel
 		StringBuilder buffer = new StringBuilder("\n***********\nBEGIN ARGUMENT MODEL\n***********");
 		for (ArgumentThread argThread : this.argThreads)
 		{
-			buffer.append("\n\tThread " + argThread.getThreadID());
+			buffer.append("\n\tThread " + counter);
 			buffer.append(argThread.toString());
 			counter++;
 		}

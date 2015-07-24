@@ -83,12 +83,13 @@ import lasad.gwt.client.model.ElementInfo;
  */
 public class LASADActionReceiver {
 
+	private final boolean DEBUG = false;
+	
+	private final String BOX = "box";
+	private final String RELATION = "relation";
+
 	lasad_clientConstants myConstants = GWT.create(lasad_clientConstants.class);
 	private static LASADActionReceiver myInstance = null;
-
-	// These shouldn't be hardcoded but I'm a rebel for now
-	private final int DEFAULT_WIDTH = 200;
-	private final int DEFAULT_HEIGHT = 200;
 
 	// David Drexler Edit-BEGIN
 	private TreeMap<Integer, ActionPackage> treeForwReplay;
@@ -532,7 +533,7 @@ public class LASADActionReceiver {
 				}
 
 				// If it's a box, add it to the model
-				if (elementType.equalsIgnoreCase("box"))
+				if (elementType.equalsIgnoreCase(BOX))
 				{
 					String xLeftString = a.getParameterValue(ParameterTypes.PosX);
 					double xLeft;
@@ -558,7 +559,7 @@ public class LASADActionReceiver {
 						return;
 					}
 
-					ElementInfo newBoxInfo = controller.getMapInfo().getElementsByType("box").get(elementModel.getValue(ParameterTypes.ElementId));
+					ElementInfo newBoxInfo = controller.getMapInfo().getElementsByType(BOX).get(elementModel.getValue(ParameterTypes.ElementId));
 					if (newBoxInfo == null)
 					{
 						Logger.log("newBoxDimenions are null", Logger.DEBUG);
@@ -586,12 +587,16 @@ public class LASADActionReceiver {
 					int height = Integer.parseInt(heightString);
 
 					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height, canBeGrouped)));
-					Logger.log(argModel.toString(), Logger.DEBUG);
+					
+					if (DEBUG)
+					{
+						Logger.log(argModel.toString(), Logger.DEBUG);
+					}
 
 				}
 
 				// If it's a relation, add it to the model
-				else if (elementType.equalsIgnoreCase("relation"))
+				else if (elementType.equalsIgnoreCase(RELATION))
 				{
 					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
 					int startBoxID = Integer.parseInt(startBoxStringID);
@@ -609,7 +614,7 @@ public class LASADActionReceiver {
 						return;
 					}
 
-					ElementInfo newLinkInfo = controller.getMapInfo().getElementsByType("relation").get(elementModel.getValue(ParameterTypes.ElementId));
+					ElementInfo newLinkInfo = controller.getMapInfo().getElementsByType(RELATION).get(elementModel.getValue(ParameterTypes.ElementId));
 					String connectsGroupString = newLinkInfo.getElementOption(ParameterTypes.ConnectsGroup);
 					boolean connectsGroup;
 					if (connectsGroupString == null)
@@ -653,7 +658,10 @@ public class LASADActionReceiver {
 						}
 					}
 
-					Logger.log(argModel.toString(), Logger.DEBUG);
+					if (DEBUG)
+					{
+						Logger.log(argModel.toString(), Logger.DEBUG);
+					}
 				}
 
 				// End Kevin Loughlin
@@ -733,10 +741,14 @@ public class LASADActionReceiver {
 			}
 			else if (a.getCmd().equals(Commands.DeleteElement))
 			{
-				Logger.log("DELETE FROM GRAPH", Logger.DEBUG);
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] DELETE-ELEMENT", Logger.DEBUG);
-
 				int elementID = Integer.parseInt(a.getParameterValue(ParameterTypes.Id));
+				// This eltID is not being update because it's not removed in the original?  I thinK?
+				if (controller.getElement(elementID) == null)
+				{
+					Logger.log("ERROR: tried to delete null element.  Ignoring element.", Logger.DEBUG);
+					return;
+				}
 				String elementType = controller.getElement(elementID).getType();
 				if (controller.getElement(elementID) != null) {
 					if (controller.getElement(elementID).getType().equalsIgnoreCase("FEEDBACK-AGENT")) {
@@ -751,33 +763,49 @@ public class LASADActionReceiver {
 					}
 
 					// Kevin Loughlin
-					
-					if (elementType.equalsIgnoreCase("box") || elementType.equalsIgnoreCase("relation"))
+					// Keep in mind that relations are removed before boxes
+					if (elementType.equalsIgnoreCase(RELATION))
 					{
-						Object removedObj = argModel.removeEltByEltID(elementID);
-						if (removedObj != null)
+						OrganizerLink removedLink = argModel.removeLinkByLinkID(elementID);
+						if (removedLink != null)
 						{
-							if (removedObj instanceof OrganizerLink)
-							{
-								OrganizerLink removedLink = (OrganizerLink) removedObj;
+							argModel.createNewThreadIfNecessary(removedLink);
+							argModel.removeExcessThreads();
 
-								autoOrganizer.createNewThreadIfNecessary(removedLink);
-								argModel.removeExcessThreads();
-
-								if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)))
-								{
-									autoOrganizer.determineLinksToRemove(removedLink);
-								}
-							}
-							else
+							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)))
 							{
-								argModel.removeExcessThreads();
+								autoOrganizer.determineLinksToRemove(removedLink);
 							}
 						}
+						else
+						{
+							Logger.log("ERROR: Removed link is null", Logger.DEBUG);
+						}
 
-						Logger.log(argModel.toString(), Logger.DEBUG);
+						if (DEBUG)
+						{
+							Logger.log(argModel.toString(), Logger.DEBUG);
+						}
 					}
+					else if (elementType.equalsIgnoreCase(BOX))
+					{
+						LinkedBox removedBox = argModel.removeBoxByBoxID(elementID);
+						if (removedBox != null)
+						{
+							argModel.removeLinksTo(removedBox);
+							argModel.removeExcessThreads();
+						}
+						else
+						{
+							Logger.log("ERROR: Removed box is null", Logger.DEBUG);
+						}
 
+						if (DEBUG)
+						{
+							Logger.log(argModel.toString(), Logger.DEBUG);
+						}
+					}
+					
 					// End Kevin Loughlin
 
 				} else {
@@ -914,7 +942,7 @@ public class LASADActionReceiver {
 				}
 
 				// If it's a box, add it to the model
-				if (elementType.equalsIgnoreCase("box"))
+				if (elementType.equalsIgnoreCase(BOX))
 				{
 					String xLeftString = a.getParameterValue(ParameterTypes.PosX);
 					double xLeft;
@@ -940,7 +968,7 @@ public class LASADActionReceiver {
 						return;
 					}
 
-					ElementInfo newBoxInfo = controller.getMapInfo().getElementsByType("box").get(elementModel.getValue(ParameterTypes.ElementId));
+					ElementInfo newBoxInfo = controller.getMapInfo().getElementsByType(BOX).get(elementModel.getValue(ParameterTypes.ElementId));
 					if (newBoxInfo == null)
 					{
 						Logger.log("newBoxDimenions are null", Logger.DEBUG);
@@ -968,12 +996,16 @@ public class LASADActionReceiver {
 					int height = Integer.parseInt(heightString);
 
 					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height, canBeGrouped)));
-					Logger.log(argModel.toString(), Logger.DEBUG);
+					
+					if (DEBUG)
+					{
+						Logger.log(argModel.toString(), Logger.DEBUG);
+					}
 
 				}
 
 				// If it's a relation, add it to the model
-				else if (elementType.equalsIgnoreCase("relation"))
+				else if (elementType.equalsIgnoreCase(RELATION))
 				{
 					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
 					int startBoxID = Integer.parseInt(startBoxStringID);
@@ -991,7 +1023,7 @@ public class LASADActionReceiver {
 						return;
 					}
 
-					ElementInfo newLinkInfo = controller.getMapInfo().getElementsByType("relation").get(elementModel.getValue(ParameterTypes.ElementId));
+					ElementInfo newLinkInfo = controller.getMapInfo().getElementsByType(RELATION).get(elementModel.getValue(ParameterTypes.ElementId));
 					String connectsGroupString = newLinkInfo.getElementOption(ParameterTypes.ConnectsGroup);
 					boolean connectsGroup;
 					if (connectsGroupString == null)
@@ -1035,7 +1067,10 @@ public class LASADActionReceiver {
 						}
 					}
 
-					Logger.log(argModel.toString(), Logger.DEBUG);
+					if (DEBUG)
+					{
+						Logger.log(argModel.toString(), Logger.DEBUG);
+					}
 				}
 
 				// End Kevin Loughlin
@@ -1100,10 +1135,9 @@ public class LASADActionReceiver {
 			}
 			else if (a.getCmd().equals(Commands.DeleteElement))
 			{
-				Logger.log("DELETE FROM GRAPH", Logger.DEBUG);
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] DELETE-ELEMENT", Logger.DEBUG);
-
 				int elementID = Integer.parseInt(a.getParameterValue(ParameterTypes.Id));
+				// This eltID is not being update because it's not removed in the original?  I thinK?
 				String elementType = controller.getElement(elementID).getType();
 				if (controller.getElement(elementID) != null) {
 					if (controller.getElement(elementID).getType().equalsIgnoreCase("FEEDBACK-AGENT")) {
@@ -1118,35 +1152,53 @@ public class LASADActionReceiver {
 					}
 
 					// Kevin Loughlin
-					
-					if (elementType.equalsIgnoreCase("box") || elementType.equalsIgnoreCase("relation"))
+					// Keep in mind that relations are removed before boxes
+					if (elementType.equalsIgnoreCase(RELATION))
 					{
-						Object removedObj = argModel.removeEltByEltID(elementID);
-						if (removedObj != null)
+						OrganizerLink removedLink = argModel.removeLinkByLinkID(elementID);
+						if (removedLink != null)
 						{
-							if (removedObj instanceof OrganizerLink)
-							{
-								OrganizerLink removedLink = (OrganizerLink) removedObj;
+							argModel.createNewThreadIfNecessary(removedLink);
+							argModel.removeExcessThreads();
 
-								autoOrganizer.createNewThreadIfNecessary(removedLink);
-								argModel.removeExcessThreads();
-
-								if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)))
-								{
-									autoOrganizer.determineLinksToRemove(removedLink);
-								}
-							}
-							else
+							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)))
 							{
-								argModel.removeExcessThreads();
+								autoOrganizer.determineLinksToRemove(removedLink);
 							}
 						}
+						else
+						{
+							Logger.log("ERROR: Removed link is null", Logger.DEBUG);
+						}
 
-						Logger.log(argModel.toString(), Logger.DEBUG);
+						if (DEBUG)
+						{
+							Logger.log(argModel.toString(), Logger.DEBUG);
+						}
 					}
+					else if (elementType.equalsIgnoreCase(BOX))
+					{
+						LinkedBox removedBox = argModel.removeBoxByBoxID(elementID);
+						if (removedBox != null)
+						{
+							argModel.removeExcessThreads();
+						}
+						else
+						{
+							Logger.log("ERROR: Removed box is null", Logger.DEBUG);
+						}
 
+						if (DEBUG)
+						{
+							Logger.log(argModel.toString(), Logger.DEBUG);
+						}
+					}
+					
 					// End Kevin Loughlin
 
+				} else {
+					// This occurs when another user deletes his/her feedback
+					Logger.log("Cannot delete, because element ID is unknown.", Logger.DEBUG_ERRORS);
 				}
 			} 
 			else if (a.getCategory().equals(Categories.Error)) {

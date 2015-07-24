@@ -92,7 +92,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 	private boolean selected = false, autogrow = false;
 
 	// Constants to calculate elements size correctly
-	public static final int CONNECTOR_WIDTH = 18, CONNECTOR_HEIGHT = 9;
+	public static final int CONNECTOR_WIDTH = 24, CONNECTOR_HEIGHT = 12;
 	public static final int BORDER_WIDTH = 5, BORDER_HEIGHT = 5;
 	public static final int HEADER_HEIGHT = 13;
 

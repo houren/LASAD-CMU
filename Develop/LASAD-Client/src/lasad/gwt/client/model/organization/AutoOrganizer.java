@@ -2,6 +2,7 @@ package lasad.gwt.client.model.organization;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Collection;
 
 import lasad.gwt.client.communication.helper.ActionFactory;
 import lasad.gwt.client.communication.LASADActionSender;
@@ -33,10 +34,11 @@ import lasad.shared.communication.objects.ActionPackage;
  * built for maps using Mara Harrell's template, this class can be applied to any map from any template.  There is a model that updates
  * with every change to the map.  Thus, we don't need to start from scratch and gather components every time these methods are called.
  * @author Kevin Loughlin and Darlan Santana Farias
- * @since 12 June 2015, Updated 21 July 2015
+ * @since 12 June 2015, Updated 23 July 2015
  */
 public class AutoOrganizer
 {
+	private final boolean DEBUG = true;
 	// The minimum number of pixels between boxes, set as a double for rounding/accuracy purposes
 	private final double MIN_SPACE = 50.0;
 
@@ -57,6 +59,9 @@ public class AutoOrganizer
 	private LASADActionSender communicator = LASADActionSender.getInstance();
 	private ActionFactory actionBuilder = ActionFactory.getInstance();
 
+	private MVController controller;
+	private ArgumentModel argModel;
+
 	/**
 	 *	The only constructor that should be used
 	 *	@param map - The argument map for this instance of AutoOrganizer
@@ -65,11 +70,8 @@ public class AutoOrganizer
 	{
 		this.map = map;
 		instances.put(map.getID(), this);
-	}
-
-	// Don't use default constructor
-	private AutoOrganizer()
-	{
+		controller = LASAD_Client.getMVCController(map.getID());
+		argModel = ArgumentModel.getInstanceByMapID(map.getID());
 	}
 
 	/**
@@ -89,8 +91,6 @@ public class AutoOrganizer
 	{
 		// Whether to sort from top to bottom or bottom to top
 		boolean isOrganizeTopToBottom = map.getMyViewSession().getController().getMapInfo().isOrganizeTopToBottom();
-
-		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
 
 		// Organize the grid by height and width "levels" (think chess board)
 		for (ArgumentThread argThread : argModel.getArgThreads())
@@ -177,10 +177,12 @@ public class AutoOrganizer
 
 			rowYcoord = CENTER_Y;
 
-			Logger.log(argThread.getGrid().toString(), Logger.DEBUG);
+			if (DEBUG)
+			{
+				Logger.log(argThread.getGrid().toString(), Logger.DEBUG);
+				Logger.log(argModel.toString(), Logger.DEBUG);
+			}
 		}
-
-		Logger.log(argModel.toString(), Logger.DEBUG);
 
 		// Position the cursor of the map
 		positionMapCursor(isOrganizeTopToBottom);
@@ -190,8 +192,6 @@ public class AutoOrganizer
 		{
 			argThread.getGrid().clear();
 		}
-
-		Logger.log(argModel.toString(), Logger.DEBUG);
 	}
 
 	/**
@@ -211,10 +211,10 @@ public class AutoOrganizer
 
 		if (link.getConnectsGroup())
 		{
-			HashSet<OrganizerLink> origStartChildLinks = origStartBox.getChildLinks();
+			Collection<OrganizerLink> origStartChildLinks = origStartBox.getChildLinks();
 			HashSet<LinkedBox> origStartChildBoxes = origStartBox.getChildBoxes();
 
-			HashSet<OrganizerLink> origEndChildLinks = origEndBox.getChildLinks();
+			Collection<OrganizerLink> origEndChildLinks = origEndBox.getChildLinks();
 			HashSet<LinkedBox> origEndChildBoxes = origEndBox.getChildBoxes();
 
 			for (OrganizerLink origStartChildLink : origStartChildLinks)
@@ -409,7 +409,16 @@ public class AutoOrganizer
 	{
 		int intX = (int) Math.round(box.getXLeft());
 		int intY = (int) Math.round(box.getYTop());
-		communicator.sendActionPackage(actionBuilder.updateBoxPosition(map.getID(), box.getBoxID(), intX, intY));
+		if (this.controller.getElement(box.getBoxID()) != null)
+		{
+			communicator.sendActionPackage(actionBuilder.updateBoxPosition(map.getID(), box.getBoxID(), intX, intY));
+		}
+		else
+		{
+			Logger.log("ERROR: Tried to update box position of nonexisting element.", Logger.DEBUG);
+			this.argModel.removeBoxByBoxID(box.getBoxID());
+			this.organizeMap();
+		}
 	}
 
 	/*
@@ -419,7 +428,6 @@ public class AutoOrganizer
 	 */
 	private void positionMapCursor(final boolean isOrganizeTopToBottom)
 	{
-		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
 		double edgeCoordY;
 		HashSet<LinkedBox> edgeBoxes = new HashSet<LinkedBox>();
 		double edgeSum = 0.0;
@@ -519,7 +527,7 @@ public class AutoOrganizer
 
 			if (startBox != null)
 			{
-				HashSet<OrganizerLink> siblingLinks = startBox.getSiblingLinks();
+				Collection<OrganizerLink> siblingLinks = startBox.getSiblingLinks();
 				for (OrganizerLink link : siblingLinks)
 				{
 					linksToRemove.add(link);
@@ -540,100 +548,29 @@ public class AutoOrganizer
 	 */
 	private void removeLinksFromVisual(HashSet<OrganizerLink> linksToRemove)
 	{
-		MVController controller = LASAD_Client.getMVCController(map.getID());
-
 		for (OrganizerLink link : linksToRemove)
 		{
 			ActionPackage myPackage = actionBuilder.autoOrganizerRemoveElement(map.getID(), link.getLinkID());
-			communicator.sendActionPackage(myPackage);
-		}
-	}
-
-	/**
-	 *	Checks to see if the removal of the passed link warrants the creation of a new Thread, and creates the thread if needed
-	 *	@param removedLink - The link removed from the model
-	 */
-	public void createNewThreadIfNecessary(OrganizerLink removedLink)
-	{
-		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(map.getID());
-
-		LinkedBox startBox = removedLink.getStartBox();
-		LinkedBox endBox = removedLink.getEndBox();
-
-		ArgumentThread originalThread = null;
-
-		HashSet<LinkedBox> boxesReached = new HashSet<LinkedBox>();
-
-		if (startBox != null)
-		{
-			originalThread = argModel.getBoxThread(startBox);
-			if (endBox != null)
+			if (this.controller.getElement(link.getLinkID()) != null)
 			{
-				boxesReached = visitRecursive(endBox, new HashSet<LinkedBox>());
-			}
-		}
-		else if (endBox != null)
-		{
-			originalThread = argModel.getBoxThread(endBox);
-			if (startBox != null)
-			{
-				boxesReached = visitRecursive(startBox, new HashSet<LinkedBox>());
-			}
-		}
-		else
-		{
-			Logger.log("Nothing to do, links boxes have already been removed", Logger.DEBUG);
-			return;
-		}
-
-		if (originalThread != null)
-		{
-			HashSet<LinkedBox> origThreadBoxes = new HashSet<LinkedBox>(originalThread.getBoxes());
-			if (boxesReached.size() == origThreadBoxes.size() && boxesReached.containsAll(origThreadBoxes))
-			{
-				// They're still in the same thread
-				return;
+				communicator.sendActionPackage(myPackage);
 			}
 			else
 			{
-				ArgumentThread newThread = new ArgumentThread(boxesReached);
-				argModel.addArgThread(newThread);
-				originalThread.removeBoxes(boxesReached);
+				LinkedBox startBox = link.getStartBox();
+				LinkedBox endBox = link.getEndBox();
+
+				if (startBox != null)
+				{
+					startBox.removeSiblingLink(link);
+				}
+				if (endBox != null)
+				{
+					endBox.removeSiblingLink(link);
+				}
+
+				Logger.log("ERROR: Tried to remove a null link: " + link.toString(), Logger.DEBUG);
 			}
 		}
-		else
-		{
-			Logger.log("ERROR: original thread is null", Logger.DEBUG);
-			return;
-		}
-	}
-
-	/*
-	 *	Goes through all the boxes directly/indirectly attached to box to see if we can reach all from the original thread
-	 *	@param box - The box currently being visited, should be initialized as the endBox of the deleted link
-	 *	@param boxesReached - The boxes so far reached, should be initialized as a new, empty HashSet
-	 */
-	private HashSet<LinkedBox> visitRecursive(LinkedBox box, HashSet<LinkedBox> boxesReached)
-	{
-		if (!boxesReached.contains(box))
-		{
-			boxesReached.add(box);
-			for (LinkedBox childBox : box.getChildBoxes())
-			{
-				boxesReached = visitRecursive(childBox, boxesReached);
-			}
-
-			for (LinkedBox parentBox : box.getParentBoxes())
-			{
-				boxesReached = visitRecursive(parentBox, boxesReached);
-			}
-
-			for (LinkedBox siblingBox : box.getSiblingBoxes())
-			{
-				boxesReached = visitRecursive(siblingBox, boxesReached);
-			}
-		}
-
-		return boxesReached;
 	}
 }
