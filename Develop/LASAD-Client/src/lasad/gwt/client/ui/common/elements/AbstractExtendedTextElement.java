@@ -53,6 +53,7 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 	private boolean wantFocus = false;
 	private boolean readOnly = false;
 	private boolean autoResize = false;
+	private static int fontSize = 12;
 
 	public AbstractExtendedTextElement(ExtendedElementContainerInterface container, ElementInfo config) {
 		super(container, config);
@@ -506,5 +507,10 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 
 	@Override
 	protected void onRemoveModelConnection() {
+	}
+
+	public static void setFontSize(int i)
+	{
+		fontSize = i;
 	}
 }

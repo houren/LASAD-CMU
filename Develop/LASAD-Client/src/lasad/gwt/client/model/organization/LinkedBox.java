@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Map;
 import java.util.Collection;
+import java.util.ArrayList;
 
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.logger.Logger;
@@ -290,7 +291,7 @@ public class LinkedBox
 	}
 
 	/**
-	 *	Returns this box and it's extended siblings (its siblings and any siblings of those siblings)
+	 *	Returns this box and it's extended siblings from left to right order (its siblings and any siblings of those siblings)
 	 */
 	public HashSet<LinkedBox> getThisAndExtendedSiblings()
 	{
@@ -711,13 +712,13 @@ public class LinkedBox
 		
 		if (shouldIndentMore)
 		{
-			String afterIndents = new String("BOX: " + rootID + "\n\t\t\t\t\tAlt Box ID: " + boxID + "; widthLevel: " + widthLevel + "; heightLevel: " + heightLevel);
+			String afterIndents = new String("BOX: " + rootID + "widthLevel: " + widthLevel + "; heightLevel: " + heightLevel);
 			StringBuilder buffer = new StringBuilder("\n\t\t\t\t" + afterIndents);
 			return buffer.toString();
 		}
 		else
 		{
-			String afterIndents = new String("BOX: " + rootID + "\n\t\t\tAlt Box ID: " + boxID + "; widthLevel: " + widthLevel + "; heightLevel: " + heightLevel);
+			String afterIndents = new String("BOX: " + rootID + "widthLevel: " + widthLevel + "; heightLevel: " + heightLevel);
 			StringBuilder buffer = new StringBuilder("\n\t\t" + afterIndents);
 			return buffer.toString();
 		}

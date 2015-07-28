@@ -55,6 +55,16 @@ public class ArgumentThread
 		return boxMap.values();
 	}
 
+	public void organizeGrid(final boolean TOP_TO_BOTTOM)
+	{
+		this.setGrid(this.grid.organize(TOP_TO_BOTTOM, this.getBoxes()));
+	}
+
+	private void setGrid(ArgumentGrid grid)
+	{
+		this.grid = grid;
+	}
+
 	public ArgumentGrid getGrid()
 	{
 		return grid;

@@ -1,0 +1,1197 @@
+28-Jul-2015 08:58:33.478 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 08:58:33.503 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 08:58:33.504 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 08:58:33.504 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 08:58:33.504 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 08:58:33.504 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 08:58:33.504 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 08:58:33.504 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 08:58:33.505 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 08:58:33.505 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 08:58:33.505 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 08:58:33.506 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 08:58:33.506 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 08:58:33.506 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 08:58:33.506 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 08:58:33.506 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 08:58:33.507 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 08:58:33.507 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 08:58:33.773 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 08:58:33.806 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 08:58:33.811 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 08:58:33.812 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 08:58:33.813 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 785 ms
+28-Jul-2015 08:58:33.846 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 08:58:33.847 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 08:58:33.883 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 08:58:39.631 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 08:58:39.795 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 5,910 ms
+28-Jul-2015 08:58:39.798 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 08:58:39.830 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 32 ms
+28-Jul-2015 08:58:39.830 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 08:58:40.443 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 613 ms
+28-Jul-2015 08:58:40.443 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 08:58:40.494 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 51 ms
+28-Jul-2015 08:58:40.495 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 08:58:40.584 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 89 ms
+28-Jul-2015 08:58:40.585 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 08:58:40.664 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 79 ms
+28-Jul-2015 08:58:40.680 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 08:58:40.688 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 08:58:40.688 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 6875 ms
+28-Jul-2015 08:58:41.716 INFO [http-nio-8080-exec-5] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 08:58:41.873 INFO [http-nio-8080-exec-5] de.novanic.eventservice.logger.DefaultServerLogger.log Server: Client "F4A6E17C5652F7F03ACA96D38BC60628125730150" initialized.
+28-Jul-2015 09:07:21.211 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 09:07:21.212 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 09:07:21.264 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 09:07:21.318 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 09:07:21.337 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 09:07:22.365 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 09:07:23.401 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 09:07:23.508 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] is still processing a request that has yet to finish. This is very likely to create a memory leak. You can control the time allowed for requests to finish by using the unloadDelay attribute of the standard Context implementation. Stack trace of request processing thread:
+ java.lang.Object.wait(Native Method)
+ de.novanic.eventservice.service.connection.strategy.connector.ConnectionStrategyServerConnectorAdapter.waitMaxWaitingTime(ConnectionStrategyServerConnectorAdapter.java:82)
+ de.novanic.eventservice.service.connection.strategy.connector.longpolling.LongPollingServerConnector.listen(LongPollingServerConnector.java:62)
+ de.novanic.eventservice.service.registry.DefaultEventRegistry.listen(DefaultEventRegistry.java:223)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:242)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:227)
+ sun.reflect.GeneratedMethodAccessor36.invoke(Unknown Source)
+ sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+ java.lang.reflect.Method.invoke(Method.java:497)
+ com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:561)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+ com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:291)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)
+ org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+ org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+ org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:142)
+ org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+ org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:617)
+ org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+ org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:518)
+ org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1091)
+ org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:668)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1521)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1478)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+ java.lang.Thread.run(Thread.java:745)
+28-Jul-2015 09:07:23.509 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 09:07:23.528 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 09:07:23.564 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 09:07:23.608 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 09:07:23.609 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 09:11:54.079 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 09:11:54.080 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 09:11:54.081 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 09:11:54.081 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 09:11:54.081 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 09:11:54.081 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 09:11:54.081 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 09:11:54.081 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 09:11:54.081 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 09:11:54.081 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 09:11:54.082 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 09:11:54.082 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 09:11:54.082 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 09:11:54.082 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 09:11:54.083 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 09:11:54.083 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 09:11:54.083 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 09:11:54.083 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 09:11:54.209 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 09:11:54.230 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 09:11:54.232 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 09:11:54.234 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 09:11:54.234 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 521 ms
+28-Jul-2015 09:11:54.253 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 09:11:54.253 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 09:11:54.271 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 09:11:56.645 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 09:11:56.727 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 2,455 ms
+28-Jul-2015 09:11:56.728 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 09:11:56.748 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 18 ms
+28-Jul-2015 09:11:56.748 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 09:11:56.949 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 200 ms
+28-Jul-2015 09:11:56.949 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 09:11:56.971 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 22 ms
+28-Jul-2015 09:11:56.971 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 09:11:56.991 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 20 ms
+28-Jul-2015 09:11:56.991 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 09:11:57.004 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 13 ms
+28-Jul-2015 09:11:57.007 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 09:11:57.012 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 09:11:57.013 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 2778 ms
+28-Jul-2015 09:12:18.221 INFO [http-nio-8080-exec-3] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 09:12:18.369 INFO [http-nio-8080-exec-3] de.novanic.eventservice.logger.DefaultServerLogger.log Server: Client "9CC6B949972201A5B316A91A609828CB557129231" initialized.
+28-Jul-2015 10:08:42.416 SEVERE [http-nio-8080-Acceptor-0] org.apache.tomcat.util.net.NioEndpoint.setSocketOptions 
+ java.net.SocketException: Invalid argument
+	at sun.nio.ch.Net.setIntOption0(Native Method)
+	at sun.nio.ch.Net.setSocketOption(Net.java:356)
+	at sun.nio.ch.SocketChannelImpl.setOption(SocketChannelImpl.java:190)
+	at sun.nio.ch.SocketAdaptor.setIntOption(SocketAdaptor.java:281)
+	at sun.nio.ch.SocketAdaptor.setSoLinger(SocketAdaptor.java:316)
+	at org.apache.tomcat.util.net.SocketProperties.setProperties(SocketProperties.java:202)
+	at org.apache.tomcat.util.net.NioEndpoint.setSocketOptions(NioEndpoint.java:531)
+	at org.apache.tomcat.util.net.NioEndpoint$Acceptor.run(NioEndpoint.java:701)
+	at java.lang.Thread.run(Thread.java:745)
+
+28-Jul-2015 10:41:16.427 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 10:41:16.438 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 10:41:16.495 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 10:41:16.547 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 10:41:16.557 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 10:41:17.603 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 10:41:18.627 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 10:41:18.738 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] is still processing a request that has yet to finish. This is very likely to create a memory leak. You can control the time allowed for requests to finish by using the unloadDelay attribute of the standard Context implementation. Stack trace of request processing thread:
+ java.lang.Object.wait(Native Method)
+ de.novanic.eventservice.service.connection.strategy.connector.ConnectionStrategyServerConnectorAdapter.waitMaxWaitingTime(ConnectionStrategyServerConnectorAdapter.java:82)
+ de.novanic.eventservice.service.connection.strategy.connector.longpolling.LongPollingServerConnector.listen(LongPollingServerConnector.java:62)
+ de.novanic.eventservice.service.registry.DefaultEventRegistry.listen(DefaultEventRegistry.java:223)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:242)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:227)
+ sun.reflect.GeneratedMethodAccessor41.invoke(Unknown Source)
+ sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+ java.lang.reflect.Method.invoke(Method.java:497)
+ com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:561)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+ com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:291)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)
+ org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+ org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+ org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:142)
+ org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+ org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:617)
+ org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+ org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:518)
+ org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1091)
+ org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:668)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1521)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1478)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+ java.lang.Thread.run(Thread.java:745)
+28-Jul-2015 10:41:18.738 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 10:41:18.752 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 10:41:18.815 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 10:41:18.916 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 10:41:18.917 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 10:51:25.240 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 10:51:25.245 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 10:51:25.245 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 10:51:25.246 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 10:51:25.246 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 10:51:25.246 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 10:51:25.246 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 10:51:25.248 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 10:51:25.248 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 10:51:25.248 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 10:51:25.248 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 10:51:25.249 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 10:51:25.249 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 10:51:25.249 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 10:51:25.250 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 10:51:25.250 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 10:51:25.250 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 10:51:25.250 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 10:51:25.417 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 10:51:25.446 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 10:51:25.452 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 10:51:25.454 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 10:51:25.454 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 732 ms
+28-Jul-2015 10:51:25.483 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 10:51:25.484 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 10:51:25.510 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 10:51:31.620 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 10:51:31.730 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 6,219 ms
+28-Jul-2015 10:51:31.731 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 10:51:31.776 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 45 ms
+28-Jul-2015 10:51:31.778 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 10:51:32.205 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 427 ms
+28-Jul-2015 10:51:32.205 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 10:51:32.236 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 31 ms
+28-Jul-2015 10:51:32.236 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 10:51:32.270 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 33 ms
+28-Jul-2015 10:51:32.271 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 10:51:32.302 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 31 ms
+28-Jul-2015 10:51:32.307 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 10:51:32.314 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 10:51:32.315 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 6859 ms
+28-Jul-2015 10:51:33.200 INFO [http-nio-8080-exec-2] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 10:51:33.428 INFO [http-nio-8080-exec-2] de.novanic.eventservice.logger.DefaultServerLogger.log Server: Client "A3E96E70FB22FEFD3DC92C62DEAF72B7-630304967" initialized.
+28-Jul-2015 10:56:43.608 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 10:56:43.609 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 10:56:43.665 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 10:56:43.716 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 10:56:43.738 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 10:56:43.765 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 10:56:43.767 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 10:56:43.768 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 10:56:43.768 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:12:30.606 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 11:12:30.608 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 11:12:30.608 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 11:12:30.608 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 11:12:30.608 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 11:12:30.609 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 11:12:30.609 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 11:12:30.609 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 11:12:30.609 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 11:12:30.609 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 11:12:30.609 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 11:12:30.610 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 11:12:30.610 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 11:12:30.610 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 11:12:30.610 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 11:12:30.611 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 11:12:30.611 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 11:12:30.611 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 11:12:30.811 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:12:30.841 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 11:12:30.844 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:12:30.846 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 11:12:30.847 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 816 ms
+28-Jul-2015 11:12:30.878 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 11:12:30.878 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 11:12:30.906 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 11:12:34.008 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 11:12:34.174 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 3,267 ms
+28-Jul-2015 11:12:34.180 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 11:12:34.208 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 29 ms
+28-Jul-2015 11:12:34.209 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 11:12:34.591 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 382 ms
+28-Jul-2015 11:12:34.591 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 11:12:34.617 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 26 ms
+28-Jul-2015 11:12:34.618 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 11:12:34.644 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 26 ms
+28-Jul-2015 11:12:34.644 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 11:12:34.674 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 30 ms
+28-Jul-2015 11:12:34.679 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:12:34.687 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:12:34.688 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 3840 ms
+28-Jul-2015 11:12:39.581 INFO [http-nio-8080-exec-8] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 11:12:39.743 INFO [http-nio-8080-exec-8] de.novanic.eventservice.logger.DefaultServerLogger.null Server: Client "6D1EE4DFA392D83AFA2D926CC9E6FCF8-1181465939" initialized.
+28-Jul-2015 11:20:53.099 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 11:20:53.100 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:20:53.154 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:20:53.209 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 11:20:53.227 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 11:20:53.254 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:20:53.257 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:20:53.362 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:20:53.362 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:25:29.589 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 11:25:29.590 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 11:25:29.590 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 11:25:29.590 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 11:25:29.591 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 11:25:29.591 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 11:25:29.591 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 11:25:29.591 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 11:25:29.591 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 11:25:29.591 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 11:25:29.591 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 11:25:29.592 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 11:25:29.592 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 11:25:29.592 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 11:25:29.592 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 11:25:29.593 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 11:25:29.593 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 11:25:29.593 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 11:25:29.735 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:25:29.757 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 11:25:29.759 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:25:29.761 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 11:25:29.762 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 536 ms
+28-Jul-2015 11:25:29.779 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 11:25:29.779 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 11:25:29.797 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 11:25:34.393 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 11:25:34.501 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 4,704 ms
+28-Jul-2015 11:25:34.502 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 11:25:34.532 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 29 ms
+28-Jul-2015 11:25:34.534 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 11:25:35.066 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 532 ms
+28-Jul-2015 11:25:35.066 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 11:25:35.128 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 61 ms
+28-Jul-2015 11:25:35.128 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 11:25:35.315 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 187 ms
+28-Jul-2015 11:25:35.316 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 11:25:35.376 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 60 ms
+28-Jul-2015 11:25:35.381 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:25:35.387 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:25:35.388 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 5626 ms
+28-Jul-2015 11:25:39.673 INFO [http-nio-8080-exec-4] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 11:25:39.811 INFO [http-nio-8080-exec-4] de.novanic.eventservice.logger.DefaultServerLogger.log Server: Client "C778D1D6F4CED93E04633B40E714B6A4-943258150" initialized.
+28-Jul-2015 11:35:51.381 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 11:35:51.381 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:35:51.435 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:35:51.490 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 11:35:51.507 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 11:35:52.543 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 11:35:53.582 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 11:35:53.689 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] is still processing a request that has yet to finish. This is very likely to create a memory leak. You can control the time allowed for requests to finish by using the unloadDelay attribute of the standard Context implementation. Stack trace of request processing thread:
+ java.lang.Object.wait(Native Method)
+ de.novanic.eventservice.service.connection.strategy.connector.ConnectionStrategyServerConnectorAdapter.waitMaxWaitingTime(ConnectionStrategyServerConnectorAdapter.java:82)
+ de.novanic.eventservice.service.connection.strategy.connector.longpolling.LongPollingServerConnector.listen(LongPollingServerConnector.java:62)
+ de.novanic.eventservice.service.registry.DefaultEventRegistry.listen(DefaultEventRegistry.java:223)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:242)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:227)
+ sun.reflect.GeneratedMethodAccessor36.invoke(Unknown Source)
+ sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+ java.lang.reflect.Method.invoke(Method.java:497)
+ com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:561)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+ com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:291)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)
+ org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+ org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+ org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:142)
+ org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+ org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:617)
+ org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+ org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:518)
+ org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1091)
+ org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:668)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1521)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1478)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+ java.lang.Thread.run(Thread.java:745)
+28-Jul-2015 11:35:53.690 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 11:35:53.712 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:35:53.780 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:35:53.830 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:35:53.831 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:41:25.472 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 11:41:25.490 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 11:41:25.491 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 11:41:25.491 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 11:41:25.491 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 11:41:25.491 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 11:41:25.491 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 11:41:25.492 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 11:41:25.492 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 11:41:25.492 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 11:41:25.492 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 11:41:25.493 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 11:41:25.493 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 11:41:25.493 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 11:41:25.493 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 11:41:25.493 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 11:41:25.493 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 11:41:25.494 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 11:41:25.806 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:41:25.832 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 11:41:25.834 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:41:25.836 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 11:41:25.838 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 1724 ms
+28-Jul-2015 11:41:25.869 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 11:41:25.869 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 11:41:25.901 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 11:41:30.036 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 11:41:30.225 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 4,323 ms
+28-Jul-2015 11:41:30.228 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 11:41:30.251 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 24 ms
+28-Jul-2015 11:41:30.252 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 11:41:30.740 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 489 ms
+28-Jul-2015 11:41:30.742 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 11:41:30.780 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 39 ms
+28-Jul-2015 11:41:30.780 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 11:41:30.816 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 36 ms
+28-Jul-2015 11:41:30.816 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 11:41:30.834 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 18 ms
+28-Jul-2015 11:41:30.839 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:41:30.845 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:41:30.846 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 5007 ms
+28-Jul-2015 11:41:31.715 INFO [http-nio-8080-exec-6] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 11:41:31.904 INFO [http-nio-8080-exec-6] de.novanic.eventservice.logger.DefaultServerLogger.log Server: Client "503BBC78F9D837BB020BCF42639F0224-564767421" initialized.
+28-Jul-2015 11:45:58.600 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 11:45:58.600 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:45:58.657 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:45:58.712 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 11:45:58.730 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 11:45:59.750 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 11:46:00.785 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 11:46:00.898 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] is still processing a request that has yet to finish. This is very likely to create a memory leak. You can control the time allowed for requests to finish by using the unloadDelay attribute of the standard Context implementation. Stack trace of request processing thread:
+ java.lang.Object.wait(Native Method)
+ de.novanic.eventservice.service.connection.strategy.connector.ConnectionStrategyServerConnectorAdapter.waitMaxWaitingTime(ConnectionStrategyServerConnectorAdapter.java:82)
+ de.novanic.eventservice.service.connection.strategy.connector.longpolling.LongPollingServerConnector.listen(LongPollingServerConnector.java:62)
+ de.novanic.eventservice.service.registry.DefaultEventRegistry.listen(DefaultEventRegistry.java:223)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:242)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:227)
+ sun.reflect.GeneratedMethodAccessor36.invoke(Unknown Source)
+ sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+ java.lang.reflect.Method.invoke(Method.java:497)
+ com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:561)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+ com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:291)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)
+ org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+ org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+ org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:142)
+ org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+ org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:617)
+ org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+ org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:518)
+ org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1091)
+ org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:668)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1521)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1478)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+ java.lang.Thread.run(Thread.java:745)
+28-Jul-2015 11:46:00.898 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 11:46:00.918 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:46:00.991 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 11:46:01.093 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 11:46:01.094 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 12:47:18.099 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 12:47:18.118 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 12:47:18.118 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 12:47:18.118 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 12:47:18.118 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 12:47:18.119 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 12:47:18.119 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 12:47:18.119 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 12:47:18.119 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 12:47:18.119 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 12:47:18.119 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 12:47:18.120 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 12:47:18.120 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 12:47:18.120 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 12:47:18.120 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 12:47:18.120 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 12:47:18.120 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 12:47:18.120 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 12:47:18.290 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 12:47:18.319 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 12:47:18.322 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 12:47:18.323 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 12:47:18.323 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 667 ms
+28-Jul-2015 12:47:18.351 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 12:47:18.351 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 12:47:18.373 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 12:47:20.834 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 12:47:20.926 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 2,552 ms
+28-Jul-2015 12:47:20.928 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 12:47:20.947 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 20 ms
+28-Jul-2015 12:47:20.947 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 12:47:21.213 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 265 ms
+28-Jul-2015 12:47:21.213 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 12:47:21.238 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 25 ms
+28-Jul-2015 12:47:21.238 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 12:47:21.258 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 20 ms
+28-Jul-2015 12:47:21.259 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 12:47:21.274 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 15 ms
+28-Jul-2015 12:47:21.278 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 12:47:21.285 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 12:47:21.286 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 2962 ms
+28-Jul-2015 12:47:37.411 INFO [http-nio-8080-exec-2] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 12:47:37.588 INFO [http-nio-8080-exec-2] de.novanic.eventservice.logger.DefaultServerLogger.log Server: Client "0D00A0AA54F0D6B103C8358909E2BF93617439647" initialized.
+28-Jul-2015 13:15:37.392 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 13:15:37.392 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:15:37.446 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:15:37.499 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 13:15:37.515 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 13:15:37.533 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:15:37.555 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:15:37.556 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:15:37.557 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:19:54.113 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 13:19:54.117 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 13:19:54.117 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 13:19:54.117 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 13:19:54.117 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 13:19:54.117 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 13:19:54.117 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 13:19:54.117 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 13:19:54.117 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 13:19:54.118 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 13:19:54.118 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 13:19:54.118 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 13:19:54.119 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 13:19:54.119 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 13:19:54.119 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 13:19:54.119 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 13:19:54.119 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 13:19:54.120 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 13:19:54.478 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:19:54.555 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 13:19:54.562 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:19:54.570 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 13:19:54.571 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 1337 ms
+28-Jul-2015 13:19:54.605 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 13:19:54.605 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 13:19:54.639 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 13:20:00.039 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 13:20:00.164 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 5,513 ms
+28-Jul-2015 13:20:00.167 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 13:20:00.189 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 23 ms
+28-Jul-2015 13:20:00.189 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 13:20:00.584 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 395 ms
+28-Jul-2015 13:20:00.584 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 13:20:00.644 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 60 ms
+28-Jul-2015 13:20:00.644 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 13:20:00.724 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 80 ms
+28-Jul-2015 13:20:00.724 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 13:20:00.746 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 22 ms
+28-Jul-2015 13:20:00.752 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:20:00.759 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:20:00.760 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 6188 ms
+28-Jul-2015 13:20:01.685 INFO [http-nio-8080-exec-7] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 13:20:01.826 INFO [http-nio-8080-exec-7] de.novanic.eventservice.logger.DefaultServerLogger.log Server: Client "DB2ACB65C1BDE9904E850998C1E058CA-1545740366" initialized.
+28-Jul-2015 13:34:09.339 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 13:34:09.340 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:34:09.393 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:34:09.449 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 13:34:09.461 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 13:34:10.496 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 13:34:11.532 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 13:34:11.646 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] is still processing a request that has yet to finish. This is very likely to create a memory leak. You can control the time allowed for requests to finish by using the unloadDelay attribute of the standard Context implementation. Stack trace of request processing thread:
+ java.lang.Object.wait(Native Method)
+ de.novanic.eventservice.service.connection.strategy.connector.ConnectionStrategyServerConnectorAdapter.waitMaxWaitingTime(ConnectionStrategyServerConnectorAdapter.java:82)
+ de.novanic.eventservice.service.connection.strategy.connector.longpolling.LongPollingServerConnector.listen(LongPollingServerConnector.java:62)
+ de.novanic.eventservice.service.registry.DefaultEventRegistry.listen(DefaultEventRegistry.java:223)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:242)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:227)
+ sun.reflect.GeneratedMethodAccessor36.invoke(Unknown Source)
+ sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+ java.lang.reflect.Method.invoke(Method.java:497)
+ com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:561)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+ com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:291)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)
+ org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+ org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+ org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:142)
+ org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+ org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:617)
+ org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+ org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:518)
+ org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1091)
+ org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:668)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1521)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1478)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+ java.lang.Thread.run(Thread.java:745)
+28-Jul-2015 13:34:11.646 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 13:34:11.665 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:34:11.742 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:34:11.796 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:34:11.797 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:38:01.673 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 13:38:01.675 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 13:38:01.675 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 13:38:01.675 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 13:38:01.676 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 13:38:01.676 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 13:38:01.676 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 13:38:01.676 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 13:38:01.676 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 13:38:01.676 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 13:38:01.676 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 13:38:01.677 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 13:38:01.677 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 13:38:01.677 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 13:38:01.677 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 13:38:01.677 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 13:38:01.677 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 13:38:01.678 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 13:38:01.809 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:38:01.829 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 13:38:01.831 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:38:01.832 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 13:38:01.832 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 521 ms
+28-Jul-2015 13:38:01.852 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 13:38:01.852 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 13:38:01.869 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 13:38:08.693 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 13:38:08.999 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 7,129 ms
+28-Jul-2015 13:38:09.001 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 13:38:09.082 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 80 ms
+28-Jul-2015 13:38:09.083 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 13:38:09.478 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 396 ms
+28-Jul-2015 13:38:09.479 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 13:38:09.509 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 30 ms
+28-Jul-2015 13:38:09.509 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 13:38:09.547 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 38 ms
+28-Jul-2015 13:38:09.549 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 13:38:09.584 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 34 ms
+28-Jul-2015 13:38:09.588 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:38:09.594 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:38:09.594 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 7761 ms
+28-Jul-2015 13:38:15.838 INFO [http-nio-8080-exec-5] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 13:38:16.083 INFO [http-nio-8080-exec-5] null.null Server: Client "BB32C68D27ABB38DB3A549B00AF25AA71129932900" initialized.
+28-Jul-2015 13:52:49.197 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 13:52:49.209 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:52:49.265 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:52:49.316 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 13:52:49.345 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 13:52:49.378 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:52:49.424 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:52:49.525 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:52:49.525 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:56:54.869 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 13:56:54.870 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 13:56:54.871 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 13:56:54.871 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 13:56:54.871 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 13:56:54.871 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 13:56:54.871 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 13:56:54.871 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 13:56:54.871 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 13:56:54.871 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 13:56:54.872 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 13:56:54.872 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 13:56:54.872 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 13:56:54.872 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 13:56:54.873 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 13:56:54.873 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 13:56:54.873 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 13:56:54.873 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 13:56:55.016 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:56:55.053 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 13:56:55.058 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:56:55.061 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 13:56:55.061 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 585 ms
+28-Jul-2015 13:56:55.090 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 13:56:55.090 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 13:56:55.118 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 13:57:01.059 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 13:57:01.343 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 6,224 ms
+28-Jul-2015 13:57:01.345 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 13:57:01.374 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 28 ms
+28-Jul-2015 13:57:01.374 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 13:57:02.270 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 896 ms
+28-Jul-2015 13:57:02.271 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 13:57:02.312 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 40 ms
+28-Jul-2015 13:57:02.312 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 13:57:02.370 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 56 ms
+28-Jul-2015 13:57:02.371 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 13:57:02.469 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 98 ms
+28-Jul-2015 13:57:02.475 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 13:57:02.485 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 13:57:02.485 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 7423 ms
+28-Jul-2015 13:57:11.057 INFO [http-nio-8080-exec-5] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 13:57:11.215 INFO [http-nio-8080-exec-5] de.novanic.eventservice.logger.DefaultServerLogger.log Server: Client "AF5100A57FD0720F071B406F7C6BC774838447316" initialized.
+28-Jul-2015 14:21:42.283 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 14:21:42.284 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 14:21:42.338 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 14:21:42.393 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 14:21:42.411 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 14:21:43.441 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 14:21:44.469 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 14:21:44.577 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] is still processing a request that has yet to finish. This is very likely to create a memory leak. You can control the time allowed for requests to finish by using the unloadDelay attribute of the standard Context implementation. Stack trace of request processing thread:
+ java.lang.Object.wait(Native Method)
+ de.novanic.eventservice.service.connection.strategy.connector.ConnectionStrategyServerConnectorAdapter.waitMaxWaitingTime(ConnectionStrategyServerConnectorAdapter.java:82)
+ de.novanic.eventservice.service.connection.strategy.connector.longpolling.LongPollingServerConnector.listen(LongPollingServerConnector.java:62)
+ de.novanic.eventservice.service.registry.DefaultEventRegistry.listen(DefaultEventRegistry.java:223)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:242)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:227)
+ sun.reflect.GeneratedMethodAccessor36.invoke(Unknown Source)
+ sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+ java.lang.reflect.Method.invoke(Method.java:497)
+ com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:561)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+ com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:291)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)
+ org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+ org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+ org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:142)
+ org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+ org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:617)
+ org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+ org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:518)
+ org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1091)
+ org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:668)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1521)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1478)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+ java.lang.Thread.run(Thread.java:745)
+28-Jul-2015 14:21:44.577 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 14:21:44.596 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 14:21:44.646 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 14:21:44.690 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 14:21:44.691 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 14:25:58.659 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 14:25:58.661 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 14:25:58.662 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 14:25:58.662 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 14:25:58.662 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 14:25:58.662 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 14:25:58.662 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 14:25:58.662 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 14:25:58.662 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 14:25:58.663 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 14:25:58.663 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 14:25:58.663 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 14:25:58.663 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 14:25:58.664 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 14:25:58.664 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 14:25:58.664 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 14:25:58.664 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 14:25:58.664 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 14:25:58.801 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 14:25:58.824 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 14:25:58.826 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 14:25:58.828 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 14:25:58.828 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 530 ms
+28-Jul-2015 14:25:58.856 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 14:25:58.856 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 14:25:58.877 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 14:26:01.367 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 14:26:01.445 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 2,567 ms
+28-Jul-2015 14:26:01.446 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 14:26:01.467 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 20 ms
+28-Jul-2015 14:26:01.467 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 14:26:01.769 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 301 ms
+28-Jul-2015 14:26:01.769 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 14:26:01.800 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 30 ms
+28-Jul-2015 14:26:01.800 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 14:26:01.831 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 31 ms
+28-Jul-2015 14:26:01.832 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 14:26:01.852 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 19 ms
+28-Jul-2015 14:26:01.857 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 14:26:01.863 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 14:26:01.864 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 3035 ms
+28-Jul-2015 14:26:09.552 INFO [http-nio-8080-exec-5] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 14:26:09.666 INFO [http-nio-8080-exec-5] de.novanic.eventservice.logger.DefaultServerLogger.log Server: Client "A039AAC4169DB81EF13680586075D7291721427746" initialized.
+28-Jul-2015 15:42:19.508 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 15:42:19.520 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 15:42:19.574 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 15:42:19.628 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 15:42:19.637 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 15:42:20.671 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 15:42:21.694 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 15:42:21.805 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] is still processing a request that has yet to finish. This is very likely to create a memory leak. You can control the time allowed for requests to finish by using the unloadDelay attribute of the standard Context implementation. Stack trace of request processing thread:
+ java.lang.Object.wait(Native Method)
+ de.novanic.eventservice.service.connection.strategy.connector.ConnectionStrategyServerConnectorAdapter.waitMaxWaitingTime(ConnectionStrategyServerConnectorAdapter.java:82)
+ de.novanic.eventservice.service.connection.strategy.connector.longpolling.LongPollingServerConnector.listen(LongPollingServerConnector.java:62)
+ de.novanic.eventservice.service.registry.DefaultEventRegistry.listen(DefaultEventRegistry.java:223)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:242)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:227)
+ sun.reflect.GeneratedMethodAccessor36.invoke(Unknown Source)
+ sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+ java.lang.reflect.Method.invoke(Method.java:497)
+ com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:561)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+ com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:291)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)
+ org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+ org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+ org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:142)
+ org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+ org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:617)
+ org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+ org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:518)
+ org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1091)
+ org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:668)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1521)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1478)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+ java.lang.Thread.run(Thread.java:745)
+28-Jul-2015 15:42:21.806 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 15:42:21.829 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 15:42:21.931 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 15:42:22.010 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 15:42:22.011 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 15:49:09.182 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 15:49:09.185 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 15:49:09.185 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 15:49:09.185 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 15:49:09.185 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 15:49:09.185 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 15:49:09.185 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 15:49:09.185 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 15:49:09.186 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 15:49:09.186 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 15:49:09.186 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 15:49:09.187 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 15:49:09.187 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 15:49:09.187 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 15:49:09.187 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 15:49:09.187 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 15:49:09.188 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 15:49:09.188 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 15:49:09.699 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 15:49:09.738 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 15:49:09.742 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 15:49:09.747 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 15:49:09.747 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 1023 ms
+28-Jul-2015 15:49:09.785 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 15:49:09.785 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 15:49:09.815 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 15:49:17.173 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 15:49:17.295 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 7,479 ms
+28-Jul-2015 15:49:17.296 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 15:49:17.330 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 33 ms
+28-Jul-2015 15:49:17.330 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 15:49:17.764 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 434 ms
+28-Jul-2015 15:49:17.765 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 15:49:17.824 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 58 ms
+28-Jul-2015 15:49:17.826 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 15:49:17.917 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 92 ms
+28-Jul-2015 15:49:17.926 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 15:49:17.955 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 29 ms
+28-Jul-2015 15:49:17.959 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 15:49:17.975 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 15:49:17.975 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 8227 ms
+28-Jul-2015 15:49:19.072 INFO [http-nio-8080-exec-5] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 15:49:19.204 INFO [http-nio-8080-exec-5] de.novanic.eventservice.logger.DefaultServerLogger.log Server: Client "50254B19D72D51B7C1806228F52934B4-863371867" initialized.
+28-Jul-2015 15:57:42.601 INFO [http-nio-8080-exec-2] null.null Server: Client "50254B19D72D51B7C1806228F52934B4960664614" initialized.
+28-Jul-2015 16:13:15.441 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 16:13:15.452 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:13:15.509 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 16:13:15.560 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 16:13:15.574 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 16:13:16.619 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 16:13:17.646 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 16:13:17.755 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] is still processing a request that has yet to finish. This is very likely to create a memory leak. You can control the time allowed for requests to finish by using the unloadDelay attribute of the standard Context implementation. Stack trace of request processing thread:
+ java.lang.Object.wait(Native Method)
+ de.novanic.eventservice.service.connection.strategy.connector.ConnectionStrategyServerConnectorAdapter.waitMaxWaitingTime(ConnectionStrategyServerConnectorAdapter.java:82)
+ de.novanic.eventservice.service.connection.strategy.connector.longpolling.LongPollingServerConnector.listen(LongPollingServerConnector.java:62)
+ de.novanic.eventservice.service.registry.DefaultEventRegistry.listen(DefaultEventRegistry.java:223)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:242)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:227)
+ sun.reflect.GeneratedMethodAccessor36.invoke(Unknown Source)
+ sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+ java.lang.reflect.Method.invoke(Method.java:497)
+ com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:561)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+ com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:291)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)
+ org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+ org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+ org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:142)
+ org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+ org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:617)
+ org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+ org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:518)
+ org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1091)
+ org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:668)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1521)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1478)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+ java.lang.Thread.run(Thread.java:745)
+28-Jul-2015 16:13:17.756 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 16:13:17.777 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:13:17.855 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 16:13:17.925 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:13:17.925 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 16:18:21.322 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 16:18:21.324 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 16:18:21.324 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 16:18:21.324 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 16:18:21.324 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 16:18:21.324 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 16:18:21.324 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 16:18:21.324 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 16:18:21.324 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 16:18:21.324 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 16:18:21.324 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 16:18:21.325 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 16:18:21.325 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 16:18:21.325 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 16:18:21.325 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 16:18:21.325 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 16:18:21.325 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 16:18:21.326 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 16:18:21.489 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:18:21.512 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 16:18:21.515 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 16:18:21.516 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 16:18:21.517 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 661 ms
+28-Jul-2015 16:18:21.539 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 16:18:21.540 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 16:18:21.562 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 16:18:24.385 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 16:18:24.459 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 2,897 ms
+28-Jul-2015 16:18:24.461 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 16:18:24.477 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 17 ms
+28-Jul-2015 16:18:24.477 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 16:18:24.775 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 298 ms
+28-Jul-2015 16:18:24.775 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 16:18:24.802 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 27 ms
+28-Jul-2015 16:18:24.802 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 16:18:24.825 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 23 ms
+28-Jul-2015 16:18:24.825 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 16:18:24.842 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 17 ms
+28-Jul-2015 16:18:24.846 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:18:24.853 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 16:18:24.854 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 3337 ms
+28-Jul-2015 16:18:25.543 INFO [http-nio-8080-exec-6] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 16:18:25.661 INFO [http-nio-8080-exec-6] de.novanic.eventservice.logger.DefaultServerLogger.log Server: Client "6854C0685B5135D9071917A941D5FF76-1521704794" initialized.
+28-Jul-2015 16:46:53.059 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 16:46:53.060 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:46:53.116 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 16:46:53.167 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 16:46:53.184 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 16:46:54.215 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 16:46:55.241 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 16:46:55.349 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] is still processing a request that has yet to finish. This is very likely to create a memory leak. You can control the time allowed for requests to finish by using the unloadDelay attribute of the standard Context implementation. Stack trace of request processing thread:
+ java.lang.Object.wait(Native Method)
+ de.novanic.eventservice.service.connection.strategy.connector.ConnectionStrategyServerConnectorAdapter.waitMaxWaitingTime(ConnectionStrategyServerConnectorAdapter.java:82)
+ de.novanic.eventservice.service.connection.strategy.connector.longpolling.LongPollingServerConnector.listen(LongPollingServerConnector.java:62)
+ de.novanic.eventservice.service.registry.DefaultEventRegistry.listen(DefaultEventRegistry.java:223)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:242)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:227)
+ sun.reflect.GeneratedMethodAccessor38.invoke(Unknown Source)
+ sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+ java.lang.reflect.Method.invoke(Method.java:497)
+ com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:561)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+ com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:291)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)
+ org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+ org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+ org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:142)
+ org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+ org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:617)
+ org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+ org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:518)
+ org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1091)
+ org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:668)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1521)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1478)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+ java.lang.Thread.run(Thread.java:745)
+28-Jul-2015 16:46:55.350 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 16:46:55.367 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:46:55.450 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 16:46:55.514 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:46:55.515 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 16:52:58.945 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.23
+28-Jul-2015 16:52:58.947 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          May 19 2015 14:58:38 UTC
+28-Jul-2015 16:52:58.947 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.23.0
+28-Jul-2015 16:52:58.947 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+28-Jul-2015 16:52:58.947 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.10.2
+28-Jul-2015 16:52:58.947 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+28-Jul-2015 16:52:58.948 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+28-Jul-2015 16:52:58.948 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+28-Jul-2015 16:52:58.948 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+28-Jul-2015 16:52:58.948 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 16:52:58.948 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 16:52:58.949 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/conf/logging.properties
+28-Jul-2015 16:52:58.949 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+28-Jul-2015 16:52:58.949 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/endorsed
+28-Jul-2015 16:52:58.949 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 16:52:58.949 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23
+28-Jul-2015 16:52:58.950 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/temp
+28-Jul-2015 16:52:58.950 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/kevin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+28-Jul-2015 16:52:59.121 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:52:59.166 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 16:52:59.169 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 16:52:59.172 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+28-Jul-2015 16:52:59.173 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 775 ms
+28-Jul-2015 16:52:59.211 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+28-Jul-2015 16:52:59.211 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.23
+28-Jul-2015 16:52:59.245 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war
+28-Jul-2015 16:53:04.970 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Jul-2015 16:53:05.100 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/lasad.war has finished in 5,854 ms
+28-Jul-2015 16:53:05.103 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs
+28-Jul-2015 16:53:05.143 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/docs has finished in 40 ms
+28-Jul-2015 16:53:05.144 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples
+28-Jul-2015 16:53:05.773 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/examples has finished in 629 ms
+28-Jul-2015 16:53:05.774 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager
+28-Jul-2015 16:53:05.813 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/host-manager has finished in 38 ms
+28-Jul-2015 16:53:05.817 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager
+28-Jul-2015 16:53:05.878 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/manager has finished in 61 ms
+28-Jul-2015 16:53:05.879 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT
+28-Jul-2015 16:53:05.903 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/kevin/Kevin-LASAD/Deploy/apache-tomcat-8.0.23/webapps/ROOT has finished in 24 ms
+28-Jul-2015 16:53:05.911 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:53:05.917 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 16:53:05.918 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 6745 ms
+28-Jul-2015 16:53:07.231 INFO [http-nio-8080-exec-6] null.null Server: Configuration changed - EventServiceConfiguration (Properties "eventservice.properties")
+  Min.: 0ms; Max.: 20000ms; Timeout: 90000ms
+28-Jul-2015 16:53:07.357 INFO [http-nio-8080-exec-6] null.null Server: Client "C27CFB42022B193F35E1CC09590A70CA1411250118" initialized.
+28-Jul-2015 16:54:59.373 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+28-Jul-2015 16:54:59.373 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:54:59.428 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 16:54:59.479 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+28-Jul-2015 16:54:59.497 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 16:55:00.530 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 16:55:01.564 INFO [localhost-startStop-2] org.apache.catalina.core.StandardWrapper.unload Waiting for 1 instance(s) to be deallocated for Servlet [eventServiceImpl]
+28-Jul-2015 16:55:01.676 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] is still processing a request that has yet to finish. This is very likely to create a memory leak. You can control the time allowed for requests to finish by using the unloadDelay attribute of the standard Context implementation. Stack trace of request processing thread:
+ java.lang.Object.wait(Native Method)
+ de.novanic.eventservice.service.connection.strategy.connector.ConnectionStrategyServerConnectorAdapter.waitMaxWaitingTime(ConnectionStrategyServerConnectorAdapter.java:82)
+ de.novanic.eventservice.service.connection.strategy.connector.longpolling.LongPollingServerConnector.listen(LongPollingServerConnector.java:62)
+ de.novanic.eventservice.service.registry.DefaultEventRegistry.listen(DefaultEventRegistry.java:223)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:242)
+ de.novanic.eventservice.service.EventServiceImpl.listen(EventServiceImpl.java:227)
+ sun.reflect.GeneratedMethodAccessor36.invoke(Unknown Source)
+ sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+ java.lang.reflect.Method.invoke(Method.java:497)
+ com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:561)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+ com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+ com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+ javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:291)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+ org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+ org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+ org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)
+ org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+ org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+ org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:142)
+ org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+ org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:617)
+ org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+ org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:518)
+ org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1091)
+ org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:668)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1521)
+ org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1478)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+ java.lang.Thread.run(Thread.java:745)
+28-Jul-2015 16:55:01.677 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [lasad] appears to have started a thread named [GWTEventService-UserActivityScheduler] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.util.TimerThread.mainLoop(Timer.java:552)
+ java.util.TimerThread.run(Timer.java:505)
+28-Jul-2015 16:55:01.698 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:55:01.775 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+28-Jul-2015 16:55:01.808 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+28-Jul-2015 16:55:01.808 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]

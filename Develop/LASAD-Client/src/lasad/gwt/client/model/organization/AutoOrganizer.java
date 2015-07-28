@@ -3,6 +3,7 @@ package lasad.gwt.client.model.organization;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Collection;
+import java.util.ArrayList;
 
 import lasad.gwt.client.communication.helper.ActionFactory;
 import lasad.gwt.client.communication.LASADActionSender;
@@ -90,21 +91,28 @@ public class AutoOrganizer
 	public void organizeMap()
 	{
 		// Whether to sort from top to bottom or bottom to top
-		boolean isOrganizeTopToBottom = map.getMyViewSession().getController().getMapInfo().isOrganizeTopToBottom();
-
-		// Organize the grid by height and width "levels" (think chess board)
-		for (ArgumentThread argThread : argModel.getArgThreads())
-		{
-			argThread.getGrid().organize(isOrganizeTopToBottom, new HashSet(argThread.getBoxes()));
-		}
+		final boolean isOrganizeTopToBottom = map.getMyViewSession().getController().getMapInfo().isOrganizeTopToBottom();
 
 		// The base X and Y coordinates for the column/row, that is updated for spacing (may also be adjusted due to box sizes)
 		double columnXcoord = CENTER_X;
 		double rowYcoord = CENTER_Y;
 
+		// Organize the grid by height and width "levels" (think chess board)
 		for (ArgumentThread argThread : argModel.getArgThreads())
 		{
+			argThread.organizeGrid(isOrganizeTopToBottom);
 			ArgumentGrid grid = argThread.getGrid();
+			if (argThread.getBoxes().size() != grid.getBoxes().size())
+			{
+				Logger.log("Grid is missing boxes", Logger.DEBUG);
+				Logger.log("Arg thread has " + argThread.getBoxes().size() + " boxes", Logger.DEBUG);
+				Logger.log("Grid has " + grid.getBoxes().size() + " boxes", Logger.DEBUG);
+			}
+
+			if (grid.getBoxes().size() == 0)
+			{
+				continue;
+			}
 			IntPair minMaxColumn = grid.determineMinMaxWidthLevels();
 			int minWidthLevel = minMaxColumn.getMin();
 			int maxWidthLevel = minMaxColumn.getMax();
@@ -146,7 +154,7 @@ public class AutoOrganizer
 
 			for (int rowCount = maxHeightLevel; rowCount >= minHeightLevel; rowCount--)
 			{
-				HashSet<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
+				ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
 				int tallestHeight = Integer.MIN_VALUE;
 				LinkedBox tallestBox = null;
 
@@ -179,6 +187,7 @@ public class AutoOrganizer
 
 			if (DEBUG)
 			{
+				Logger.log(grid.toString(), Logger.DEBUG);
 				Logger.log(argThread.getGrid().toString(), Logger.DEBUG);
 				Logger.log(argModel.toString(), Logger.DEBUG);
 			}
@@ -190,7 +199,7 @@ public class AutoOrganizer
 		// Free some memory for speed (garbage collector will take the nullified values)
 		for (ArgumentThread argThread : argModel.getArgThreads())
 		{
-			argThread.getGrid().clear();
+			argThread.getGrid().empty();
 		}
 	}
 

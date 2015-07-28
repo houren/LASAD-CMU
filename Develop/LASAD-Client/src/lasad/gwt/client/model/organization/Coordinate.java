@@ -44,6 +44,12 @@ public class Coordinate
 	}
 
 	@Override
+	public int hashCode()
+	{
+		return 31*(x^3) - y^3;
+	}
+
+	@Override
 	public boolean equals(Object o)
 	{
 		if (o instanceof Coordinate)
@@ -62,5 +68,11 @@ public class Coordinate
 		{
 			return false;
 		}
+	}
+
+	@Override
+	public String toString()
+	{
+		return new String("(" + x + ", " + y + ")");
 	}
 }

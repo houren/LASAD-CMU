@@ -69,6 +69,8 @@ import lasad.gwt.client.model.organization.EdgeCoords;
 import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteContributionDialog;
 import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteRelationDialog;
 
+import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
+
 /**
  *	Finishes the implementation of the map's menu bar.
  *	@author Unknown
@@ -790,6 +792,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		MenuItem deleteItem = createDeleteItem();
 		menu.add(deleteItem);
 
+		MenuItem fontSizeItem = createFontSizeItem();
+		menu.add(fontSizeItem);
+
 		MenuItem autoOrganizeItem = createAutoOrganizeItem();
 		menu.add(autoOrganizeItem);
 
@@ -911,6 +916,37 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		boxLinkMenu.add(createContributionItem(useSubList));
 		boxLinkMenu.add(createRelationItem(useSubList));
 		return boxLinkMenu;
+	}
+
+	protected MenuItem createFontSizeItem()
+	{
+		MenuItem fontSizeItem = new MenuItem("Select font size");
+		fontSizeItem.setSubMenu(createSizeSelector());
+		return fontSizeItem;
+	}
+
+	protected Menu createSizeSelector()
+	{
+		Menu sizeOptions = new Menu();
+		for (int i = 8; i < 37; i += 4)
+		{
+			sizeOptions.add(createNextFontSize(i));
+		}
+		return sizeOptions;
+	}
+
+	protected MenuItem createNextFontSize(final int i)
+	{
+		MenuItem fontSize = new MenuItem(String.valueOf(i));
+		fontSize.addSelectionListener(new SelectionListener<MenuEvent>()
+		{
+			@Override
+			public void componentSelected(MenuEvent me)
+			{
+				AbstractExtendedTextElement.setFontSize(i);
+			}
+		});
+		return fontSize;
 	}
 
 	/*
