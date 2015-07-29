@@ -29,17 +29,18 @@ import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
 import lasad.shared.communication.objects.ActionPackage;
 
 /**
- * An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update links
- * in ArgumentMap representations where a type of relation can create groups of boxes. The overall map organizing function,
- * accordingly called organizeMap(), is only called when the user clicks the corresponding button on the ArgumentMapMenuBar. Though originally
- * built for maps using Mara Harrell's template, this class can be applied to any map from any template.  There is a model that updates
- * with every change to the map.  Thus, we don't need to start from scratch and gather components every time these methods are called.
- * @author Kevin Loughlin and Darlan Santana Farias
- * @since 12 June 2015, Updated 23 July 2015
+ *	An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update links
+ *	in ArgumentMap representations where a type of relation can create groups of boxes. The overall map organizing function,
+ *	accordingly called organizeMap(), is only called when the user clicks the corresponding button on the ArgumentMapMenuBar. Though originally
+ *	built for maps using Mara Harrell's template, this class can be applied to any map from any template.  There is a model (see ArgumentModel.java)
+ *	that updates with every change to the map.  Thus, we don't need to start from scratch and gather components to update links.
+ *	For organizeMap however, we reconstruct the ArgumentGrid each time.
+ *	@author Kevin Loughlin and Darlan Santana Farias
+ *	@since 12 June 2015, Updated 29 July 2015
  */
 public class AutoOrganizer
 {
-	private final boolean DEBUG = true;
+	private final boolean DEBUG = false;
 	// The minimum number of pixels between boxes, set as a double for rounding/accuracy purposes
 	private final double MIN_SPACE = 50.0;
 
@@ -87,36 +88,31 @@ public class AutoOrganizer
 
 	/**
 	 *	Organizes the map either top to bottom or bottom to top.  A clean-up function for the workspace.
+	 *	@param DOWNWARD - Whether to organize the map in an downward orientation or upward
 	 */
-	public void organizeMap()
+	public void organizeMap(final boolean DOWNWARD)
 	{
-		// Whether to sort from top to bottom or bottom to top
-		final boolean isOrganizeTopToBottom = map.getMyViewSession().getController().getMapInfo().isOrganizeTopToBottom();
-
 		// The base X and Y coordinates for the column/row, that is updated for spacing (may also be adjusted due to box sizes)
 		double columnXcoord = CENTER_X;
 		double rowYcoord = CENTER_Y;
 
+		HashSet<LinkedBox> boxesToSendToServer = new HashSet<LinkedBox>();
+
 		// Organize the grid by height and width "levels" (think chess board)
 		for (ArgumentThread argThread : argModel.getArgThreads())
 		{
-			argThread.organizeGrid(isOrganizeTopToBottom);
+			argThread.organizeGrid(DOWNWARD);
 			ArgumentGrid grid = argThread.getGrid();
-			if (argThread.getBoxes().size() != grid.getBoxes().size())
-			{
-				Logger.log("Grid is missing boxes", Logger.DEBUG);
-				Logger.log("Arg thread has " + argThread.getBoxes().size() + " boxes", Logger.DEBUG);
-				Logger.log("Grid has " + grid.getBoxes().size() + " boxes", Logger.DEBUG);
-			}
 
 			if (grid.getBoxes().size() == 0)
 			{
 				continue;
 			}
-			IntPair minMaxColumn = grid.determineMinMaxWidthLevels();
+			IntPair minMaxColumn = grid.determineMinMaxWidthLevels(grid.getBoxes());
 			int minWidthLevel = minMaxColumn.getMin();
 			int maxWidthLevel = minMaxColumn.getMax();
 
+			// Sets the x coord
 			for (int columnCount = minWidthLevel; columnCount <= maxWidthLevel; columnCount++)
 			{
 				HashSet<LinkedBox> column = grid.getBoxesAtWidthLevel(columnCount);
@@ -148,10 +144,11 @@ public class AutoOrganizer
 				columnXcoord += MIN_SPACE;
 			}
 
-			IntPair minMaxRow = grid.determineMinMaxHeightLevels();
+			IntPair minMaxRow = grid.determineMinMaxHeightLevels(grid.getBoxes());
 			int minHeightLevel = minMaxRow.getMin();
 			int maxHeightLevel = minMaxRow.getMax();
 
+			// Sets the y coord
 			for (int rowCount = maxHeightLevel; rowCount >= minHeightLevel; rowCount--)
 			{
 				ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
@@ -166,6 +163,7 @@ public class AutoOrganizer
 						tallestBox = box;
 						tallestHeight = tallestBox.getHeight();
 					}
+					boxesToSendToServer.add(box);
 				}
 
 				if (tallestBox != null)
@@ -177,24 +175,21 @@ public class AutoOrganizer
 				rowYcoord += MIN_SPACE;	
 			}
 
-			// Send the new positions to the server
-			for (LinkedBox box : grid.getBoxes())
-			{
-				sendUpdatePositionToServer(box);
-			}
-
 			rowYcoord = CENTER_Y;
 
+			
 			if (DEBUG)
 			{
 				Logger.log(grid.toString(), Logger.DEBUG);
-				Logger.log(argThread.getGrid().toString(), Logger.DEBUG);
-				Logger.log(argModel.toString(), Logger.DEBUG);
+				Logger.log(argThread.toString(), Logger.DEBUG);
 			}
 		}
 
+		// Send the new positions to the server
+		updateBoxPositions(boxesToSendToServer);
+
 		// Position the cursor of the map
-		positionMapCursor(isOrganizeTopToBottom);
+		positionMapCursor(DOWNWARD);
 
 		// Free some memory for speed (garbage collector will take the nullified values)
 		for (ArgumentThread argThread : argModel.getArgThreads())
@@ -414,39 +409,41 @@ public class AutoOrganizer
 	 *	Updates a box position on the map
 	 *	@param box - The box whose position we will update with its new coordinates
 	 */
-	private void sendUpdatePositionToServer(LinkedBox box)
+	private void updateBoxPositions(Collection<LinkedBox> boxes)
 	{
-		int intX = (int) Math.round(box.getXLeft());
-		int intY = (int) Math.round(box.getYTop());
-		if (this.controller.getElement(box.getBoxID()) != null)
+		for (LinkedBox box : boxes)
 		{
-			communicator.sendActionPackage(actionBuilder.updateBoxPosition(map.getID(), box.getBoxID(), intX, intY));
-		}
-		else
-		{
-			Logger.log("ERROR: Tried to update box position of nonexisting element.", Logger.DEBUG);
-			this.argModel.removeBoxByBoxID(box.getBoxID());
-			this.organizeMap();
+			int intX = (int) Math.round(box.getXLeft());
+			int intY = (int) Math.round(box.getYTop());
+			if (this.controller.getElement(box.getBoxID()) != null)
+			{
+				communicator.sendActionPackage(actionBuilder.updateBoxPosition(map.getID(), box.getBoxID(), intX, intY));
+			}
+			else
+			{
+				Logger.log("ERROR: Tried to update box position of nonexisting element.", Logger.DEBUG);
+				this.argModel.removeBoxByBoxID(box.getBoxID());
+			}
 		}
 	}
 
 	/*
 	 *	Positions the map cursor either with the top most box(es) at the top of the map or bottom-most at the bottom
-	 *	@param isOrganizeTopToBottom - if true, put the bottom boxes at the bottom of the screen, false do other option
+	 *	@param DOWNWARD - if true, put the bottom boxes at the bottom of the screen, false do other option
 	 *	The "edge" is the bottom of the bottom row of boxes in the case of true, top of the top row in case of false
 	 */
-	private void positionMapCursor(final boolean isOrganizeTopToBottom)
+	private void positionMapCursor(final boolean DOWNWARD)
 	{
 		double edgeCoordY;
 		HashSet<LinkedBox> edgeBoxes = new HashSet<LinkedBox>();
 		double edgeSum = 0.0;
 
-		if (isOrganizeTopToBottom)
+		if (DOWNWARD)
 		{
 			edgeCoordY = Double.MIN_VALUE;
 			for (ArgumentThread argThread : argModel.getArgThreads())
 			{
-				for (LinkedBox box : argThread.getGrid().getBoxesAtEndLevel(isOrganizeTopToBottom))
+				for (LinkedBox box : argThread.getGrid().getBoxesAtEndLevel(DOWNWARD))
 				{
 					double boxLowerEdge = box.getYTop() + box.getHeight();
 					if (boxLowerEdge >= edgeCoordY)
@@ -463,7 +460,7 @@ public class AutoOrganizer
 			edgeCoordY = Double.MIN_VALUE;
 			for (ArgumentThread argThread : argModel.getArgThreads())
 			{
-				for (LinkedBox box : argThread.getGrid().getBoxesAtEndLevel(isOrganizeTopToBottom))
+				for (LinkedBox box : argThread.getGrid().getBoxesAtEndLevel(DOWNWARD))
 				{
 					if (box.getYTop() >= edgeCoordY)
 					{
@@ -477,7 +474,7 @@ public class AutoOrganizer
 
 		if (edgeBoxes.size() > 0)
 		{
-			if (isOrganizeTopToBottom)
+			if (DOWNWARD)
 			{
 				map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) + 10 - map.getInnerHeight());
 			}

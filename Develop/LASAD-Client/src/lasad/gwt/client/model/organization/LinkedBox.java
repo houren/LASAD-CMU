@@ -17,7 +17,7 @@ import lasad.gwt.client.model.organization.Coordinate;
  * 	organization of all Links on the map, as they can be followed in a chain similar to a linked list.  This class is key to AutoOrganizer.
  * 	All names within this class are self-explanatory.
  * 	@author Kevin Loughlin
- * 	@since 11 June 2015, Updated 21 July 2015
+ * 	@since 11 June 2015, Updated 29 July 2015
  */
 public class LinkedBox
 {
@@ -296,6 +296,21 @@ public class LinkedBox
 	public HashSet<LinkedBox> getThisAndExtendedSiblings()
 	{
 		return findThisAndExtendedSiblings(this, new HashSet<LinkedBox>());
+	}
+
+	public HashSet<LinkedBox> getExtendedSiblingsWithoutParentsOrChildren()
+	{
+		HashSet<LinkedBox> extSibs = getThisAndExtendedSiblings();
+		extSibs.remove(this);
+		HashSet<LinkedBox> extSibsWithoutOtherFamily = new HashSet<LinkedBox>();
+		for (LinkedBox extSib : extSibs)
+		{
+			if (extSib.getNumParents() == 0 && extSib.getNumChildren() == 0)
+			{
+				extSibsWithoutOtherFamily.add(extSib);
+			}
+		}
+		return extSibsWithoutOtherFamily;
 	}
 
 	// intialize currentBox as this and accumulated should be empty; RECURSIVE
@@ -677,80 +692,6 @@ public class LinkedBox
 		}
 	}
 
-	// Box IDs are unique and final, so this is all we need for equality for now.
-	@Override
-	public boolean equals(Object object)
-	{
-		if (object instanceof LinkedBox)
-		{
-			LinkedBox otherBox = (LinkedBox) object;
-			if (this.boxID == otherBox.getBoxID())
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}	
-	}
-
-	// Necessary override since we're using HashMaps and HashSets in our code.  BoxIDs are unique, so this guarantees no collisions.
-	@Override
-	public int hashCode()
-	{
-		return this.boxID;
-	}
-
-	// Just outputs the box's boxID and rootID, not its children and parents and siblings
-	public String toStringShort(final boolean shouldIndentMore)
-	{
-		
-		if (shouldIndentMore)
-		{
-			String afterIndents = new String("BOX: " + rootID + "widthLevel: " + widthLevel + "; heightLevel: " + heightLevel);
-			StringBuilder buffer = new StringBuilder("\n\t\t\t\t" + afterIndents);
-			return buffer.toString();
-		}
-		else
-		{
-			String afterIndents = new String("BOX: " + rootID + "widthLevel: " + widthLevel + "; heightLevel: " + heightLevel);
-			StringBuilder buffer = new StringBuilder("\n\t\t" + afterIndents);
-			return buffer.toString();
-		}
-			
-	}
-
-	/**
-	 *	Outputs this box's identification numbers as well as the ID's of all its children/parents/siblings
-	 */
-	@Override
-	public String toString()
-	{
-		StringBuilder buffer = new StringBuilder(this.toStringShort(false));
-		buffer.append("\n\t\t\tCHILD BOXES...");
-		for (LinkedBox childBox : this.getChildBoxes())
-		{
-			buffer.append(childBox.toStringShort(true));
-		}
-		buffer.append("\n\t\t\tPARENT BOXES...");
-		for (LinkedBox parentBox : this.getParentBoxes())
-		{
-			buffer.append(parentBox.toStringShort(true));
-		}
-		buffer.append("\n\t\t\tSIBLING BOXES...");
-		for (LinkedBox siblingBox : this.getSiblingBoxes())
-		{
-			buffer.append(siblingBox.toStringShort(true));
-		}
-		buffer.append("\n\t\tEND BOX\n");
-		return buffer.toString();
-	}
-
 	// Needs a better name, do that tomorrow
 	public boolean okayForLink(LinkedBox endBox)
 	{
@@ -843,5 +784,79 @@ public class LinkedBox
 		clone.setWidthLevel(this.widthLevel);
 		clone.setCanBeGrouped(this.canBeGrouped);
 		return clone;
+	}
+
+	// Box IDs are unique and final, so this is all we need for equality for now.
+	@Override
+	public boolean equals(Object object)
+	{
+		if (object instanceof LinkedBox)
+		{
+			LinkedBox otherBox = (LinkedBox) object;
+			if (this.boxID == otherBox.getBoxID())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}	
+	}
+
+	// Necessary override since we're using HashMaps and HashSets in our code.  BoxIDs are unique, so this guarantees no collisions.
+	@Override
+	public int hashCode()
+	{
+		return this.boxID;
+	}
+
+	// Just outputs the box's boxID and rootID, not its children and parents and siblings
+	public String toStringShort(final boolean shouldIndentMore)
+	{
+		
+		if (shouldIndentMore)
+		{
+			String afterIndents = new String("BOX: " + rootID + "; widthLevel: " + widthLevel + "; heightLevel: " + heightLevel);
+			StringBuilder buffer = new StringBuilder("\n\t\t\t\t" + afterIndents);
+			return buffer.toString();
+		}
+		else
+		{
+			String afterIndents = new String("BOX: " + rootID + "; widthLevel: " + widthLevel + "; heightLevel: " + heightLevel);
+			StringBuilder buffer = new StringBuilder("\n\t\t" + afterIndents);
+			return buffer.toString();
+		}
+			
+	}
+
+	/**
+	 *	Outputs this box's identification numbers as well as the ID's of all its children/parents/siblings
+	 */
+	@Override
+	public String toString()
+	{
+		StringBuilder buffer = new StringBuilder(this.toStringShort(false));
+		buffer.append("\n\t\t\tCHILD BOXES...");
+		for (LinkedBox childBox : this.getChildBoxes())
+		{
+			buffer.append(childBox.toStringShort(true));
+		}
+		buffer.append("\n\t\t\tPARENT BOXES...");
+		for (LinkedBox parentBox : this.getParentBoxes())
+		{
+			buffer.append(parentBox.toStringShort(true));
+		}
+		buffer.append("\n\t\t\tSIBLING BOXES...");
+		for (LinkedBox siblingBox : this.getSiblingBoxes())
+		{
+			buffer.append(siblingBox.toStringShort(true));
+		}
+		buffer.append("\n\t\tEND BOX\n");
+		return buffer.toString();
 	}
 }

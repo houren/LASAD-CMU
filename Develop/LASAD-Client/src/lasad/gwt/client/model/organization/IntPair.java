@@ -27,11 +27,11 @@ public class IntPair
 	}
 
 	/**
-	 *	The root is the top (max) height level if isOrganizeTopToBottom is true and the opposite if false
+	 *	The root is the top (max) height level if DOWNWARD is true and the opposite if false
 	 */
-	public int calcRoot(boolean isOrganizeTopToBottom)
+	public int calcRoot(final boolean DOWNWARD)
 	{
-		if (isOrganizeTopToBottom)
+		if (DOWNWARD)
 		{
 			return max;
 		}

@@ -933,7 +933,6 @@ public class ActionFactory {
 			boolean commitTextByEnter,
 			boolean straightLink,
 			boolean useAutoGrowTextArea,
-			boolean organizeTopToBottom,
 			boolean allowLinksToLinks) 
 	{
 		ActionPackage p = new ActionPackage();
@@ -971,8 +970,7 @@ public class ActionFactory {
 		
 		//MODFIED BY BM
 		a.addParameter(ParameterTypes.AutoGrowTextArea, useAutoGrowTextArea + "");
-		
-		a.addParameter(ParameterTypes.OrganizeTopToBottom, organizeTopToBottom + "");
+
 		a.addParameter(ParameterTypes.AllowLinksToLinks, allowLinksToLinks + "");
 		
 		p.addAction(a);

@@ -2,7 +2,7 @@
 <maptemplate uniquename="Harrell_DiagrammingOntologyTemplate" title="Harrell_DiagrammingOntologyTemplate" ontology="Harrell_DiagrammingOntology">
   <mapdetails>
     <description>Template for Mara Harrell's class</description>
-    <options maxuser="30" chatsystem="true" listofusers="true" minimap="false" track-cursor="false" selection-details="false" onlyauthorcanmodify="false" committextbyenter="true" straightlink="true" AutoGrowTextArea="true" organizetoptobottom="false" allowlinkstolinks="false"/>
+    <options maxuser="30" chatsystem="true" listofusers="true" minimap="false" track-cursor="false" selection-details="false" onlyauthorcanmodify="false" committextbyenter="true" straightlink="true" AutoGrowTextArea="true" allowlinkstolinks="false"/>
   </mapdetails>
 </maptemplate>
 

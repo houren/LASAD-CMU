@@ -2,7 +2,7 @@
 <maptemplate uniquename="my_test2_template" title="my_test2_template" ontology="my_test2">
   <mapdetails>
     <description />
-    <options maxuser="30" chatsystem="true" listofusers="true" minimap="false" track-cursor="false" selection-details="false" onlyauthorcanmodify="false" committextbyenter="true" straightlink="true" AutoGrowTextArea="false" organizetoptobottom="false" allowlinkstolinks="false" />
+    <options maxuser="30" chatsystem="true" listofusers="true" minimap="false" track-cursor="false" selection-details="false" onlyauthorcanmodify="false" committextbyenter="true" straightlink="true" AutoGrowTextArea="false" allowlinkstolinks="false" />
   </mapdetails>
 </maptemplate>
 

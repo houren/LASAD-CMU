@@ -16,7 +16,7 @@ import lasad.gwt.client.logger.Logger;
  *	An argument model is simply a vector of threads, i.e. a vector separate chains of arguments on the map space.
  *	This format of modeling is more conducive to support for AutoOrganizer.
  *	@author Kevin Loughlin
- *	@since 19 June 2015, Updated 23 July 2015
+ *	@since 19 June 2015, Updated 29 July 2015
  */
 public class ArgumentModel
 {
@@ -74,7 +74,6 @@ public class ArgumentModel
 
 	public LinkedBox removeBoxByBoxID(int boxID)
 	{
-		Logger.log("Entering argModel removeBoxByBoxID", Logger.DEBUG);
 		for (ArgumentThread argThread : argThreads)
 		{
 			LinkedBox removedBox = argThread.removeBoxByBoxID(boxID);
@@ -89,7 +88,6 @@ public class ArgumentModel
 
 	public OrganizerLink removeLinkByLinkID(int linkID)
 	{
-		Logger.log("Entering argModel removeLinkByLinkID", Logger.DEBUG);
 		for (ArgumentThread argThread : argThreads)
 		{
 			OrganizerLink removedLink = argThread.removeLinkByLinkID(linkID);
@@ -144,24 +142,15 @@ public class ArgumentModel
 	// Returns the argument thread of the provided box, else null
 	public ArgumentThread getBoxThread(LinkedBox box)
 	{
-		boolean threadFound = false;
 		ArgumentThread returnThread = null;
 		for (ArgumentThread thread : argThreads)
 		{
 			if (thread.contains(box))
 			{
-				if (threadFound)
-				{
-					Logger.log("ERROR: Multiple threads contain box " + box.getRootID(), Logger.DEBUG);
-				}
-				else
-				{
-					returnThread = thread;
-					threadFound = true;
-				}
+				return thread;
 			}
 		}
-		return returnThread;
+		return null;
 	}
 
 	public HashSet<ArgumentThread> getArgThreads()

@@ -109,7 +109,6 @@ public class OntologyReader {
 							mapInfo.setStraightLink(((getAttribute(mapDetailsNode, "straightlink").equalsIgnoreCase("true")) ? true : false));
 							mapInfo.setOnlyAuthorCanModify(((getAttribute(mapDetailsNode, "onlyauthorcanmodify").equalsIgnoreCase("true")) ? true : false));
 							mapInfo.setCommitTextByEnter(((getAttribute(mapDetailsNode, "committextbyenter").equalsIgnoreCase("true")) ? true : false));
-							mapInfo.setOrganizeTopToBottom(((getAttribute(mapDetailsNode, "organizetoptobottom").equalsIgnoreCase("true")) ? true : false));
 							mapInfo.setAllowLinksToLinks(((getAttribute(mapDetailsNode, "allowlinkstolinks").equalsIgnoreCase("true")) ? true : false));
 						}
 					}

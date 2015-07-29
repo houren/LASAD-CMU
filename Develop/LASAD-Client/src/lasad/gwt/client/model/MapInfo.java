@@ -12,7 +12,7 @@ import lasad.gwt.client.ui.workspace.tutorial.TutorialConfig;
 public class MapInfo {
 
 	private int mapID, maxUser;
-	private boolean feedback = false, tutorial = false, userList = false, miniMap = false, chatSystem = false, trackCursor = false, groupPointer = false, selectionDetails = false, directLinkingDenied = false,sentenceopener=false,straightLink=false,onlyAuthorCanModify=false,commitTextByEnter=false,autoGrowTextArea=false, organizeTopToBottom=false, allowLinksToLinks=false; //autoOrganize=false,
+	private boolean feedback = false, tutorial = false, userList = false, miniMap = false, chatSystem = false, trackCursor = false, groupPointer = false, selectionDetails = false, directLinkingDenied = false,sentenceopener=false,straightLink=false,onlyAuthorCanModify=false,commitTextByEnter=false,autoGrowTextArea=false, allowLinksToLinks=false; //autoOrganize=false,
 	private String title, ontologyName, templateName, templateTitle, xmlOntology, xmlTemplate, description, xmlTranscriptConfiguration,sentenceOpenerConfig;
 	private LinkedHashMap<Integer, String> transcriptLines;
 	private TutorialConfig tutorialConfig = null;
@@ -284,16 +284,6 @@ public String getSentenceOpenerConfig(){
 	 */
 	public void setAutoGrowTextArea(boolean autoGrowTextArea) {
 		this.autoGrowTextArea = autoGrowTextArea;
-	}
-
-	public boolean isOrganizeTopToBottom()
-	{
-		return organizeTopToBottom;
-	}
-
-	public void setOrganizeTopToBottom(boolean organizeTopToBottom)
-	{
-		this.organizeTopToBottom = organizeTopToBottom;
 	}
 
 	public boolean isAllowLinksToLinks()

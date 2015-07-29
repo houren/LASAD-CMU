@@ -83,7 +83,7 @@ import lasad.gwt.client.model.ElementInfo;
  */
 public class LASADActionReceiver {
 
-	private final boolean DEBUG = false;
+	//private final boolean DEBUG = false;
 	
 	private final String BOX = "box";
 	private final String RELATION = "relation";
@@ -588,11 +588,12 @@ public class LASADActionReceiver {
 
 					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height, canBeGrouped)));
 					
+					/*
 					if (DEBUG)
 					{
 						Logger.log(argModel.toString(), Logger.DEBUG);
 					}
-
+					*/
 				}
 
 				// If it's a relation, add it to the model
@@ -658,10 +659,12 @@ public class LASADActionReceiver {
 						}
 					}
 
+					/*
 					if (DEBUG)
 					{
 						Logger.log(argModel.toString(), Logger.DEBUG);
 					}
+					*/
 				}
 
 				// End Kevin Loughlin
@@ -782,10 +785,12 @@ public class LASADActionReceiver {
 							Logger.log("ERROR: Removed link is null", Logger.DEBUG);
 						}
 
+						/*
 						if (DEBUG)
 						{
 							Logger.log(argModel.toString(), Logger.DEBUG);
 						}
+						*/
 					}
 					else if (elementType.equalsIgnoreCase(BOX))
 					{
@@ -800,10 +805,12 @@ public class LASADActionReceiver {
 							Logger.log("ERROR: Removed box is null", Logger.DEBUG);
 						}
 
+						/*
 						if (DEBUG)
 						{
 							Logger.log(argModel.toString(), Logger.DEBUG);
 						}
+						*/
 					}
 					
 					// End Kevin Loughlin
@@ -997,10 +1004,12 @@ public class LASADActionReceiver {
 
 					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height, canBeGrouped)));
 					
+					/*
 					if (DEBUG)
 					{
 						Logger.log(argModel.toString(), Logger.DEBUG);
 					}
+					*/
 
 				}
 
@@ -1067,10 +1076,12 @@ public class LASADActionReceiver {
 						}
 					}
 
+					/*
 					if (DEBUG)
 					{
 						Logger.log(argModel.toString(), Logger.DEBUG);
 					}
+					*/
 				}
 
 				// End Kevin Loughlin
@@ -1171,10 +1182,12 @@ public class LASADActionReceiver {
 							Logger.log("ERROR: Removed link is null", Logger.DEBUG);
 						}
 
+						/*
 						if (DEBUG)
 						{
 							Logger.log(argModel.toString(), Logger.DEBUG);
 						}
+						*/
 					}
 					else if (elementType.equalsIgnoreCase(BOX))
 					{
@@ -1188,10 +1201,12 @@ public class LASADActionReceiver {
 							Logger.log("ERROR: Removed box is null", Logger.DEBUG);
 						}
 
+						/*
 						if (DEBUG)
 						{
 							Logger.log(argModel.toString(), Logger.DEBUG);
 						}
+						*/
 					}
 					
 					// End Kevin Loughlin

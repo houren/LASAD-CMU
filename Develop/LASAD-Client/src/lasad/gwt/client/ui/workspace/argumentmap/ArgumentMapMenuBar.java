@@ -201,15 +201,12 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		}
 	}
 
-	// TODO Zhenyu
-	protected MenuItem altCreateScreenshotItem()
-	{
+	// An attempt by Kevin Loughlin to downsize screen shot, doesn't work as of 29 July 2015.  Need to speak with Zhenyu
+	protected MenuItem kevinCreateScreenshotItem() {
 		final MenuItem screenshot = new MenuItem("Create a screenshot");
-		screenshot.addSelectionListener(new SelectionListener<MenuEvent>()
-		{
+		screenshot.addSelectionListener(new SelectionListener<MenuEvent>() {
 			@Override
-			public void componentSelected(MenuEvent me)
-			{
+			public void componentSelected(MenuEvent me) {
 				// extend the size of map to adjust itself to the windows
 				((ArgumentMap) myMapSpace.getMyMap()).extendMapDimension(Direction.RIGHT,
 						(myMapSpace.getMyMap().getMapDimensionSize().width / myMapSpace.getMyMap().getOffsetWidth() + 1)
@@ -229,29 +226,26 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 				// / (60 * myMapSpace.getMyMap().getOffsetHeight() * myMapSpace.getMyMap().getOffsetWidth())
 				// +
 						"several minutes, do you want to continue? ");
-				box.addCallback(new Listener<MessageBoxEvent>()
-				{
-					public void handleEvent(MessageBoxEvent be)
-					{
+				box.addCallback(new Listener<MessageBoxEvent>() {
+
+					public void handleEvent(MessageBoxEvent be) {
 						if (be.getButtonClicked().getItemId().equals(Dialog.YES)) {
 							// save position in order to return to this position after screenshot
 							final int leftBefore = myMapSpace.getMyMap().getBody().getScrollLeft();
 							final int topBefore = myMapSpace.getMyMap().getBody().getScrollTop();
 
 							ExportScreenShotDialogue.getInstance().showLoadingScreen();
-							// roll map to the beginning
-
 
 							EdgeCoords edgeCoords = ArgumentModel.getInstanceByMapID(myMapInfo.getMapID()).calcEdgeCoords();
-							final int top = edgeCoords.getTop();
-							final int left = edgeCoords.getLeft();
-							final int right = edgeCoords.getRight();
-							final int bottom = edgeCoords.getBottom();
-							final int width = right - left;
-							final int height = bottom - top;
-
-							myMapSpace.getMyMap().getBody().scrollTo("top", top);
-							myMapSpace.getMyMap().getBody().scrollTo("left", left);
+							final int TOP = edgeCoords.getTop();
+							final int LEFT = edgeCoords.getLeft();
+							final int RIGHT = edgeCoords.getRight();
+							final int BOTTOM = edgeCoords.getBottom();
+							final int WIDTH = RIGHT - LEFT;
+							final int HEIGHT = BOTTOM - TOP;
+							// roll map to the beginning
+							myMapSpace.getMyMap().getBody().scrollTo("top", TOP);
+							myMapSpace.getMyMap().getBody().scrollTo("left", LEFT);
 
 							// make a screen shot
 							captureMap(myMapSpace.getMyMap().getBody().getId());
@@ -260,11 +254,13 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 								// the size of the windows
 								int interval_H = myMapSpace.getMyMap().getOffsetHeight();
 								int interval_W = myMapSpace.getMyMap().getOffsetWidth();
-								int position_H = top;
-								int position_W = left;
+								int position_H = TOP;
+								int position_W = LEFT;
 								int sum = 0;
 								boolean isFinished = false;
-								int numOfAllImages = width * height / (myMapSpace.getMyMap().getOffsetHeight() * myMapSpace.getMyMap().getOffsetWidth());
+								int numOfAllImages = WIDTH
+										* HEIGHT
+										/ (myMapSpace.getMyMap().getOffsetHeight() * myMapSpace.getMyMap().getOffsetWidth());
 
 								public void run() {
 									if (!isFinished) {
@@ -286,10 +282,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 										};
 
 										// update the step of the process
-										if (numOfAllImages != 0)
-										{
-											ExportScreenShotDialogue.getInstance().updateProgress((float) sum / numOfAllImages);
-										}
+										ExportScreenShotDialogue.getInstance().updateProgress((float) sum / numOfAllImages);
 
 										try {
 											// get the screenshot and send it to the servlet
@@ -301,12 +294,12 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 											e.printStackTrace();
 										}
 										// if not end roll the map to next window
-										if (position_H < bottom) {
-											if (position_W < right) {
+										if (position_H < HEIGHT - interval_H + 1) {
+											if (position_W < WIDTH - interval_W) {
 												position_W += interval_W;
 											} else {
 												position_H += interval_H;
-												position_W = left;
+												position_W = LEFT;
 											}
 
 											myMapSpace.getMyMap().getBody().scrollTo("top", position_H);
@@ -323,11 +316,12 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 													+ "ScreenShotMerge");
 											try {
 												// calculate the cols and rows of the image
-												int cols = width / interval_W;
-												int rows = height / interval_H;
-												
+												int cols = WIDTH / interval_W;
+												int rows = HEIGHT / interval_H;
 												String format = LASAD_Client.getInstance().getUsername() + "_" + myMapInfo.getMapID() + ","
 														+ rows + ":" + cols;
+
+												Logger.log(format, Logger.DEBUG);
 
 												builder_end.sendRequest(format, new RequestCallback() {
 													@Override
@@ -767,7 +761,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		MenuItem exportItem = createExportItem();
 		menu.add(exportItem);
 
-		MenuItem screenshot = altCreateScreenshotItem();
+		MenuItem screenshot = kevinCreateScreenshotItem();
 		menu.add(screenshot);
 
 		MenuItem closeMap = createCloseMapItem();
@@ -1024,21 +1018,48 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	}
 
 	/*
-	 *	Subitem of the edit menu that autoOrganizes the map when pressed
+	 *	Subitem of the edit menu that autoOrganizes the map when subitem (specifying orientation) is pressed
 	 */
 	protected MenuItem createAutoOrganizeItem()
 	{
 		final MenuItem autoOrganizeItem = new MenuItem("Auto organize this map");
+		autoOrganizeItem.setSubMenu(chooseOrganizationDirection());
+		return autoOrganizeItem;
+	}
 
-		autoOrganizeItem.addSelectionListener(new SelectionListener<MenuEvent>()
+	protected Menu chooseOrganizationDirection()
+	{
+		Menu organizationDirection = new Menu();
+		organizationDirection.add(createUpwardOrientation());
+		organizationDirection.add(createDownwardOrientation());
+		return organizationDirection;
+	}
+
+	protected MenuItem createUpwardOrientation()
+	{
+		MenuItem upward = new MenuItem("Upward Orientation");
+		upward.addSelectionListener(new SelectionListener<MenuEvent>()
 		{
 			@Override
 			public void componentSelected(MenuEvent ce)
 			{
-				AutoOrganizer autoOrganizer = new AutoOrganizer(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap() );
-				autoOrganizer.organizeMap();
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getAutoOrganizer().organizeMap(false);
 			}
 		});
-		return autoOrganizeItem;
+		return upward;
+	}
+
+	protected MenuItem createDownwardOrientation()
+	{
+		MenuItem downward = new MenuItem("Downward Orientation");
+		downward.addSelectionListener(new SelectionListener<MenuEvent>()
+		{
+			@Override
+			public void componentSelected(MenuEvent ce)
+			{
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getAutoOrganizer().organizeMap(true);
+			}
+		});
+		return downward;
 	}
 }

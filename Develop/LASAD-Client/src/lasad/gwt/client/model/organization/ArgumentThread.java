@@ -12,7 +12,7 @@ import lasad.gwt.client.model.organization.ArgumentGrid;
  *	An argument thread is a connected chain of boxes on the argument map space.
  *  This class is useful for AutoOrganizer.
  *	@author Kevin Loughlin
- *	@since 19 June 2015, Updated 23 July 2015
+ *	@since 19 June 2015, Updated 29 July 2015
  */
 
 public class ArgumentThread
@@ -55,9 +55,10 @@ public class ArgumentThread
 		return boxMap.values();
 	}
 
-	public void organizeGrid(final boolean TOP_TO_BOTTOM)
+	// This is kinda a weird way of doing this but it works and seems neat enough, so I guess don't fix something that isn't broken? TBD
+	public void organizeGrid(final boolean DOWNWARD)
 	{
-		this.setGrid(this.grid.organize(TOP_TO_BOTTOM, this.getBoxes()));
+		this.setGrid(this.grid.organize(DOWNWARD, this.getBoxes()));
 	}
 
 	private void setGrid(ArgumentGrid grid)
