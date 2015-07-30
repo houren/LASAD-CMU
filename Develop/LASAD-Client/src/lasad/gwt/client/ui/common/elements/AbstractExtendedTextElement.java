@@ -1,5 +1,6 @@
 package lasad.gwt.client.ui.common.elements;
 
+import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.ElementInfo;
 import lasad.gwt.client.ui.common.AbstractExtendedElement;
@@ -27,7 +28,8 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import java.awt.Robot;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.awt.event.KeyEvent;
 
 public abstract class AbstractExtendedTextElement extends AbstractExtendedElement{
@@ -53,7 +55,8 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 	private boolean wantFocus = false;
 	private boolean readOnly = false;
 	private boolean autoResize = false;
-	private static int fontSize = 12;
+	
+	private static HashMap<String,HashSet<Element>> textElements = new HashMap<String,HashSet<Element>>();
 
 	public AbstractExtendedTextElement(ExtendedElementContainerInterface container, ElementInfo config) {
 		super(container, config);
@@ -115,6 +118,10 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 		} else {
 			this.labelOnTop = labelOnTop;
 		}
+	}
+	
+	public static HashSet<Element> getTextElements(String mapId){
+		return textElements.get(mapId);
 	}
 
 	protected void buildElement() {
@@ -257,6 +264,8 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 		int balanceWidth = 4, balanceHeight = 4; // 1px distance to the
 													// frameborder, 1 px padding
 													// in each direction
+		String mapID = this.getContainer().getMVCViewSession().getController().getMapID();
+		int fontSize = ArgumentModel.getInstanceByMapID(mapID).getFontSize();
 
 		if (textFrameDiv != null) {
 
@@ -278,6 +287,12 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 			} else {
 				DOM.setStyleAttribute(textArea, "width", Math.max(0, size.width - balanceWidth) + "px");
 			}
+			if(textElements.get(mapID) == null){
+				textElements.put(mapID, new HashSet<Element>());
+			}
+			textElements.get(mapID).add(textArea);
+			
+			DOM.setStyleAttribute(textArea, "font-size", fontSize+"px");
 		}
 		if (textField != null) {
 			// if(labelOnTop && labelDiv != null) {
@@ -292,6 +307,12 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 			} else {
 				DOM.setStyleAttribute(textField, "width", Math.max(0, size.width - balanceWidth) + "px");
 			}
+			
+			if(textElements.get(mapID) == null){
+				textElements.put(mapID, new HashSet<Element>());
+			}
+			textElements.get(mapID).add(textField);
+			DOM.setStyleAttribute(textField, "font-size", fontSize+"px");
 		}
 	}
 
@@ -460,7 +481,9 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 				//Modified by Darlan Santana Farias
 					//resize the box when losing focus
 					//added this line so the box get resized after pasting content, intead of only when typing
-				this.autoSizeTextArea();
+				if (autoResize) {
+					autoSizeTextArea();
+				}
 				
 				if (DEBUG)
 					LASADInfo.display("setElementFocus", "UNLOCK");
@@ -479,7 +502,7 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 	 * @author BM
 	 * @date 19.06.2012
 	 */
-	private void autoSizeTextArea() {
+	public void autoSizeTextArea() {
 		// save the old height to get the difference
 		int oldClientHeight = textArea.getClientHeight();
 
@@ -507,10 +530,5 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 
 	@Override
 	protected void onRemoveModelConnection() {
-	}
-
-	public static void setFontSize(int i)
-	{
-		fontSize = i;
 	}
 }

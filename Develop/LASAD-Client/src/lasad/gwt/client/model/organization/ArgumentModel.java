@@ -3,14 +3,29 @@ package lasad.gwt.client.model.organization;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Collection;
+import java.util.ArrayList;
 
 // Aware that this is unnecessary, I just do it as a reminder in case I change location
 import lasad.gwt.client.model.organization.ArgumentThread;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.EdgeCoords;
+import lasad.gwt.client.model.argument.MVController;
+import lasad.gwt.client.LASAD_Client;
+import lasad.gwt.client.model.ElementInfo;
+import lasad.gwt.client.communication.LASADActionReceiver;
+import lasad.gwt.client.communication.helper.ActionFactory;
+import lasad.shared.communication.objects.ActionPackage;
 import lasad.gwt.client.logger.Logger;
+import lasad.gwt.client.model.AbstractUnspecifiedElementModel;
+import lasad.shared.communication.objects.parameters.ParameterTypes;
+import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
+import lasad.gwt.client.ui.box.AbstractBox;
+import lasad.gwt.client.ui.common.AbstractExtendedElement;
+import lasad.gwt.client.model.organization.EdgeCoords;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.dom.client.Element;
 
 /**
  *	An argument model is simply a vector of threads, i.e. a vector separate chains of arguments on the map space.
@@ -25,10 +40,14 @@ public class ArgumentModel
 	// One model instance per map, where String is mapID
 	private static HashMap<String, ArgumentModel> instances = new HashMap<String, ArgumentModel>();
 
+	private int fontSize = 10;
+	private MVController controller;
+
 	// Just for this class, if we need to create a new instance below
-	private ArgumentModel()
+	private ArgumentModel(String mapID)
 	{
 		this.argThreads = new HashSet<ArgumentThread>();
+		controller = LASAD_Client.getMVCController(mapID);
 	}
 
 	public static ArgumentModel getInstanceByMapID(String mapID)
@@ -38,7 +57,7 @@ public class ArgumentModel
 		// if the model doesn't already exist, create it
 		if (myArgModel == null)
 		{
-			instances.put(mapID, new ArgumentModel());
+			instances.put(mapID, new ArgumentModel(mapID));
 			myArgModel = instances.get(mapID);
 		}
 
@@ -84,6 +103,34 @@ public class ArgumentModel
 		}
 
 		return null;
+	}
+
+	public void setFontSize(int fontSize){
+		this.fontSize = fontSize;
+		
+		for(AbstractBox box : AbstractBox.getBoxes(controller.getMapID()))
+			if(box != null){
+				box.setHeaderFontSize(fontSize);
+				for(AbstractExtendedElement element : box.getExtendedElements()){
+					if(element instanceof AbstractExtendedTextElement)
+						((AbstractExtendedTextElement)element).autoSizeTextArea();
+				}
+			}
+		
+		Logger.log("Tried changing font for AbstractExtendedTextElements"+AbstractExtendedTextElement.getTextElements(controller.getMapID()), Logger.DEBUG);
+		if(AbstractExtendedTextElement.getTextElements(controller.getMapID()) != null)
+			for(Element el : AbstractExtendedTextElement.getTextElements(controller.getMapID())){
+				if(el != null){
+					el.getStyle().setFontSize(fontSize,com.google.gwt.dom.client.Style.Unit.PX);
+					el.getStyle().setHeight(el.getScrollHeight(),com.google.gwt.dom.client.Style.Unit.PX);
+					el.getParentElement().getStyle().setHeight(el.getParentElement().getScrollHeight(),com.google.gwt.dom.client.Style.Unit.PX);
+				}
+			}
+		Logger.log("Finished trying to change font for AbstractExtendedTextElements", Logger.DEBUG);
+	}
+	
+	public int getFontSize(){
+		return this.fontSize;
 	}
 
 	public OrganizerLink removeLinkByLinkID(int linkID)

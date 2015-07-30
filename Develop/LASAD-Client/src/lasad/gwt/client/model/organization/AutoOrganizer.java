@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.List;
 
 import lasad.gwt.client.communication.helper.ActionFactory;
 import lasad.gwt.client.communication.LASADActionSender;
@@ -28,6 +29,11 @@ import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
 
 import lasad.shared.communication.objects.ActionPackage;
 
+import lasad.gwt.client.ui.box.AbstractBox;
+import lasad.gwt.client.ui.common.AbstractExtendedElement;
+import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
+import com.extjs.gxt.ui.client.widget.Component;
+
 /**
  *	An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update links
  *	in ArgumentMap representations where a type of relation can create groups of boxes. The overall map organizing function,
@@ -40,6 +46,7 @@ import lasad.shared.communication.objects.ActionPackage;
  */
 public class AutoOrganizer
 {
+	private final int DEFAULT_WIDTH = 200;
 	private final boolean DEBUG = false;
 	// The minimum number of pixels between boxes, set as a double for rounding/accuracy purposes
 	private final double MIN_SPACE = 50.0;
@@ -91,6 +98,168 @@ public class AutoOrganizer
 	 *	@param DOWNWARD - Whether to organize the map in an downward orientation or upward
 	 */
 	public void organizeMap(final boolean DOWNWARD)
+	{
+		HashSet<LinkedBox> boxesToSendToServer = new HashSet<LinkedBox>();
+
+		double columnXcoord = CENTER_X;
+
+		// Organize the grid by height and width "levels" (think chess board)
+		for (ArgumentThread argThread : argModel.getArgThreads())
+		{
+			argThread.organizeGrid(DOWNWARD);
+			ArgumentGrid grid = argThread.getGrid();
+			if (grid.getBoxes().size() == 0)
+			{
+				continue;
+			}
+
+			for (LinkedBox box : grid.getBoxes())
+			{
+				final int BOX_AREA = box.getWidth() * box.getHeight();
+				box.setWidth(DEFAULT_WIDTH);
+				final double boxAreaDouble = (double) BOX_AREA;
+				final double widthDouble  = (double) DEFAULT_WIDTH;
+				final double quotient = boxAreaDouble / widthDouble;
+				box.setHeight((int) Math.round(Math.ceil(quotient)));
+				updateBoxSize(box);
+			}
+			
+			IntPair minMaxColumn = grid.determineMinMaxWidthLevels(grid.getBoxes());
+			final int minWidthLevel = minMaxColumn.getMin();
+			final int maxWidthLevel = minMaxColumn.getMax();
+
+			IntPair minMaxRow = grid.determineMinMaxHeightLevels(grid.getBoxes());
+			final int minHeightLevel = minMaxRow.getMin();
+			final int maxHeightLevel = minMaxRow.getMax();
+
+			// Sets the y coord
+
+			if (DOWNWARD)
+			{
+				double rowYcoord = CENTER_Y;
+				for (int rowCount = maxHeightLevel; rowCount >= minHeightLevel; rowCount--)
+				{
+					ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
+
+					int tallestHeightAtRow = Integer.MIN_VALUE;
+					for (LinkedBox box : row)
+					{
+						box.setYTop(rowYcoord);
+						
+						
+						final int BOX_HEIGHT = box.getHeight();
+						if (BOX_HEIGHT > tallestHeightAtRow)
+						{
+							tallestHeightAtRow = BOX_HEIGHT;
+						}
+						
+					}
+
+					// Add space between rows
+					if (tallestHeightAtRow != Integer.MIN_VALUE)
+					{
+						rowYcoord += tallestHeightAtRow + MIN_SPACE;
+					}
+					else
+					{
+						rowYcoord += MIN_SPACE;
+					}
+				}
+
+			}
+			else
+			{
+				double nextRowYcoord = CENTER_Y;
+
+				for (int rowCount = minHeightLevel; rowCount <= maxHeightLevel; rowCount++)
+				{
+					ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
+
+					for (LinkedBox box : row)
+					{
+						box.setYTop(nextRowYcoord);
+					}
+
+					ArrayList<LinkedBox> nextRow = grid.getBoxesAtHeightLevel(rowCount + 1);
+					if (nextRow.size() > 0)
+					{
+						int tallestHeightAtNextRow = Integer.MIN_VALUE;
+						for (LinkedBox box : nextRow)
+						{
+							final int BOX_HEIGHT = box.getHeight();
+							if (BOX_HEIGHT > tallestHeightAtNextRow)
+							{
+								tallestHeightAtNextRow = BOX_HEIGHT;
+							}
+						}
+
+						nextRowYcoord = nextRowYcoord - MIN_SPACE - tallestHeightAtNextRow;
+					}
+				}
+			}
+
+			for (int columnNumber = minWidthLevel; columnNumber <= maxWidthLevel; columnNumber++)
+			{
+				HashSet<LinkedBox> column = grid.getBoxesAtWidthLevel(columnNumber);
+				for (LinkedBox box : column)
+				{
+					box.setXLeft(columnXcoord);
+					boxesToSendToServer.add(box);
+				}
+
+				columnXcoord += DEFAULT_WIDTH;
+			}
+
+			columnXcoord += DEFAULT_WIDTH;
+
+			if (DEBUG)
+			{
+				Logger.log(grid.toString(), Logger.DEBUG);
+				Logger.log(argThread.toString(), Logger.DEBUG);
+			}
+
+			for (LinkedBox box : grid.getBoxes())
+			{
+				List<Component> mapComponents = map.getItems();
+				for (Component mapComponent : mapComponents)
+				{
+					if (mapComponent instanceof AbstractBox)
+					{
+						AbstractBox myBox = (AbstractBox) mapComponent;
+						if (myBox.getConnectedModel().getId() == box.getBoxID())
+						{
+							for (AbstractExtendedElement childElement : myBox.getExtendedElements())
+							{
+								if (childElement instanceof AbstractExtendedTextElement)
+								{
+									AbstractExtendedTextElement textElt = (AbstractExtendedTextElement) childElement;
+									textElt.autoSizeTextArea();
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Send the new positions to the server
+		updateBoxPositions(boxesToSendToServer);
+
+		// Position the cursor of the map
+		positionMapCursor(DOWNWARD);
+
+		// Free some memory for speed (garbage collector will take the nullified values)
+		for (ArgumentThread argThread : argModel.getArgThreads())
+		{
+			argThread.getGrid().empty();
+		}
+	}
+
+	/**
+	 *	Organizes the map either top to bottom or bottom to top.  A clean-up function for the workspace.
+	 *	@param DOWNWARD - Whether to organize the map in an downward orientation or upward
+	 */
+	public void ORIGorganizeMap(final boolean DOWNWARD)
 	{
 		// The base X and Y coordinates for the column/row, that is updated for spacing (may also be adjusted due to box sizes)
 		double columnXcoord = CENTER_X;
@@ -424,6 +593,19 @@ public class AutoOrganizer
 				Logger.log("ERROR: Tried to update box position of nonexisting element.", Logger.DEBUG);
 				this.argModel.removeBoxByBoxID(box.getBoxID());
 			}
+		}
+	}
+
+	private void updateBoxSize(LinkedBox box)
+	{
+		if (this.controller.getElement(box.getBoxID()) != null)
+		{
+			communicator.sendActionPackage(actionBuilder.updateBoxSize(map.getID(), box.getBoxID(), box.getWidth(), box.getHeight()));
+		}
+		else
+		{
+			Logger.log("ERROR: Tried to update box size of nonexisting element.", Logger.DEBUG);
+			this.argModel.removeBoxByBoxID(box.getBoxID());
 		}
 	}
 

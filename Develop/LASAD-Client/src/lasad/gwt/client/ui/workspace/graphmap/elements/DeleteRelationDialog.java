@@ -15,6 +15,7 @@ import com.extjs.gxt.ui.client.widget.form.SimpleComboBox;
 import com.extjs.gxt.ui.client.widget.form.SimpleComboValue;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.user.client.Element;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
 
 import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.model.organization.LinkedBox;
@@ -58,6 +59,8 @@ public class DeleteRelationDialog extends Window
 		this.argModel = ArgumentModel.getInstanceByMapID(mapId);
 		this.boxes = argModel.getBoxes();
 		this.allowLinksToLinks = AbstractGraphMap.getInstanceByMapID(correspondingMapId).getMyViewSession().getController().getMapInfo().isAllowLinksToLinks();
+		this.comboStart.setTriggerAction(ComboBox.TriggerAction.ALL);
+		this.comboEnd.setTriggerAction(ComboBox.TriggerAction.ALL);
 	}
 
 	@Override

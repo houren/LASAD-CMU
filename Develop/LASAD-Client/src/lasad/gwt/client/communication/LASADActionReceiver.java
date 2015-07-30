@@ -87,6 +87,7 @@ public class LASADActionReceiver {
 	
 	private final String BOX = "box";
 	private final String RELATION = "relation";
+	private final int DEFAULT_HEIGHT = 107;
 
 	lasad_clientConstants myConstants = GWT.create(lasad_clientConstants.class);
 	private static LASADActionReceiver myInstance = null;
@@ -566,7 +567,9 @@ public class LASADActionReceiver {
 					}
 
 					String widthString = newBoxInfo.getUiOption(ParameterTypes.Width);
-					String heightString = newBoxInfo.getUiOption(ParameterTypes.Height);
+
+					// The default height is set incorrectly, don't know how, but it's always 107 yet comes out as 200.
+					//String heightString = newBoxInfo.getUiOption(ParameterTypes.Height);
 					String canBeGroupedString = newBoxInfo.getElementOption(ParameterTypes.CanBeGrouped);
 					boolean canBeGrouped;
 					if (canBeGroupedString == null)
@@ -578,16 +581,17 @@ public class LASADActionReceiver {
 						canBeGrouped = Boolean.parseBoolean(canBeGroupedString);
 					}
 
-					if (widthString == null || heightString == null)
+					if (widthString == null)
 					{
-						Logger.log("width and/or height string(s) are null", Logger.DEBUG);
+						Logger.log("width string is null", Logger.DEBUG);
 					}
 
 					int width = Integer.parseInt(widthString);
-					int height = Integer.parseInt(heightString);
 
-					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height, canBeGrouped)));
+					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, DEFAULT_HEIGHT, canBeGrouped)));
 					
+					//Added by DSF, run setFontSize so new boxes get the right font size
+					argModel.setFontSize(argModel.getFontSize());
 					/*
 					if (DEBUG)
 					{

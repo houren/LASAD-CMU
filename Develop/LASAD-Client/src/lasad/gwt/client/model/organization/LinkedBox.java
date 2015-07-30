@@ -127,6 +127,11 @@ public class LinkedBox
 		return width;
 	}
 
+	public Coordinate getDimensions()
+	{
+		return new Coordinate(width, height);
+	}
+
 	public OrganizerLink getLinkByLinkID(int linkID)
 	{
 		OrganizerLink returnLink = childLinks.get(linkID);

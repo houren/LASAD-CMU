@@ -937,7 +937,8 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			@Override
 			public void componentSelected(MenuEvent me)
 			{
-				AbstractExtendedTextElement.setFontSize(i);
+				Logger.log("selected new font size: "+i, Logger.DEBUG);
+				ArgumentModel.getInstanceByMapID(ArgumentMapMenuBar.this.getMyMapInfo().getMapID()).setFontSize(i);
 			}
 		});
 		return fontSize;

@@ -3,6 +3,8 @@ package lasad.gwt.client.ui.box;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.HashSet;
+import java.util.HashMap;
 
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.helper.connection.Connection;
@@ -36,6 +38,7 @@ import lasad.gwt.client.ui.workspace.graphmap.GraphMap;
 import lasad.gwt.client.ui.workspace.graphmap.elements.AbstractCreateLinkDialog;
 import lasad.gwt.client.ui.workspace.transcript.TranscriptLinkData;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
+import lasad.gwt.client.model.organization.ArgumentModel;
 
 import com.extjs.gxt.ui.client.core.XDOM;
 import com.extjs.gxt.ui.client.dnd.DropTarget;
@@ -54,6 +57,7 @@ import com.extjs.gxt.ui.client.widget.ComponentHelper;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.dom.client.Style.Cursor;
 
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.dom.client.Style;
@@ -92,7 +96,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 	private boolean selected = false, autogrow = false;
 
 	// Constants to calculate elements size correctly
-	public static final int CONNECTOR_WIDTH = 24, CONNECTOR_HEIGHT = 12;
+	public static final int CONNECTOR_WIDTH = 18, CONNECTOR_HEIGHT = 9;
 	public static final int BORDER_WIDTH = 5, BORDER_HEIGHT = 5;
 	public static final int HEADER_HEIGHT = 13;
 
@@ -173,6 +177,8 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 	private Listener<ComponentEvent> componentListener = null;
 	
 	private boolean isReplay;
+	
+	private static HashMap<String,HashSet<AbstractBox>> boxes = new HashMap<String,HashSet<AbstractBox>>();
 
 	private Timer hoverTimer = new Timer() {
 		public void run() {
@@ -196,6 +202,11 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		cn = UIObjectConnector.wrap(this, BORDER_WIDTH*2, BORDER_HEIGHT*2); // To set the whole box as connector
 
 		disableTextSelection();
+		
+		if(boxes.get(map.getID()) == null){
+			boxes.put(map.getID(), new HashSet<AbstractBox>());
+		}
+		boxes.get(map.getID()).add(this);
 	}
 
 	/**
@@ -220,9 +231,17 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		setBorder(config.getUiOption(ParameterTypes.Border));
 
 		//boxHeading = new BoxHeaderElement(this, this.title,isR);
+		
+		if(boxes.get(map.getID()) == null){
+			boxes.put(map.getID(), new HashSet<AbstractBox>());
+		}
+		boxes.get(map.getID()).add(this);
+		
 		boxHeading = createBoxHeaderElement(this, this.title,isR);
+		
 		boxHeading.render(boxContentDiv, 0);
 		ComponentHelper.doAttach(boxHeading);
+		
 	}
 	protected abstract AbstractBoxHeaderElement createBoxHeaderElement(AbstractBox correspondingBox, String title, boolean isReplay);
 
@@ -230,6 +249,11 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		this(map, info,isR);
 		this.myDetails = sdp;
 		this.isReplay = isR;
+		
+		if(boxes.get(map.getID()) == null){
+			boxes.put(map.getID(), new HashSet<AbstractBox>());
+		}
+		boxes.get(map.getID()).add(this);
 	}
 
 	@Override
@@ -270,7 +294,6 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 	 * @author Frank Loll
 	 */
 	public void calculateElementsSize() {
-
 		// Outer 3x3 table
 		DOM.setStyleAttribute(outerGrid, "height", this.height + "px");
 		DOM.setStyleAttribute(outerGrid, "width", this.width + "px");
@@ -369,11 +392,13 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		DOM.setStyleAttribute(borderURC, "width", BORDER_WIDTH + "px");
 
 		// Middle row
-		DOM.setStyleAttribute(borderMLC, "height", (this.height - CONNECTOR_HEIGHT - CONNECTOR_HEIGHT - BORDER_HEIGHT - BORDER_HEIGHT) + "px");
+		DOM.setStyleAttribute(borderMLC, "height", (this.height +this.boxHeading.getElement().getScrollHeight() - CONNECTOR_HEIGHT - CONNECTOR_HEIGHT - BORDER_HEIGHT - BORDER_HEIGHT) + "px");
 		DOM.setStyleAttribute(borderMLC, "width", BORDER_HEIGHT + "px");
 
-		DOM.setStyleAttribute(borderMRC, "height", (this.height - CONNECTOR_HEIGHT - CONNECTOR_HEIGHT - BORDER_HEIGHT - BORDER_HEIGHT) + "px");
+		DOM.setStyleAttribute(borderMRC, "height", (this.height +this.boxHeading.getElement().getScrollHeight() - CONNECTOR_HEIGHT - CONNECTOR_HEIGHT - BORDER_HEIGHT - BORDER_HEIGHT) + "px");
 		DOM.setStyleAttribute(borderMRC, "width", BORDER_WIDTH + "px");
+		
+		this.boxHeading.setPosition(0, -this.boxHeading.getElement().getScrollHeight()/3);
 
 		// Bottom row
 		DOM.setStyleAttribute(borderBLC, "height", BORDER_HEIGHT + "px");
@@ -864,6 +889,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		//this.northConnector = new BoxConnectorElement(this, "north-connector");
 		this.northConnector = createBoxConnectorElement(this, "north-connector");
 		this.northConnector.render(northArea);
+		this.northConnector.getElement().getStyle().setCursor(Cursor.POINTER); 
 
 		this.outerTopRowRightCell = DOM.createTD();
 		outerTopRowRightCell.setClassName("box-outerGrid-trc");
@@ -887,6 +913,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		//this.westConnector = new BoxConnectorElement(this, "west-connector");
 		this.westConnector = createBoxConnectorElement(this, "west-connector");
 		this.westConnector.render(westArea);
+		this.westConnector.getElement().getStyle().setCursor(Cursor.POINTER); 
 
 		this.outerMiddleRowMiddleCell = DOM.createTD();
 		outerMiddleRowMiddleCell.setClassName("box-outerGrid-mmc");
@@ -903,6 +930,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		//this.eastConnector = new BoxConnectorElement(this, "east-connector");
 		this.eastConnector = createBoxConnectorElement(this, "east-connector");
 		this.eastConnector.render(eastArea);
+		this.eastConnector.getElement().getStyle().setCursor(Cursor.POINTER); 
 
 		DOM.appendChild(outerGridTBody, outerMiddleRow);
 
@@ -926,6 +954,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		//this.southConnector = new BoxConnectorElement(this, "south-connector");
 		this.southConnector = createBoxConnectorElement(this, "south-connector");
 		this.southConnector.render(southArea);
+		this.southConnector.getElement().getStyle().setCursor(Cursor.POINTER); 
 
 		this.outerBottomRowRightCell = DOM.createTD();
 		outerBottomRowRightCell.setClassName("box-outerGrid-brc");
@@ -1223,6 +1252,21 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 
 		if(myDetails != null)
 			this.myDetails.setColor(color);
+	}
+	
+	public static HashSet<AbstractBox> getBoxes(String mapId){
+		return boxes.get(mapId);
+	}
+	
+	public void setHeaderFontSize(int fontSize){
+		if(this.boxHeading != null){
+			this.boxHeading.getContentText().getStyle().setFontSize(fontSize,com.google.gwt.dom.client.Style.Unit.PX);
+			this.boxHeading.getContentText().getStyle().setHeight(fontSize+2,com.google.gwt.dom.client.Style.Unit.PX);
+			this.boxHeading.getElement().getStyle().setHeight(fontSize+5,com.google.gwt.dom.client.Style.Unit.PX);
+			this.setSize(Math.max(this.boxHeading.getElement().getScrollWidth()+32, this.width), this.height);
+			
+			Logger.log("Changed header font size: "+fontSize, Logger.DEBUG);
+		}
 	}
 
 	/**

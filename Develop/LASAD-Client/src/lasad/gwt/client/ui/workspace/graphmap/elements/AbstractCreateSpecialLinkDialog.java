@@ -24,6 +24,7 @@ import com.extjs.gxt.ui.client.widget.form.SimpleComboBox;
 import com.extjs.gxt.ui.client.widget.form.SimpleComboValue;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.user.client.Element;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
 
 import lasad.gwt.client.model.organization.ArgumentModel;
 import lasad.gwt.client.model.organization.LinkedBox;
@@ -69,6 +70,8 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 		this.boxes = boxes;
 		this.links = links;
 		this.allowLinksToLinks = AbstractGraphMap.getInstanceByMapID(correspondingMapId).getMyViewSession().getController().getMapInfo().isAllowLinksToLinks();
+		this.comboStart.setTriggerAction(ComboBox.TriggerAction.ALL);
+		this.comboEnd.setTriggerAction(ComboBox.TriggerAction.ALL);
 	}
 
 	@Override

@@ -371,13 +371,23 @@ public class ArgumentGrid
 	{
 		final Coordinate POSITION = box.getGridPosition();
 		final int WIDTH_LEVEL = POSITION.getX();
+		final int HEIGHT_LEVEL = POSITION.getY();
 
 		if (!grid.values().contains(box))
 		{	
 			if (this.getBoxAt(POSITION) == null)
 			{
-				grid.put(POSITION, box);
-				return WIDTH_LEVEL + HOR_SPACE;
+				if (this.getBoxAt(WIDTH_LEVEL - 1, HEIGHT_LEVEL) == null)
+				{
+					grid.put(POSITION, box);
+					return WIDTH_LEVEL + HOR_SPACE;	
+				}
+				else
+				{
+					box.setWidthLevel(HOR_SPACE / 2 + WIDTH_LEVEL);
+					return putSoloBoxOnGrid(box);
+				}
+				
 			}
 			else
 			{

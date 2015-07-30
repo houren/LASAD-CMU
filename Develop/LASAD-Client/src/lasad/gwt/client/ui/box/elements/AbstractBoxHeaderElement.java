@@ -111,6 +111,10 @@ public abstract class AbstractBoxHeaderElement extends BoxComponent {
 		contentText.setInnerHTML(this.rootElementID + "&nbsp;&middot;&nbsp;<b>" + this.title + "</b>");
 	}
 
+	public Element getContentText(){
+		return contentText;
+	}
+	
 	public void setEditButtonVisibility(boolean visible) {
 		if (visible) {
 
