@@ -46,7 +46,9 @@ import com.extjs.gxt.ui.client.widget.Component;
  */
 public class AutoOrganizer
 {
-	private final int DEFAULT_WIDTH = 200;
+	private int boxWidth = 200;
+	private int minBoxHeight = 100;
+
 	private final boolean DEBUG = false;
 	// The minimum number of pixels between boxes, set as a double for rounding/accuracy purposes
 	private final double MIN_SPACE = 50.0;
@@ -93,6 +95,26 @@ public class AutoOrganizer
 		return instances.get(mapID);
 	}
 
+	public void setBoxWidth(int width)
+	{
+		this.boxWidth = width;
+	}
+
+	public void setMinBoxHeight(int minBoxHeight)
+	{
+		this.minBoxHeight = minBoxHeight;
+	}
+
+	public int getBoxWidth()
+	{
+		return boxWidth;
+	}
+
+	public int getMinBoxHeight()
+	{
+		return minBoxHeight;
+	}
+
 	/**
 	 *	Organizes the map either top to bottom or bottom to top.  A clean-up function for the workspace.
 	 *	@param DOWNWARD - Whether to organize the map in an downward orientation or upward
@@ -113,15 +135,43 @@ public class AutoOrganizer
 				continue;
 			}
 
+			List<Component> mapComponents = map.getItems();
+			List<Component> mapComponentsCopy = new ArrayList<Component>(mapComponents);
+			ArrayList<Component> toRemove = new ArrayList<Component>();
+
 			for (LinkedBox box : grid.getBoxes())
 			{
-				final int BOX_AREA = box.getWidth() * box.getHeight();
-				box.setWidth(DEFAULT_WIDTH);
-				final double boxAreaDouble = (double) BOX_AREA;
-				final double widthDouble  = (double) DEFAULT_WIDTH;
-				final double quotient = boxAreaDouble / widthDouble;
-				box.setHeight((int) Math.round(Math.ceil(quotient)));
-				updateBoxSize(box);
+				for (Component mapComponent : mapComponentsCopy)
+				{
+					if (mapComponent instanceof AbstractBox)
+					{
+						AbstractBox myBox = (AbstractBox) mapComponent;
+						if (myBox.getConnectedModel().getId() == box.getBoxID())
+						{
+							toRemove.add(mapComponent);
+							myBox.setSize(boxWidth, minBoxHeight);
+							box.setSize(boxWidth, minBoxHeight);
+
+							for (AbstractExtendedElement childElement : myBox.getExtendedElements())
+							{
+								if (childElement instanceof AbstractExtendedTextElement)
+								{
+									AbstractExtendedTextElement textElt = (AbstractExtendedTextElement) childElement;
+									myBox.textAreaCallNewHeightgrow(textElt.determineBoxHeightChange());
+									box.setHeight(myBox.getHeight());
+									break;
+								}
+							}
+							updateBoxSize(box);
+							break;
+						}
+					}
+					else
+					{
+						toRemove.add(mapComponent);
+					}
+				}
+				mapComponentsCopy.removeAll(toRemove);
 			}
 			
 			IntPair minMaxColumn = grid.determineMinMaxWidthLevels(grid.getBoxes());
@@ -207,38 +257,15 @@ public class AutoOrganizer
 					boxesToSendToServer.add(box);
 				}
 
-				columnXcoord += DEFAULT_WIDTH;
+				columnXcoord += boxWidth;
 			}
 
-			columnXcoord += DEFAULT_WIDTH;
+			columnXcoord += boxWidth;
 
 			if (DEBUG)
 			{
 				Logger.log(grid.toString(), Logger.DEBUG);
 				Logger.log(argThread.toString(), Logger.DEBUG);
-			}
-
-			for (LinkedBox box : grid.getBoxes())
-			{
-				List<Component> mapComponents = map.getItems();
-				for (Component mapComponent : mapComponents)
-				{
-					if (mapComponent instanceof AbstractBox)
-					{
-						AbstractBox myBox = (AbstractBox) mapComponent;
-						if (myBox.getConnectedModel().getId() == box.getBoxID())
-						{
-							for (AbstractExtendedElement childElement : myBox.getExtendedElements())
-							{
-								if (childElement instanceof AbstractExtendedTextElement)
-								{
-									AbstractExtendedTextElement textElt = (AbstractExtendedTextElement) childElement;
-									textElt.autoSizeTextArea();
-								}
-							}
-						}
-					}
-				}
 			}
 		}
 
@@ -606,6 +633,18 @@ public class AutoOrganizer
 		{
 			Logger.log("ERROR: Tried to update box size of nonexisting element.", Logger.DEBUG);
 			this.argModel.removeBoxByBoxID(box.getBoxID());
+		}
+	}
+
+	private void updateBoxSize(AbstractBox box)
+	{
+		if (this.controller.getElement(box.getConnectedModel().getId()) != null)
+		{
+			communicator.sendActionPackage(actionBuilder.updateBoxSize(map.getID(), box.getConnectedModel().getId(), box.getWidth(), box.getHeight()));
+		}
+		else
+		{
+			Logger.log("ERROR: Tried to update box size of nonexisting element.", Logger.DEBUG);
 		}
 	}
 

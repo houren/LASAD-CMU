@@ -70,6 +70,7 @@ import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteContributionDialog;
 import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteRelationDialog;
 
 import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
+import lasad.gwt.client.ui.workspace.argumentmap.CreatePreferencesDialog;
 
 /**
  *	Finishes the implementation of the map's menu bar.
@@ -745,6 +746,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	{
 		Menu menu = new Menu();
 
+		MenuItem preferencesItem = createPreferencesItem();
+		menu.add(preferencesItem);
+
 		MenuItem logOut = createLogOutItem();
 		menu.add(logOut);
 
@@ -786,9 +790,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		MenuItem deleteItem = createDeleteItem();
 		menu.add(deleteItem);
 
-		MenuItem fontSizeItem = createFontSizeItem();
-		menu.add(fontSizeItem);
-
 		MenuItem autoOrganizeItem = createAutoOrganizeItem();
 		menu.add(autoOrganizeItem);
 
@@ -804,6 +805,23 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		MenuItem findContribution = createFindContributionItem();
 		menu.add(findContribution);
 		return menu;
+	}
+
+	protected MenuItem createPreferencesItem()
+	{
+		final MenuItem preferences = new MenuItem("Preferences");
+		preferences.addSelectionListener(new SelectionListener<MenuEvent>()
+		{
+			@Override
+			public void componentSelected(MenuEvent me)
+			{
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
+				preferences.getParentMenu().hide();
+				CreatePreferencesDialog preferencesDialog = new CreatePreferencesDialog(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getID());
+				preferencesDialog.show();
+			}
+		});
+		return preferences;
 	}
 
 	/*
@@ -867,12 +885,14 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	 */
 	protected MenuItem createCloseMapItem()
 	{
-		MenuItem closeItem = new MenuItem("Close");
+		final MenuItem closeItem = new MenuItem("Close");
 		closeItem.addSelectionListener(new SelectionListener<MenuEvent>()
 		{
 			@Override
 			public void componentSelected(MenuEvent ce)
 			{
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
+				closeItem.getParentMenu().hide();
 				communicator.sendActionPackage(actionBuilder.leaveMap(ArgumentMapMenuBar.this.getMyMapInfo().getMapID()));
 			}
 		});
@@ -912,6 +932,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return boxLinkMenu;
 	}
 
+	/*
 	protected MenuItem createFontSizeItem()
 	{
 		MenuItem fontSizeItem = new MenuItem("Select font size");
@@ -922,7 +943,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	protected Menu createSizeSelector()
 	{
 		Menu sizeOptions = new Menu();
-		for (int i = 8; i < 37; i += 4)
+		for (int i = 8; i < 37; i += 2)
 		{
 			sizeOptions.add(createNextFontSize(i));
 		}
@@ -937,12 +958,15 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			@Override
 			public void componentSelected(MenuEvent me)
 			{
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
+				fontSize.getParentMenu().hide();
 				Logger.log("selected new font size: "+i, Logger.DEBUG);
 				ArgumentModel.getInstanceByMapID(ArgumentMapMenuBar.this.getMyMapInfo().getMapID()).setFontSize(i);
 			}
 		});
 		return fontSize;
 	}
+	*/
 
 	/*
 	 *	Create the item listed as contribution for the add and delete subitems.
@@ -950,7 +974,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	 */
 	protected MenuItem createContributionItem(final boolean useSubList)
 	{
-		MenuItem boxMenu = new MenuItem(myConstants.ContributionMenuItem());
+		final MenuItem boxMenu = new MenuItem(myConstants.ContributionMenuItem());
 		if (useSubList)
 		{
 			Menu subBoxes = new Menu();
@@ -973,6 +997,8 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 				@Override
 				public void componentSelected(MenuEvent me)
 				{
+					ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
+					boxMenu.getParentMenu().hide();
 					DeleteContributionDialog boxDialog = new DeleteContributionDialog(getMyMapSpace().getMyMap().getID());
 					boxDialog.show();
 				}
@@ -988,7 +1014,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	protected MenuItem createRelationItem(final boolean useSubList)
 	{
 		// Creates the sub menu for link types
-		MenuItem linkMenu = new MenuItem(myConstants.RelationMenuItem());
+		final MenuItem linkMenu = new MenuItem(myConstants.RelationMenuItem());
 		if (useSubList)
 		{
 			Menu subLinks = new Menu();
@@ -1010,6 +1036,8 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 				@Override
 				public void componentSelected(MenuEvent me)
 				{
+					ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
+					linkMenu.getParentMenu().hide();
 					DeleteRelationDialog linkDialog = new DeleteRelationDialog(getMyMapSpace().getMyMap().getID());
 					linkDialog.show();
 				}
@@ -1038,12 +1066,14 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
 	protected MenuItem createUpwardOrientation()
 	{
-		MenuItem upward = new MenuItem("Upward Orientation");
+		final MenuItem upward = new MenuItem("Upward Orientation");
 		upward.addSelectionListener(new SelectionListener<MenuEvent>()
 		{
 			@Override
 			public void componentSelected(MenuEvent ce)
 			{
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
+				upward.getParentMenu().hide();
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getAutoOrganizer().organizeMap(false);
 			}
 		});
@@ -1052,12 +1082,14 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
 	protected MenuItem createDownwardOrientation()
 	{
-		MenuItem downward = new MenuItem("Downward Orientation");
+		final MenuItem downward = new MenuItem("Downward Orientation");
 		downward.addSelectionListener(new SelectionListener<MenuEvent>()
 		{
 			@Override
 			public void componentSelected(MenuEvent ce)
 			{
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
+				downward.getParentMenu().hide();
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getAutoOrganizer().organizeMap(true);
 			}
 		});

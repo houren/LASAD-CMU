@@ -178,6 +178,12 @@ public class LinkedBox
 		this.yCenter = this.yTop + height / 2.0;
 	}
 
+	public void setSize(int width, int height)
+	{
+		this.setWidth(width);
+		this.setHeight(height);
+	}
+
 	public double getXLeft()
 	{
 		return xLeft;
