@@ -96,9 +96,9 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 	private boolean selected = false, autogrow = false;
 
 	// Constants to calculate elements size correctly
-	public static final int CONNECTOR_WIDTH = 18, CONNECTOR_HEIGHT = 9;
+	public static final int CONNECTOR_WIDTH = 24, CONNECTOR_HEIGHT = 12;
 	public static final int BORDER_WIDTH = 5, BORDER_HEIGHT = 5;
-	public static final int HEADER_HEIGHT = 13;
+	public static final int HEADER_HEIGHT = 40;
 
 	private final int HIGHLIGHT_TIMER = 30000; // Time until a highlight will
 	// disappear
@@ -340,7 +340,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		// Inner 3x3 table
 		DOM.setStyleAttribute(innerGrid, "height", (this.height - CONNECTOR_HEIGHT - CONNECTOR_HEIGHT) + "px");
 		DOM.setStyleAttribute(innerGrid, "width", (this.width - CONNECTOR_HEIGHT - CONNECTOR_HEIGHT) + "px");
-
+		
 		DOM.setStyleAttribute(innerGridTBody, "height", (this.height - CONNECTOR_HEIGHT - CONNECTOR_HEIGHT) + "px");
 		DOM.setStyleAttribute(innerGridTBody, "width", (this.width - CONNECTOR_HEIGHT - CONNECTOR_HEIGHT) + "px");
 
@@ -392,13 +392,11 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		DOM.setStyleAttribute(borderURC, "width", BORDER_WIDTH + "px");
 
 		// Middle row
-		DOM.setStyleAttribute(borderMLC, "height", (this.height +this.boxHeading.getElement().getScrollHeight() - CONNECTOR_HEIGHT - CONNECTOR_HEIGHT - BORDER_HEIGHT - BORDER_HEIGHT) + "px");
+		DOM.setStyleAttribute(borderMLC, "height", (this.height - CONNECTOR_HEIGHT - CONNECTOR_HEIGHT - BORDER_HEIGHT - BORDER_HEIGHT) + "px");
 		DOM.setStyleAttribute(borderMLC, "width", BORDER_HEIGHT + "px");
 
-		DOM.setStyleAttribute(borderMRC, "height", (this.height +this.boxHeading.getElement().getScrollHeight() - CONNECTOR_HEIGHT - CONNECTOR_HEIGHT - BORDER_HEIGHT - BORDER_HEIGHT) + "px");
+		DOM.setStyleAttribute(borderMRC, "height", (this.height - CONNECTOR_HEIGHT - CONNECTOR_HEIGHT - BORDER_HEIGHT - BORDER_HEIGHT) + "px");
 		DOM.setStyleAttribute(borderMRC, "width", BORDER_WIDTH + "px");
-		
-		this.boxHeading.setPosition(0, -this.boxHeading.getElement().getScrollHeight()/3);
 
 		// Bottom row
 		DOM.setStyleAttribute(borderBLC, "height", BORDER_HEIGHT + "px");
@@ -433,9 +431,17 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 					if (extendedElementContainer != null) {
 						extendedElementContainer.setWidth(this.width - CONNECTOR_HEIGHT
 								- CONNECTOR_HEIGHT - BORDER_HEIGHT - BORDER_HEIGHT);
-						extendedElementContainer.setHeight(this.height
+						if(this.height
 								- CONNECTOR_HEIGHT - CONNECTOR_HEIGHT - BORDER_HEIGHT
-								- BORDER_HEIGHT - HEADER_HEIGHT);
+								- BORDER_HEIGHT - this.fontSize - BORDER_HEIGHT > 0){
+							extendedElementContainer.setHeight(this.height
+									- CONNECTOR_HEIGHT - CONNECTOR_HEIGHT - BORDER_HEIGHT
+									- BORDER_HEIGHT - this.fontSize - BORDER_HEIGHT);
+						}else{
+							extendedElementContainer.setHeight(this.height
+									- CONNECTOR_HEIGHT - CONNECTOR_HEIGHT - BORDER_HEIGHT
+									- BORDER_HEIGHT - HEADER_HEIGHT);
+						}
 					}
 				}
 				//MODIFIED END BY BM ---------------------------------------------------------------------------------------------
@@ -460,7 +466,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 
 		// West
 		DOM.setStyleAttribute(westConnector.getElement(), "top", ((this.height - CONNECTOR_WIDTH) / 2 - CONNECTOR_HEIGHT) + "px");
-
+		
 		this.setVisible(true);
 	}
 
@@ -855,7 +861,6 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 	}
 
 	private void initBoxElements() {
-
 		positioningElement = DOM.createDiv();
 		DOM.setStyleAttribute(positioningElement, "position", "absolute");
 
@@ -1258,14 +1263,30 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		return boxes.get(mapId);
 	}
 	
+	//necessary for controlling box size
+	int fontSize = 0;
+	boolean changedFontSize = false;
+	int previousHeaderHeight = 0;
+	
+	public int getHeaderFontSize(){
+		return this.fontSize;
+	}
+	
 	public void setHeaderFontSize(int fontSize){
 		if(this.boxHeading != null){
+			if(this.fontSize != fontSize){
+				changedFontSize = true;
+				previousHeaderHeight = this.fontSize+BORDER_HEIGHT;
+			}
+			
+			this.fontSize = fontSize;
 			this.boxHeading.getContentText().getStyle().setFontSize(fontSize,com.google.gwt.dom.client.Style.Unit.PX);
-			this.boxHeading.getContentText().getStyle().setHeight(fontSize+2,com.google.gwt.dom.client.Style.Unit.PX);
-			this.boxHeading.getElement().getStyle().setHeight(fontSize+5,com.google.gwt.dom.client.Style.Unit.PX);
+			this.boxHeading.getContentText().getStyle().setHeight(fontSize+BORDER_HEIGHT/2,com.google.gwt.dom.client.Style.Unit.PX);
+			this.boxHeading.getElement().getStyle().setHeight(fontSize+BORDER_HEIGHT,com.google.gwt.dom.client.Style.Unit.PX);
+			
 			this.setSize(Math.max(this.boxHeading.getElement().getScrollWidth()+32, this.width), this.height);
 			
-			Logger.log("Changed header font size: "+fontSize, Logger.DEBUG);
+			changedFontSize = false;
 		}
 	}
 
@@ -1467,6 +1488,9 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 
 	@Override
 	public void setSize(int width, int height) { //TODO Vergleiche was in den Projekten unterschiedlich ist!!!
+		if(changedFontSize)
+			height += Math.max(this.fontSize+BORDER_HEIGHT-previousHeaderHeight, 0);
+		
 		if (this.width != width || this.height != height) {
 			if (this.getConnectedModel() != null) {
 				this.getConnectedModel().setValue(ParameterTypes.Width, "" + width);

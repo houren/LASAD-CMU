@@ -22,34 +22,38 @@ import lasad.shared.communication.objects.parameters.ParameterTypes;
 import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.common.AbstractExtendedElement;
-import lasad.gwt.client.model.organization.EdgeCoords;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.dom.client.Element;
+
 
 /**
  *	An argument model is simply a vector of threads, i.e. a vector separate chains of arguments on the map space.
  *	This format of modeling is more conducive to support for AutoOrganizer.
  *	@author Kevin Loughlin
- *	@since 19 June 2015, Updated 29 July 2015
+ *	@since 19 June 2015, Updated 30 June 2015
  */
 public class ArgumentModel
 {
 	private HashSet<ArgumentThread> argThreads;
-
+	private int fontSize = 10;
+	private MVController controller;
+	
 	// One model instance per map, where String is mapID
 	private static HashMap<String, ArgumentModel> instances = new HashMap<String, ArgumentModel>();
 
-	private int fontSize = 10;
-	private MVController controller;
-
 	// Just for this class, if we need to create a new instance below
+	private ArgumentModel()
+	{
+		this.argThreads = new HashSet<ArgumentThread>();
+	}
+
 	private ArgumentModel(String mapID)
 	{
 		this.argThreads = new HashSet<ArgumentThread>();
 		controller = LASAD_Client.getMVCController(mapID);
 	}
-
+	
 	public static ArgumentModel getInstanceByMapID(String mapID)
 	{
 		ArgumentModel myArgModel = instances.get(mapID);
@@ -63,74 +67,50 @@ public class ArgumentModel
 
 		return myArgModel;
 	}
-
-	public void addArgThread(ArgumentThread argThread)
-	{
-		this.argThreads.add(argThread);
-	}
-
-	public void removeArgThread(ArgumentThread argThread)
-	{
-		this.argThreads.remove(argThread);
-	}
-
-	public void removeExcessThreads()
-	{
-		HashSet<ArgumentThread> threadsToRemove = new HashSet<ArgumentThread>();
-		for (ArgumentThread argThread : argThreads)
-		{
-			Collection<LinkedBox> boxes = argThread.getBoxes();
-			if (boxes.size() == 0)
-			{
-				threadsToRemove.add(argThread);
-			}
-		}
-		for (ArgumentThread argThread : threadsToRemove)
-		{
-			this.removeArgThread(argThread);
-		}
-	}
-
-	public LinkedBox removeBoxByBoxID(int boxID)
-	{
-		for (ArgumentThread argThread : argThreads)
-		{
-			LinkedBox removedBox = argThread.removeBoxByBoxID(boxID);
-			if (removedBox != null)
-			{
-				return removedBox;
-			}
-		}
-
-		return null;
-	}
-
+	
 	public void setFontSize(int fontSize){
 		this.fontSize = fontSize;
-		
-		for(AbstractBox box : AbstractBox.getBoxes(controller.getMapID()))
-			if(box != null){
-				box.setHeaderFontSize(fontSize);
-				for(AbstractExtendedElement element : box.getExtendedElements()){
-					if(element instanceof AbstractExtendedTextElement)
-						((AbstractExtendedTextElement)element).autoSizeTextArea();
+
+		HashSet<AbstractBox> boxes = AbstractBox.getBoxes(controller.getMapID());
+		if (boxes == null || boxes.size() == 0)
+		{
+			return;
+		}
+		else
+		{
+			for(AbstractBox box : boxes){
+				if(box != null){
+					if(box.getHeaderFontSize() != fontSize){
+						box.setHeaderFontSize(fontSize);
+						for(AbstractExtendedElement element : box.getExtendedElements()){
+							if(element instanceof AbstractExtendedTextElement){
+								((AbstractExtendedTextElement)element).autoSizeTextArea();
+							}
+						}
+					}
 				}
 			}
-		
-		Logger.log("Tried changing font for AbstractExtendedTextElements"+AbstractExtendedTextElement.getTextElements(controller.getMapID()), Logger.DEBUG);
-		if(AbstractExtendedTextElement.getTextElements(controller.getMapID()) != null)
-			for(Element el : AbstractExtendedTextElement.getTextElements(controller.getMapID())){
-				if(el != null){
-					el.getStyle().setFontSize(fontSize,com.google.gwt.dom.client.Style.Unit.PX);
-					el.getStyle().setHeight(el.getScrollHeight(),com.google.gwt.dom.client.Style.Unit.PX);
-					el.getParentElement().getStyle().setHeight(el.getParentElement().getScrollHeight(),com.google.gwt.dom.client.Style.Unit.PX);
+
+			if(AbstractExtendedTextElement.getTextElements(controller.getMapID()) != null)
+			{
+				for(Element el : AbstractExtendedTextElement.getTextElements(controller.getMapID())){
+					if(el != null){
+						el.getStyle().setFontSize(fontSize,com.google.gwt.dom.client.Style.Unit.PX);
+						el.getStyle().setHeight(el.getScrollHeight(),com.google.gwt.dom.client.Style.Unit.PX);
+						el.getParentElement().getStyle().setHeight(el.getParentElement().getScrollHeight(),com.google.gwt.dom.client.Style.Unit.PX);
+					}
 				}
 			}
-		Logger.log("Finished trying to change font for AbstractExtendedTextElements", Logger.DEBUG);
+		}	
 	}
 	
 	public int getFontSize(){
 		return this.fontSize;
+	}
+
+	public void addArgThread(ArgumentThread argThread)
+	{
+		this.argThreads.add(argThread);
 	}
 
 	public OrganizerLink removeLinkByLinkID(int linkID)
@@ -145,113 +125,6 @@ public class ArgumentModel
 		}
 
 		return null;
-	}
-
-	public HashSet<LinkedBox> getBoxes()
-	{
-		HashSet<LinkedBox> boxes = new HashSet<LinkedBox>();
-		for (ArgumentThread argThread : this.getArgThreads())
-		{
-			boxes.addAll(argThread.getBoxes());
-		}
-		return boxes;
-	}
-
-	public LinkedBox getBoxByBoxID(int boxID)
-	{
-		LinkedBox returnBox = null;
-		for (ArgumentThread argThread : this.argThreads)
-		{
-			returnBox = argThread.getBoxByBoxID(boxID);
-			if (returnBox != null)
-			{
-				return returnBox;
-			}
-		}
-		
-		return null;
-		
-	}
-
-	public LinkedBox getBoxByRootID(int rootID)
-	{
-		for (ArgumentThread argThread : argThreads)
-		{
-			LinkedBox box = argThread.getBoxByRootID(rootID);
-			if (box != null)
-			{
-				return box;
-			}
-		}
-		return null;
-	}
-
-	// Returns the argument thread of the provided box, else null
-	public ArgumentThread getBoxThread(LinkedBox box)
-	{
-		ArgumentThread returnThread = null;
-		for (ArgumentThread thread : argThreads)
-		{
-			if (thread.contains(box))
-			{
-				return thread;
-			}
-		}
-		return null;
-	}
-
-	public HashSet<ArgumentThread> getArgThreads()
-	{
-		return argThreads;
-	}
-
-	public int getNumArgThreads()
-	{
-		return argThreads.size();
-	}
-
-	// Remember, top left is (0,0), not bottom left
-	public EdgeCoords calcEdgeCoords()
-	{
-		double top = Double.MAX_VALUE;
-		double left = Double.MAX_VALUE;
-
-		double bottom = Double.MIN_VALUE;
-		double right = Double.MIN_VALUE;
-
-		for (ArgumentThread thread : this.getArgThreads())
-		{
-			for (LinkedBox box : thread.getBoxes())
-			{
-				double yTop = box.getYTop();
-				double yBottom = yTop + box.getHeight();
-
-				double xLeft = box.getXLeft();
-				double xRight = xLeft + box.getWidth();
-
-				if (yTop < top)
-				{
-					top = yTop;
-				}
-
-				if (yBottom > bottom)
-				{
-					bottom = yBottom;
-				}
-
-				if (xLeft < left)
-				{
-					left = xLeft;
-				}
-
-				if (xRight > right)
-				{
-					right = xRight;
-				}
-			}
-		}
-
-		return new EdgeCoords(top, right, bottom, left);
 	}
 
 	/**
@@ -320,6 +193,28 @@ public class ArgumentModel
 		return boxesReached;
 	}
 
+	public void removeArgThread(ArgumentThread argThread)
+	{
+		this.argThreads.remove(argThread);
+	}
+
+	public void removeExcessThreads()
+	{
+		HashSet<ArgumentThread> threadsToRemove = new HashSet<ArgumentThread>();
+		for (ArgumentThread argThread : argThreads)
+		{
+			Collection<LinkedBox> boxes = argThread.getBoxes();
+			if (boxes.size() == 0)
+			{
+				threadsToRemove.add(argThread);
+			}
+		}
+		for (ArgumentThread argThread : threadsToRemove)
+		{
+			this.removeArgThread(argThread);
+		}
+	}
+
 	// This is a "just in case" method that gets called to verify that there isn't an error with the argModel.
 	public void removeLinksTo(LinkedBox removedBox)
 	{
@@ -335,6 +230,126 @@ public class ArgumentModel
 			argThread.removeLinksTo(removedBox);
 		}
 	}
+
+	public HashSet<LinkedBox> getBoxes()
+	{
+		HashSet<LinkedBox> boxes = new HashSet<LinkedBox>();
+		for (ArgumentThread argThread : this.getArgThreads())
+		{
+			boxes.addAll(argThread.getBoxes());
+		}
+		return boxes;
+	}
+
+	public LinkedBox getBoxByBoxID(int boxID)
+	{
+		LinkedBox returnBox = null;
+		for (ArgumentThread argThread : this.argThreads)
+		{
+			returnBox = argThread.getBoxByBoxID(boxID);
+			if (returnBox != null)
+			{
+				return returnBox;
+			}
+		}
+		
+		return null;
+		
+	}
+
+	public LinkedBox removeBoxByBoxID(int boxID)
+	{
+		for (ArgumentThread argThread : argThreads)
+		{
+			LinkedBox removedBox = argThread.removeBoxByBoxID(boxID);
+			if (removedBox != null)
+			{
+				return removedBox;
+			}
+		}
+
+		return null;
+	}
+
+	public LinkedBox getBoxByRootID(int rootID)
+	{
+		for (ArgumentThread argThread : argThreads)
+		{
+			LinkedBox box = argThread.getBoxByRootID(rootID);
+			if (box != null)
+			{
+				return box;
+			}
+		}
+		return null;
+	}
+
+	// Returns the argument thread of the provided box, else null
+	public ArgumentThread getBoxThread(LinkedBox box)
+	{
+		for (ArgumentThread thread : argThreads)
+		{
+			if (thread.contains(box))
+			{
+				return thread;
+			}
+		}
+		return null;
+	}
+
+	public HashSet<ArgumentThread> getArgThreads()
+	{
+		return argThreads;
+	}
+
+	public int getNumArgThreads()
+	{
+		return argThreads.size();
+	}
+
+	// Remember, top left is (0,0), not bottom left
+	public EdgeCoords calcEdgeCoords()
+	{
+		double top = Double.MAX_VALUE;
+		double left = Double.MAX_VALUE;
+
+		double bottom = Double.MIN_VALUE;
+		double right = Double.MIN_VALUE;
+
+		for (ArgumentThread thread : this.getArgThreads())
+		{
+			for (LinkedBox box : thread.getBoxes())
+			{
+				double yTop = box.getYTop();
+				double yBottom = yTop + box.getHeight();
+
+				double xLeft = box.getXLeft();
+				double xRight = xLeft + box.getWidth();
+
+				if (yTop < top)
+				{
+					top = yTop;
+				}
+
+				if (yBottom > bottom)
+				{
+					bottom = yBottom;
+				}
+
+				if (xLeft < left)
+				{
+					left = xLeft;
+				}
+
+				if (xRight > right)
+				{
+					right = xRight;
+				}
+			}
+		}
+
+		return new EdgeCoords(top, right, bottom, left);
+	} 
 
 	@Override
 	public String toString()

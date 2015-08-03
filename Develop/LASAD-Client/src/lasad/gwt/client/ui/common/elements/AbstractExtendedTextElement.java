@@ -518,20 +518,13 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 
 	public int determineBoxHeightChange()
 	{
-		// save the old height to get the difference
-		final int oldClientHeight = textArea.getClientHeight();
-		final int scrollHeight = textArea.getScrollHeight();
-
-		if (oldClientHeight < scrollHeight)
-		{
+		final int OLD_BOX_HEIGHT = textArea.getClientHeight();
+		if (textArea.getClientHeight() != textArea.getScrollHeight() && textArea.getClientHeight() < textArea.getScrollHeight()) {
 			// size the textArea to the right height
-			this.setActualViewModeHeight(scrollHeight + 10);
-			return textArea.getClientHeight() - oldClientHeight;
+			this.setActualViewModeHeight(textArea.getScrollHeight() + 10);
 		}
-		else
-		{
-			return 0;
-		}
+
+		return textArea.getClientHeight() - OLD_BOX_HEIGHT;
 	}
 
 	protected abstract void sendRequestLockElement(String mapID, int elementID);

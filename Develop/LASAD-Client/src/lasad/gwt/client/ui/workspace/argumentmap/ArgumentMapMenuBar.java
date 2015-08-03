@@ -816,7 +816,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			public void componentSelected(MenuEvent me)
 			{
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				preferences.getParentMenu().hide();
 				CreatePreferencesDialog preferencesDialog = new CreatePreferencesDialog(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getID());
 				preferencesDialog.show();
 			}
@@ -832,9 +831,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		final MenuItem logOutItem = new MenuItem("Logout");
 		logOutItem.addSelectionListener(new SelectionListener<MenuEvent>() {
 			@Override
-			public void componentSelected(MenuEvent me) {
+			public void componentSelected(MenuEvent me)
+			{
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				logOutItem.getParentMenu().hide();
 				LASAD_Client.getInstance().logOut();
 			}
 		});
@@ -892,7 +891,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			public void componentSelected(MenuEvent ce)
 			{
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				closeItem.getParentMenu().hide();
 				communicator.sendActionPackage(actionBuilder.leaveMap(ArgumentMapMenuBar.this.getMyMapInfo().getMapID()));
 			}
 		});
@@ -998,7 +996,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 				public void componentSelected(MenuEvent me)
 				{
 					ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-					boxMenu.getParentMenu().hide();
 					DeleteContributionDialog boxDialog = new DeleteContributionDialog(getMyMapSpace().getMyMap().getID());
 					boxDialog.show();
 				}
@@ -1037,7 +1034,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 				public void componentSelected(MenuEvent me)
 				{
 					ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-					linkMenu.getParentMenu().hide();
 					DeleteRelationDialog linkDialog = new DeleteRelationDialog(getMyMapSpace().getMyMap().getID());
 					linkDialog.show();
 				}
@@ -1073,7 +1069,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			public void componentSelected(MenuEvent ce)
 			{
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				upward.getParentMenu().hide();
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getAutoOrganizer().organizeMap(false);
 			}
 		});
@@ -1089,7 +1084,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			public void componentSelected(MenuEvent ce)
 			{
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				downward.getParentMenu().hide();
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getAutoOrganizer().organizeMap(true);
 			}
 		});

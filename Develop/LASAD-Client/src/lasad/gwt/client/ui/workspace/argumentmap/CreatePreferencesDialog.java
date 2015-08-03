@@ -21,6 +21,8 @@ import lasad.gwt.client.model.organization.ArgumentModel;
 import com.extjs.gxt.ui.client.widget.Slider;
 import com.extjs.gxt.ui.client.widget.form.SliderField;
 
+import lasad.gwt.client.logger.Logger;
+
 /**
  *	Creates the preferences menu that appears when selected from the LASAD menu, found in ArgumentMapMenuBar.
  *	The preferences menu allows the user to select the font size for LASAD, as well as the default box width and size for autoOrganizer.
@@ -55,7 +57,7 @@ public class CreatePreferencesDialog extends Window
 	{
 		super.onRender(parent, index);
 		this.setAutoHeight(true);
-		this.setWidth(200);
+		this.setWidth(400);
 		this.setHeading("Preferences");
 		formData = new FormData("-20");
 		createForm();
@@ -77,31 +79,25 @@ public class CreatePreferencesDialog extends Window
 		fontSizeSelector = new SimpleComboBox<String>();
 		fontSizeSelector.setTriggerAction(ComboBox.TriggerAction.ALL);
 
-		// Make the default font size option the current value
-		fontSizeSelector.setRawValue(String.valueOf(ORIG_FONT_SIZE));
-
-		fontSizeSelector.setFieldLabel("<font color=\"#000000\">" + "Font Size" + "</font>");
-		fontSizeSelector.setAllowBlank(false);
+		fontSizeSelector.setFieldLabel("<font color=\"#000000\">" + "Font Size [" + ORIG_FONT_SIZE + "]" + "</font>");
+		fontSizeSelector.setAllowBlank(true);
 
 		// Allow even font sizes from 8-36 as options
 		for (int i = 8; i < 37; i += 2)
 		{
 			fontSizeSelector.add(String.valueOf(i));
 		}
-
-		thisForm.add(fontSizeSelector, formData);
-
-		// Filter comboEnd depending on fontSizeSelector selection
-		/*
+		
 		fontSizeSelector.addSelectionChangedListener(new SelectionChangedListener<SimpleComboValue<String>>()
 		{
 			@Override
 			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se)
 			{
-				fontSizeSelector.getRawValue()
+				fontSizeSelector.setFieldLabel("<font color=\"#000000\">" + "Font Size [" + fontSizeSelector.getRawValue() + "]" + "</font>");
 			}
 		});
-		*/
+
+		thisForm.add(fontSizeSelector, formData);
 
 		widthSlider = new Slider()
 		{
@@ -109,14 +105,14 @@ public class CreatePreferencesDialog extends Window
 			protected void onValueChange(int value)
 			{
 				super.onValueChange(value);
-				widthField.setFieldLabel("Width [" + value + "]");
+				widthField.setFieldLabel("Auto Organization Box Width [" + value + "]");
 			}
 
 		};
 		widthSlider.setMinValue(150);
 		widthSlider.setMaxValue(450);
 		widthSlider.setIncrement(1);
-		widthSlider.setMessage("Width: {0}");
+		widthSlider.setMessage("Auto Organization Box Width: {0}");
 
 		widthField = new SliderField(widthSlider);
 
@@ -131,14 +127,14 @@ public class CreatePreferencesDialog extends Window
 			protected void onValueChange(int value)
 			{
 				super.onValueChange(value);
-				heightField.setFieldLabel("Height: [" + value + "]");
+				heightField.setFieldLabel("Auto Organization Minimum Box Height [" + value + "]");
 			}
 
 		};
 		heightSlider.setMinValue(100);
 		heightSlider.setMaxValue(450);
 		heightSlider.setIncrement(1);
-		heightSlider.setMessage("Height: {0}");
+		heightSlider.setMessage("Auto Organization Minimum Box Height: {0}");
 
 		heightField = new SliderField(heightSlider);
 
@@ -154,7 +150,17 @@ public class CreatePreferencesDialog extends Window
 			@Override
 			public void componentSelected(ButtonEvent ce)
 			{
-				ArgumentModel.getInstanceByMapID(mapID).setFontSize(Integer.parseInt(fontSizeSelector.getRawValue()));
+				try
+				{
+					// if fontsizeselector is left blank, this will throw an exception
+					int newFontSize = Integer.parseInt(fontSizeSelector.getRawValue());
+					ArgumentModel.getInstanceByMapID(mapID).setFontSize(newFontSize);
+				}
+				catch (NumberFormatException e)
+				{
+					ArgumentModel.getInstanceByMapID(mapID).setFontSize(ORIG_FONT_SIZE);
+				}
+
 				AutoOrganizer.getInstanceByMapID(mapID).setBoxWidth(widthSlider.getValue());
 				AutoOrganizer.getInstanceByMapID(mapID).setMinBoxHeight(heightSlider.getValue());
 				CreatePreferencesDialog.this.hide();
