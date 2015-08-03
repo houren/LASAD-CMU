@@ -43,7 +43,7 @@ public class CreatePreferencesDialog extends Window
 	private SliderField widthField;
 	private SliderField heightField;
 
-	private SimpleComboBox<String> fontSizeSelector;
+	//private SimpleComboBox<String> fontSizeSelector;
 
 	private FormData formData;
 
@@ -57,8 +57,8 @@ public class CreatePreferencesDialog extends Window
 	{
 		super.onRender(parent, index);
 		this.setAutoHeight(true);
-		this.setWidth(400);
-		this.setHeading("Preferences");
+		this.setWidth(500);
+		this.setHeading("Auto Organization Box Size Preferences");
 		formData = new FormData("-20");
 		createForm();
 	}
@@ -67,7 +67,7 @@ public class CreatePreferencesDialog extends Window
 	private void createForm()
 	{
 		// Save these values for cancel button, which will revert to original values
-		final int ORIG_FONT_SIZE = ArgumentModel.getInstanceByMapID(mapID).getFontSize();
+		//final int ORIG_FONT_SIZE = ArgumentModel.getInstanceByMapID(mapID).getFontSize();
 		final int ORIG_BOX_WIDTH = AutoOrganizer.getInstanceByMapID(mapID).getBoxWidth();
 		final int ORIG_MIN_BOX_HEIGHT = AutoOrganizer.getInstanceByMapID(mapID).getMinBoxHeight();
 
@@ -76,7 +76,7 @@ public class CreatePreferencesDialog extends Window
 		thisForm.setHeaderVisible(false);
 		thisForm.setAutoHeight(true);
 
-		fontSizeSelector = new SimpleComboBox<String>();
+		/* fontSizeSelector = new SimpleComboBox<String>();
 		fontSizeSelector.setTriggerAction(ComboBox.TriggerAction.ALL);
 
 		fontSizeSelector.setFieldLabel("<font color=\"#000000\">" + "Font Size [" + ORIG_FONT_SIZE + "]" + "</font>");
@@ -99,20 +99,22 @@ public class CreatePreferencesDialog extends Window
 
 		thisForm.add(fontSizeSelector, formData);
 
+		*/
+
 		widthSlider = new Slider()
 		{
 			@Override
 			protected void onValueChange(int value)
 			{
 				super.onValueChange(value);
-				widthField.setFieldLabel("Auto Organization Box Width [" + value + "]");
+				widthField.setFieldLabel("Box Width [" + value + "]");
 			}
 
 		};
 		widthSlider.setMinValue(150);
 		widthSlider.setMaxValue(450);
 		widthSlider.setIncrement(1);
-		widthSlider.setMessage("Auto Organization Box Width: {0}");
+		widthSlider.setMessage("Box Width: {0}");
 
 		widthField = new SliderField(widthSlider);
 
@@ -127,14 +129,14 @@ public class CreatePreferencesDialog extends Window
 			protected void onValueChange(int value)
 			{
 				super.onValueChange(value);
-				heightField.setFieldLabel("Auto Organization Minimum Box Height [" + value + "]");
+				heightField.setFieldLabel("Minimum Box Height [" + value + "]");
 			}
 
 		};
 		heightSlider.setMinValue(100);
 		heightSlider.setMaxValue(450);
 		heightSlider.setIncrement(1);
-		heightSlider.setMessage("Auto Organization Minimum Box Height: {0}");
+		heightSlider.setMessage("Minimum Box Height: {0}");
 
 		heightField = new SliderField(heightSlider);
 
@@ -150,6 +152,7 @@ public class CreatePreferencesDialog extends Window
 			@Override
 			public void componentSelected(ButtonEvent ce)
 			{
+				/*
 				try
 				{
 					// if fontsizeselector is left blank, this will throw an exception
@@ -160,6 +163,7 @@ public class CreatePreferencesDialog extends Window
 				{
 					ArgumentModel.getInstanceByMapID(mapID).setFontSize(ORIG_FONT_SIZE);
 				}
+				*/
 
 				AutoOrganizer.getInstanceByMapID(mapID).setBoxWidth(widthSlider.getValue());
 				AutoOrganizer.getInstanceByMapID(mapID).setMinBoxHeight(heightSlider.getValue());

@@ -746,8 +746,10 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	{
 		Menu menu = new Menu();
 
+		/*
 		MenuItem preferencesItem = createPreferencesItem();
 		menu.add(preferencesItem);
+		*/
 
 		MenuItem logOut = createLogOutItem();
 		menu.add(logOut);
@@ -790,6 +792,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		MenuItem deleteItem = createDeleteItem();
 		menu.add(deleteItem);
 
+		MenuItem fontSizeItem = createFontSizeItem();
+		menu.add(fontSizeItem);
+
 		MenuItem autoOrganizeItem = createAutoOrganizeItem();
 		menu.add(autoOrganizeItem);
 
@@ -807,6 +812,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return menu;
 	}
 
+	/*
 	protected MenuItem createPreferencesItem()
 	{
 		final MenuItem preferences = new MenuItem("Preferences");
@@ -822,6 +828,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		});
 		return preferences;
 	}
+	*/
 
 	/*
 	 *	Create the subitem of the LASAD menu that allows a user to logout when clicked
@@ -845,7 +852,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	 */
 	protected MenuItem createExportItem()
 	{
-		final MenuItem saveItem = new MenuItem("Export map...");
+		final MenuItem saveItem = new MenuItem("Export map");
 		saveItem.addSelectionListener(new SelectionListener<MenuEvent>() {
 			@Override
 			public void componentSelected(MenuEvent ce) {
@@ -930,7 +937,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return boxLinkMenu;
 	}
 
-	/*
 	protected MenuItem createFontSizeItem()
 	{
 		MenuItem fontSizeItem = new MenuItem("Select font size");
@@ -957,14 +963,11 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			public void componentSelected(MenuEvent me)
 			{
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				fontSize.getParentMenu().hide();
-				Logger.log("selected new font size: "+i, Logger.DEBUG);
 				ArgumentModel.getInstanceByMapID(ArgumentMapMenuBar.this.getMyMapInfo().getMapID()).setFontSize(i);
 			}
 		});
 		return fontSize;
 	}
-	*/
 
 	/*
 	 *	Create the item listed as contribution for the add and delete subitems.
@@ -1048,16 +1051,17 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	protected MenuItem createAutoOrganizeItem()
 	{
 		final MenuItem autoOrganizeItem = new MenuItem("Auto organize this map");
-		autoOrganizeItem.setSubMenu(chooseOrganizationDirection());
+		autoOrganizeItem.setSubMenu(chooseOrganizationStyle());
 		return autoOrganizeItem;
 	}
 
-	protected Menu chooseOrganizationDirection()
+	protected Menu chooseOrganizationStyle()
 	{
-		Menu organizationDirection = new Menu();
-		organizationDirection.add(createUpwardOrientation());
-		organizationDirection.add(createDownwardOrientation());
-		return organizationDirection;
+		Menu organizationStyle = new Menu();
+		organizationStyle.add(createUpwardOrientation());
+		organizationStyle.add(createDownwardOrientation());
+		organizationStyle.add(createBoxSizeSettings());
+		return organizationStyle;
 	}
 
 	protected MenuItem createUpwardOrientation()
@@ -1088,5 +1092,21 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			}
 		});
 		return downward;
+	}
+
+	protected MenuItem createBoxSizeSettings()
+	{
+		final MenuItem boxSizeSettings = new MenuItem("Box Size Preferences");
+		boxSizeSettings.addSelectionListener(new SelectionListener<MenuEvent>()
+		{
+			@Override
+			public void componentSelected(MenuEvent ce)
+			{
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
+				CreatePreferencesDialog preferencesDialog = new CreatePreferencesDialog(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getID());
+				preferencesDialog.show();
+			}
+		});
+		return boxSizeSettings;
 	}
 }

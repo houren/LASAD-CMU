@@ -60,9 +60,9 @@ public class ArgumentGrid
 	}
 
 	/*
-		For the downward orientation, recursively sets height levels.
+		recursively sets height levels, assuming upward orientation (can be adjusted later)
 	*/
-	private HashSet<LinkedBox> topToBottomSetHeightLevels(LinkedBox box, final int HEIGHT_LEVEL, HashSet<LinkedBox> visited)
+	private HashSet<LinkedBox> recursivelySetHeightLevels(LinkedBox box, final int HEIGHT_LEVEL, HashSet<LinkedBox> visited)
 	{
 		if (!visited.contains(box))
 		{
@@ -71,46 +71,17 @@ public class ArgumentGrid
 
 			for (LinkedBox sibling : box.getSiblingBoxes())
 			{
-				visited = topToBottomSetHeightLevels(sibling, HEIGHT_LEVEL, visited);
+				visited = recursivelySetHeightLevels(sibling, HEIGHT_LEVEL, visited);
 			}
 
 			for (LinkedBox child : box.getChildBoxes())
 			{
-				visited = topToBottomSetHeightLevels(child, HEIGHT_LEVEL - VERT_SPACE, visited);
+				visited = recursivelySetHeightLevels(child, HEIGHT_LEVEL + VERT_SPACE, visited);
 			}
 			
 			for (LinkedBox parent : box.getParentBoxes())
 			{
-				visited = topToBottomSetHeightLevels(parent, HEIGHT_LEVEL + VERT_SPACE, visited);
-			}
-		}
-
-		return visited;
-	}
-
-	/*
-		For the upwardward orientation, recursively sets height levels.
-	*/
-	private HashSet<LinkedBox> bottomToTopSetHeightLevels(LinkedBox box, final int HEIGHT_LEVEL, HashSet<LinkedBox> visited)
-	{
-		if (!visited.contains(box))
-		{
-			box.setHeightLevel(HEIGHT_LEVEL);
-			visited.add(box);
-
-			for (LinkedBox sibling : box.getSiblingBoxes())
-			{
-				visited = bottomToTopSetHeightLevels(sibling, HEIGHT_LEVEL, visited);
-			}
-
-			for (LinkedBox child : box.getChildBoxes())
-			{
-				visited = bottomToTopSetHeightLevels(child, HEIGHT_LEVEL + VERT_SPACE, visited);
-			}
-			
-			for (LinkedBox parent : box.getParentBoxes())
-			{
-				visited = bottomToTopSetHeightLevels(parent, HEIGHT_LEVEL - VERT_SPACE, visited);
+				visited = recursivelySetHeightLevels(parent, HEIGHT_LEVEL - VERT_SPACE, visited);
 			}
 		}
 
@@ -145,7 +116,7 @@ public class ArgumentGrid
 		return highestRow;
 	}
 
-	// Sorts the "starting" row of the grid (top row for upward orientation and bottom row for downward) and puts it on the grid
+	// Sorts the "starting" row of the grid (bottom, which can eventually become top if downward orientation flips the grid in the end) and puts it on the grid
 	private void sortAndPutStartRow(Collection<LinkedBox> startRow)
 	{
 		HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
@@ -188,73 +159,46 @@ public class ArgumentGrid
 			return this;
 		}
 
-		// Set the height levels of the boxes and determine the starting row
-		// Start row is bottom row if DOWNWARD = true, top row if false
-		int startRowNum = Integer.MAX_VALUE;	
-		if (DOWNWARD)
+		// Set the height levels of the boxes from bottom to top, with lowest height level as 0
+		for (LinkedBox box : boxesToPutOnGrid)
 		{
-			for (LinkedBox box : boxesToPutOnGrid)
-			{
-				boxesToPutOnGrid = topToBottomSetHeightLevels(box, 0, new HashSet<LinkedBox>());
-				startRowNum = determineMinMaxHeightLevels(boxesToPutOnGrid).getMin();
-				break;
-			}
-		}
-		else
-		{
-			for (LinkedBox box : boxesToPutOnGrid)
-			{
-				boxesToPutOnGrid = bottomToTopSetHeightLevels(box, 0, new HashSet<LinkedBox>());
-				startRowNum = determineMinMaxHeightLevels(boxesToPutOnGrid).getMax();
-				break;
-			}
+			boxesToPutOnGrid = recursivelySetHeightLevels(box, 0, new HashSet<LinkedBox>());
+			break;
 		}
 
-		// Gather the startRow boxes and determine the max and min row (height level) of the grid
-		HashSet<LinkedBox> startRowBoxes = new HashSet<LinkedBox>();
-		int minRow = Integer.MAX_VALUE;
-		int maxRow = Integer.MIN_VALUE;
+		// Sets the lowest level to 0
+		int origLowestRow = determineMinMaxHeightLevels(boxesToPutOnGrid).getMin();
+		for (LinkedBox box : boxesToPutOnGrid)
+		{
+			box.setHeightLevel(box.getHeightLevel() - origLowestRow);
+		}
+
+		IntPair minMaxHeightLevels = determineMinMaxHeightLevels(boxesToPutOnGrid);
+		final int MIN_ROW = minMaxHeightLevels.getMin();
+		final int MAX_ROW = minMaxHeightLevels.getMax();
+
+		// Gather the maxRow boxes
+		HashSet<LinkedBox> maxRowBoxes = new HashSet<LinkedBox>();
 		for (LinkedBox box : boxesToPutOnGrid)
 		{
 			final int HEIGHT = box.getHeightLevel();
-			if (HEIGHT == startRowNum)
+			if (HEIGHT == MAX_ROW)
 			{
-				startRowBoxes.add(box);
-			}
-			if (HEIGHT < minRow)
-			{
-				minRow = HEIGHT;
-			}
-
-			if (HEIGHT > maxRow)
-			{
-				maxRow = HEIGHT;
+				maxRowBoxes.add(box);
 			}
 		}
 
 		// Adds start row to grid
-		this.sortAndPutStartRow(startRowBoxes);
-
-		final int RANGE = maxRow - minRow;
-		int rowIndex = startRowNum;
+		this.sortAndPutStartRow(maxRowBoxes);
 
 		// Adds all the rest of the rows to the grid, based from the startLevel.  Essentially we take an already present row and add its children.
-		// If DOWNWARD orientation of the grid, we're travelling in reverse direction up the rows during this loop, and vice-versa.
-		for (int counter = 0; counter < RANGE; counter++)
+		for (int rowIndex = MAX_ROW; rowIndex > MIN_ROW; rowIndex--)
 		{
 			ArrayList<LinkedBox> rowBoxes = this.getBoxesAtHeightLevel(rowIndex);
 
 			int nextAvailableWidth = putParentsOfRowOnGrid(rowBoxes);
 
-			final int PARENT_HEIGHT;
-			if (DOWNWARD)
-			{
-				PARENT_HEIGHT = rowIndex + 1;
-			}
-			else
-			{
-				PARENT_HEIGHT = rowIndex - 1;
-			}
+			final int PARENT_HEIGHT = rowIndex - 1;
 
 			ArrayList<LinkedBox> parentLevelBoxes = new ArrayList<LinkedBox>();
 
@@ -283,18 +227,18 @@ public class ArgumentGrid
 					}
 				}
 			}
-
-			if (DOWNWARD)
-			{
-				rowIndex++;
-			}
-			else
-			{
-				rowIndex--;
-			}
 		}
 
-		this.setGrid(centerSharedChildren(this.clone(), DOWNWARD));
+		this.setGrid(centerSharedChildren(this.clone()));
+
+		// Flip box height levels if downward orientation
+		if (DOWNWARD)
+		{
+			for (LinkedBox box : this.getGrid().values())
+			{
+				box.setHeightLevel(-1 * box.getHeightLevel());
+			}
+		}
 		return this;
 	}
 
@@ -379,8 +323,16 @@ public class ArgumentGrid
 			{
 				if (this.getBoxAt(WIDTH_LEVEL - 1, HEIGHT_LEVEL) == null)
 				{
-					grid.put(POSITION, box);
-					return WIDTH_LEVEL + HOR_SPACE;	
+					if (this.getBoxAt(WIDTH_LEVEL + 1, HEIGHT_LEVEL) == null)
+					{
+						grid.put(POSITION, box);
+						return WIDTH_LEVEL + HOR_SPACE;
+					}
+					else
+					{
+						box.setWidthLevel(HOR_SPACE + HOR_SPACE / 2 + WIDTH_LEVEL);
+						return putSoloBoxOnGrid(box);
+					}
 				}
 				else
 				{
@@ -440,36 +392,23 @@ public class ArgumentGrid
 		this.grid = grid;
 	}
 	
-	// Centers shared children above/below the parents sharing them, depending on the value of DOWNWARD
+	// Centers shared children above the parents sharing them
 	// Actually creates a newGrid with all of the boxes in origGrid moved, and then returns the HashMap of this new grid
-	private HashMap<Coordinate, LinkedBox> centerSharedChildren(ArgumentGrid origGrid, final boolean DOWNWARD)
+	private HashMap<Coordinate, LinkedBox> centerSharedChildren(ArgumentGrid origGrid)
 	{
 		ArgumentGrid finalGrid = new ArgumentGrid();
 		final int MIN_LEVEL = origGrid.calcLowestLevel();
 		final int MAX_LEVEL = origGrid.calcHighestLevel();
-		final int RANGE = MAX_LEVEL - MIN_LEVEL;
-		final int ROOT_LEVEL;
-		if (DOWNWARD)
-		{
-			ROOT_LEVEL = MAX_LEVEL;
 
-		}
-		else
-		{
-			ROOT_LEVEL = MIN_LEVEL;
-		}
-
-		for (LinkedBox box : origGrid.getBoxesAtHeightLevel(ROOT_LEVEL))
+		for (LinkedBox box : origGrid.getBoxesAtHeightLevel(MIN_LEVEL))
 		{
 			finalGrid.putSoloBoxOnGrid(box);
 		}
 
-		int currentLevel = ROOT_LEVEL;
-
-		final int LAST_ITER = RANGE - 1;
+		final int LAST_ITER = MAX_LEVEL - 1;
 
 		// Root level, orig parent level, is already in place; we skip end level because we put the children of levels onto the grid, meaning the last will be covered
-		for (int counter = 0; counter < RANGE; counter++)
+		for (int currentLevel = MIN_LEVEL; currentLevel < MAX_LEVEL; currentLevel++)
 		{
 			ArrayList<LinkedBox> origGridParentLevel = origGrid.getBoxesAtHeightLevel(currentLevel);
 			ArrayList<LinkedBox> finalGridParentLevel = finalGrid.getBoxesAtHeightLevel(currentLevel);
@@ -488,16 +427,7 @@ public class ArgumentGrid
 				}
 			}
 
-			final int CHILD_LEVEL;
-			if (DOWNWARD)
-			{
-				CHILD_LEVEL = currentLevel - 1;
-				
-			}
-			else
-			{
-				CHILD_LEVEL = currentLevel + 1;
-			}
+			final int CHILD_LEVEL = currentLevel + 1;
 
 			// parent level is set now, so declare as final
 			final ArrayList<LinkedBox> PARENT_LEVEL_BOXES = finalGrid.getBoxesAtHeightLevel(currentLevel);
@@ -537,7 +467,7 @@ public class ArgumentGrid
 				// Hack for bug in which siblings in the last row sorted, that don't have parents or children, were not being repositioned
 				// Now if we find such boxes, we don't proceed normally and instead use putGroupOnGrid
 				boolean proceedNormally = true;
-				if (counter == LAST_ITER)
+				if (currentLevel == LAST_ITER)
 				{
 					HashSet<LinkedBox> siblingsWithoutParentsOrChildren = new HashSet<LinkedBox>();
 					for (LinkedBox child : childGroup)
@@ -584,14 +514,6 @@ public class ArgumentGrid
 					}
 
 				}		
-			}
-			if (DOWNWARD)
-			{
-				currentLevel--;
-			}
-			else
-			{
-				currentLevel++;
 			}
 		}
 		return finalGrid.getGrid();
@@ -723,7 +645,7 @@ public class ArgumentGrid
 	/**
 	 *	Get the min and max height levels of the passed set of boxes.
 	 */
-	public IntPair determineMinMaxHeightLevels(Collection<LinkedBox> boxes)
+	public static IntPair determineMinMaxHeightLevels(Collection<LinkedBox> boxes)
 	{
 		int minLevel = Integer.MAX_VALUE;
 		int maxLevel = Integer.MIN_VALUE;
@@ -749,7 +671,7 @@ public class ArgumentGrid
 	/**
 	 *	Get the min and max width levels of the passed set of boxes.
 	 */
-	public IntPair determineMinMaxWidthLevels(Collection<LinkedBox> boxes)
+	public static IntPair determineMinMaxWidthLevels(Collection<LinkedBox> boxes)
 	{
 		int minLevel = Integer.MAX_VALUE;
 		int maxLevel = Integer.MIN_VALUE;

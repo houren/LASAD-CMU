@@ -98,7 +98,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 	// Constants to calculate elements size correctly
 	public static final int CONNECTOR_WIDTH = 24, CONNECTOR_HEIGHT = 12;
 	public static final int BORDER_WIDTH = 5, BORDER_HEIGHT = 5;
-	public static final int HEADER_HEIGHT = 40;
+	private int HEADER_HEIGHT = 13;
 
 	private final int HIGHLIGHT_TIMER = 30000; // Time until a highlight will
 	// disappear
@@ -1278,7 +1278,8 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 				changedFontSize = true;
 				previousHeaderHeight = this.fontSize+BORDER_HEIGHT;
 			}
-			
+
+			HEADER_HEIGHT = fontSize+3;
 			this.fontSize = fontSize;
 			this.boxHeading.getContentText().getStyle().setFontSize(fontSize,com.google.gwt.dom.client.Style.Unit.PX);
 			this.boxHeading.getContentText().getStyle().setHeight(fontSize+BORDER_HEIGHT/2,com.google.gwt.dom.client.Style.Unit.PX);

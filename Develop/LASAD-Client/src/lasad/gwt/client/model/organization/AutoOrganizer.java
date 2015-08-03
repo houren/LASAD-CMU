@@ -49,7 +49,7 @@ public class AutoOrganizer
 	private int boxWidth = 200;
 	private int minBoxHeight = 100;
 
-	private final boolean DEBUG = false;
+	private final boolean DEBUG = true;
 	// The minimum number of pixels between boxes, set as a double for rounding/accuracy purposes
 	private final double MIN_SPACE = 50.0;
 
@@ -175,19 +175,18 @@ public class AutoOrganizer
 			}
 			
 			IntPair minMaxColumn = grid.determineMinMaxWidthLevels(grid.getBoxes());
-			final int minWidthLevel = minMaxColumn.getMin();
-			final int maxWidthLevel = minMaxColumn.getMax();
+			final int MIN_WIDTH_LEVEL = minMaxColumn.getMin();
+			final int MAX_WIDTH_LEVEL = minMaxColumn.getMax();
 
 			IntPair minMaxRow = grid.determineMinMaxHeightLevels(grid.getBoxes());
-			final int minHeightLevel = minMaxRow.getMin();
-			final int maxHeightLevel = minMaxRow.getMax();
+			final int MIN_HEIGHT_LEVEL = minMaxRow.getMin();
+			final int MAX_HEIGHT_LEVEL = minMaxRow.getMax();
 
 			// Sets the y coord
-
 			if (DOWNWARD)
 			{
 				double rowYcoord = CENTER_Y;
-				for (int rowCount = maxHeightLevel; rowCount >= minHeightLevel; rowCount--)
+				for (int rowCount = MAX_HEIGHT_LEVEL; rowCount >= MIN_HEIGHT_LEVEL; rowCount--)
 				{
 					ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
 
@@ -221,7 +220,7 @@ public class AutoOrganizer
 			{
 				double nextRowYcoord = CENTER_Y;
 
-				for (int rowCount = minHeightLevel; rowCount <= maxHeightLevel; rowCount++)
+				for (int rowCount = MIN_HEIGHT_LEVEL; rowCount <= MAX_HEIGHT_LEVEL; rowCount++)
 				{
 					ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
 
@@ -248,7 +247,7 @@ public class AutoOrganizer
 				}
 			}
 
-			for (int columnNumber = minWidthLevel; columnNumber <= maxWidthLevel; columnNumber++)
+			for (int columnNumber = MIN_WIDTH_LEVEL; columnNumber <= MAX_WIDTH_LEVEL; columnNumber++)
 			{
 				HashSet<LinkedBox> column = grid.getBoxesAtWidthLevel(columnNumber);
 				for (LinkedBox box : column)
@@ -262,118 +261,6 @@ public class AutoOrganizer
 
 			columnXcoord += boxWidth;
 
-			if (DEBUG)
-			{
-				Logger.log(grid.toString(), Logger.DEBUG);
-				Logger.log(argThread.toString(), Logger.DEBUG);
-			}
-		}
-
-		// Send the new positions to the server
-		updateBoxPositions(boxesToSendToServer);
-
-		// Position the cursor of the map
-		positionMapCursor(DOWNWARD);
-
-		// Free some memory for speed (garbage collector will take the nullified values)
-		for (ArgumentThread argThread : argModel.getArgThreads())
-		{
-			argThread.getGrid().empty();
-		}
-	}
-
-	/**
-	 *	Organizes the map either top to bottom or bottom to top.  A clean-up function for the workspace.
-	 *	@param DOWNWARD - Whether to organize the map in an downward orientation or upward
-	 */
-	public void ORIGorganizeMap(final boolean DOWNWARD)
-	{
-		// The base X and Y coordinates for the column/row, that is updated for spacing (may also be adjusted due to box sizes)
-		double columnXcoord = CENTER_X;
-		double rowYcoord = CENTER_Y;
-
-		HashSet<LinkedBox> boxesToSendToServer = new HashSet<LinkedBox>();
-
-		// Organize the grid by height and width "levels" (think chess board)
-		for (ArgumentThread argThread : argModel.getArgThreads())
-		{
-			argThread.organizeGrid(DOWNWARD);
-			ArgumentGrid grid = argThread.getGrid();
-
-			if (grid.getBoxes().size() == 0)
-			{
-				continue;
-			}
-			IntPair minMaxColumn = grid.determineMinMaxWidthLevels(grid.getBoxes());
-			int minWidthLevel = minMaxColumn.getMin();
-			int maxWidthLevel = minMaxColumn.getMax();
-
-			// Sets the x coord
-			for (int columnCount = minWidthLevel; columnCount <= maxWidthLevel; columnCount++)
-			{
-				HashSet<LinkedBox> column = grid.getBoxesAtWidthLevel(columnCount);
-				int fattestWidth = Integer.MIN_VALUE;
-				LinkedBox fattestBox = null;
-				for (LinkedBox box : column)
-				{
-					box.setXLeft(columnXcoord);
-					if (box.getWidth() > fattestWidth)
-					{
-						fattestBox = box;
-						fattestWidth = fattestBox.getWidth();
-					}
-				}
-
-				// Center the boxes on the column line
-				if (fattestBox != null)
-				{
-					double center = fattestBox.getXCenter();
-					for (LinkedBox box : column)
-					{
-						box.setXCenter(center);
-					}
-
-					columnXcoord = fattestBox.getXLeft() + fattestBox.getWidth();
-				}
-
-				// Add space between columns
-				columnXcoord += MIN_SPACE;
-			}
-
-			IntPair minMaxRow = grid.determineMinMaxHeightLevels(grid.getBoxes());
-			int minHeightLevel = minMaxRow.getMin();
-			int maxHeightLevel = minMaxRow.getMax();
-
-			// Sets the y coord
-			for (int rowCount = maxHeightLevel; rowCount >= minHeightLevel; rowCount--)
-			{
-				ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
-				int tallestHeight = Integer.MIN_VALUE;
-				LinkedBox tallestBox = null;
-
-				for (LinkedBox box : row)
-				{
-					box.setYTop(rowYcoord);
-					if (box.getHeight() > tallestHeight)
-					{
-						tallestBox = box;
-						tallestHeight = tallestBox.getHeight();
-					}
-					boxesToSendToServer.add(box);
-				}
-
-				if (tallestBox != null)
-				{
-					rowYcoord = tallestBox.getYTop() + tallestBox.getHeight();
-				}
-
-				// Add space between rows
-				rowYcoord += MIN_SPACE;	
-			}
-
-			rowYcoord = CENTER_Y;
-
-			
 			if (DEBUG)
 			{
 				Logger.log(grid.toString(), Logger.DEBUG);
@@ -655,45 +542,80 @@ public class AutoOrganizer
 	 */
 	private void positionMapCursor(final boolean DOWNWARD)
 	{
-		double edgeCoordY;
-		HashSet<LinkedBox> edgeBoxes = new HashSet<LinkedBox>();
+		ArrayList<LinkedBox> boxesAtEndLevel = new ArrayList<LinkedBox>();
 		double edgeSum = 0.0;
+		int numEdgeBoxes = 0;
+		double edgeCoordY;
 
 		if (DOWNWARD)
 		{
-			edgeCoordY = Double.MIN_VALUE;
-			for (ArgumentThread argThread : argModel.getArgThreads())
+			int minGridHeight = Integer.MAX_VALUE;
+			for (ArgumentThread ARG_THREAD : argModel.getArgThreads())
 			{
-				for (LinkedBox box : argThread.getGrid().getBoxesAtEndLevel(DOWNWARD))
+
+				final int GRID_MIN = ArgumentGrid.determineMinMaxHeightLevels(ARG_THREAD.getGrid().getBoxes()).getMin();
+				if (GRID_MIN < minGridHeight)
 				{
-					double boxLowerEdge = box.getYTop() + box.getHeight();
-					if (boxLowerEdge >= edgeCoordY)
+					minGridHeight = GRID_MIN;
+				}
+			}
+
+			double currentBottom = Double.MIN_VALUE;
+			for (ArgumentThread ARG_THREAD : argModel.getArgThreads())
+			{
+				final ArgumentGrid GRID = ARG_THREAD.getGrid();
+			
+				ArrayList<LinkedBox> boxesAtMinGridHeight = GRID.getBoxesAtHeightLevel(minGridHeight);
+				for (LinkedBox box : boxesAtMinGridHeight)
+				{
+					boxesAtEndLevel.add(box);
+					final double BOTTOM_EDGE = box.getYTop() + box.getHeight();
+					if (BOTTOM_EDGE > currentBottom)
 					{
-						edgeSum += box.getXCenter();
-						edgeBoxes.add(box);
-						edgeCoordY = boxLowerEdge;
+						currentBottom = BOTTOM_EDGE;
 					}
 				}
 			}
+			edgeCoordY = currentBottom;
 		}
 		else
 		{
-			edgeCoordY = Double.MIN_VALUE;
-			for (ArgumentThread argThread : argModel.getArgThreads())
+			int maxGridHeight = Integer.MIN_VALUE;
+			for (ArgumentThread ARG_THREAD : argModel.getArgThreads())
 			{
-				for (LinkedBox box : argThread.getGrid().getBoxesAtEndLevel(DOWNWARD))
+				final int GRID_MAX = ArgumentGrid.determineMinMaxHeightLevels(ARG_THREAD.getGrid().getBoxes()).getMax();
+				if (GRID_MAX > maxGridHeight)
 				{
-					if (box.getYTop() >= edgeCoordY)
+					maxGridHeight = GRID_MAX;
+				}
+			}
+
+			double currentTop = Double.MAX_VALUE;
+			for (ArgumentThread ARG_THREAD : argModel.getArgThreads())
+			{
+				final ArgumentGrid GRID = ARG_THREAD.getGrid();
+			
+				ArrayList<LinkedBox> boxesAtMaxGridHeight = GRID.getBoxesAtHeightLevel(maxGridHeight);
+				for (LinkedBox box : boxesAtMaxGridHeight)
+				{
+					boxesAtEndLevel.add(box);
+					final double TOP_EDGE = box.getYTop();
+					if (TOP_EDGE < currentTop)
 					{
-						edgeSum += box.getXCenter();
-						edgeBoxes.add(box);
-						edgeCoordY = box.getYTop();
+						currentTop = TOP_EDGE;
 					}
 				}
 			}
+			edgeCoordY = currentTop;
 		}
 
-		if (edgeBoxes.size() > 0)
+		for (LinkedBox box : boxesAtEndLevel)
+		{
+			edgeSum += box.getXCenter();
+			numEdgeBoxes++;
+		}
+
+		if (numEdgeBoxes > 0)
 		{
 			if (DOWNWARD)
 			{
@@ -703,8 +625,7 @@ public class AutoOrganizer
 			{
 				map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) - 10);
 			}
-			map.getLayoutTarget().dom.setScrollLeft((int) Math.round(edgeSum / edgeBoxes.size() - map.getInnerWidth() / 2.0));
-			
+			map.getLayoutTarget().dom.setScrollLeft((int) Math.round(edgeSum / numEdgeBoxes - map.getInnerWidth() / 2.0));	
 		}
 		else
 		{
