@@ -123,6 +123,10 @@ public class ArgumentGrid
 		int widthLevel = 0;
 		for (LinkedBox box : startRow)
 		{
+
+		}
+		for (LinkedBox box : startRow)
+		{
 			if (!visited.contains(box))
 			{
 				box.setWidthLevel(widthLevel);
@@ -326,6 +330,7 @@ public class ArgumentGrid
 					if (this.getBoxAt(WIDTH_LEVEL + 1, HEIGHT_LEVEL) == null)
 					{
 						grid.put(POSITION, box);
+						Logger.log(this.toString(), Logger.DEBUG);
 						return WIDTH_LEVEL + HOR_SPACE;
 					}
 					else

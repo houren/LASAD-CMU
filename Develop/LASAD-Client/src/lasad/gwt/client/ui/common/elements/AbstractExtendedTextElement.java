@@ -60,6 +60,7 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 
 	public AbstractExtendedTextElement(ExtendedElementContainerInterface container, ElementInfo config) {
 		super(container, config);
+		Logger.log("On AbstractExtendedTextElement constructor...", Logger.DEBUG);
 		// Set possible Element Vars
 		// Only this Elements would be updates to the model
 		this.elementVars.add(ParameterTypes.Text);
@@ -90,7 +91,7 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 			// MODIFIED BY SN in order to fix Preview of Nodes when creating them in a ontology. (added try/catch block)
 			this.autoResize = false;
 		}
-
+		Logger.log("leaving AbstractExtendedTextElement constructor...", Logger.DEBUG);
 		// MODIFIED END
 	}
 
@@ -264,15 +265,22 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 		int balanceWidth = 4, balanceHeight = 4; // 1px distance to the
 													// frameborder, 1 px padding
 													// in each direction
-		String mapID = this.getContainer().getMVCViewSession().getController().getMapID();
-		int fontSize = ArgumentModel.getInstanceByMapID(mapID).getFontSize();
-
+		
+		int fontSize = 10;
+		String mapID = null;
+		
+		if(this.getContainer().getMVCViewSession() != null){
+			mapID = this.getContainer().getMVCViewSession().getController().getMapID();
+			fontSize = ArgumentModel.getInstanceByMapID(mapID).getFontSize();
+		}
+		
 		if (textFrameDiv != null) {
 
 			DOM.setStyleAttribute(textFrameDiv, "width", Math.max(0, size.width - balanceWidth) + "px");
 
 			DOM.setStyleAttribute(textFrameDiv, "height", Math.max(0, size.height - balanceHeight) + "px");
 		}
+		
 		if (textArea != null) {
 			if (labelOnTop && labelDiv != null) {
 
@@ -287,10 +295,13 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 			} else {
 				DOM.setStyleAttribute(textArea, "width", Math.max(0, size.width - balanceWidth) + "px");
 			}
-			if(textElements.get(mapID) == null){
-				textElements.put(mapID, new HashSet<Element>());
+			
+			if(mapID != null){
+				if(textElements.get(mapID) == null){
+					textElements.put(mapID, new HashSet<Element>());
+				}
+				textElements.get(mapID).add(textArea);
 			}
-			textElements.get(mapID).add(textArea);
 			
 			DOM.setStyleAttribute(textArea, "font-size", fontSize+"px");
 		}
@@ -308,10 +319,12 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 				DOM.setStyleAttribute(textField, "width", Math.max(0, size.width - balanceWidth) + "px");
 			}
 			
-			if(textElements.get(mapID) == null){
-				textElements.put(mapID, new HashSet<Element>());
+			if(mapID != null){
+				if(textElements.get(mapID) == null){
+					textElements.put(mapID, new HashSet<Element>());
+				}
+				textElements.get(mapID).add(textField);
 			}
-			textElements.get(mapID).add(textField);
 			DOM.setStyleAttribute(textField, "font-size", fontSize+"px");
 		}
 	}

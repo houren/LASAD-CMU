@@ -49,7 +49,7 @@ public class AutoOrganizer
 	private int boxWidth = 200;
 	private int minBoxHeight = 100;
 
-	private final boolean DEBUG = true;
+	private final boolean DEBUG = false;
 	// The minimum number of pixels between boxes, set as a double for rounding/accuracy purposes
 	private final double MIN_SPACE = 50.0;
 
