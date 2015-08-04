@@ -136,8 +136,8 @@
 
 .east-connector{
 	position: absolute;
-	width: 24px;
-	height: 12px;
+	width: 12px;
+	height: 24px;
 	background:url(images/box/connectorEast.gif);
 	background-repeat:no-repeat;
 	background-position:left center;
@@ -146,8 +146,8 @@
 
 .east-connector-dark{
 	position: absolute;
-	width: 24px;
-	height: 12px;
+	width: 12px;
+	height: 24px;
 	background:url(images/box/connectorEastDark.gif);
 	background-repeat:no-repeat;
 	background-position:left center; 

@@ -221,12 +221,12 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 				box.setButtons(MessageBox.YESNO);
 				box.setIcon(MessageBox.QUESTION);
 				// box.setTitle(myConstants.CloseMapHeader());
-				box.setMessage("This Process will last " +
+				box.setMessage("This process " +
 				// 3
 				// * (myMapSpace.getMyMap().getMapDimensionSize().width * myMapSpace.getMyMap().getMapDimensionSize().height)
 				// / (60 * myMapSpace.getMyMap().getOffsetHeight() * myMapSpace.getMyMap().getOffsetWidth())
 				// +
-						"several minutes, do you want to continue? ");
+						"may take a few minutes, do you want to continue? ");
 				box.addCallback(new Listener<MessageBoxEvent>() {
 
 					public void handleEvent(MessageBoxEvent be) {
@@ -244,6 +244,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 							final int BOTTOM = edgeCoords.getBottom();
 							final int WIDTH = RIGHT - LEFT;
 							final int HEIGHT = BOTTOM - TOP;
+							final int interval_H = myMapSpace.getMyMap().getOffsetHeight();
+							final int interval_W = myMapSpace.getMyMap().getOffsetWidth();
+							
 							// roll map to the beginning
 							myMapSpace.getMyMap().getBody().scrollTo("top", TOP);
 							myMapSpace.getMyMap().getBody().scrollTo("left", LEFT);
@@ -253,17 +256,17 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
 							Timer t = new Timer() {
 								// the size of the windows
-								int interval_H = myMapSpace.getMyMap().getOffsetHeight();
-								int interval_W = myMapSpace.getMyMap().getOffsetWidth();
 								int position_H = TOP;
 								int position_W = LEFT;
 								int sum = 0;
 								boolean isFinished = false;
-								int numOfAllImages = WIDTH
-										* HEIGHT
-										/ (myMapSpace.getMyMap().getOffsetHeight() * myMapSpace.getMyMap().getOffsetWidth());
-
+								int numberOfColumns = (int) Math.ceil(WIDTH * 1.0 / interval_W);
+								int numberOfRows = (int) Math.ceil(HEIGHT * 1.0 / interval_H);
+								int numOfAllImages = numberOfColumns*numberOfRows;
+								int i = 1; int j = 1;
+								
 								public void run() {
+									
 									if (!isFinished) {
 										RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()
 												+ "ScreenShot");
@@ -294,13 +297,16 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 										} catch (RequestException e) {
 											e.printStackTrace();
 										}
-										// if not end roll the map to next window
-										if (position_H < HEIGHT - interval_H + 1) {
-											if (position_W < WIDTH - interval_W) {
+										// if not end, roll the map to next window
+										if (i < numberOfRows+1) {
+											if (j < numberOfColumns) {
 												position_W += interval_W;
+												j++;
 											} else {
 												position_H += interval_H;
 												position_W = LEFT;
+												i++;
+												j = 1;
 											}
 
 											myMapSpace.getMyMap().getBody().scrollTo("top", position_H);
@@ -317,8 +323,8 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 													+ "ScreenShotMerge");
 											try {
 												// calculate the cols and rows of the image
-												int cols = WIDTH / interval_W;
-												int rows = HEIGHT / interval_H;
+												int cols = numberOfColumns;
+												int rows = numberOfRows;
 												String format = LASAD_Client.getInstance().getUsername() + "_" + myMapInfo.getMapID() + ","
 														+ rows + ":" + cols;
 
