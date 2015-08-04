@@ -42,7 +42,7 @@ import com.extjs.gxt.ui.client.widget.Component;
  *	that updates with every change to the map.  Thus, we don't need to start from scratch and gather components to update links.
  *	For organizeMap however, we reconstruct the ArgumentGrid each time.
  *	@author Kevin Loughlin and Darlan Santana Farias
- *	@since 12 June 2015, Updated 29 July 2015
+ *	@since 12 June 2015, Updated 4 August 2015
  */
 public class AutoOrganizer
 {
@@ -136,9 +136,14 @@ public class AutoOrganizer
 			}
 
 			List<Component> mapComponents = map.getItems();
+			// Important to make a copy so that we don't modify the actual mapComponents
 			List<Component> mapComponentsCopy = new ArrayList<Component>(mapComponents);
 			ArrayList<Component> toRemove = new ArrayList<Component>();
 
+			// We need to call setSize from abstractBox, so we temporarily shift from LinkedBoxes to AbstractBoxes
+			// I'm aware it's annoying that we have two types of boxes representing the same thing, but it made life a lot easier
+			// for auto organization to have almost everything I needed in one place (LinkedBox)
+			// We shrink the mapComponents copy as we go for speed
 			for (LinkedBox box : grid.getBoxes())
 			{
 				for (Component mapComponent : mapComponentsCopy)
@@ -148,6 +153,7 @@ public class AutoOrganizer
 						AbstractBox myBox = (AbstractBox) mapComponent;
 						if (myBox.getConnectedModel().getId() == box.getBoxID())
 						{
+							// The setSize method will update the textBox appropriately.  We want the box height to be just enough to fit the text
 							toRemove.add(mapComponent);
 							myBox.setSize(boxWidth, minBoxHeight);
 							box.setSize(boxWidth, minBoxHeight);
@@ -182,7 +188,7 @@ public class AutoOrganizer
 			final int MIN_HEIGHT_LEVEL = minMaxRow.getMin();
 			final int MAX_HEIGHT_LEVEL = minMaxRow.getMax();
 
-			// Sets the y coord
+			// Sets the y coord either top to bottom or bottom to top, providing space between each row.  Each thread should start at the same y-coord
 			if (DOWNWARD)
 			{
 				double rowYcoord = CENTER_Y;
@@ -194,7 +200,6 @@ public class AutoOrganizer
 					for (LinkedBox box : row)
 					{
 						box.setYTop(rowYcoord);
-						
 						
 						final int BOX_HEIGHT = box.getHeight();
 						if (BOX_HEIGHT > tallestHeightAtRow)
@@ -247,6 +252,7 @@ public class AutoOrganizer
 				}
 			}
 
+			// Sets the x coord left to right
 			for (int columnNumber = MIN_WIDTH_LEVEL; columnNumber <= MAX_WIDTH_LEVEL; columnNumber++)
 			{
 				HashSet<LinkedBox> column = grid.getBoxesAtWidthLevel(columnNumber);
@@ -259,6 +265,7 @@ public class AutoOrganizer
 				columnXcoord += boxWidth;
 			}
 
+			// Give an extra space between threads
 			columnXcoord += boxWidth;
 
 			if (DEBUG)
