@@ -87,7 +87,7 @@ public abstract class AbstractTextElement extends AbstractChildElement{
 			
 			texttype = "textfield";
 			
-			textBox = new TextBox();
+			textBox = new ExtendedTextBox();
 			textBox.setStyleName("extendedTextElement-TextField-ViewMode");
 			
 			add(textBox, fieldData);
@@ -95,7 +95,7 @@ public abstract class AbstractTextElement extends AbstractChildElement{
 			
 		} else {
 			
-			textArea = new TextArea();
+			textArea = new ExtendedTextArea();
 			textArea.setStyleName("extendedTextElement-TextArea-ViewMode");
 			
 			add(textArea, areaData);

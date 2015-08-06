@@ -39,6 +39,7 @@ import lasad.gwt.client.ui.workspace.graphmap.elements.AbstractCreateLinkDialog;
 import lasad.gwt.client.ui.workspace.transcript.TranscriptLinkData;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
 
 import com.extjs.gxt.ui.client.core.XDOM;
 import com.extjs.gxt.ui.client.dnd.DropTarget;
@@ -1311,8 +1312,36 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 					} else if (be.getEventTypeInt() == Events.OnDoubleClick.getEventCode()) {
 						onDoubleClick(be);
 						be.cancelBubble();
+					}else if (be.getEventTypeInt() == Events.OnPaste.getEventCode()){
+						onPaste(be);
 					}
 				}
+			}
+			
+			private void onPaste(ComponentEvent be){
+				Logger.log("OnPaste : AbstractBox", Logger.DEBUG);
+						
+				Timer t = new Timer() {
+					@Override
+					public void run() {
+						AbstractBox box = AbstractBox.this;
+						box.setSize(box.getWidth(), 100);
+						
+						for (AbstractExtendedElement childElement : box.getExtendedElements())
+						{
+							if (childElement instanceof AbstractExtendedTextElement)
+							{
+								AbstractExtendedTextElement textElt = (AbstractExtendedTextElement) childElement;
+								box.textAreaCallNewHeightgrow(textElt.determineBoxHeightChange());
+								break;
+							}
+						}
+					}
+				};
+
+				// Schedule the timer to run once in half a second.
+				// The delay is necessary, so the method gets called after the text is actually pasted
+				t.schedule(500);
 			}
 
 			private void onClick(ComponentEvent be) {
@@ -1370,7 +1399,8 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		this.addListener(Events.OnMouseOut, componentListener);
 		this.addListener(Events.OnClick, componentListener);
 		this.addListener(Events.OnDoubleClick, componentListener);
-		this.sinkEvents(Events.OnMouseOver.getEventCode() | Events.OnMouseOut.getEventCode() | Events.OnClick.getEventCode() | Events.OnDoubleClick.getEventCode());
+		this.addListener(Events.OnPaste, componentListener);
+		this.sinkEvents(Events.OnPaste.getEventCode() | Events.OnMouseOver.getEventCode() | Events.OnMouseOut.getEventCode() | Events.OnClick.getEventCode() | Events.OnDoubleClick.getEventCode());
 	}
 
 	public void setElementFocus(boolean focus) {

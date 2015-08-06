@@ -46,6 +46,7 @@ import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.menu.Menu;
 import com.extjs.gxt.ui.client.widget.menu.MenuItem;
+import com.extjs.gxt.ui.client.widget.menu.CheckMenuItem;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -71,6 +72,7 @@ import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteRelationDialog;
 
 import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
 import lasad.gwt.client.ui.workspace.argumentmap.CreatePreferencesDialog;
+import com.extjs.gxt.ui.client.widget.Component;
 
 /**
  *	Finishes the implementation of the map's menu bar.
@@ -202,7 +204,8 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		}
 	}
 
-	// An attempt by Kevin Loughlin to downsize screen shot, doesn't work as of 29 July 2015.  Need to speak with Zhenyu
+	// An attempt originally by Kevin Loughlin to downsize screen shot, but that now works thanks to Darlan Sanatana Farias
+	// perhaps we should change the method name ;)
 	protected MenuItem kevinCreateScreenshotItem() {
 		final MenuItem screenshot = new MenuItem("Create a screenshot");
 		screenshot.addSelectionListener(new SelectionListener<MenuEvent>() {
@@ -216,310 +219,139 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 						(myMapSpace.getMyMap().getMapDimensionSize().height / myMapSpace.getMyMap().getOffsetHeight() + 1)
 								* myMapSpace.getMyMap().getOffsetHeight() - myMapSpace.getMyMap().getMapDimensionSize().height);
 
-				// show the time of this process
-				MessageBox box = new MessageBox();
-				box.setButtons(MessageBox.YESNO);
-				box.setIcon(MessageBox.QUESTION);
-				// box.setTitle(myConstants.CloseMapHeader());
-				box.setMessage("This process " +
-				// 3
-				// * (myMapSpace.getMyMap().getMapDimensionSize().width * myMapSpace.getMyMap().getMapDimensionSize().height)
-				// / (60 * myMapSpace.getMyMap().getOffsetHeight() * myMapSpace.getMyMap().getOffsetWidth())
-				// +
-						"may take a few minutes, do you want to continue? ");
-				box.addCallback(new Listener<MessageBoxEvent>() {
+				// save position in order to return to this position after screenshot
+				final int leftBefore = myMapSpace.getMyMap().getBody().getScrollLeft();
+				final int topBefore = myMapSpace.getMyMap().getBody().getScrollTop();
 
-					public void handleEvent(MessageBoxEvent be) {
-						if (be.getButtonClicked().getItemId().equals(Dialog.YES)) {
-							// save position in order to return to this position after screenshot
-							final int leftBefore = myMapSpace.getMyMap().getBody().getScrollLeft();
-							final int topBefore = myMapSpace.getMyMap().getBody().getScrollTop();
+				ExportScreenShotDialogue.getInstance().showLoadingScreen();
 
-							ExportScreenShotDialogue.getInstance().showLoadingScreen();
+				EdgeCoords edgeCoords = ArgumentModel.getInstanceByMapID(myMapInfo.getMapID()).calcEdgeCoords();
+				final int TOP = edgeCoords.getTop();
+				final int LEFT = edgeCoords.getLeft();
+				final int RIGHT = edgeCoords.getRight();
+				final int BOTTOM = edgeCoords.getBottom();
+				final int WIDTH = RIGHT - LEFT;
+				final int HEIGHT = BOTTOM - TOP;
+				final int interval_H = myMapSpace.getMyMap().getOffsetHeight();
+				final int interval_W = myMapSpace.getMyMap().getOffsetWidth();
+				
+				// roll map to the beginning
+				myMapSpace.getMyMap().getBody().scrollTo("top", TOP);
+				myMapSpace.getMyMap().getBody().scrollTo("left", LEFT);
 
-							EdgeCoords edgeCoords = ArgumentModel.getInstanceByMapID(myMapInfo.getMapID()).calcEdgeCoords();
-							final int TOP = edgeCoords.getTop();
-							final int LEFT = edgeCoords.getLeft();
-							final int RIGHT = edgeCoords.getRight();
-							final int BOTTOM = edgeCoords.getBottom();
-							final int WIDTH = RIGHT - LEFT;
-							final int HEIGHT = BOTTOM - TOP;
-							final int interval_H = myMapSpace.getMyMap().getOffsetHeight();
-							final int interval_W = myMapSpace.getMyMap().getOffsetWidth();
-							
-							// roll map to the beginning
-							myMapSpace.getMyMap().getBody().scrollTo("top", TOP);
-							myMapSpace.getMyMap().getBody().scrollTo("left", LEFT);
+				// make a screen shot
+				captureMap(myMapSpace.getMyMap().getBody().getId());
 
-							// make a screen shot
-							captureMap(myMapSpace.getMyMap().getBody().getId());
+				Timer t = new Timer() {
+					// the size of the windows
+					int position_H = TOP;
+					int position_W = LEFT;
+					int sum = 0;
+					boolean isFinished = false;
+					int numberOfColumns = (int) Math.ceil(WIDTH * 1.0 / interval_W);
+					int numberOfRows = (int) Math.ceil(HEIGHT * 1.0 / interval_H);
+					int numOfAllImages = numberOfColumns*numberOfRows;
+					int i = 1; int j = 1;
+					
+					public void run() {
+						
+						if (!isFinished) {
+							RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()
+									+ "ScreenShot");
+							RequestCallback handler = new RequestCallback() {
 
-							Timer t = new Timer() {
-								// the size of the windows
-								int position_H = TOP;
-								int position_W = LEFT;
-								int sum = 0;
-								boolean isFinished = false;
-								int numberOfColumns = (int) Math.ceil(WIDTH * 1.0 / interval_W);
-								int numberOfRows = (int) Math.ceil(HEIGHT * 1.0 / interval_H);
-								int numOfAllImages = numberOfColumns*numberOfRows;
-								int i = 1; int j = 1;
-								
-								public void run() {
-									
-									if (!isFinished) {
-										RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()
-												+ "ScreenShot");
-										RequestCallback handler = new RequestCallback() {
+								@Override
+								public void onError(Request request, Throwable e) {
+									if (DebugSettings.debug_errors)
+										Logger.log(e.toString(), Logger.DEBUG_ERRORS);
+								}
 
-											@Override
-											public void onError(Request request, Throwable e) {
-												if (DebugSettings.debug_errors)
-													Logger.log(e.toString(), Logger.DEBUG_ERRORS);
-											}
-
-											@Override
-											public void onResponseReceived(Request request, Response response) {
-												// Browser will open a save file dialog box
-												// System.err.println("ScreenShot sendet!");
-											}
-										};
-
-										// update the step of the process
-										ExportScreenShotDialogue.getInstance().updateProgress((float) sum / numOfAllImages);
-
-										try {
-											// get the screenshot and send it to the servlet
-											String map_temp = showMap();
-											map_temp = map_temp.substring(map_temp.indexOf(",") + 1);
-											builder.sendRequest(LASAD_Client.getInstance().getUsername() + "_" + myMapInfo.getMapID() + sum
-													+ ":" + map_temp, handler);
-										} catch (RequestException e) {
-											e.printStackTrace();
-										}
-										// if not end, roll the map to next window
-										if (i < numberOfRows+1) {
-											if (j < numberOfColumns) {
-												position_W += interval_W;
-												j++;
-											} else {
-												position_H += interval_H;
-												position_W = LEFT;
-												i++;
-												j = 1;
-											}
-
-											myMapSpace.getMyMap().getBody().scrollTo("top", position_H);
-											myMapSpace.getMyMap().getBody().scrollTo("left", position_W);
-											captureMap(myMapSpace.getMyMap().getBody().getId());
-											sum++;
-										} else {
-											ExportScreenShotDialogue.getInstance().updateProgress((float) 1);
-											// return to previous position
-											myMapSpace.getMyMap().getBody().scrollTo("top", topBefore);
-											myMapSpace.getMyMap().getBody().scrollTo("left", leftBefore);
-											isFinished = true;
-											RequestBuilder builder_end = new RequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()
-													+ "ScreenShotMerge");
-											try {
-												// calculate the cols and rows of the image
-												int cols = numberOfColumns;
-												int rows = numberOfRows;
-												String format = LASAD_Client.getInstance().getUsername() + "_" + myMapInfo.getMapID() + ","
-														+ rows + ":" + cols;
-
-												Logger.log(format, Logger.DEBUG);
-
-												builder_end.sendRequest(format, new RequestCallback() {
-													@Override
-													public void onError(Request request, Throwable e) {
-														if (DebugSettings.debug_errors)
-															Logger.log(e.toString(), Logger.DEBUG_ERRORS);
-													}
-
-													@Override
-													public void onResponseReceived(Request request, Response response) {
-														// Browser will open a save file dialog box
-														ExportScreenShotDialogue.getInstance().closeLoadingScreen();
-														com.google.gwt.user.client.Window.open(GWT.getModuleBaseURL() + "ScreenShotMerge",
-																"_blank", "enabled");
-														// System.err.println("Screenshot mergen!");
-													}
-												});
-												this.cancel();
-											} catch (RequestException e1) {
-												// TODO Auto-generated catch block
-												e1.printStackTrace();
-											}
-										}
-									}
+								@Override
+								public void onResponseReceived(Request request, Response response) {
+									// Browser will open a save file dialog box
+									// System.err.println("ScreenShot sendet!");
 								}
 							};
 
-							// delay running for 3 seconds
-							t.scheduleRepeating(3000);
+							// update the step of the process
+							ExportScreenShotDialogue.getInstance().updateProgress(((float) sum ) / numOfAllImages);
+
+							try {
+								// get the screenshot and send it to the servlet
+								String map_temp = showMap();
+								map_temp = map_temp.substring(map_temp.indexOf(",") + 1);
+								builder.sendRequest(LASAD_Client.getInstance().getUsername() + "_" + myMapInfo.getMapID() + sum
+										+ ":" + map_temp, handler);
+							} catch (RequestException e) {
+								e.printStackTrace();
+							}
+							// if not end, roll the map to next window
+							if (i < numberOfRows+1) {
+								if (j < numberOfColumns) {
+									position_W += interval_W;
+									j++;
+								} else {
+									position_H += interval_H;
+									position_W = LEFT;
+									i++;
+									j = 1;
+								}
+
+								myMapSpace.getMyMap().getBody().scrollTo("top", position_H);
+								myMapSpace.getMyMap().getBody().scrollTo("left", position_W);
+								captureMap(myMapSpace.getMyMap().getBody().getId());
+								sum++;
+							} else {
+								ExportScreenShotDialogue.getInstance().updateProgress((float) 1);
+								// return to previous position
+								myMapSpace.getMyMap().getBody().scrollTo("top", topBefore);
+								myMapSpace.getMyMap().getBody().scrollTo("left", leftBefore);
+								isFinished = true;
+								RequestBuilder builder_end = new RequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()
+										+ "ScreenShotMerge");
+								try {
+									// calculate the cols and rows of the image
+									int cols = numberOfColumns;
+									int rows = numberOfRows;
+									String format = LASAD_Client.getInstance().getUsername() + "_" + myMapInfo.getMapID() + ","
+											+ rows + ":" + cols;
+
+									Logger.log(format, Logger.DEBUG);
+
+									builder_end.sendRequest(format, new RequestCallback() {
+										@Override
+										public void onError(Request request, Throwable e) {
+											if (DebugSettings.debug_errors)
+												Logger.log(e.toString(), Logger.DEBUG_ERRORS);
+										}
+
+										@Override
+										public void onResponseReceived(Request request, Response response) {
+											// Browser will open a save file dialog box
+											ExportScreenShotDialogue.getInstance().closeLoadingScreen();
+											com.google.gwt.user.client.Window.open(GWT.getModuleBaseURL() + "ScreenShotMerge",
+													"_blank", "enabled");
+											// System.err.println("Screenshot mergen!");
+										}
+									});
+									this.cancel();
+								} catch (RequestException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+							}
 						}
 					}
+				};
 
-				});
-				box.show();
+				// delay running for 3 seconds
+				t.scheduleRepeating(3000);
 			}
 		});
 
 		return screenshot;
 	}
-
-	// TODO Zhenyu
-	protected MenuItem createScreenshotItem() {
-		final MenuItem screenshot = new MenuItem("Create a screenshot");
-		screenshot.addSelectionListener(new SelectionListener<MenuEvent>() {
-			@Override
-			public void componentSelected(MenuEvent me) {
-				// extend the size of map to adjust itself to the windows
-				((ArgumentMap) myMapSpace.getMyMap()).extendMapDimension(Direction.RIGHT,
-						(myMapSpace.getMyMap().getMapDimensionSize().width / myMapSpace.getMyMap().getOffsetWidth() + 1)
-								* myMapSpace.getMyMap().getOffsetWidth() - myMapSpace.getMyMap().getMapDimensionSize().width);
-				((ArgumentMap) myMapSpace.getMyMap()).extendMapDimension(Direction.DOWN,
-						(myMapSpace.getMyMap().getMapDimensionSize().height / myMapSpace.getMyMap().getOffsetHeight() + 1)
-								* myMapSpace.getMyMap().getOffsetHeight() - myMapSpace.getMyMap().getMapDimensionSize().height);
-
-				// show the time of this process
-				MessageBox box = new MessageBox();
-				box.setButtons(MessageBox.YESNO);
-				box.setIcon(MessageBox.QUESTION);
-				// box.setTitle(myConstants.CloseMapHeader());
-				box.setMessage("This Process will last " +
-				// 3
-				// * (myMapSpace.getMyMap().getMapDimensionSize().width * myMapSpace.getMyMap().getMapDimensionSize().height)
-				// / (60 * myMapSpace.getMyMap().getOffsetHeight() * myMapSpace.getMyMap().getOffsetWidth())
-				// +
-						"several minutes, do you want to continue? ");
-				box.addCallback(new Listener<MessageBoxEvent>() {
-
-					public void handleEvent(MessageBoxEvent be) {
-						if (be.getButtonClicked().getItemId().equals(Dialog.YES)) {
-							// save position in order to return to this position after screenshot
-							final int leftBefore = myMapSpace.getMyMap().getBody().getScrollLeft();
-							final int topBefore = myMapSpace.getMyMap().getBody().getScrollTop();
-
-							ExportScreenShotDialogue.getInstance().showLoadingScreen();
-							// roll map to the beginning
-							myMapSpace.getMyMap().getBody().scrollTo("top", 0);
-							myMapSpace.getMyMap().getBody().scrollTo("left", 0);
-
-							// make a screen shot
-							captureMap(myMapSpace.getMyMap().getBody().getId());
-
-							Timer t = new Timer() {
-								// the size of the windows
-								int interval_H = myMapSpace.getMyMap().getOffsetHeight();
-								int interval_W = myMapSpace.getMyMap().getOffsetWidth();
-								int position_H = 0;
-								int position_W = 0;
-								int sum = 0;
-								boolean isFinished = false;
-								int numOfAllImages = myMapSpace.getMyMap().getMapDimensionSize().width
-										* myMapSpace.getMyMap().getMapDimensionSize().height
-										/ (myMapSpace.getMyMap().getOffsetHeight() * myMapSpace.getMyMap().getOffsetWidth());
-
-								public void run() {
-									if (!isFinished) {
-										RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()
-												+ "ScreenShot");
-										RequestCallback handler = new RequestCallback() {
-
-											@Override
-											public void onError(Request request, Throwable e) {
-												if (DebugSettings.debug_errors)
-													Logger.log(e.toString(), Logger.DEBUG_ERRORS);
-											}
-
-											@Override
-											public void onResponseReceived(Request request, Response response) {
-												// Browser will open a save file dialog box
-												// System.err.println("ScreenShot sendet!");
-											}
-										};
-
-										// update the step of the process
-										ExportScreenShotDialogue.getInstance().updateProgress((float) sum / numOfAllImages);
-
-										try {
-											// get the screenshot and send it to the servlet
-											String map_temp = showMap();
-											map_temp = map_temp.substring(map_temp.indexOf(",") + 1);
-											builder.sendRequest(LASAD_Client.getInstance().getUsername() + "_" + myMapInfo.getMapID() + sum
-													+ ":" + map_temp, handler);
-										} catch (RequestException e) {
-											e.printStackTrace();
-										}
-										// if not end roll the map to next window
-										if (position_H < myMapSpace.getMyMap().getMapDimensionSize().height - interval_H + 1) {
-											if (position_W < myMapSpace.getMyMap().getMapDimensionSize().width - interval_W) {
-												position_W += interval_W;
-											} else {
-												position_H += interval_H;
-												position_W = 0;
-											}
-
-											myMapSpace.getMyMap().getBody().scrollTo("top", position_H);
-											myMapSpace.getMyMap().getBody().scrollTo("left", position_W);
-											captureMap(myMapSpace.getMyMap().getBody().getId());
-											sum++;
-										} else {
-											ExportScreenShotDialogue.getInstance().updateProgress((float) 1);
-											// return to previous position
-											myMapSpace.getMyMap().getBody().scrollTo("top", topBefore);
-											myMapSpace.getMyMap().getBody().scrollTo("left", leftBefore);
-											isFinished = true;
-											RequestBuilder builder_end = new RequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()
-													+ "ScreenShotMerge");
-											try {
-												// calculate the cols and rows of the image
-												int cols = myMapSpace.getMyMap().getMapDimensionSize().width / interval_W;
-												int rows = myMapSpace.getMyMap().getMapDimensionSize().height / interval_H;
-												String format = LASAD_Client.getInstance().getUsername() + "_" + myMapInfo.getMapID() + ","
-														+ rows + ":" + cols;
-
-												builder_end.sendRequest(format, new RequestCallback() {
-													@Override
-													public void onError(Request request, Throwable e) {
-														if (DebugSettings.debug_errors)
-															Logger.log(e.toString(), Logger.DEBUG_ERRORS);
-													}
-
-													@Override
-													public void onResponseReceived(Request request, Response response) {
-														// Browser will open a save file dialog box
-														ExportScreenShotDialogue.getInstance().closeLoadingScreen();
-														com.google.gwt.user.client.Window.open(GWT.getModuleBaseURL() + "ScreenShotMerge",
-																"_blank", "enabled");
-														// System.err.println("Screenshot mergen!");
-													}
-												});
-												this.cancel();
-											} catch (RequestException e1) {
-												// TODO Auto-generated catch block
-												e1.printStackTrace();
-											}
-										}
-									}
-								}
-							};
-
-							// delay running for 3 seconds
-							t.scheduleRepeating(3000);
-						}
-					}
-
-				});
-				box.show();
-			}
-		});
-
-		return screenshot;
-	}
-
+	
 	// TODO Zhenyu, currently unused
 	private MenuItem createSearchBox() {
 		final MenuItem searchbox = new MenuItem("search the Text of Boxes.....");
@@ -960,14 +792,27 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return sizeOptions;
 	}
 
-	protected MenuItem createNextFontSize(final int i)
+	protected CheckMenuItem createNextFontSize(final int i)
 	{
-		MenuItem fontSize = new MenuItem(String.valueOf(i));
+		final CheckMenuItem fontSize = new CheckMenuItem(String.valueOf(i));
+		if (i == ArgumentModel.getInstanceByMapID(ArgumentMapMenuBar.this.getMyMapInfo().getMapID()).getFontSize())
+		{
+			fontSize.setChecked(true);
+		}
 		fontSize.addSelectionListener(new SelectionListener<MenuEvent>()
 		{
 			@Override
 			public void componentSelected(MenuEvent me)
 			{
+				for (Component menuComponent : fontSize.getParentMenu().getItems())
+				{
+					if (menuComponent instanceof CheckMenuItem)
+					{
+						((CheckMenuItem) menuComponent).setChecked(false);
+					}
+				}
+
+				fontSize.setChecked(true);
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
 				ArgumentModel.getInstanceByMapID(ArgumentMapMenuBar.this.getMyMapInfo().getMapID()).setFontSize(i);
 			}
@@ -1056,54 +901,39 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	 */
 	protected MenuItem createAutoOrganizeItem()
 	{
-		final MenuItem autoOrganizeItem = new MenuItem("Auto organize this map");
+		final MenuItem autoOrganizeItem = new MenuItem("Auto Organization");
 		autoOrganizeItem.setSubMenu(chooseOrganizationStyle());
 		return autoOrganizeItem;
 	}
 
 	protected Menu chooseOrganizationStyle()
 	{
-		Menu organizationStyle = new Menu();
-		organizationStyle.add(createUpwardOrientation());
-		organizationStyle.add(createDownwardOrientation());
-		organizationStyle.add(createBoxSizeSettings());
-		return organizationStyle;
+		Menu runOrAdjust = new Menu();
+		runOrAdjust.add(createRunOrganizer());
+		runOrAdjust.add(createOrganizerSettings());
+		return runOrAdjust;
 	}
 
-	protected MenuItem createUpwardOrientation()
+	protected MenuItem createRunOrganizer()
 	{
-		final MenuItem upward = new MenuItem("Upward Orientation");
-		upward.addSelectionListener(new SelectionListener<MenuEvent>()
+		final MenuItem runOrganizer = new MenuItem("Organize Map");
+		runOrganizer.addSelectionListener(new SelectionListener<MenuEvent>()
 		{
 			@Override
 			public void componentSelected(MenuEvent ce)
 			{
+				AutoOrganizer myOrganizer = ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getAutoOrganizer();
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getAutoOrganizer().organizeMap(false);
+				myOrganizer.organizeMap();
 			}
 		});
-		return upward;
+		return runOrganizer;
 	}
 
-	protected MenuItem createDownwardOrientation()
+	protected MenuItem createOrganizerSettings()
 	{
-		final MenuItem downward = new MenuItem("Downward Orientation");
-		downward.addSelectionListener(new SelectionListener<MenuEvent>()
-		{
-			@Override
-			public void componentSelected(MenuEvent ce)
-			{
-				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getAutoOrganizer().organizeMap(true);
-			}
-		});
-		return downward;
-	}
-
-	protected MenuItem createBoxSizeSettings()
-	{
-		final MenuItem boxSizeSettings = new MenuItem("Box Size Preferences");
-		boxSizeSettings.addSelectionListener(new SelectionListener<MenuEvent>()
+		final MenuItem organizerPreferences = new MenuItem("Preferences");
+		organizerPreferences.addSelectionListener(new SelectionListener<MenuEvent>()
 		{
 			@Override
 			public void componentSelected(MenuEvent ce)
@@ -1113,6 +943,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 				preferencesDialog.show();
 			}
 		});
-		return boxSizeSettings;
+		return organizerPreferences;
 	}
 }

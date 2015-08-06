@@ -27,6 +27,7 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Timer;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,7 +61,7 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 
 	public AbstractExtendedTextElement(ExtendedElementContainerInterface container, ElementInfo config) {
 		super(container, config);
-		Logger.log("On AbstractExtendedTextElement constructor...", Logger.DEBUG);
+
 		// Set possible Element Vars
 		// Only this Elements would be updates to the model
 		this.elementVars.add(ParameterTypes.Text);
@@ -91,7 +92,6 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 			// MODIFIED BY SN in order to fix Preview of Nodes when creating them in a ontology. (added try/catch block)
 			this.autoResize = false;
 		}
-		Logger.log("leaving AbstractExtendedTextElement constructor...", Logger.DEBUG);
 		// MODIFIED END
 	}
 
@@ -235,7 +235,6 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 				DOM.sinkEvents(textField, Events.Blur.getEventCode());
 				DOM.sinkEvents(textField, Events.OnMouseOver.getEventCode());
 				DOM.setEventListener(textField, listener);
-
 			}
 		} else {
 			// TextArea

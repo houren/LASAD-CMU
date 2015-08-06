@@ -28,7 +28,7 @@ public enum ParameterTypes {
 			"TOKEN"), groupId("GROUP_ID"), passwordEncrypted("passwordEncrypted"), BackgroundImageURL("BackgroundImageURL"), PatternId(
 			"PATTERN-ID"), RequestId("REQUEST-ID"), ServiceClass("SERVICE-CLASS"), AllowLinksToLinks("ALLOW_LINKS_TO_LINKS"),
 			CanBeGrouped("canbegrouped"), ConnectsGroup("connectsgroup"), LinksAlreadyRemoved("linksalreadyremoved"),
-			SiblingsAlreadyUpdated("siblingsalreadyupdated"),
+			SiblingsAlreadyUpdated("siblingsalreadyupdated")
 
 	TextOnImage("textonimage"), Source("source"), Dragable("dragable"), Text1("TEXT1"), Text2("TEXT2"), Spot1("SPOT1"), Spot2("SPOT2"), DetailsOnly(
 			"detailsonly"), FontColor("font-color"), Client("CLIENT"), UserList("USERLIST"), Headline("headline"), Link("LINK"), ImageURL(

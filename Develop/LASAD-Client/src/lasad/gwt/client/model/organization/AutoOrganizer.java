@@ -26,6 +26,7 @@ import lasad.gwt.client.model.organization.ArgumentGrid;
 
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
+import lasad.gwt.client.ui.workspace.LASADInfo;
 
 import lasad.shared.communication.objects.ActionPackage;
 
@@ -60,6 +61,8 @@ public class AutoOrganizer
 	private final double CENTER_X = 2400.0;
 	private final double CENTER_Y = CENTER_X;
 
+	private boolean downward;
+
 	// The map that this instance of AutoOrganizer corresponds to
 	private AbstractGraphMap map;
 
@@ -83,6 +86,7 @@ public class AutoOrganizer
 		instances.put(map.getID(), this);
 		controller = LASAD_Client.getMVCController(map.getID());
 		argModel = ArgumentModel.getInstanceByMapID(map.getID());
+		downward = false;
 	}
 
 	/**
@@ -93,6 +97,16 @@ public class AutoOrganizer
 	public static AutoOrganizer getInstanceByMapID(String mapID)
 	{
 		return instances.get(mapID);
+	}
+
+	public boolean getOrientation()
+	{
+		return downward;
+	}
+
+	public void setOrientation(boolean downward)
+	{
+		this.downward = downward;
 	}
 
 	public void setBoxWidth(int width)
@@ -117,175 +131,184 @@ public class AutoOrganizer
 
 	/**
 	 *	Organizes the map either top to bottom or bottom to top.  A clean-up function for the workspace.
-	 *	@param DOWNWARD - Whether to organize the map in an downward orientation or upward
 	 */
-	public void organizeMap(final boolean DOWNWARD)
+	public void organizeMap()
 	{
-		HashSet<LinkedBox> boxesToSendToServer = new HashSet<LinkedBox>();
-
-		double columnXcoord = CENTER_X;
-
-		// Organize the grid by height and width "levels" (think chess board)
-		for (ArgumentThread argThread : argModel.getArgThreads())
+		final boolean DOWNWARD = downward;
+		Logger.log("[lasad.gwt.client.model.organization.AutoOrganizer] Beginning organizeMap", Logger.DEBUG);
+		try
 		{
-			argThread.organizeGrid(DOWNWARD);
-			ArgumentGrid grid = argThread.getGrid();
-			if (grid.getBoxes().size() == 0)
-			{
-				continue;
-			}
+			HashSet<LinkedBox> boxesToSendToServer = new HashSet<LinkedBox>();
 
-			List<Component> mapComponents = map.getItems();
-			// Important to make a copy so that we don't modify the actual mapComponents
-			List<Component> mapComponentsCopy = new ArrayList<Component>(mapComponents);
-			ArrayList<Component> toRemove = new ArrayList<Component>();
+			double columnXcoord = CENTER_X;
 
-			// We need to call setSize from abstractBox, so we temporarily shift from LinkedBoxes to AbstractBoxes
-			// I'm aware it's annoying that we have two types of boxes representing the same thing, but it made life a lot easier
-			// for auto organization to have almost everything I needed in one place (LinkedBox)
-			// We shrink the mapComponents copy as we go for speed
-			for (LinkedBox box : grid.getBoxes())
+			// Organize the grid by height and width "levels" (think chess board)
+			for (ArgumentThread argThread : argModel.getArgThreads())
 			{
-				for (Component mapComponent : mapComponentsCopy)
+				argThread.organizeGrid(DOWNWARD);
+				ArgumentGrid grid = argThread.getGrid();
+				if (grid.getBoxes().size() == 0)
 				{
-					if (mapComponent instanceof AbstractBox)
-					{
-						AbstractBox myBox = (AbstractBox) mapComponent;
-						if (myBox.getConnectedModel().getId() == box.getBoxID())
-						{
-							// The setSize method will update the textBox appropriately.  We want the box height to be just enough to fit the text
-							toRemove.add(mapComponent);
-							myBox.setSize(boxWidth, minBoxHeight);
-							box.setSize(boxWidth, minBoxHeight);
+					continue;
+				}
 
-							for (AbstractExtendedElement childElement : myBox.getExtendedElements())
+				List<Component> mapComponents = map.getItems();
+				// Important to make a copy so that we don't modify the actual mapComponents
+				List<Component> mapComponentsCopy = new ArrayList<Component>(mapComponents);
+				ArrayList<Component> toRemove = new ArrayList<Component>();
+
+				// We need to call setSize from abstractBox, so we temporarily shift from LinkedBoxes to AbstractBoxes
+				// I'm aware it's annoying that we have two types of boxes representing the same thing, but it made life a lot easier
+				// for auto organization to have almost everything I needed in one place (LinkedBox)
+				// We shrink the mapComponents copy as we go for speed
+				for (LinkedBox box : grid.getBoxes())
+				{
+					for (Component mapComponent : mapComponentsCopy)
+					{
+						if (mapComponent instanceof AbstractBox)
+						{
+							AbstractBox myBox = (AbstractBox) mapComponent;
+							if (myBox.getConnectedModel().getId() == box.getBoxID())
 							{
-								if (childElement instanceof AbstractExtendedTextElement)
+								// The setSize method will update the textBox appropriately.  We want the box height to be just enough to fit the text
+								toRemove.add(mapComponent);
+								myBox.setSize(boxWidth, minBoxHeight);
+								box.setSize(boxWidth, minBoxHeight);
+
+								for (AbstractExtendedElement childElement : myBox.getExtendedElements())
 								{
-									AbstractExtendedTextElement textElt = (AbstractExtendedTextElement) childElement;
-									myBox.textAreaCallNewHeightgrow(textElt.determineBoxHeightChange());
-									box.setHeight(myBox.getHeight());
-									break;
+									if (childElement instanceof AbstractExtendedTextElement)
+									{
+										AbstractExtendedTextElement textElt = (AbstractExtendedTextElement) childElement;
+										myBox.textAreaCallNewHeightgrow(textElt.determineBoxHeightChange());
+										box.setHeight(myBox.getHeight());
+										break;
+									}
+								}
+								updateBoxSize(box);
+								break;
+							}
+						}
+						else
+						{
+							toRemove.add(mapComponent);
+						}
+					}
+					mapComponentsCopy.removeAll(toRemove);
+				}
+				
+				IntPair minMaxColumn = grid.determineMinMaxWidthLevels(grid.getBoxes());
+				final int MIN_WIDTH_LEVEL = minMaxColumn.getMin();
+				final int MAX_WIDTH_LEVEL = minMaxColumn.getMax();
+
+				IntPair minMaxRow = grid.determineMinMaxHeightLevels(grid.getBoxes());
+				final int MIN_HEIGHT_LEVEL = minMaxRow.getMin();
+				final int MAX_HEIGHT_LEVEL = minMaxRow.getMax();
+
+				// Sets the y coord either top to bottom or bottom to top, providing space between each row.  Each thread should start at the same y-coord
+				if (DOWNWARD)
+				{
+					double rowYcoord = CENTER_Y;
+					for (int rowCount = MAX_HEIGHT_LEVEL; rowCount >= MIN_HEIGHT_LEVEL; rowCount--)
+					{
+						ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
+
+						int tallestHeightAtRow = Integer.MIN_VALUE;
+						for (LinkedBox box : row)
+						{
+							box.setYTop(rowYcoord);
+							
+							final int BOX_HEIGHT = box.getHeight();
+							if (BOX_HEIGHT > tallestHeightAtRow)
+							{
+								tallestHeightAtRow = BOX_HEIGHT;
+							}
+							
+						}
+
+						// Add space between rows
+						if (tallestHeightAtRow != Integer.MIN_VALUE)
+						{
+							rowYcoord += tallestHeightAtRow + MIN_SPACE;
+						}
+						else
+						{
+							rowYcoord += MIN_SPACE;
+						}
+					}
+
+				}
+				else
+				{
+					double nextRowYcoord = CENTER_Y;
+
+					for (int rowCount = MIN_HEIGHT_LEVEL; rowCount <= MAX_HEIGHT_LEVEL; rowCount++)
+					{
+						ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
+
+						for (LinkedBox box : row)
+						{
+							box.setYTop(nextRowYcoord);
+						}
+
+						ArrayList<LinkedBox> nextRow = grid.getBoxesAtHeightLevel(rowCount + 1);
+						if (nextRow.size() > 0)
+						{
+							int tallestHeightAtNextRow = Integer.MIN_VALUE;
+							for (LinkedBox box : nextRow)
+							{
+								final int BOX_HEIGHT = box.getHeight();
+								if (BOX_HEIGHT > tallestHeightAtNextRow)
+								{
+									tallestHeightAtNextRow = BOX_HEIGHT;
 								}
 							}
-							updateBoxSize(box);
-							break;
+
+							nextRowYcoord = nextRowYcoord - MIN_SPACE - tallestHeightAtNextRow;
 						}
 					}
-					else
-					{
-						toRemove.add(mapComponent);
-					}
 				}
-				mapComponentsCopy.removeAll(toRemove);
-			}
-			
-			IntPair minMaxColumn = grid.determineMinMaxWidthLevels(grid.getBoxes());
-			final int MIN_WIDTH_LEVEL = minMaxColumn.getMin();
-			final int MAX_WIDTH_LEVEL = minMaxColumn.getMax();
 
-			IntPair minMaxRow = grid.determineMinMaxHeightLevels(grid.getBoxes());
-			final int MIN_HEIGHT_LEVEL = minMaxRow.getMin();
-			final int MAX_HEIGHT_LEVEL = minMaxRow.getMax();
-
-			// Sets the y coord either top to bottom or bottom to top, providing space between each row.  Each thread should start at the same y-coord
-			if (DOWNWARD)
-			{
-				double rowYcoord = CENTER_Y;
-				for (int rowCount = MAX_HEIGHT_LEVEL; rowCount >= MIN_HEIGHT_LEVEL; rowCount--)
+				// Sets the x coord left to right
+				for (int columnNumber = MIN_WIDTH_LEVEL; columnNumber <= MAX_WIDTH_LEVEL; columnNumber++)
 				{
-					ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
-
-					int tallestHeightAtRow = Integer.MIN_VALUE;
-					for (LinkedBox box : row)
+					HashSet<LinkedBox> column = grid.getBoxesAtWidthLevel(columnNumber);
+					for (LinkedBox box : column)
 					{
-						box.setYTop(rowYcoord);
-						
-						final int BOX_HEIGHT = box.getHeight();
-						if (BOX_HEIGHT > tallestHeightAtRow)
-						{
-							tallestHeightAtRow = BOX_HEIGHT;
-						}
-						
+						box.setXLeft(columnXcoord);
+						boxesToSendToServer.add(box);
 					}
 
-					// Add space between rows
-					if (tallestHeightAtRow != Integer.MIN_VALUE)
-					{
-						rowYcoord += tallestHeightAtRow + MIN_SPACE;
-					}
-					else
-					{
-						rowYcoord += MIN_SPACE;
-					}
+					columnXcoord += boxWidth;
 				}
 
-			}
-			else
-			{
-				double nextRowYcoord = CENTER_Y;
-
-				for (int rowCount = MIN_HEIGHT_LEVEL; rowCount <= MAX_HEIGHT_LEVEL; rowCount++)
-				{
-					ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
-
-					for (LinkedBox box : row)
-					{
-						box.setYTop(nextRowYcoord);
-					}
-
-					ArrayList<LinkedBox> nextRow = grid.getBoxesAtHeightLevel(rowCount + 1);
-					if (nextRow.size() > 0)
-					{
-						int tallestHeightAtNextRow = Integer.MIN_VALUE;
-						for (LinkedBox box : nextRow)
-						{
-							final int BOX_HEIGHT = box.getHeight();
-							if (BOX_HEIGHT > tallestHeightAtNextRow)
-							{
-								tallestHeightAtNextRow = BOX_HEIGHT;
-							}
-						}
-
-						nextRowYcoord = nextRowYcoord - MIN_SPACE - tallestHeightAtNextRow;
-					}
-				}
-			}
-
-			// Sets the x coord left to right
-			for (int columnNumber = MIN_WIDTH_LEVEL; columnNumber <= MAX_WIDTH_LEVEL; columnNumber++)
-			{
-				HashSet<LinkedBox> column = grid.getBoxesAtWidthLevel(columnNumber);
-				for (LinkedBox box : column)
-				{
-					box.setXLeft(columnXcoord);
-					boxesToSendToServer.add(box);
-				}
-
+				// Give an extra space between threads
 				columnXcoord += boxWidth;
+
+				if (DEBUG)
+				{
+					Logger.log(grid.toString(), Logger.DEBUG);
+					Logger.log(argThread.toString(), Logger.DEBUG);
+				}
 			}
 
-			// Give an extra space between threads
-			columnXcoord += boxWidth;
+			// Send the new positions to the server
+			updateBoxPositions(boxesToSendToServer);
 
-			if (DEBUG)
+			// Position the cursor of the map
+			positionMapCursor(DOWNWARD);
+
+			// Free some memory for speed (garbage collector will take the nullified values)
+			for (ArgumentThread argThread : argModel.getArgThreads())
 			{
-				Logger.log(grid.toString(), Logger.DEBUG);
-				Logger.log(argThread.toString(), Logger.DEBUG);
+				argThread.getGrid().empty();
 			}
 		}
-
-		// Send the new positions to the server
-		updateBoxPositions(boxesToSendToServer);
-
-		// Position the cursor of the map
-		positionMapCursor(DOWNWARD);
-
-		// Free some memory for speed (garbage collector will take the nullified values)
-		for (ArgumentThread argThread : argModel.getArgThreads())
+		catch (Exception e)
 		{
-			argThread.getGrid().empty();
+			LASADInfo.display("Error", "An unknown error has occurred - current arrangement of map cannot be auto organized.");
 		}
+		Logger.log("[lasad.gwt.client.model.organization.AutoOrganizer] Finishing organizeMap", Logger.DEBUG);		
 	}
 
 	/**

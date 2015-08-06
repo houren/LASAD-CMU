@@ -15,11 +15,21 @@ import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.user.client.Element;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 
+//import com.extjs.gxt.ui.client.widget.form.CheckBox;
+
+import com.google.gwt.user.client.ui.CheckBox;
+
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+
 import lasad.gwt.client.model.organization.AutoOrganizer;
 import lasad.gwt.client.model.organization.ArgumentModel;
 
 import com.extjs.gxt.ui.client.widget.Slider;
 import com.extjs.gxt.ui.client.widget.form.SliderField;
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.Listener; 
+import com.extjs.gxt.ui.client.event.BaseEvent;
 
 import lasad.gwt.client.logger.Logger;
 
@@ -42,6 +52,9 @@ public class CreatePreferencesDialog extends Window
 
 	private SliderField widthField;
 	private SliderField heightField;
+
+	private CheckBox orientUpward;
+	private CheckBox orientDownward;
 
 	//private SimpleComboBox<String> fontSizeSelector;
 
@@ -75,6 +88,7 @@ public class CreatePreferencesDialog extends Window
 		thisForm.setFrame(true);
 		thisForm.setHeaderVisible(false);
 		thisForm.setAutoHeight(true);
+		
 
 		/* fontSizeSelector = new SimpleComboBox<String>();
 		fontSizeSelector.setTriggerAction(ComboBox.TriggerAction.ALL);
@@ -98,8 +112,80 @@ public class CreatePreferencesDialog extends Window
 		});
 
 		thisForm.add(fontSizeSelector, formData);
+*/
+		
+		orientUpward = new CheckBox();
+		orientUpward.setText("Orient Upward");
+		//orientUpward.setBoxLabel("Orient Upward");
 
+		orientDownward = new CheckBox();
+		orientDownward.setText("Orient Downward");
+		//orientDownward.setBoxLabel("Orient Downward");
+			
+
+		final boolean IS_DOWNWARD = AutoOrganizer.getInstanceByMapID(mapID).getOrientation();
+		if (IS_DOWNWARD)
+		{
+			orientDownward.setValue(true);
+			orientUpward.setValue(false);
+		}
+		else
+		{
+			orientDownward.setValue(false);
+			orientUpward.setValue(true);
+		}
+
+		/*
+		orientUpward.addListener(Events.OnClick, new Listener()
+		{
+			@Override
+			public void handleEvent(BaseEvent e)
+			{
+				orientUpward.setValue(true);
+				orientDownward.setValue(false);
+			}
+		});
+
+		orientDownward.addListener(Events.OnClick, new Listener()
+		{
+			@Override
+			public void handleEvent(BaseEvent e)
+			{
+				orientUpward.setValue(false);
+				orientDownward.setValue(true);
+			}
+		});
 		*/
+		
+
+		
+		ClickHandler myHandler = new ClickHandler()
+		{
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				orientUpward.setValue(true);
+				orientDownward.setValue(false);
+			}
+
+		};
+		orientUpward.addClickHandler(myHandler);
+
+		orientDownward.addClickHandler(new ClickHandler()
+		{
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				orientUpward.setValue(false);
+				orientDownward.setValue(true);
+			}
+
+		});
+		orientUpward.setHTML(orientUpward.getHTML() + "<br>");
+
+		thisForm.add(orientUpward, formData);
+		thisForm.add(orientDownward, formData);
+			
 
 		widthSlider = new Slider()
 		{
@@ -146,7 +232,7 @@ public class CreatePreferencesDialog extends Window
 		thisForm.add(heightField, formData);
 
 		// Okay Button
-		Button btnOkay = new Button("Ok");
+		Button btnOkay = new Button("Organize");
 		btnOkay.addSelectionListener(new SelectionListener<ButtonEvent>()
 		{
 			@Override
@@ -165,9 +251,22 @@ public class CreatePreferencesDialog extends Window
 				}
 				*/
 
-				AutoOrganizer.getInstanceByMapID(mapID).setBoxWidth(widthSlider.getValue());
-				AutoOrganizer.getInstanceByMapID(mapID).setMinBoxHeight(heightSlider.getValue());
+				AutoOrganizer myOrganizer = AutoOrganizer.getInstanceByMapID(mapID);
+
+				myOrganizer.setBoxWidth(widthSlider.getValue());
+				myOrganizer.setMinBoxHeight(heightSlider.getValue());
+				final boolean DOWNWARD;
+				if (orientUpward.getValue())
+				{
+					DOWNWARD = false;
+				}
+				else
+				{
+					DOWNWARD = true;
+				}
+				myOrganizer.setOrientation(DOWNWARD);
 				CreatePreferencesDialog.this.hide();
+				myOrganizer.organizeMap();
 			}
 		});
 		thisForm.addButton(btnOkay);

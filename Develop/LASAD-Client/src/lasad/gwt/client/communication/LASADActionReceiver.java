@@ -750,13 +750,7 @@ public class LASADActionReceiver {
 			{
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] DELETE-ELEMENT", Logger.DEBUG);
 				int elementID = Integer.parseInt(a.getParameterValue(ParameterTypes.Id));
-				// This eltID is not being update because it's not removed in the original?  I thinK?
-				if (controller.getElement(elementID) == null)
-				{
-					Logger.log("ERROR: tried to delete null element.  Ignoring element.", Logger.DEBUG);
-					return;
-				}
-				String elementType = controller.getElement(elementID).getType();
+				
 				if (controller.getElement(elementID) != null) {
 					if (controller.getElement(elementID).getType().equalsIgnoreCase("FEEDBACK-AGENT")) {
 						processRemoveFeedbackAgent(controller, a);
@@ -771,6 +765,7 @@ public class LASADActionReceiver {
 
 					// Kevin Loughlin
 					// Keep in mind that relations are removed before boxes
+					String elementType = controller.getElement(elementID).getType();
 					if (elementType.equalsIgnoreCase(RELATION))
 					{
 						OrganizerLink removedLink = argModel.removeLinkByLinkID(elementID);

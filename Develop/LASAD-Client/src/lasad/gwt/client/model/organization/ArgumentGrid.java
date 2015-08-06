@@ -10,6 +10,7 @@ import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.organization.Coordinate;
 import lasad.gwt.client.model.organization.IntPair;
+import lasad.gwt.client.ui.workspace.LASADInfo;
 
 /**
  *	Provides a chessboard like organization of each argument thread, with specific coordinate positions translated from this model by AutoOrganizer.
@@ -125,6 +126,7 @@ public class ArgumentGrid
 	*/
 	private void sortAndPutStartRow(Collection<LinkedBox> startRow)
 	{
+		Logger.log("[lasad.gwt.client.model.organization.ArgumentGrid] Adding start row to grid...", Logger.DEBUG);
 		final int SIZE = startRow.size();
 		HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
 
@@ -260,6 +262,7 @@ public class ArgumentGrid
 	 */
 	public ArgumentGrid organize(final boolean DOWNWARD, Collection<LinkedBox> boxesToPutOnGrid)
 	{
+		Logger.log("[lasad.gwt.client.model.organization.ArgumentGrid] Organizing grid...", Logger.DEBUG);
 		// Remember to clear the grid before organization, since boxes must be reaccumulated
 		this.empty();
 
@@ -358,6 +361,7 @@ public class ArgumentGrid
 	*/
 	private int putParentsOfRowOnGrid(ArrayList<LinkedBox> rowBoxes)
 	{
+		Logger.log("[lasad.gwt.client.model.organization.ArgumentGrid] Putting successive height levels on grid...", Logger.DEBUG);
 		final int SIZE = rowBoxes.size();
 		if (SIZE > 0)
 		{
@@ -508,6 +512,7 @@ public class ArgumentGrid
 	// Actually creates a newGrid with all of the boxes in origGrid moved, and then returns the HashMap of this new grid
 	private HashMap<Coordinate, LinkedBox> alignBoxes(ArgumentGrid origGrid)
 	{
+		Logger.log("[lasad.gwt.client.model.organization.ArgumentGrid] Aligning boxes...", Logger.DEBUG);
 		ArgumentGrid finalGrid = new ArgumentGrid();
 		final int MIN_LEVEL = origGrid.calcLowestLevel();
 		final int MAX_LEVEL = origGrid.calcHighestLevel();
@@ -558,7 +563,7 @@ public class ArgumentGrid
 					continue;
 				}
 
-				// Remove children that are at a lower height level that are already on the grid (these children cause visual cycles and should be ignored when sorting the "above" level)
+				// Remove children that are at a lower height or equal level that are already on the grid (these children cause visual cycles and should be ignored when sorting the "above" level)
 				HashSet<LinkedBox> childrenToRemove = new HashSet<LinkedBox>();
 				for (LinkedBox child : childGroup)
 				{
@@ -580,11 +585,10 @@ public class ArgumentGrid
 					}
 				}
 
-				final int LEFT_PARENT_WIDTH = parentGroup.get(0).getWidthLevel();
-				final int LEFT_CHILD_WIDTH = childGroup.get(0).getWidthLevel();
+				final int AVERAGE_PARENT_WIDTH = calcAverageParentWidth(parentGroup);
 
 				// First child will be farthest left, with each next child moving HOR_SPACE right successively
-				int widthLeftChildShouldBe = LEFT_PARENT_WIDTH + parentGroup.size() - childGroup.size();
+				int widthLeftChildShouldBe = AVERAGE_PARENT_WIDTH - (childGroup.size() - 1);
 
 				// The width the nextChild should be
 				int nextWidth = widthLeftChildShouldBe;
@@ -622,6 +626,12 @@ public class ArgumentGrid
 									foundCycle = true;
 									break;
 								}
+								else if (grandChild.getHeightLevel() == CHILD_LEVEL && grandChild.getWidthLevel() == member.getWidthLevel())
+								{
+									Logger.log("grandChild equals", Logger.DEBUG);
+									foundCycle = true;
+									break;
+								}
 							}
 						}
 
@@ -651,6 +661,25 @@ public class ArgumentGrid
 			}
 		}
 		return finalGrid.getGrid();
+	}
+
+	private int calcAverageParentWidth(final Collection<LinkedBox> parents)
+	{
+		double sum = 0.0;
+		int numParents = parents.size();
+		if (numParents != 0)
+		{
+			for (LinkedBox parent : parents)
+			{
+				sum += parent.getWidthLevel();
+			}
+			return (int) Math.round(sum / numParents);
+		}
+		else
+		{
+			Logger.log("Passed empty parent group to calcAverageParentWidth", Logger.DEBUG);
+			return 0;
+		}
 	}
 
 	// Sorts a collection of boxes from lowest to greatest widthLevel, returned as an ArrayList
