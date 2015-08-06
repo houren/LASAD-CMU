@@ -441,7 +441,6 @@ public class ArgumentGrid
 					if (this.getBoxAt(WIDTH_LEVEL + 1, HEIGHT_LEVEL) == null)
 					{
 						grid.put(POSITION, box);
-						Logger.log(this.toString(), Logger.DEBUG);
 						return WIDTH_LEVEL + HOR_SPACE;
 					}
 					else
@@ -557,7 +556,7 @@ public class ArgumentGrid
 				LinkedBox currentBox = PARENT_LEVEL_BOXES.get(i);
 				ArrayList<LinkedBox> parentGroup = new ArrayList<LinkedBox>();
 				parentGroup.add(currentBox);
-				ArrayList<LinkedBox> childGroup = sortAscendingWidth(currentBox.getChildBoxes());
+				ArrayList<LinkedBox> childGroup = sortAscendingNumParents(currentBox.getChildBoxes());
 				if (childGroup.size() == 0)
 				{
 					continue;
@@ -680,6 +679,35 @@ public class ArgumentGrid
 			Logger.log("Passed empty parent group to calcAverageParentWidth", Logger.DEBUG);
 			return 0;
 		}
+	}
+
+	private ArrayList<LinkedBox> sortAscendingNumParents(final Collection<LinkedBox> group)
+	{
+		HashSet<LinkedBox> unsortedChildGroup = new HashSet<LinkedBox>(group);
+		ArrayList<LinkedBox> sortedChildGroup = new ArrayList<LinkedBox>();
+
+		final int SIZE = group.size();
+		for (int i = 0; i < SIZE; i++)
+		{
+			int minNumParents = Integer.MAX_VALUE;
+			LinkedBox minBox = null;
+
+			for (LinkedBox box : unsortedChildGroup)
+			{
+				if (box.getNumParents() < minNumParents)
+				{
+					minNumParents = box.getNumParents();
+					minBox = box;
+				}
+			}
+			if (minBox != null)
+			{
+				unsortedChildGroup.remove(minBox);
+				sortedChildGroup.add(minBox);
+			}
+		}
+
+		return sortedChildGroup;
 	}
 
 	// Sorts a collection of boxes from lowest to greatest widthLevel, returned as an ArrayList
