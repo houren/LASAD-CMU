@@ -25,6 +25,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import lasad.gwt.client.model.organization.AutoOrganizer;
 import lasad.gwt.client.model.organization.ArgumentModel;
 
+import lasad.gwt.client.LASAD_Client;
 import com.extjs.gxt.ui.client.widget.Slider;
 import com.extjs.gxt.ui.client.widget.form.SliderField;
 import com.extjs.gxt.ui.client.event.Events;
@@ -80,39 +81,13 @@ public class CreatePreferencesDialog extends Window
 	private void createForm()
 	{
 		// Save these values for cancel button, which will revert to original values
-		//final int ORIG_FONT_SIZE = ArgumentModel.getInstanceByMapID(mapID).getFontSize();
-		final int ORIG_BOX_WIDTH = AutoOrganizer.getInstanceByMapID(mapID).getBoxWidth();
-		final int ORIG_MIN_BOX_HEIGHT = AutoOrganizer.getInstanceByMapID(mapID).getMinBoxHeight();
+		final int ORIG_BOX_WIDTH = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getAutoOrganizer().getBoxWidth();
+		final int ORIG_MIN_BOX_HEIGHT = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getAutoOrganizer().getMinBoxHeight();
 
 		FormPanel thisForm = new FormPanel();
 		thisForm.setFrame(true);
 		thisForm.setHeaderVisible(false);
 		thisForm.setAutoHeight(true);
-		
-
-		/* fontSizeSelector = new SimpleComboBox<String>();
-		fontSizeSelector.setTriggerAction(ComboBox.TriggerAction.ALL);
-
-		fontSizeSelector.setFieldLabel("<font color=\"#000000\">" + "Font Size [" + ORIG_FONT_SIZE + "]" + "</font>");
-		fontSizeSelector.setAllowBlank(true);
-
-		// Allow even font sizes from 8-36 as options
-		for (int i = 8; i < 37; i += 2)
-		{
-			fontSizeSelector.add(String.valueOf(i));
-		}
-		
-		fontSizeSelector.addSelectionChangedListener(new SelectionChangedListener<SimpleComboValue<String>>()
-		{
-			@Override
-			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se)
-			{
-				fontSizeSelector.setFieldLabel("<font color=\"#000000\">" + "Font Size [" + fontSizeSelector.getRawValue() + "]" + "</font>");
-			}
-		});
-
-		thisForm.add(fontSizeSelector, formData);
-*/
 		
 		orientUpward = new CheckBox();
 		orientUpward.setText("Orient Upward");
@@ -123,7 +98,7 @@ public class CreatePreferencesDialog extends Window
 		//orientDownward.setBoxLabel("Orient Downward");
 			
 
-		final boolean IS_DOWNWARD = AutoOrganizer.getInstanceByMapID(mapID).getOrientation();
+		final boolean IS_DOWNWARD = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getAutoOrganizer().getOrientation();
 		if (IS_DOWNWARD)
 		{
 			orientDownward.setValue(true);
@@ -134,28 +109,6 @@ public class CreatePreferencesDialog extends Window
 			orientDownward.setValue(false);
 			orientUpward.setValue(true);
 		}
-
-		/*
-		orientUpward.addListener(Events.OnClick, new Listener()
-		{
-			@Override
-			public void handleEvent(BaseEvent e)
-			{
-				orientUpward.setValue(true);
-				orientDownward.setValue(false);
-			}
-		});
-
-		orientDownward.addListener(Events.OnClick, new Listener()
-		{
-			@Override
-			public void handleEvent(BaseEvent e)
-			{
-				orientUpward.setValue(false);
-				orientDownward.setValue(true);
-			}
-		});
-		*/
 		
 
 		
@@ -182,6 +135,7 @@ public class CreatePreferencesDialog extends Window
 
 		});
 		orientUpward.setHTML(orientUpward.getHTML() + "<br>");
+		orientDownward.setHTML(orientDownward.getHTML() + "<br><br>");
 
 		thisForm.add(orientUpward, formData);
 		thisForm.add(orientDownward, formData);
@@ -238,20 +192,7 @@ public class CreatePreferencesDialog extends Window
 			@Override
 			public void componentSelected(ButtonEvent ce)
 			{
-				/*
-				try
-				{
-					// if fontsizeselector is left blank, this will throw an exception
-					int newFontSize = Integer.parseInt(fontSizeSelector.getRawValue());
-					ArgumentModel.getInstanceByMapID(mapID).setFontSize(newFontSize);
-				}
-				catch (NumberFormatException e)
-				{
-					ArgumentModel.getInstanceByMapID(mapID).setFontSize(ORIG_FONT_SIZE);
-				}
-				*/
-
-				AutoOrganizer myOrganizer = AutoOrganizer.getInstanceByMapID(mapID);
+				AutoOrganizer myOrganizer = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getAutoOrganizer();
 
 				myOrganizer.setBoxWidth(widthSlider.getValue());
 				myOrganizer.setMinBoxHeight(heightSlider.getValue());
@@ -278,11 +219,6 @@ public class CreatePreferencesDialog extends Window
 			@Override
 			public void componentSelected(ButtonEvent ce)
 			{
-				/*
-				ArgumentModel.getInstanceByMapID(mapID).setFontSize(ORIG_FONT_SIZE);
-				AutoOrganizer.getInstanceByMapID(mapID).setBoxWidth(ORIG_BOX_WIDTH);
-				AutoOrganizer.getInstanceByMapID(mapID).setMinBoxHeight(ORIG_MIN_BOX_HEIGHT);
-				*/
 				CreatePreferencesDialog.this.hide();
 			}
 		});
@@ -293,26 +229,5 @@ public class CreatePreferencesDialog extends Window
 		binding.addButton(btnOkay);
 
 		this.add(thisForm);
-
-		/*
-		ElementInfo newElement = createNewElement(elInfo);
-		// Add default text field
-		Vector<Parameter> subElOptions = new Vector<Parameter>();
-		Vector<Parameter> subUiOptions = new Vector<Parameter>();
-		subUiOptions.add(new Parameter(ParameterTypes.MinHeight, "42"));
-
-		String subElementName = title.getValue() + "-text";
-		ElementInfo newElementTextField = OntologyGenerator.createElementInfo(subElementName, "text", 1, 1, 1, subElOptions, subUiOptions);
-		newElement.getChildElements().put(subElementName, newElementTextField);
-		// SN: Added Awareness Checkbox - Behavior during preview.
-		if (addAwarenessCheckbox.getValue()) {
-			addAwareness(newElement);
-		}
-
-		// SN: End Awareness Checkbox
-		
-
-		CreateModifyAndDeleteOntology.getInstance().createPreviewForElement(newElement);
-		*/
 	}
 }

@@ -429,11 +429,12 @@ public class LASADActionReceiver {
 
 	private void processMapAction(MVController controller, Action a) {
 
-		ArgumentModel argModel = ArgumentModel.getInstanceByMapID(controller.getMapID());
+
+		ArgumentModel argModel = LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().getArgModel();
 
 		Logger.log("[lasad.gwt.client.communication.LASADActionReceiver][processMapAction] Processing map action...", Logger.DEBUG);
 
-		AutoOrganizer autoOrganizer = AutoOrganizer.getInstanceByMapID(controller.getMapID());
+		AutoOrganizer autoOrganizer = LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().getAutoOrganizer();
 
 		Logger.log("[Details] " + a.toString(), Logger.DEBUG_DETAILS);
 

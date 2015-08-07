@@ -33,9 +33,6 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 //	protected LASADActionSender communicator = LASADActionSender.getInstance();
 //	protected ActionFactory actionBuilder = ActionFactory.getInstance();
 
-	// Instances of maps, where string is mapID
-	protected static HashMap<String, AbstractGraphMap> instances = new HashMap<String, AbstractGraphMap>();
-
 	protected GraphMapSpace myArgumentMapSpace;
 
 //	protected MVCViewSession myViewSession;
@@ -78,15 +75,9 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 		init();
 		focusHandler = new GenericFocusHandler(this);
 		highlightHandler = new GenericHighlightHandler(this);
-		argModel = ArgumentModel.getInstanceByMapID(this.getID());
+		argModel = new ArgumentModel(this.getID());
 		autoOrganizer = new AutoOrganizer(this);
-		instances.put(this.getID(), this);
 		Logger.log("Argument Model and autoOrganizer successfully assigned to this map.", Logger.DEBUG);
-	}
-
-	public static AbstractGraphMap getInstanceByMapID(String mapID)
-	{
-		return instances.get(mapID);
 	}
 
 	/*

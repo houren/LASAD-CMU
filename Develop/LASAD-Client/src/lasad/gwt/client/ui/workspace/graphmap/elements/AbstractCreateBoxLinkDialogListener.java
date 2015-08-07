@@ -17,6 +17,8 @@ import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.ui.workspace.LASADInfo;
 
+import lasad.gwt.client.LASAD_Client;
+
 /**
  * This class represents the abstract action handler for the CreateBoxLink dialog box.
  */
@@ -79,7 +81,7 @@ public abstract class AbstractCreateBoxLinkDialogListener implements EventListen
 					}	
 					if (connectsGroup)
 					{
-						ArgumentModel argModel = ArgumentModel.getInstanceByMapID(myMap.getID());
+						ArgumentModel argModel = myMap.getArgModel();
 						LinkedBox alpha = argModel.getBoxByBoxID(myDialog.getStartBox().getConnectedModel().getId());
 						if (alpha.getCanBeGrouped())
 						{

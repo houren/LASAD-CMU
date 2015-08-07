@@ -53,7 +53,7 @@ public class DeleteContributionDialog extends Window
 	public DeleteContributionDialog(String mapId)
 	{
 		this.correspondingMapId = mapId;
-		this.argModel = ArgumentModel.getInstanceByMapID(mapId);
+		this.argModel = LASAD_Client.getMapTab(mapId).getMyMapSpace().getMyMap().getArgModel();
 		this.boxes = argModel.getBoxes();
 		this.boxSelector.setTriggerAction(ComboBox.TriggerAction.ALL);
 	}

@@ -40,9 +40,6 @@ public class ArgumentModel
 	private HashSet<ArgumentThread> argThreads;
 	private int fontSize = 10;
 	private MVController controller;
-	
-	// One model instance per map, where String is mapID
-	private static HashMap<String, ArgumentModel> instances = new HashMap<String, ArgumentModel>();
 
 	// Just for this class, if we need to create a new instance below
 	private ArgumentModel()
@@ -50,24 +47,10 @@ public class ArgumentModel
 		this.argThreads = new HashSet<ArgumentThread>();
 	}
 
-	private ArgumentModel(String mapID)
+	public ArgumentModel(String mapID)
 	{
 		this.argThreads = new HashSet<ArgumentThread>();
 		controller = LASAD_Client.getMVCController(mapID);
-	}
-	
-	public static ArgumentModel getInstanceByMapID(String mapID)
-	{
-		ArgumentModel myArgModel = instances.get(mapID);
-
-		// if the model doesn't already exist, create it
-		if (myArgModel == null)
-		{
-			instances.put(mapID, new ArgumentModel(mapID));
-			myArgModel = instances.get(mapID);
-		}
-
-		return myArgModel;
 	}
 	
 	public void setFontSize(int fontSize){

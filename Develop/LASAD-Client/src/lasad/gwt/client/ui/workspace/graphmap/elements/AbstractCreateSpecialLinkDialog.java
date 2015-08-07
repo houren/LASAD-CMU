@@ -33,6 +33,8 @@ import lasad.gwt.client.model.organization.ArgumentThread;
 import lasad.gwt.client.model.organization.AutoOrganizer;
 import lasad.gwt.client.logger.Logger;
 
+import lasad.gwt.client.LASAD_Client;
+
 import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
 
 /**
@@ -69,7 +71,7 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 		this.correspondingMapId = mapId;
 		this.boxes = boxes;
 		this.links = links;
-		this.allowLinksToLinks = AbstractGraphMap.getInstanceByMapID(correspondingMapId).getMyViewSession().getController().getMapInfo().isAllowLinksToLinks();
+		this.allowLinksToLinks = LASAD_Client.getMapTab(mapId).getMyMapSpace().getMyMap().getMyViewSession().getController().getMapInfo().isAllowLinksToLinks();
 		this.comboStart.setTriggerAction(ComboBox.TriggerAction.ALL);
 		this.comboEnd.setTriggerAction(ComboBox.TriggerAction.ALL);
 	}
@@ -110,7 +112,7 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 			if (connectsGroup)
 			{
-				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
+				ArgumentModel argModel = LASAD_Client.getMapTab(correspondingMapId).getMyMapSpace().getMyMap().getArgModel();
 				LinkedBox alpha = argModel.getBoxByRootID(Integer.parseInt(rootID));
 
 				if (alpha.getNumSiblings() < MAX_SIBLINGS && alpha.getCanBeGrouped())
@@ -150,7 +152,7 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 			@Override
 			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se) {
 
-				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
+				ArgumentModel argModel = LASAD_Client.getMapTab(correspondingMapId).getMyMapSpace().getMyMap().getArgModel();
 
 				// Important to use rootID
 				LinkedBox startBox = argModel.getBoxByRootID(Integer.parseInt(comboStart.getRawValue()));
@@ -167,7 +169,7 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 
 				Vector<String> restrictedIds = new Vector<String>();
 
-				AutoOrganizer autoOrganizer = AutoOrganizer.getInstanceByMapID(correspondingMapId);
+				AutoOrganizer autoOrganizer = LASAD_Client.getMapTab(correspondingMapId).getMyMapSpace().getMyMap().getAutoOrganizer();
 
 				String connectsGroupString = config.getElementOption(ParameterTypes.ConnectsGroup);
 				boolean connectsGroup;
@@ -252,12 +254,12 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 			@Override
 			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se) {
 
-				ArgumentModel argModel = ArgumentModel.getInstanceByMapID(correspondingMapId);
+				ArgumentModel argModel = LASAD_Client.getMapTab(correspondingMapId).getMyMapSpace().getMyMap().getArgModel();
 				LinkedBox endBox = argModel.getBoxByRootID(Integer.parseInt(comboEnd.getRawValue()));
 
 				comboStart.removeAll();
 
-				AutoOrganizer autoOrganizer = AutoOrganizer.getInstanceByMapID(correspondingMapId);
+				AutoOrganizer autoOrganizer = LASAD_Client.getMapTab(correspondingMapId).getMyMapSpace().getMyMap().getAutoOrganizer();
 
 				String connectsGroupString = config.getElementOption(ParameterTypes.ConnectsGroup);
 				boolean connectsGroup;

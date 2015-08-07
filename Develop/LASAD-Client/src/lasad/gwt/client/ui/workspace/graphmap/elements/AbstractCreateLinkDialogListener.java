@@ -21,6 +21,8 @@ import lasad.gwt.client.model.organization.GroupedBoxesStatusCodes;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.ui.workspace.LASADInfo;
 
+import lasad.gwt.client.LASAD_Client;
+
 public abstract class AbstractCreateLinkDialogListener implements EventListener {
 
 //    private final LASADActionSender communicator = LASADActionSender.getInstance();
@@ -83,7 +85,7 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 						connectsGroup = Boolean.parseBoolean(connectsGroupString);
 					}
 
-					ArgumentModel argModel = ArgumentModel.getInstanceByMapID(myMap.getID());
+					ArgumentModel argModel = myMap.getArgModel();
 					LinkedBox alpha = argModel.getBoxByBoxID(b1.getConnectedModel().getId());
 					LinkedBox beta = argModel.getBoxByBoxID(b2.getConnectedModel().getId());
 					OrganizerLink newLink = new OrganizerLink(alpha, beta, linkType, connectsGroup);

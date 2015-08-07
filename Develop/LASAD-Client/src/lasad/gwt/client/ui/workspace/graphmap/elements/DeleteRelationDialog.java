@@ -56,9 +56,9 @@ public class DeleteRelationDialog extends Window
 	public DeleteRelationDialog(String mapId)
 	{
 		this.correspondingMapId = mapId;
-		this.argModel = ArgumentModel.getInstanceByMapID(mapId);
+		this.argModel = LASAD_Client.getMapTab(mapId).getMyMapSpace().getMyMap().getArgModel();
 		this.boxes = argModel.getBoxes();
-		this.allowLinksToLinks = AbstractGraphMap.getInstanceByMapID(correspondingMapId).getMyViewSession().getController().getMapInfo().isAllowLinksToLinks();
+		this.allowLinksToLinks = LASAD_Client.getMapTab(mapId).getMyMapSpace().getMyMap().getMyViewSession().getController().getMapInfo().isAllowLinksToLinks();
 		this.comboStart.setTriggerAction(ComboBox.TriggerAction.ALL);
 		this.comboEnd.setTriggerAction(ComboBox.TriggerAction.ALL);
 	}

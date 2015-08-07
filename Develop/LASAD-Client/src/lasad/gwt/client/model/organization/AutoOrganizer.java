@@ -66,8 +66,6 @@ public class AutoOrganizer
 	// The map that this instance of AutoOrganizer corresponds to
 	private AbstractGraphMap map;
 
-	// Instances of autoOrganizer: one per map.  String is mapID.
-	private static HashMap<String, AutoOrganizer> instances = new HashMap<String, AutoOrganizer>();
 
 	// For sending map updates to the server
 	private LASADActionSender communicator = LASADActionSender.getInstance();
@@ -83,20 +81,9 @@ public class AutoOrganizer
 	public AutoOrganizer(AbstractGraphMap map)
 	{
 		this.map = map;
-		instances.put(map.getID(), this);
 		controller = LASAD_Client.getMVCController(map.getID());
-		argModel = ArgumentModel.getInstanceByMapID(map.getID());
+		argModel = map.getArgModel();
 		downward = false;
-	}
-
-	/**
-	 * Returns the AutoOrganizer instance relating to the parameter mapID
-	 * @param mapID - The ID for the map that corresponds to an instance of AutoOrganizer
-	 * @return The autoOrganizer instance corresponding to mapID, or null if the instance does not exist
-	 */
-	public static AutoOrganizer getInstanceByMapID(String mapID)
-	{
-		return instances.get(mapID);
 	}
 
 	public boolean getOrientation()

@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.awt.event.KeyEvent;
 
+import lasad.gwt.client.LASAD_Client;
+
 public abstract class AbstractExtendedTextElement extends AbstractExtendedElement{
 
 	protected final boolean DEBUG = false;
@@ -272,7 +274,7 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 		
 		if(this.getContainer().getMVCViewSession() != null){
 			mapID = this.getContainer().getMVCViewSession().getController().getMapID();
-			fontSize = ArgumentModel.getInstanceByMapID(mapID).getFontSize();
+			fontSize = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getArgModel().getFontSize();
 		}
 		
 		if (textFrameDiv != null) {

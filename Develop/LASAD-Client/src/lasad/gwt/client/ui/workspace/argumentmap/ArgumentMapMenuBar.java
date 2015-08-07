@@ -224,8 +224,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 				final int topBefore = myMapSpace.getMyMap().getBody().getScrollTop();
 
 				ExportScreenShotDialogue.getInstance().showLoadingScreen();
-
-				EdgeCoords edgeCoords = ArgumentModel.getInstanceByMapID(myMapInfo.getMapID()).calcEdgeCoords();
+				EdgeCoords edgeCoords = LASAD_Client.getMapTab(myMapInfo.getMapID()).getMyMapSpace().getMyMap().getArgModel().calcEdgeCoords();
 				final int TOP = edgeCoords.getTop();
 				final int LEFT = edgeCoords.getLeft();
 				final int RIGHT = edgeCoords.getRight();
@@ -795,10 +794,11 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	protected CheckMenuItem createNextFontSize(final int i)
 	{
 		final CheckMenuItem fontSize = new CheckMenuItem(String.valueOf(i));
-		if (i == ArgumentModel.getInstanceByMapID(ArgumentMapMenuBar.this.getMyMapInfo().getMapID()).getFontSize())
+		if (i == 10)
 		{
 			fontSize.setChecked(true);
 		}
+			
 		fontSize.addSelectionListener(new SelectionListener<MenuEvent>()
 		{
 			@Override
@@ -814,7 +814,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
 				fontSize.setChecked(true);
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				ArgumentModel.getInstanceByMapID(ArgumentMapMenuBar.this.getMyMapInfo().getMapID()).setFontSize(i);
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getArgModel().setFontSize(i);
 			}
 		});
 		return fontSize;
