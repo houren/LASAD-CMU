@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.List;
 
 // Aware that this is unnecessary, I just do it as a reminder in case I change location
 import lasad.gwt.client.model.organization.ArgumentThread;
@@ -25,6 +26,7 @@ import lasad.gwt.client.ui.common.AbstractExtendedElement;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.dom.client.Element;
+import com.extjs.gxt.ui.client.widget.Component;
 
 
 /**
@@ -71,38 +73,25 @@ public class ArgumentModel
 	public void setFontSize(int fontSize){
 		this.fontSize = fontSize;
 
-		HashSet<AbstractBox> boxes = AbstractBox.getBoxes(controller.getMapID());
-		if (boxes == null || boxes.size() == 0)
-		{
-			return;
-		}
-		else
-		{
-			for(AbstractBox box : boxes){
-				if(box != null){
-					if(box.getHeaderFontSize() != fontSize){
-						box.setHeaderFontSize(fontSize);
-						for(AbstractExtendedElement element : box.getExtendedElements()){
-							if(element instanceof AbstractExtendedTextElement){
-								((AbstractExtendedTextElement)element).autoSizeTextArea();
-							}
+		List<Component> mapComponents = LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().getItems();
+		for(Component mapComponent : mapComponents){
+			if(mapComponent instanceof AbstractBox){
+				AbstractBox box = (AbstractBox) mapComponent;
+				if(box.getHeaderFontSize() != fontSize){
+					box.setHeaderFontSize(fontSize);
+					box.setSize(box.getWidth(), 100);
+					for(AbstractExtendedElement element : box.getExtendedElements()){
+						if(element instanceof AbstractExtendedTextElement){
+							AbstractExtendedTextElement textEl = (AbstractExtendedTextElement)element;
+							textEl.setFontSize(fontSize);
+							box.textAreaCallNewHeightgrow(textEl.determineBoxHeightChange());
+							break;
 						}
 					}
 				}
 			}
-
-			if(AbstractExtendedTextElement.getTextElements(controller.getMapID()) != null)
-			{
-				for(Element el : AbstractExtendedTextElement.getTextElements(controller.getMapID())){
-					if(el != null){
-						el.getStyle().setFontSize(fontSize,com.google.gwt.dom.client.Style.Unit.PX);
-						el.getStyle().setHeight(el.getScrollHeight(),com.google.gwt.dom.client.Style.Unit.PX);
-						el.getParentElement().getStyle().setHeight(el.getParentElement().getScrollHeight(),com.google.gwt.dom.client.Style.Unit.PX);
-					}
-				}
-			}
-		}	
-	}
+		}
+	}	
 	
 	public int getFontSize(){
 		return this.fontSize;

@@ -178,8 +178,6 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 	private Listener<ComponentEvent> componentListener = null;
 	
 	private boolean isReplay;
-	
-	private static HashMap<String,HashSet<AbstractBox>> boxes = new HashMap<String,HashSet<AbstractBox>>();
 
 	private Timer hoverTimer = new Timer() {
 		public void run() {
@@ -203,11 +201,6 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		cn = UIObjectConnector.wrap(this, BORDER_WIDTH*2, BORDER_HEIGHT*2); // To set the whole box as connector
 
 		disableTextSelection();
-		
-		if(boxes.get(map.getID()) == null){
-			boxes.put(map.getID(), new HashSet<AbstractBox>());
-		}
-		boxes.get(map.getID()).add(this);
 	}
 
 	/**
@@ -233,11 +226,6 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 
 		//boxHeading = new BoxHeaderElement(this, this.title,isR);
 		
-		if(boxes.get(map.getID()) == null){
-			boxes.put(map.getID(), new HashSet<AbstractBox>());
-		}
-		boxes.get(map.getID()).add(this);
-		
 		boxHeading = createBoxHeaderElement(this, this.title,isR);
 		
 		boxHeading.render(boxContentDiv, 0);
@@ -250,11 +238,6 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 		this(map, info,isR);
 		this.myDetails = sdp;
 		this.isReplay = isR;
-		
-		if(boxes.get(map.getID()) == null){
-			boxes.put(map.getID(), new HashSet<AbstractBox>());
-		}
-		boxes.get(map.getID()).add(this);
 	}
 
 	@Override
@@ -1258,10 +1241,6 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 
 		if(myDetails != null)
 			this.myDetails.setColor(color);
-	}
-	
-	public static HashSet<AbstractBox> getBoxes(String mapId){
-		return boxes.get(mapId);
 	}
 	
 	//necessary for controlling box size

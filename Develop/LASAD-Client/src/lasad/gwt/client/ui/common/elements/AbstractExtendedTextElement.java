@@ -56,8 +56,6 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 	private boolean wantFocus = false;
 	private boolean readOnly = false;
 	private boolean autoResize = false;
-	
-	private static HashMap<String,HashSet<Element>> textElements = new HashMap<String,HashSet<Element>>();
 
 	public AbstractExtendedTextElement(ExtendedElementContainerInterface container, ElementInfo config) {
 		super(container, config);
@@ -120,11 +118,15 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 			this.labelOnTop = labelOnTop;
 		}
 	}
-	
-	public static HashSet<Element> getTextElements(String mapId){
-		return textElements.get(mapId);
-	}
 
+	public void setFontSize(int fontSize){
+		if(textArea != null){
+			textArea.getStyle().setFontSize(fontSize,com.google.gwt.dom.client.Style.Unit.PX);
+		}else if(textField != null){
+			textField.getStyle().setFontSize(fontSize,com.google.gwt.dom.client.Style.Unit.PX);
+		}
+	}
+	
 	protected void buildElement() {
 		if (elementContent != null) {
 			// Already built
@@ -295,13 +297,6 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 				DOM.setStyleAttribute(textArea, "width", Math.max(0, size.width - balanceWidth) + "px");
 			}
 			
-			if(mapID != null){
-				if(textElements.get(mapID) == null){
-					textElements.put(mapID, new HashSet<Element>());
-				}
-				textElements.get(mapID).add(textArea);
-			}
-			
 			DOM.setStyleAttribute(textArea, "font-size", fontSize+"px");
 		}
 		if (textField != null) {
@@ -318,12 +313,6 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 				DOM.setStyleAttribute(textField, "width", Math.max(0, size.width - balanceWidth) + "px");
 			}
 			
-			if(mapID != null){
-				if(textElements.get(mapID) == null){
-					textElements.put(mapID, new HashSet<Element>());
-				}
-				textElements.get(mapID).add(textField);
-			}
 			DOM.setStyleAttribute(textField, "font-size", fontSize+"px");
 		}
 	}
