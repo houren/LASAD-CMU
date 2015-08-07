@@ -35,6 +35,9 @@ import lasad.gwt.client.ui.common.AbstractExtendedElement;
 import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
 import com.extjs.gxt.ui.client.widget.Component;
 
+import lasad.gwt.client.ui.link.AbstractLinkPanel;
+import lasad.shared.communication.objects.parameters.ParameterTypes;
+
 /**
  *	An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update links
  *	in ArgumentMap representations where a type of relation can create groups of boxes. The overall map organizing function,
@@ -52,7 +55,7 @@ public class AutoOrganizer
 
 	private final boolean DEBUG = false;
 	// The minimum number of pixels between boxes, set as a double for rounding/accuracy purposes
-	private final double MIN_SPACE = 50.0;
+	private double MIN_SPACE = 50.0;
 
 	// The maximum number of siblings (grouped boxes) a box can have
 	private final int MAX_SIBLINGS = 2;
@@ -178,6 +181,12 @@ public class AutoOrganizer
 						}
 						else
 						{
+							if(mapComponent instanceof AbstractLinkPanel){
+								if(!Boolean.parseBoolean(((AbstractLinkPanel) mapComponent).getElementInfo().getElementOption(ParameterTypes.Details))){
+									MIN_SPACE = (int) Math.max(((AbstractLinkPanel)mapComponent).getElement().getScrollHeight()+50, MIN_SPACE);
+								}
+							}
+
 							toRemove.add(mapComponent);
 						}
 					}
