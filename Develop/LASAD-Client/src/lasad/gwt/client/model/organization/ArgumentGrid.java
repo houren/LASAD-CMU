@@ -597,19 +597,13 @@ public class ArgumentGrid
 					{
 						child.setWidthLevel(nextWidth);
 						ArrayList<LinkedBox> groupForGrid = new ArrayList<LinkedBox>();
-						switch (child.getNumSiblings())
+						if (child.getNumSiblings() == 0)
 						{
-							case 0:
-								groupForGrid.add(child);
-								break;
-							case 1:
-								groupForGrid = sortGroup(child);
-								break;
-							case 2:
-								groupForGrid = sortGroup(child, nextWidth);
-								break;
-							default:
-								break;
+							groupForGrid.add(child);
+						}
+						else
+						{
+							groupForGrid = sortGroup(child);
 						}
 
 						// Check for cycles (boxes that point to boxes below them and share widthLevels with that box).  These types of cycle look bad
