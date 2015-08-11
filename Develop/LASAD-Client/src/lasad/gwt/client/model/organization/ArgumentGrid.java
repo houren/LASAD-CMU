@@ -468,6 +468,12 @@ public class ArgumentGrid
 		}
 	}
 
+	private int replaceSoloBoxOnGrid(LinkedBox box)
+	{
+		grid.remove(findBoxOnGrid(box).getGridPosition());
+		return putSoloBoxOnGrid(box);
+	}
+
 	// Puts a group of boxes (extended siblings) on grid if not already present, finding different locations if other box(es) are in the way
 	// The "sortedGroup" is sorted in ascending widthLevel order.
 	private int putGroupOnGrid(ArrayList<LinkedBox> sortedGroup)
@@ -621,7 +627,6 @@ public class ArgumentGrid
 								}
 								else if (grandChild.getHeightLevel() == CHILD_LEVEL && grandChild.getWidthLevel() == member.getWidthLevel())
 								{
-									Logger.log("grandChild equals", Logger.DEBUG);
 									foundCycle = true;
 									break;
 								}
@@ -648,9 +653,52 @@ public class ArgumentGrid
 						else
 						{
 							nextWidth = finalGrid.putGroupOnGrid(groupForGrid);
-						}	
+						}
 					}
-				}	
+				}
+
+				if (currentLevel == MIN_LEVEL)
+				{
+					double childGroupWidthLevelSum = 0.0;
+					ArrayList<LinkedBox> adjustedChildGroup = new ArrayList<LinkedBox>();
+					for (LinkedBox child : childGroup)
+					{
+						LinkedBox childOnGrid = findBoxOnGrid(child);
+						childGroupWidthLevelSum += childOnGrid.getWidthLevel();
+						adjustedChildGroup.add(childOnGrid);
+					}
+					if (Math.abs(childGroupWidthLevelSum) > 0.1)
+					{
+						final int AVERAGE_CHILD_WIDTH = (int) Math.round(childGroupWidthLevelSum / adjustedChildGroup.size());
+						int widthNextParentShouldBe = AVERAGE_CHILD_WIDTH - (parentGroup.size() - 1);
+						for (LinkedBox parent : parentGroup)
+						{
+							if (parent.getNumSiblings() == 0)
+							{
+								if (parent.getWidthLevel() != widthNextParentShouldBe)
+								{
+									parent.setWidthLevel(widthNextParentShouldBe);
+									replaceSoloBoxOnGrid(parent);
+								}
+
+								widthNextParentShouldBe += HOR_SPACE;
+							}
+							else
+							{
+								int rightMostWidth = Integer.MIN_VALUE;
+								for (LinkedBox myBox : parent.getThisAndExtendedSiblings())
+								{
+									if (myBox.getWidthLevel() > rightMostWidth)
+									{
+										rightMostWidth = myBox.getWidthLevel();
+									}
+								}
+
+								widthNextParentShouldBe = rightMostWidth + HOR_SPACE;
+							}
+						}
+					}
+				}		
 			}
 		}
 		return finalGrid.getGrid();

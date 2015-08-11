@@ -29,7 +29,7 @@ public enum ParameterTypes {
 			"PATTERN-ID"), RequestId("REQUEST-ID"), ServiceClass("SERVICE-CLASS"), AllowLinksToLinks("ALLOW_LINKS_TO_LINKS"),
 			CanBeGrouped("canbegrouped"), ConnectsGroup("connectsgroup"), LinksAlreadyRemoved("linksalreadyremoved"),
 			SiblingsAlreadyUpdated("siblingsalreadyupdated"), OrganizerBoxWidth("organizerboxwidth"), OrganizerBoxHeight("organizerboxheight"),
-			OrganizerOrientation("organizerorientation"), ScrollLeft("scrollleft"), ScrollTop("scrolltop"), FontSize("font-size"),
+			OrganizerOrientation("organizerorientation"), ScrollEdgeX("scrolledgex"), ScrollEdgeY("scrolledgey"), FontSize("font-size"),
 
 	TextOnImage("textonimage"), Source("source"), Dragable("dragable"), Text1("TEXT1"), Text2("TEXT2"), Spot1("SPOT1"), Spot2("SPOT2"), DetailsOnly(
 			"detailsonly"), FontColor("font-color"), Client("CLIENT"), UserList("USERLIST"), Headline("headline"), Link("LINK"), ImageURL(

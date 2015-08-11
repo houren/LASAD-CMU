@@ -62,6 +62,8 @@ import com.google.gwt.dom.client.Style.Cursor;
 
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.dom.client.Style;
+import lasad.gwt.client.communication.LASADActionSender;
+import lasad.gwt.client.communication.helper.ActionFactory; 
 
 /**
  * Visual representation of each box in the graph-layout
@@ -1599,6 +1601,7 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 	public void textAreaCallNewHeightgrow(int height) {
 		autogrow = true;
 		setSize(getWidth(), getHeight()+ height);
+		LASADActionSender.getInstance().sendActionPackage(ActionFactory.getInstance().updateBoxSize(myMap.getID(), AbstractBox.this.getConnectedModel().getId(), getWidth(), getHeight()));
 		autogrow = false;
 	}
 }

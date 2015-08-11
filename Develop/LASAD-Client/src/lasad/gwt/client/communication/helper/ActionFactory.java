@@ -118,7 +118,7 @@ public class ActionFactory {
 	}
 
 	// Created by Kevin Loughlin
-	public ActionPackage finishAutoOrganization(String mapID, boolean isDownward, int boxWidth, int minBoxHeight, int scrollLeft, int scrollTop)
+	public ActionPackage finishAutoOrganization(String mapID, boolean isDownward, int boxWidth, int minBoxHeight, double edgeCoordX, double edgeCoordY)
 	{
 		ActionPackage p = new ActionPackage();
 		Action a = new Action(Commands.AutoOrganize, Categories.Map);
@@ -126,8 +126,8 @@ public class ActionFactory {
 		a.addParameter(ParameterTypes.OrganizerOrientation, String.valueOf(isDownward));
 		a.addParameter(ParameterTypes.OrganizerBoxWidth, String.valueOf(boxWidth));
 		a.addParameter(ParameterTypes.OrganizerBoxHeight, String.valueOf(minBoxHeight));
-		a.addParameter(ParameterTypes.ScrollLeft, String.valueOf(scrollLeft));
-		a.addParameter(ParameterTypes.ScrollTop, String.valueOf(scrollTop));
+		a.addParameter(ParameterTypes.ScrollEdgeX, String.valueOf(edgeCoordX));
+		a.addParameter(ParameterTypes.ScrollEdgeY, String.valueOf(edgeCoordY));
 		p.addAction(a);
 		return p;
 	}

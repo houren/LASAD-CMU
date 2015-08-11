@@ -1473,8 +1473,17 @@ public class LASADActionReceiver {
 		organizer.setBoxWidth(Integer.parseInt(a.getParameterValue(ParameterTypes.OrganizerBoxWidth)));
 		organizer.setMinBoxHeight(Integer.parseInt(a.getParameterValue(ParameterTypes.OrganizerBoxHeight)));
 		AbstractGraphMap map = LASAD_Client.getMapTab(MAP_ID).getMyMapSpace().getMyMap();
-		map.getLayoutTarget().dom.setScrollLeft(Integer.parseInt(a.getParameterValue(ParameterTypes.ScrollLeft)));
-		map.getLayoutTarget().dom.setScrollTop(Integer.parseInt(a.getParameterValue(ParameterTypes.ScrollTop)));
+		double edgeCoordY = Double.parseDouble(a.getParameterValue(ParameterTypes.ScrollEdgeY));
+		double edgeCoordX = Double.parseDouble(a.getParameterValue(ParameterTypes.ScrollEdgeX));
+		if (IS_DOWNWARD)
+		{
+			map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) + 10 - map.getInnerHeight());
+		}
+		else
+		{
+			map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) - 10);
+		}
+		map.getLayoutTarget().dom.setScrollLeft((int) Math.round(edgeCoordX - map.getInnerWidth() / 2.0));
 	}
 
 	private void processAuthoringAction(final Action a) {

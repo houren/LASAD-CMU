@@ -276,7 +276,7 @@ public class AutoOrganizer
 						boxesToSendToServer.add(box);
 					}
 
-					columnXcoord += boxWidth;
+					columnXcoord += (boxWidth * 3) / 4;
 				}
 
 				// Give an extra space between threads
@@ -293,9 +293,9 @@ public class AutoOrganizer
 			updateBoxPositions(boxesToSendToServer);
 
 			// Position the cursor of the map
-			final Coordinate SCROLL_POSITION = determineScrollPosition(DOWNWARD);
+			final double[] SCROLL_EDGE = determineScrollEdge(DOWNWARD);
 
-			communicator.sendActionPackage(actionBuilder.finishAutoOrganization(map.getID(), DOWNWARD, this.getBoxWidth(), this.getMinBoxHeight(), SCROLL_POSITION.getX(), SCROLL_POSITION.getY()));
+			communicator.sendActionPackage(actionBuilder.finishAutoOrganization(map.getID(), DOWNWARD, this.getBoxWidth(), this.getMinBoxHeight(), SCROLL_EDGE[0], SCROLL_EDGE[1]));
 
 			// Free some memory for speed (garbage collector will take the nullified values)
 			for (ArgumentThread argThread : argModel.getArgThreads())
@@ -569,7 +569,7 @@ public class AutoOrganizer
 	 *	@param DOWNWARD - if true, put the bottom boxes at the bottom of the screen, false do other option
 	 *	The "edge" is the bottom of the bottom row of boxes in the case of true, top of the top row in case of false
 	 */
-	private Coordinate determineScrollPosition(final boolean DOWNWARD)
+	private double[] determineScrollEdge(final boolean DOWNWARD)
 	{
 		ArrayList<LinkedBox> boxesAtEndLevel = new ArrayList<LinkedBox>();
 		double edgeSum = 0.0;
@@ -644,26 +644,14 @@ public class AutoOrganizer
 			numEdgeBoxes++;
 		}
 
-		final int SCROLL_LEFT;
-		final int SCROLL_TOP;
 		if (numEdgeBoxes > 0)
 		{
-			if (DOWNWARD)
-			{
-				SCROLL_TOP = (int) Math.round(edgeCoordY) + 10 - map.getInnerHeight();
-			}
-			else
-			{
-				SCROLL_TOP = (int) Math.round(edgeCoordY) - 10;
-			}
-			SCROLL_LEFT = (int) Math.round(edgeSum / numEdgeBoxes - map.getInnerWidth() / 2.0);
+			return new double[]{edgeSum / numEdgeBoxes, edgeCoordY};
 		}
 		else
 		{
-			SCROLL_LEFT = map.getMapDimensionSize().width / 2 - map.getInnerWidth() / 2;
-			SCROLL_TOP = map.getMapDimensionSize().height / 2 - map.getInnerHeight() / 2;
+			return new double[]{CENTER_X, CENTER_Y};
 		}
-		return new Coordinate(SCROLL_LEFT, SCROLL_TOP);
 	}
 
 	/*
