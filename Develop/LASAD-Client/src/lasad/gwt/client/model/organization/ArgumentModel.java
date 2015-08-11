@@ -15,6 +15,7 @@ import lasad.gwt.client.model.argument.MVController;
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.model.ElementInfo;
 import lasad.gwt.client.communication.LASADActionReceiver;
+import lasad.gwt.client.communication.LASADActionSender;
 import lasad.gwt.client.communication.helper.ActionFactory;
 import lasad.shared.communication.objects.ActionPackage;
 import lasad.gwt.client.logger.Logger;
@@ -53,7 +54,7 @@ public class ArgumentModel
 		controller = LASAD_Client.getMVCController(mapID);
 	}
 	
-	public void setFontSize(int fontSize){
+	public void setFontSize(int fontSize, boolean isOriginalCall){
 		this.fontSize = fontSize;
 
 		List<Component> mapComponents = LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().getItems();
@@ -74,7 +75,9 @@ public class ArgumentModel
 				}
 			}
 		}
-	}	
+		if(isOriginalCall)
+			LASADActionSender.getInstance().sendActionPackage(ActionFactory.getInstance().changeFontSize(controller.getMapID(), fontSize));
+	}
 	
 	public int getFontSize(){
 		return this.fontSize;

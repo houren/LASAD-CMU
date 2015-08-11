@@ -38,14 +38,10 @@ import lasad.gwt.client.logger.Logger;
  *	Creates the preferences menu that appears when selected from the LASAD menu, found in ArgumentMapMenuBar.
  *	The preferences menu allows the user to select the font size for LASAD, as well as the default box width and size for autoOrganizer.
  *	@author Kevin Loughlin
- *	@since 31 July 2015, Last Updated 31 July 2015
+ *	@since 31 July 2015, Last Updated 11 August 2015
  */
 public class CreatePreferencesDialog extends Window
 {
-	// The default values for the width and height sliders (referring to box width and height upon autoOrganization)
-	private final int DEFAULT_WIDTH = 200;
-	private final int DEFAULT_HEIGHT = DEFAULT_WIDTH / 2;
-
 	private String mapID;
 
 	private Slider widthSlider;

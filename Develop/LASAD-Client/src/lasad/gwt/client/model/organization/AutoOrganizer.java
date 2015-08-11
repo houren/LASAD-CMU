@@ -23,6 +23,7 @@ import lasad.gwt.client.model.organization.GroupedBoxesStatusCodes;
 import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.model.organization.IntPair;
 import lasad.gwt.client.model.organization.ArgumentGrid;
+import lasad.gwt.client.model.organization.Coordinate;
 
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
@@ -292,7 +293,9 @@ public class AutoOrganizer
 			updateBoxPositions(boxesToSendToServer);
 
 			// Position the cursor of the map
-			positionMapCursor(DOWNWARD);
+			final Coordinate SCROLL_POSITION = determineScrollPosition(DOWNWARD);
+
+			communicator.sendActionPackage(actionBuilder.finishAutoOrganization(map.getID(), DOWNWARD, this.getBoxWidth(), this.getMinBoxHeight(), SCROLL_POSITION.getX(), SCROLL_POSITION.getY()));
 
 			// Free some memory for speed (garbage collector will take the nullified values)
 			for (ArgumentThread argThread : argModel.getArgThreads())
@@ -566,7 +569,7 @@ public class AutoOrganizer
 	 *	@param DOWNWARD - if true, put the bottom boxes at the bottom of the screen, false do other option
 	 *	The "edge" is the bottom of the bottom row of boxes in the case of true, top of the top row in case of false
 	 */
-	private void positionMapCursor(final boolean DOWNWARD)
+	private Coordinate determineScrollPosition(final boolean DOWNWARD)
 	{
 		ArrayList<LinkedBox> boxesAtEndLevel = new ArrayList<LinkedBox>();
 		double edgeSum = 0.0;
@@ -641,23 +644,26 @@ public class AutoOrganizer
 			numEdgeBoxes++;
 		}
 
+		final int SCROLL_LEFT;
+		final int SCROLL_TOP;
 		if (numEdgeBoxes > 0)
 		{
 			if (DOWNWARD)
 			{
-				map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) + 10 - map.getInnerHeight());
+				SCROLL_TOP = (int) Math.round(edgeCoordY) + 10 - map.getInnerHeight();
 			}
 			else
 			{
-				map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) - 10);
+				SCROLL_TOP = (int) Math.round(edgeCoordY) - 10;
 			}
-			map.getLayoutTarget().dom.setScrollLeft((int) Math.round(edgeSum / numEdgeBoxes - map.getInnerWidth() / 2.0));	
+			SCROLL_LEFT = (int) Math.round(edgeSum / numEdgeBoxes - map.getInnerWidth() / 2.0);
 		}
 		else
 		{
-			map.getLayoutTarget().dom.setScrollLeft(map.getMapDimensionSize().width / 2 - map.getInnerWidth() / 2);
-			map.getLayoutTarget().dom.setScrollTop(map.getMapDimensionSize().height / 2 - map.getInnerHeight() / 2);
+			SCROLL_LEFT = map.getMapDimensionSize().width / 2 - map.getInnerWidth() / 2;
+			SCROLL_TOP = map.getMapDimensionSize().height / 2 - map.getInnerHeight() / 2;
 		}
+		return new Coordinate(SCROLL_LEFT, SCROLL_TOP);
 	}
 
 	/*

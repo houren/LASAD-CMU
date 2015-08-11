@@ -452,6 +452,14 @@ public class LASADActionReceiver {
 					.applyStyles("background:url(" + a.getParameterValue(ParameterTypes.BackgroundImageURL) + ")");
 			LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().repaint();
 		}
+
+		if (a.getCmd().equals(Commands.ChangeFontSize)){
+			Logger.log("Changing font size on ActionReceiver: "+a.getParameterValue(ParameterTypes.FontSize), Logger.DEBUG);
+			if (a.getParameterValue(ParameterTypes.FontSize) != null){
+				argModel.setFontSize(Integer.parseInt(a.getParameterValue(ParameterTypes.FontSize)), false);
+				((ArgumentMapMenuBar)LASAD_Client.getMapTab(a.getParameterValue(ParameterTypes.MapId)).getMyMapSpace().getMenuBar()).setFontSizeSelection(Integer.parseInt(a.getParameterValue(ParameterTypes.FontSize)));
+			}
+		}
 		
 		// TODO vereinfachen
 		if (LASAD_Client.getMapEditionStyle(mapId) == ArgumentEditionStyleEnum.GRAPH) {
@@ -592,7 +600,7 @@ public class LASADActionReceiver {
 					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, DEFAULT_HEIGHT, canBeGrouped)));
 					
 					//Added by DSF, run setFontSize so new boxes get the right font size
-					argModel.setFontSize(argModel.getFontSize());
+					argModel.setFontSize(argModel.getFontSize(), false);
 					/*
 					if (DEBUG)
 					{
@@ -736,10 +744,10 @@ public class LASADActionReceiver {
 					controller.updateElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)), a.getParameters());
 				}
 			}
-			else if (a.getCmd().equals(Commands.CenterMap))
+			else if (a.getCmd().equals(Commands.AutoOrganize))
 			{
-				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] CENTER-MAP", Logger.DEBUG);
-				this.centerMap(a);
+				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] AUTO-ORGANIZE", Logger.DEBUG);
+				this.handleAutoOrganization(a);
 			}
 			else if (a.getCmd().equals(Commands.UpdateCursorPosition)) {
 
@@ -1133,10 +1141,10 @@ public class LASADActionReceiver {
 				}
 
 			}
-			else if (a.getCmd().equals(Commands.CenterMap))
+			else if (a.getCmd().equals(Commands.AutoOrganize))
 			{
-				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] CENTER-MAP", Logger.DEBUG);
-				this.centerMap(a);
+				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] AUTO-ORGANIZE", Logger.DEBUG);
+				this.handleAutoOrganization(a);
 			}
 			else if (a.getCmd().equals(Commands.UpdateCursorPosition)) {
 
@@ -1338,6 +1346,8 @@ public class LASADActionReceiver {
 		case CreateElement:
 		case UpdateElement:
 		case DeleteElement:
+		case ChangeFontSize:
+		case AutoOrganize:
 		case ChatMsg:
 			init.createAllReplayActions(a);
 			break;
@@ -1452,6 +1462,19 @@ public class LASADActionReceiver {
 			map.getLayoutTarget().dom.setScrollLeft(map.getMapDimensionSize().width / 2 - map.getInnerWidth() / 2);
 			map.getLayoutTarget().dom.setScrollTop(map.getMapDimensionSize().height / 2 - map.getInnerHeight() / 2);
 		}
+	}
+
+	private void handleAutoOrganization(Action a)
+	{
+		final String MAP_ID = a.getParameterValue(ParameterTypes.MapId);
+		final boolean IS_DOWNWARD = Boolean.parseBoolean(a.getParameterValue(ParameterTypes.OrganizerOrientation));
+		AutoOrganizer organizer = LASAD_Client.getMapTab(MAP_ID).getMyMapSpace().getMyMap().getAutoOrganizer();
+		organizer.setOrientation(IS_DOWNWARD);
+		organizer.setBoxWidth(Integer.parseInt(a.getParameterValue(ParameterTypes.OrganizerBoxWidth)));
+		organizer.setMinBoxHeight(Integer.parseInt(a.getParameterValue(ParameterTypes.OrganizerBoxHeight)));
+		AbstractGraphMap map = LASAD_Client.getMapTab(MAP_ID).getMyMapSpace().getMyMap();
+		map.getLayoutTarget().dom.setScrollLeft(Integer.parseInt(a.getParameterValue(ParameterTypes.ScrollLeft)));
+		map.getLayoutTarget().dom.setScrollTop(Integer.parseInt(a.getParameterValue(ParameterTypes.ScrollTop)));
 	}
 
 	private void processAuthoringAction(final Action a) {

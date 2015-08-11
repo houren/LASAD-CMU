@@ -406,11 +406,29 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		}
 	}
 
+	private void processAutoOrganize(Action a, User u)
+	{
+		int mapID = this.aproc.getMapIDFromAction(a);
+		
+		// Create new revision of the map
+		Revision r = createNewRevision(mapID, u, a);
+		r.setDescription("Auto Organizing Map");
+		r.saveToDatabase();
+		
+		ActionPackage ap = ActionPackage.wrapAction(a);
+		Logger.doCFLogging(ap);	
+		ManagementController.addToAllUsersOnMapActionQueue(ap, mapID);
+	}
+
 	@Override
 	public boolean processAction(Action a, User u, String sessionID) {
 		boolean returnValue = false;
 		if (u != null && a.getCategory().equals(Categories.Map)) {
 			switch (a.getCmd()) {
+			case ChangeFontSize:
+				processChangeFontSize(a, u);
+				returnValue = true;
+				break;
 			case CreateElement:// Check
 				processCreateElement(a, u);
 				returnValue = true;
@@ -432,11 +450,27 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				processBackgroudImage(a, u);
 				returnValue = true;
 				break;
+			case AutoOrganize:
+				processAutoOrganize(a, u);
+				returnValue = true;
+				break;
 			default:
 				break;
 			}
 		}
 		return returnValue;
+	}
+
+	private void processChangeFontSize(Action a, User u){
+		int mapID = this.aproc.getMapIDFromAction(a);
+		
+		Revision r = createNewRevision(mapID, u, a);
+		r.setDescription("Changing the font size");
+		r.saveToDatabase();
+		
+		ActionPackage ap = ActionPackage.wrapAction(a);
+		Logger.doCFLogging(ap);	
+		ManagementController.addToAllUsersOnMapActionQueue(ap, mapID);
 	}
 	
 	//TODO Zhenyu

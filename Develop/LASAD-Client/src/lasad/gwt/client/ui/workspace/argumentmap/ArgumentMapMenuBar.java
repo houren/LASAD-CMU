@@ -204,6 +204,20 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		}
 	}
 
+	public void setFontSizeSelection(int fontSize){
+		if(sizeOptions == null) return;
+		for (Component menuComponent : sizeOptions.getItems())
+		{
+			if (menuComponent instanceof CheckMenuItem)
+			{
+				if(!((CheckMenuItem) menuComponent).getText().equals(Integer.toString(fontSize)))
+					((CheckMenuItem) menuComponent).setChecked(false);
+				else 
+					((CheckMenuItem) menuComponent).setChecked(true);
+			}
+		}
+	}
+
 	// An attempt originally by Kevin Loughlin to downsize screen shot, but that now works thanks to Darlan Sanatana Farias
 	// perhaps we should change the method name ;)
 	protected MenuItem kevinCreateScreenshotItem() {
@@ -781,9 +795,10 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return fontSizeItem;
 	}
 
+	Menu sizeOptions = null;
 	protected Menu createSizeSelector()
 	{
-		Menu sizeOptions = new Menu();
+		sizeOptions = new Menu();
 		for (int i = 8; i < 37; i += 2)
 		{
 			sizeOptions.add(createNextFontSize(i));
@@ -814,7 +829,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
 				fontSize.setChecked(true);
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getArgModel().setFontSize(i);
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getArgModel().setFontSize(i, true);
 			}
 		});
 		return fontSize;
