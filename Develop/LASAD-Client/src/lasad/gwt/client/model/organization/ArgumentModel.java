@@ -237,8 +237,11 @@ public class ArgumentModel
 		for (ArgumentThread argThread : argThreads)
 		{
 			LinkedBox removedBox = argThread.removeBoxByBoxID(boxID);
-			if (removedBox != null)
-			{
+			if (removedBox != null){
+				if(argThread.getBoxes().size() == 0){
+					this.removeArgThread(argThread);
+				}
+				
 				return removedBox;
 			}
 		}

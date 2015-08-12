@@ -468,12 +468,6 @@ public class ArgumentGrid
 		}
 	}
 
-	private int replaceSoloBoxOnGrid(LinkedBox box)
-	{
-		grid.remove(findBoxOnGrid(box).getGridPosition());
-		return putSoloBoxOnGrid(box);
-	}
-
 	// Puts a group of boxes (extended siblings) on grid if not already present, finding different locations if other box(es) are in the way
 	// The "sortedGroup" is sorted in ascending widthLevel order.
 	private int putGroupOnGrid(ArrayList<LinkedBox> sortedGroup)
@@ -677,8 +671,9 @@ public class ArgumentGrid
 							{
 								if (parent.getWidthLevel() != widthNextParentShouldBe)
 								{
+									grid.remove(parent.getGridPosition());
 									parent.setWidthLevel(widthNextParentShouldBe);
-									replaceSoloBoxOnGrid(parent);
+									putSoloBoxOnGrid(parent);
 								}
 
 								widthNextParentShouldBe += HOR_SPACE;

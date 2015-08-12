@@ -781,7 +781,7 @@ public class LASADActionReceiver {
 						if (removedLink != null)
 						{
 							argModel.createNewThreadIfNecessary(removedLink);
-							argModel.removeExcessThreads();
+							//argModel.removeExcessThreads();
 
 							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)) 
 								&& Integer.parseInt(a.getParameterValue(ParameterTypes.NumActions)) == 1)
@@ -807,7 +807,7 @@ public class LASADActionReceiver {
 						if (removedBox != null)
 						{
 							argModel.removeLinksTo(removedBox);
-							argModel.removeExcessThreads();
+							//argModel.removeExcessThreads();
 						}
 						else
 						{
@@ -1179,7 +1179,7 @@ public class LASADActionReceiver {
 						if (removedLink != null)
 						{
 							argModel.createNewThreadIfNecessary(removedLink);
-							argModel.removeExcessThreads();
+							//argModel.removeExcessThreads();
 
 							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved))
 								&& Integer.parseInt(a.getParameterValue(ParameterTypes.NumActions)) == 1)
@@ -1204,7 +1204,7 @@ public class LASADActionReceiver {
 						LinkedBox removedBox = argModel.removeBoxByBoxID(elementID);
 						if (removedBox != null)
 						{
-							argModel.removeExcessThreads();
+							//argModel.removeExcessThreads();
 						}
 						else
 						{
