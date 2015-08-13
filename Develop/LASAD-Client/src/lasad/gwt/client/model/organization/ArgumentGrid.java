@@ -253,6 +253,16 @@ public class ArgumentGrid
 		}
 	}
 
+	private void fixCounterOrientedLinks(Collection<LinkedBox> boxesToPutOnGrid){
+		for(LinkedBox box : boxesToPutOnGrid){
+			for(LinkedBox child : box.getChildBoxes()){
+				if(box.getHeightLevel() >= child.getHeightLevel()){
+					box.setHeightLevel(child.getHeightLevel()-1);
+				}
+			}
+		}
+	}
+
 	/**
 	 *	The method that actually organizes the grid and thus is key to auto organization.
 	 *	This should only be called from organizeGrid in ArgumentThread.
@@ -272,11 +282,25 @@ public class ArgumentGrid
 			return this;
 		}
 
+		final int ORIG_SIZE = boxesToPutOnGrid.size();
+
 		// Set the height levels of the boxes from bottom to top, with lowest height level as 0
 		for (LinkedBox box : boxesToPutOnGrid)
 		{
 			boxesToPutOnGrid = recursivelySetHeightLevels(box, 0, new HashSet<LinkedBox>());
 			break;
+		}
+
+		if (boxesToPutOnGrid.size() != ORIG_SIZE)
+		{
+			Logger.log("It's all Kevin's fault.", Logger.DEBUG);
+		}
+
+		fixCounterOrientedLinks(boxesToPutOnGrid);
+
+		if (boxesToPutOnGrid.size() != ORIG_SIZE)
+		{
+			Logger.log("It's all Darlan's fault.", Logger.DEBUG);
 		}
 
 		// Sets the lowest level to 0
