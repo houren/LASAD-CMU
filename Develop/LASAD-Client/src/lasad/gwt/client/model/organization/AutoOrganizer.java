@@ -306,6 +306,11 @@ public class AutoOrganizer
 		catch (Exception e)
 		{
 			LASADInfo.display("Error", "An unknown error has occurred - current arrangement of map cannot be auto organized.");
+			e.printStackTrace();
+			Logger.log(e.toString(), Logger.DEBUG);
+			Logger.log(e.getMessage(), Logger.DEBUG);
+			Logger.log(e.getStackTrace().toString(), Logger.DEBUG);
+			Logger.log(e.getClass().toString(), Logger.DEBUG);
 		}
 		Logger.log("[lasad.gwt.client.model.organization.AutoOrganizer] Finishing organizeMap", Logger.DEBUG);		
 	}

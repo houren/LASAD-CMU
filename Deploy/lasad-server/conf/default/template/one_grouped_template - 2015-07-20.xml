@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<maptemplate uniquename="one_grouped_template" title="one_grouped_template" ontology="one_can_be_grouped">
-  <mapdetails>
-    <description />
-    <options maxuser="30" chatsystem="true" listofusers="true" minimap="false" track-cursor="false" selection-details="false" onlyauthorcanmodify="false" committextbyenter="true" straightlink="true" AutoGrowTextArea="false" allowlinkstolinks="false" />
-  </mapdetails>
-</maptemplate>
-

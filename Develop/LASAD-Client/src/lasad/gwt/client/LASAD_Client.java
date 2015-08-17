@@ -256,6 +256,27 @@ public class LASAD_Client implements EntryPoint {
 		return (MapTab) item;
 	}
 
+	public void createAboutTab()
+	{
+		TabItem about = new TabItem();
+		about.setText(myConstants.Introduction());
+		about.setClosable(true);
+		about.addStyleName("pad-text");
+		about.setStyleAttribute("backgroundColor", "#FBFBFB");
+		// item.setEnabled(false);
+
+		// TODO This text should be loaded from the server.
+		HTML introduction = new HTML();
+		introduction
+				.setHTML("<br><div align=\"center\"><img src=\"resources/images/lasad.png\" border=\"0\"><font color=#000000><br><br><h2>Welcome!</h2><br><p>This is version "
+						+ DebugSettings.version
+						+ " of the LASAD system.<br></p><p>You have two options: (1) Try out the pre-configured LASAD system or (2) configure the system to your needs by means of the authoring tool.<br><br></p><p>To just test the system, please click on \"Login & Map Overview\" at the top of the screen. <br>After login, you can join an existing argumentation map or create a new one.<br><br></p><p>If you want to configure the system to your needs, please click first on \"Login and Map Overview\" and enter your username and password.<br> After that, there will be a new tab at the top of the screen called \"LASAD Authoring Tool\".<br> Here you can configure the system. <br>Once your configuration is complete, you can switch to the \"Login & Map Overview\" tab to actually use it.</p></div></font>");
+		about.add(introduction);
+
+		advanced.add(about);
+		advanced.setSelection(about);
+	}
+
 	/** Creating tabs **/
 	private TabPanel createTabs() {
 
@@ -265,6 +286,7 @@ public class LASAD_Client implements EntryPoint {
 		advanced.setAnimScroll(true);
 		advanced.setTabScroll(true);
 
+		/*
 		TabItem item = new TabItem();
 		item.setText(myConstants.Introduction());
 		item.setClosable(true);
@@ -280,6 +302,7 @@ public class LASAD_Client implements EntryPoint {
 						+ " of the LASAD system.<br></p><p>You have two options: (1) Try out the pre-configured LASAD system or (2) configure the system to your needs by means of the authoring tool.<br><br></p><p>To just test the system, please click on \"Login & Map Overview\" at the top of the screen. <br>After login, you can join an existing argumentation map or create a new one.<br><br></p><p>If you want to configure the system to your needs, please click first on \"Login and Map Overview\" and enter your username and password.<br> After that, there will be a new tab at the top of the screen called \"LASAD Authoring Tool\".<br> Here you can configure the system. <br>Once your configuration is complete, you can switch to the \"Login & Map Overview\" tab to actually use it.</p></div></font>");
 		item.add(introduction);
 		advanced.add(item);
+		*/
 
 		item2 = new TabItem();
 		item2.setLayout(new FitLayout());
@@ -299,7 +322,8 @@ public class LASAD_Client implements EntryPoint {
 			advanced.setSelection(item2);
 		}
 
-		this.addLoginInfoTab();
+		// Commented out by Kevin Loughlin - login info tab is unncessary and unwanted for our purposes right now
+		// this.addLoginInfoTab();
 
 		return advanced;
 	}

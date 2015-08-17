@@ -1,4 +1,0 @@
-# Module lasad_client
-# RPC service class, partial path of RPC policy file
-lasad.gwt.client.communication.servlet.LASADServletService, 2F45066F05E85285ED9E79AFED943F00.gwt.rpc
-de.novanic.eventservice.client.event.service.EventService, 6D564E9CB8F5FB54CFFA15AD59D01DB4.gwt.rpc

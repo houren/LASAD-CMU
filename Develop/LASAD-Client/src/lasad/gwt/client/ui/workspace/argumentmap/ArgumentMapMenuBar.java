@@ -597,6 +597,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	{
 		Menu menu = new Menu();
 
+		MenuItem about = createAboutItem();
+		menu.add(about);
+
 		/*
 		MenuItem preferencesItem = createPreferencesItem();
 		menu.add(preferencesItem);
@@ -680,6 +683,23 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		return preferences;
 	}
 	*/
+
+	/*
+	 *	Creates the about subitem of the LASAD menu that provides general info about what LASAD is, version, etc.
+	 */
+	protected MenuItem createAboutItem()
+	{
+		final MenuItem aboutItem = new MenuItem("About LASAD");
+		aboutItem.addSelectionListener(new SelectionListener<MenuEvent>() {
+			@Override
+			public void componentSelected(MenuEvent me)
+			{
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
+				LASAD_Client.getInstance().createAboutTab();
+			}
+		});
+		return aboutItem;
+	}
 
 	/*
 	 *	Create the subitem of the LASAD menu that allows a user to logout when clicked

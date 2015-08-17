@@ -248,9 +248,41 @@ public class LinkedBox
 		return childBoxes;
 	}
 
+	public HashSet<LinkedBox> getChildBoxesOnNextLevel()
+	{
+		HashSet<LinkedBox> childBoxesOnNextLevel = new HashSet<LinkedBox>(this.getChildBoxes());
+		HashSet<LinkedBox> toRemove = new HashSet<LinkedBox>();
+		final int CHILD_HEIGHT = this.getHeightLevel() + 1;
+		for (LinkedBox box : childBoxesOnNextLevel)
+		{
+			if (box.getHeightLevel() != CHILD_HEIGHT)
+			{
+				toRemove.add(box);
+			}
+		}
+		childBoxesOnNextLevel.removeAll(toRemove);
+		return childBoxesOnNextLevel;
+	}
+
 	public HashSet<LinkedBox> getParentBoxes()
 	{
 		return parentBoxes;
+	}
+
+	public HashSet<LinkedBox> getParentBoxesOnPreviousLevel()
+	{
+		HashSet<LinkedBox> parentBoxesOnPreviousLevel = new HashSet<LinkedBox>(this.getParentBoxes());
+		HashSet<LinkedBox> toRemove = new HashSet<LinkedBox>();
+		final int PARENT_HEIGHT = this.getHeightLevel() - 1;
+		for (LinkedBox box : parentBoxesOnPreviousLevel)
+		{
+			if (box.getHeightLevel() != PARENT_HEIGHT)
+			{
+				toRemove.add(box);
+			}
+		}
+		parentBoxesOnPreviousLevel.removeAll(toRemove);
+		return parentBoxesOnPreviousLevel;
 	}
 
 	public HashSet<LinkedBox> getSiblingBoxes()
