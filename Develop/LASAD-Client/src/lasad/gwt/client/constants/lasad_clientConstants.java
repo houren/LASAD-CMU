@@ -316,15 +316,15 @@ public interface lasad_clientConstants extends com.google.gwt.i18n.client.Consta
 	@Key("NotLoggedIn")
 	String NotLoggedIn();
 
-	@DefaultStringValue("Find contribution")
-	@Key("FindContributionTitle")
-	String FindContributionTitle();
+	@DefaultStringValue("Center contribution")
+	@Key("CenterContributionTitle")
+	String CenterContributionTitle();
 
 	@DefaultStringValue("Specify number of contribution")
-	@Key("FindContributionText")
-	String FindContributionText();
+	@Key("CenterContributionText")
+	String CenterContributionText();
 
-	@DefaultStringValue("Find contribution...")
+	@DefaultStringValue("Center contribution...")
 	@Key("SearchMenuItem")
 	String SearchMenuItem();
 

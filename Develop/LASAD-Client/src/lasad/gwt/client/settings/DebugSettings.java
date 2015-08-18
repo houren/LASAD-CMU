@@ -10,7 +10,7 @@ package lasad.gwt.client.settings;
  */
 public class DebugSettings {
 
-	public static String version = "1.13";
+	public static String version = "2.0.0";
 	public static boolean debug = true;
 	public static boolean debug_details = true;
 	public static boolean debug_errors = true;

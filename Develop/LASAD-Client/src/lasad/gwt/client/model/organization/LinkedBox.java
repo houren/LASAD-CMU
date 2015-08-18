@@ -74,8 +74,8 @@ public class LinkedBox
 		this.childBoxes = new HashSet<LinkedBox>();
 		this.parentBoxes = new HashSet<LinkedBox>();
 		this.siblingBoxes = new HashSet<LinkedBox>();
-		this.heightLevel = Integer.MIN_VALUE;
-		this.widthLevel = Integer.MAX_VALUE;
+		this.heightLevel = Integer.MIN_VALUE + 1;
+		this.widthLevel = Integer.MAX_VALUE - 1;
 		this.canBeGrouped = canBeGrouped;
 	}
 

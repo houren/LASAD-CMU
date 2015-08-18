@@ -93,17 +93,17 @@ public abstract class AbstractCreateBoxLinkDialogListener implements EventListen
 								}
 								else
 								{
-									LASADInfo.display("Error", "Grouped boxes can only be between boxes of the same type - can't create link");
+									LASADInfo.display("Error", "Group links can only be created between boxes of the same type. Box and link not created.");
 								}
 							}
 							else
 							{
-								LASADInfo.display("Error", "The starting box already has 2 siblings - can't create link");// 1 or more already have 2 siblings, can't create link
+								LASADInfo.display("Error", "Exceeds limit of two group links from each box. Box and link not created.");// 1 or more already have 2 siblings, can't create link
 							}
 						}
 						else
 						{
-							LASADInfo.display("Error", "Boxes are not of a groupable type");
+							LASADInfo.display("Error", "Cannot group this box type. Box and link not created.");
 						}
 					}
 					else

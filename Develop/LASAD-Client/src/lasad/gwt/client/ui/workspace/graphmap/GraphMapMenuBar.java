@@ -47,8 +47,7 @@ public abstract class GraphMapMenuBar extends ToolBar
 	protected GraphMapSpace myMapSpace;
 	protected GraphMapInfo myMapInfo;
 	protected ArgumentEditionStyleEnum editionStyle;
-
-	protected Button itemFeedback = null;
+	protected final Button itemFeedback;
 
 	/**
 	 * Creates menu for a map
@@ -65,6 +64,7 @@ public abstract class GraphMapMenuBar extends ToolBar
 		this.setSpacing(5);
 		// To make the menu appear on top, even on top of a box
 		DOM.setIntStyleAttribute(this.getElement(), "zIndex", XDOM.getTopZIndex() + 1);
+		itemFeedback = new Button("Feedback");
 	}
 
 	protected abstract GraphMapInfo getDrawingAreaInformation();
@@ -287,14 +287,14 @@ public abstract class GraphMapMenuBar extends ToolBar
 		return this.myMapInfo;
 	}
 
-	protected MenuItem createFindContributionItem() {
-		final MenuItem findContributionItem = new MenuItem(myConstants.SearchMenuItem());
-		findContributionItem.addSelectionListener(new SelectionListener<MenuEvent>() {
+	protected MenuItem createCenterContributionItem() {
+		final MenuItem centerContributionItem = new MenuItem(myConstants.SearchMenuItem());
+		centerContributionItem.addSelectionListener(new SelectionListener<MenuEvent>() {
 			@Override
 			public void componentSelected(MenuEvent me) {
 				GraphMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				findContributionItem.getParentMenu().hide();
-				final MessageBox box = MessageBox.prompt(myConstants.FindContributionTitle(), myConstants.FindContributionText());
+				centerContributionItem.getParentMenu().hide();
+				final MessageBox box = MessageBox.prompt(myConstants.CenterContributionTitle(), myConstants.CenterContributionText());
 				box.addCallback(new Listener<MessageBoxEvent>() {
 					public void handleEvent(MessageBoxEvent be) {
 						if (be.getButtonClicked().getText().equalsIgnoreCase("OK")) {
@@ -334,6 +334,6 @@ public abstract class GraphMapMenuBar extends ToolBar
 				});
 			}
 		});
-		return findContributionItem;
+		return centerContributionItem;
 	}
 }

@@ -67,7 +67,6 @@ public class PatternGraphMapMenuBar extends GraphMapMenuBar {
 		this.add(itemAdd);
 		 
 		if (myMapInfo.isFeedback()) {
-			itemFeedback = new Button("Feedback");
 			Menu feedbackMenu = createFeedbackMenu();
 			itemFeedback.setMenu(feedbackMenu);
 			this.add(itemFeedback);

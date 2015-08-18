@@ -32,6 +32,8 @@ import lasad.gwt.client.ui.workspace.tableview.argument.MapTableArgument;
 import lasad.gwt.client.xml.MapToXMLConverter;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 
+import com.extjs.gxt.ui.client.event.BaseEvent;
+import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MenuEvent;
@@ -153,10 +155,10 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	@Override
 	public void createMenuBar()
 	{
-		Button itemLASAD = new Button("LASAD");
-		Button itemFile = new Button("File");
-		Button itemEdit = new Button(myConstants.EditMenu());
-		Button itemView = new Button("View");
+		final Button itemLASAD = new Button("LASAD");
+		final Button itemFile = new Button("File");
+		final Button itemEdit = new Button(myConstants.EditMenu());
+		final Button itemView = new Button("View");
 
 		Menu lasadMenu = createLASADmenu();
 		Menu fileMenu = createFileMenu();
@@ -168,14 +170,59 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		itemEdit.setMenu(editMenu);
 		itemView.setMenu(viewMenu);
 
+		itemLASAD.addListener(Events.OnDoubleClick, new Listener<BaseEvent>()
+		{
+			@Override
+			public void handleEvent(BaseEvent be)
+			{
+				itemLASAD.hideMenu();
+			}
+		});
+
+		itemFile.addListener(Events.OnDoubleClick, new Listener<BaseEvent>()
+		{
+			@Override
+			public void handleEvent(BaseEvent be)
+			{
+				itemFile.hideMenu();
+			}
+		});
+
+		itemEdit.addListener(Events.OnDoubleClick, new Listener<BaseEvent>()
+		{
+			@Override
+			public void handleEvent(BaseEvent be)
+			{
+				itemEdit.hideMenu();
+			}
+		});
+
+		itemView.addListener(Events.OnDoubleClick, new Listener<BaseEvent>()
+		{
+			@Override
+			public void handleEvent(BaseEvent be)
+			{
+				itemView.hideMenu();
+			}
+		});
+
 		this.add(itemLASAD);
 		this.add(itemFile);
 		this.add(itemEdit);
 		this.add(itemView);
 
-		Button itemGroup = new Button(myConstants.GroupTools());
+		final Button itemGroup = new Button(myConstants.GroupTools());
 		Menu groupMenu = createGroupMenu();
 		itemGroup.setMenu(groupMenu);
+
+		itemGroup.addListener(Events.OnDoubleClick, new Listener<BaseEvent>()
+		{
+			@Override
+			public void handleEvent(BaseEvent be)
+			{
+				itemGroup.hideMenu();
+			}
+		});
 
 		if (groupMenu.getItemCount() > 0)
 		{
@@ -184,9 +231,16 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
 		if (myMapInfo.isFeedback())
 		{
-			itemFeedback = new Button("Feedback");
 			Menu feedbackMenu = createFeedbackMenu();
 			itemFeedback.setMenu(feedbackMenu);
+			itemFeedback.addListener(Events.OnDoubleClick, new Listener<BaseEvent>()
+			{
+				@Override
+				public void handleEvent(BaseEvent be)
+				{
+					itemFeedback.hideMenu();
+				}
+			});
 			this.add(itemFeedback);
 		}
 
@@ -197,9 +251,17 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
 		if (LASAD_Client.getInstance().getRole().equalsIgnoreCase("developer"))
 		{
-			Button itemDebug = new Button("Debug");
+			final Button itemDebug = new Button("Debug");
 			Menu debugMenu = createDebugMenu();
 			itemDebug.setMenu(debugMenu);
+			itemDebug.addListener(Events.OnDoubleClick, new Listener<BaseEvent>()
+			{
+				@Override
+				public void handleEvent(BaseEvent be)
+				{
+					itemDebug.hideMenu();
+				}
+			});
 			this.add(itemDebug);
 		}
 	}
@@ -489,7 +551,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	}
 
 	private void createZoomMenu() {
-		Button zoom = new Button("Zoom");
+		final Button zoom = new Button("Zoom");
 		Menu zoomMenu = new Menu();
 
 		for (final TableZoomEnum e : TableZoomEnum.values()) {
@@ -514,6 +576,14 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		}
 
 		zoom.setMenu(zoomMenu);
+		zoom.addListener(Events.OnDoubleClick, new Listener<BaseEvent>()
+		{
+			@Override
+			public void handleEvent(BaseEvent be)
+			{
+				zoom.hideMenu();
+			}
+		});
 		add(zoom);
 	}
 
@@ -656,13 +726,13 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	}
 
 	/*
-	 *	Create the menu for viewing (all there is right now is finding a contribution)
+	 *	Create the menu for viewing (all there is right now is centering a contribution)
 	 */
 	protected Menu createViewMenu()
 	{
 		Menu menu = new Menu();
-		MenuItem findContribution = createFindContributionItem();
-		menu.add(findContribution);
+		MenuItem centerContribution = createCenterContributionItem();
+		menu.add(centerContribution);
 		return menu;
 	}
 

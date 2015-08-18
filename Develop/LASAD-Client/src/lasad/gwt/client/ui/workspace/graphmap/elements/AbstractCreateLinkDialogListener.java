@@ -114,16 +114,16 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 									Logger.log("Same start and end box passed to GroupedBoxesCanBeCreated", Logger.DEBUG);
 									break;
 								case GroupedBoxesStatusCodes.NOT_SAME_TYPE:
-									LASADInfo.display("Error", "Grouped boxes can only be between boxes of the same type - can't create link");
+									LASADInfo.display("Error", "Group links can only be created between boxes of the same type. Link not created.");
 									break;
 								case GroupedBoxesStatusCodes.TOO_MANY_SIBS:
-									LASADInfo.display("Error", "One or both of the selected boxes is already directly grouped with 2 boxes - can't create link");
+									LASADInfo.display("Error", "Exceeds limit of two group links from each box. Link not created.");
 									break;
 								case GroupedBoxesStatusCodes.TWO_WAY_LINK:
-									LASADInfo.display("Error", "Creating grouped boxes would result in more than 1 link between a pair of boxes - can't create link");
+									LASADInfo.display("Error", "Group link would create a two-way link between boxes, which is not allowed. Link not created.");
 									break;
 								case GroupedBoxesStatusCodes.CANT_BE_GROUPED:
-									LASADInfo.display("Error", "Box type is not groupable - can't create link");
+									LASADInfo.display("Error", "Cannot group this box type. Link not created.");
 								default:
 									Logger.log("ERROR: Unrecognized status code returned from AutoOrganizer.GroupedBoxesCanBeCreated", Logger.DEBUG);
 									break;

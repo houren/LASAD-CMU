@@ -100,7 +100,6 @@
 		<fail unless="gwt_compiled">GWT must be compiled first!</fail>
         
         <!-- Kevin Loughlin changed war production location.  Be mindful of Tomcat version. -->
-        <delete dir="../../Deploy/apache-tomcat-8.0.23/webapps/lasad"/>
 		<zip destfile="../../Deploy/apache-tomcat-8.0.23/webapps/lasad.war">
             
 			<zipfileset dir="../LASAD-shared/bin" prefix="WEB-INF/classes/" />
@@ -119,8 +118,11 @@
         <delete dir="war/WEB-INF/deploy"/>
         <delete dir="war/lasad_client"/>
         <delete dir="gwt-unitCache"/>
-        <delete file="../LASAD-Server/LASAD-Server.jar"/>
-        <delete file="lasad.war"/>
+        <delete dir="../../Deploy/apache-tomcat-8.0.23/webapps/lasad"/>
+        <delete includeEmptyDirs="true">
+            <fileset dir="../../Deploy/apache-tomcat-8.0.23/logs" includes="**/*" defaultexcludes="no"/>
+        </delete>
+        <delete file="../../Deploy/lasad-server/server.log"/>
     </target>
     <!-- End of content added by Kevin Loughlin -->
 </project>

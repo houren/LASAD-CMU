@@ -268,9 +268,7 @@ public class LASAD_Client implements EntryPoint {
 		// TODO This text should be loaded from the server.
 		HTML introduction = new HTML();
 		introduction
-				.setHTML("<br><div align=\"center\"><img src=\"resources/images/lasad.png\" border=\"0\"><font color=#000000><br><br><h2>Welcome!</h2><br><p>This is version "
-						+ DebugSettings.version
-						+ " of the LASAD system.<br></p><p>You have two options: (1) Try out the pre-configured LASAD system or (2) configure the system to your needs by means of the authoring tool.<br><br></p><p>To just test the system, please click on \"Login & Map Overview\" at the top of the screen. <br>After login, you can join an existing argumentation map or create a new one.<br><br></p><p>If you want to configure the system to your needs, please click first on \"Login and Map Overview\" and enter your username and password.<br> After that, there will be a new tab at the top of the screen called \"LASAD Authoring Tool\".<br> Here you can configure the system. <br>Once your configuration is complete, you can switch to the \"Login & Map Overview\" tab to actually use it.</p></div></font>");
+				.setHTML("<br><div align=\"center\"><img src=\"resources/images/lasad.png\" border=\"0\"><font color=#000000><br><br><h2>Version " + DebugSettings.version + "<br>Developed at Carnegie Mellon University and Humboldt-Universität zu Berlin</h2><br><p>LASAD is a web-based argumentation system that allows users to graphically represent their arguments via diagrams, referred to as argument maps.<br>These argument maps can be constructed individually or collaboratively, with collaboration supported by the software's simulatenous editing and chat system features.<br>LASAD is compatible with any diagram-friendly argumentation language, and each argumentation language is represented as an argument map ontology in LASAD's database.<br>Ontologies can be created by an administrative account, using LASAD's authoring tool, and can then be accessed by users with appropriate permissions.</p></div></font>");
 		about.add(introduction);
 
 		advanced.add(about);
