@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ontology type="CMU Argumentation Ontology">
+<ontology type="CMU-Ontology">
     <elements>
         <element elementtype="box" elementid="Premise" minquantity="0" maxquantity="0" quantity="0">
             <elementoptions heading="Premise" canbegrouped="true"/>

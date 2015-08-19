@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<maptemplate uniquename="CMU Argumentation Template" title="CMU Argumentation Template" ontology="CMU Argumentation Ontology">
+<maptemplate uniquename="CMU-Template" title="CMU-Template" ontology="CMU-Ontology">
   <mapdetails>
     <description>Template for Mara Harrell's class</description>
     <options maxuser="30" chatsystem="true" listofusers="true" minimap="false" track-cursor="false" selection-details="false" onlyauthorcanmodify="false" committextbyenter="true" straightlink="true" AutoGrowTextArea="true" allowlinkstolinks="false"/>
