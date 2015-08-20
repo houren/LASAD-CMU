@@ -147,7 +147,7 @@ public class CreatePreferencesDialog extends Window
 			}
 
 		};
-		widthSlider.setMinValue(150);
+		widthSlider.setMinValue(100);
 		widthSlider.setMaxValue(450);
 		widthSlider.setIncrement(1);
 		widthSlider.setMessage("Box Width: {0}");

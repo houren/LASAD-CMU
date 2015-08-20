@@ -11,6 +11,7 @@ import lasad.gwt.client.ui.workspace.LASADInfo;
 import lasad.gwt.client.ui.workspace.loaddialogues.ImportingMapDialogue;
 import lasad.gwt.client.ui.workspace.loaddialogues.LoadingMapFromFileDialogue;
 import lasad.gwt.client.xml.LoadSessionFromXMLFileParser;
+import lasad.gwt.client.ui.workspace.argumentmap.ImportMapDialog;
 import lasad.shared.communication.objects.ActionPackage;
 
 import com.extjs.gxt.ui.client.event.ComponentEvent;
@@ -33,11 +34,11 @@ public class ImportMapFormPanel extends FormPanel {
 	
 	private CheckBox privateMapChk;
 	
-	public ImportMapFormPanel() {
+	public ImportMapFormPanel(final ImportMapDialog CONTAINER) {
 		super();
-		
+
 		setHeading("Import existing map from local file system");
-		setLabelWidth(130);
+		setLabelWidth(130);	
 		
 		sessionName = new TextField<String>();
 		sessionName.setFieldLabel("Map name");
@@ -66,7 +67,6 @@ public class ImportMapFormPanel extends FormPanel {
 					if(file.validate()) {
 						try {
 							ImportMapFormPanel.this.submit();
-							
 						}
 						catch (Exception e) {
 							Logger.log("File upload failed", Logger.DEBUG_ERRORS);
@@ -112,6 +112,11 @@ public class ImportMapFormPanel extends FormPanel {
 					else {
 						ImportMapFormPanel.this.processSingleMap(result, sessionName.getValue(), true);
 					}
+
+					if (CONTAINER != null)
+					{
+						CONTAINER.hide();
+					}
 				}
 				else {
 					LASADInfo.display("Error", "The file type is invalid.");
@@ -120,8 +125,6 @@ public class ImportMapFormPanel extends FormPanel {
         });       
         
 		add(loadMap);
-		
-		
 
 		// set the form to use the POST method, and multipart MIME encoding for file upload
 		setEncoding(FormPanel.Encoding.MULTIPART);

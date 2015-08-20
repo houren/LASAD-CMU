@@ -422,7 +422,10 @@ public class ArgumentMapTableMVCViewSession extends MVCViewSession{
 		
 	}
 
-
+	public ArgumentMapSpace getArgumentMapSpace()
+	{
+		return this.mapSpace;
+	}
 
 	@Override
 	public Vector<MVCViewRecipient> workOnUnregisterParent(AbstractUnspecifiedElementModel parent, AbstractUnspecifiedElementModel child) {

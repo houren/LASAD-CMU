@@ -194,7 +194,7 @@ public class MapLoginTab extends ContentPanel {
 		left.setHeaderVisible(false);
 
 		initOverviewPanel();
-		left.add(new ImportMapFormPanel());
+		left.add(new ImportMapFormPanel(null));
 
 		right = new ContentPanel();
 		right.setLayout(new FitLayout());

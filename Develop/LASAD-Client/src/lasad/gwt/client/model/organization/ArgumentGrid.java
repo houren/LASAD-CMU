@@ -192,7 +192,6 @@ public class ArgumentGrid
 			ArrayList<LinkedBox> toRemove = null;
 			for (ArrayList<LinkedBox> group : groupWithAverageParents.keySet())
 			{
-
 				if (groupWithAverageParents.get(group) < minParents)
 				{
 					toRemove = group;
@@ -288,75 +287,19 @@ public class ArgumentGrid
 	 *	@param boxesToPutOnGrid - The corresponding argThread's boxes.
 	 *	@return The new, organized ArgumentGrid
 	 */
-	public ArgumentGrid organize(final boolean DOWNWARD, Collection<LinkedBox> boxesToPutOnGrid)
+	public ArgumentGrid organize(final boolean DOWNWARD, LinkedBox startBox)
 	{
 		Logger.log("[lasad.gwt.client.model.organization.ArgumentGrid] Organizing grid...", Logger.DEBUG);
 		// Remember to clear the grid before organization, since boxes must be reaccumulated
 		this.empty();
 
 		// If nothing is there just return
-		if (boxesToPutOnGrid == null || boxesToPutOnGrid.size() == 0)
+		if (startBox == null)
 		{
 			return this;
 		}
 
-		final int ORIG_SIZE = boxesToPutOnGrid.size();
-
-		LinkedBox startBox = null;
-		if (DOWNWARD)
-		{
-			for (LinkedBox box : boxesToPutOnGrid)
-			{
-				if (startBox == null)
-				{
-					startBox = box;
-				}
-				else if (box.getYTop() < startBox.getYTop())
-				{
-					startBox = box;
-				}
-				else if (Math.abs(box.getYTop() - startBox.getYTop()) < 0.1)
-				{
-					if (box.getXLeft() < startBox.getXLeft())
-					{
-						startBox = box;
-					}
-				}
-			}
-		}
-		else
-		{
-			for (LinkedBox box : boxesToPutOnGrid)
-			{
-				if (startBox == null)
-				{
-					startBox = box;
-				}
-				else if (box.getYTop() > startBox.getYTop())
-				{
-					startBox = box;
-				}
-				else if (Math.abs(box.getYTop() - startBox.getYTop()) < 0.1)
-				{
-					if (box.getXLeft() < startBox.getXLeft())
-					{
-						startBox = box;
-					}
-				}
-			}
-		}	
-
-		// Set the height levels of the boxes from bottom to top, with lowest height level as 0
-		if (startBox != null)
-		{
-			boxesToPutOnGrid = recursivelySetHeightLevels(startBox, 0, new HashSet<LinkedBox>());
-		}
-		else
-		{
-			Logger.log("Failed to organize, startBox is null", Logger.DEBUG);
-			return this;
-		}
-			
+		HashSet<LinkedBox> boxesToPutOnGrid = recursivelySetHeightLevels(startBox, 0, new HashSet<LinkedBox>());
 
 		fixCounterOrientedLinks(boxesToPutOnGrid);
 
@@ -552,6 +495,7 @@ public class ArgumentGrid
 				return putSoloBoxOnGrid(solo);
 			}
 		}
+
 		final int GROUP_LEFT = sortedGroup.get(0).getWidthLevel();
 		final int GROUP_RIGHT = sortedGroup.get(GROUP_SIZE - 1).getWidthLevel();
 		final int GROUP_HEIGHT = sortedGroup.get(0).getHeightLevel();
@@ -589,6 +533,7 @@ public class ArgumentGrid
 
 	private HashMap<Coordinate, LinkedBox> alignBoxes(ArgumentGrid origGrid)
 	{
+		Logger.log("[lasad.gwt.client.model.organization.ArgumentGrid] Aligning boxes...", Logger.DEBUG);
 		final ArgumentGrid origGridCopy = origGrid.clone();
 		final int MIN_LEVEL = origGrid.calcLowestLevel();
 		final int MAX_LEVEL = origGrid.calcHighestLevel();
@@ -605,14 +550,9 @@ public class ArgumentGrid
 			final int CHILD_LEVEL = PARENT_LEVEL + 1;
 			ArrayList<LinkedBox> allParentLevelBoxes = origGrid.getBoxesAtHeightLevel(PARENT_LEVEL);
 			ArrayList<LinkedBox> parentBoxesAlreadyOnGrid = finalGrid.getBoxesAtHeightLevel(PARENT_LEVEL);
-			//int nextParentWidth;
-			if (parentBoxesAlreadyOnGrid.size() == 0)
+
+			if (parentBoxesAlreadyOnGrid.size() != 0)
 			{
-				//nextParentWidth = 0;
-			}
-			else
-			{
-				//nextParentWidth = parentBoxesAlreadyOnGrid.get(parentBoxesAlreadyOnGrid.size() - 1).getWidthLevel() + HOR_SPACE;
 				ArrayList<LinkedBox> parentBoxesNotOnGrid = new ArrayList<LinkedBox>();
 				for (LinkedBox box : allParentLevelBoxes)
 				{
@@ -631,7 +571,7 @@ public class ArgumentGrid
 			ArrayList<LinkedBox> childBoxesOnOldGrid = origGrid.getBoxesAtHeightLevel(CHILD_LEVEL);
 			for (int i = 0; i < PARENT_LEVEL_SIZE; i++)
 			{
-				LinkedBox parentLevelBox = allParentLevelBoxes.get(i);			
+				LinkedBox parentLevelBox = allParentLevelBoxes.get(i);	
 				ArrayList<LinkedBox> parentGroup = new ArrayList<LinkedBox>();
 				parentGroup.add(parentLevelBox);
 				HashSet<LinkedBox> unsortedChildGroup = parentLevelBox.getChildBoxes();
@@ -674,6 +614,7 @@ public class ArgumentGrid
 				}
 				else
 				{
+					// This is where an exception would be thrown (index out of bounds) if the height levels were not properly configured
 					LinkedBox newGridBox = parentBoxesAlreadyOnGrid.get(0);
 					LinkedBox oldGridBox = origGridCopy.findBoxOnGrid(newGridBox);
 					for (LinkedBox parent : parentGroup)

@@ -56,9 +56,28 @@ public class ArgumentThread
 	}
 
 	// This is kinda a weird way of doing this but it works and seems neat enough, so I guess don't fix something that isn't broken? TBD
-	public void organizeGrid(final boolean DOWNWARD)
+	public void organizeGrid(final boolean DOWNWARD) throws Exception
 	{
-		this.setGrid(this.grid.organize(DOWNWARD, this.getBoxes()));
+		Exception myException = null;
+		for (LinkedBox startBox : this.getBoxes())
+		{
+			try
+			{
+				this.setGrid(this.grid.organize(DOWNWARD, startBox));
+				return;
+			}
+			catch (Exception e)
+			{
+				Logger.log("Auto Organization failed with startBox " + startBox.getRootID() + ".  Retrying with next box if available...", Logger.DEBUG);
+				myException = e;
+				this.grid.empty();
+			}
+		}
+
+		if (myException != null)
+		{
+			throw myException;
+		}
 	}
 
 	private void setGrid(ArgumentGrid grid)

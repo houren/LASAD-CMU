@@ -119,10 +119,10 @@
         <delete dir="war/lasad_client"/>
         <delete dir="gwt-unitCache"/>
         <delete dir="../../Deploy/apache-tomcat-8.0.23/webapps/lasad"/>
+        <delete file="../../Deploy/lasad-server/server.log"/>
         <delete includeEmptyDirs="true">
             <fileset dir="../../Deploy/apache-tomcat-8.0.23/logs" includes="**/*" defaultexcludes="no"/>
         </delete>
-        <delete file="../../Deploy/lasad-server/server.log"/>
     </target>
     <!-- End of content added by Kevin Loughlin -->
 </project>

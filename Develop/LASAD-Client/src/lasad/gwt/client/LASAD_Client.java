@@ -23,6 +23,7 @@ import lasad.gwt.client.ui.workspace.tabs.LoginInfoTab;
 import lasad.gwt.client.ui.workspace.tabs.LoginTab;
 import lasad.gwt.client.ui.workspace.tabs.MapTab;
 import lasad.gwt.client.ui.workspace.tabs.ReplayTab;
+import lasad.gwt.client.ui.workspace.tabs.AboutTab;
 import lasad.gwt.client.ui.workspace.tabs.authoring.AuthoringTab;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.FeedbackAuthoringTab;
 import lasad.gwt.client.ui.workspace.tabs.map.MapLoginTab;
@@ -57,8 +58,9 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.HTML;
+
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.HTML;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -258,19 +260,7 @@ public class LASAD_Client implements EntryPoint {
 
 	public void createAboutTab()
 	{
-		TabItem about = new TabItem();
-		about.setText(myConstants.Introduction());
-		about.setClosable(true);
-		about.addStyleName("pad-text");
-		about.setStyleAttribute("backgroundColor", "#FBFBFB");
-		// item.setEnabled(false);
-
-		// TODO This text should be loaded from the server.
-		HTML introduction = new HTML();
-		introduction
-				.setHTML("<br><div align=\"center\"><img src=\"resources/images/lasad.png\" border=\"0\"><font color=#000000><br><br><h2>Version " + DebugSettings.version + "<br>Developed at Carnegie Mellon University and Humboldt-Universität zu Berlin</h2><br><p>LASAD is a web-based argumentation system that allows users to graphically represent their arguments via diagrams, referred to as argument maps.<br>These argument maps can be constructed individually or collaboratively, with collaboration supported by the software's simulatenous editing and chat system features.<br>LASAD is compatible with any diagram-friendly argumentation language, and each argumentation language is represented as an argument map ontology in LASAD's database.<br>Ontologies can be created by an administrative account, using LASAD's authoring tool, and can then be accessed by users with appropriate permissions.</p></div></font>");
-		about.add(introduction);
-
+		AboutTab about = new AboutTab(myConstants.Introduction());
 		advanced.add(about);
 		advanced.setSelection(about);
 	}
@@ -426,7 +416,7 @@ public class LASAD_Client implements EntryPoint {
 			while (iterator.hasNext()) {
 				TabItem tab = iterator.next();
 				if (tab instanceof DebugTab || tab instanceof AuthoringTab || tab instanceof ReplayTab
-						|| tab instanceof FeedbackAuthoringTab) {
+						|| tab instanceof FeedbackAuthoringTab || tab instanceof AboutTab) {
 					iterator.remove();
 					tab.close();
 				}

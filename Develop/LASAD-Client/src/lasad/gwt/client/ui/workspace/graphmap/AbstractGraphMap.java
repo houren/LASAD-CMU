@@ -77,7 +77,6 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 		highlightHandler = new GenericHighlightHandler(this);
 		argModel = new ArgumentModel(this.getID());
 		autoOrganizer = new AutoOrganizer(this);
-		Logger.log("Argument Model and autoOrganizer successfully assigned to this map.", Logger.DEBUG);
 	}
 
 	/*

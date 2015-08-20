@@ -59,12 +59,14 @@ public abstract class GraphMapMenuBar extends ToolBar
 		this.myMapInfo = getDrawingAreaInformation() ;  //myMapSpace.getSession().getController().getMapInfo();
 		this.editionStyle = LASAD_Client.getMapEditionStyle(String.valueOf(myMapInfo.getMapID()));
 
+		// This button must be created before createMenuBar
+		itemFeedback = new Button("Feedback");
 		createMenuBar();
 
 		this.setSpacing(5);
 		// To make the menu appear on top, even on top of a box
 		DOM.setIntStyleAttribute(this.getElement(), "zIndex", XDOM.getTopZIndex() + 1);
-		itemFeedback = new Button("Feedback");
+		
 	}
 
 	protected abstract GraphMapInfo getDrawingAreaInformation();

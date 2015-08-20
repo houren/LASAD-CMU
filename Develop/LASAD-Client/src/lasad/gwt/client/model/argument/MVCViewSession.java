@@ -10,6 +10,7 @@ import lasad.gwt.client.model.MVCViewRecipient;
 import lasad.gwt.client.model.events.LASADEventListenerInterface;
 import lasad.gwt.client.model.events.LasadEvent;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
+import lasad.gwt.client.logger.Logger;
 
 public abstract class MVCViewSession extends AbstractMVCViewSession {
 

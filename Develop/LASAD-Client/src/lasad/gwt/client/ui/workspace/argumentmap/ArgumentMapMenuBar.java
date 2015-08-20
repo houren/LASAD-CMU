@@ -74,7 +74,9 @@ import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteRelationDialog;
 
 import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
 import lasad.gwt.client.ui.workspace.argumentmap.CreatePreferencesDialog;
+//import lasad.gwt.client.ui.workspace.argumentmap.ImportMapDialog;
 import com.extjs.gxt.ui.client.widget.Component;
+import lasad.gwt.client.ui.workspace.tabs.map.ImportMapFormPanel;
 
 /**
  *	Finishes the implementation of the map's menu bar.
@@ -688,6 +690,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	{
 		Menu menu = new Menu();
 
+		MenuItem importItem = createImportItem();
+		menu.add(importItem);
+
 		MenuItem exportItem = createExportItem();
 		menu.add(exportItem);
 
@@ -737,24 +742,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	}
 
 	/*
-	protected MenuItem createPreferencesItem()
-	{
-		final MenuItem preferences = new MenuItem("Preferences");
-		preferences.addSelectionListener(new SelectionListener<MenuEvent>()
-		{
-			@Override
-			public void componentSelected(MenuEvent me)
-			{
-				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				CreatePreferencesDialog preferencesDialog = new CreatePreferencesDialog(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getID());
-				preferencesDialog.show();
-			}
-		});
-		return preferences;
-	}
-	*/
-
-	/*
 	 *	Creates the about subitem of the LASAD menu that provides general info about what LASAD is, version, etc.
 	 */
 	protected MenuItem createAboutItem()
@@ -786,6 +773,21 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			}
 		});
 		return logOutItem;
+	}
+
+	protected MenuItem createImportItem()
+	{
+		final MenuItem loadItem = new MenuItem("Import map");
+		loadItem.addSelectionListener(new SelectionListener<MenuEvent>() {
+			@Override
+			public void componentSelected(MenuEvent ce)
+			{
+				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
+				ImportMapDialog importDialog = new ImportMapDialog();
+				importDialog.show();
+			}
+		});
+		return loadItem;
 	}
 
 	/*
