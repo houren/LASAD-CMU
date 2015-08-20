@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<maptemplate uniquename="CMU-Template" title="CMU-Template" ontology="CMU-Ontology">
+<maptemplate uniquename="MBF-Model-Template" title="MBF-Model-Template" ontology="Modified-Beardsley-Freeman-Model">
   <mapdetails>
-    <description>Template for Mara Harrell's class</description>
+    <description>Modified Beardsley-Freeman Model template for Dr. Mara Harrell's class</description>
     <options maxuser="30" chatsystem="true" listofusers="true" minimap="false" track-cursor="false" selection-details="false" onlyauthorcanmodify="false" committextbyenter="true" straightlink="true" AutoGrowTextArea="true" allowlinkstolinks="false"/>
   </mapdetails>
 </maptemplate>
