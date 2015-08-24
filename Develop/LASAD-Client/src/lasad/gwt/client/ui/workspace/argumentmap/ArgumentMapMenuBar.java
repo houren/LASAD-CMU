@@ -168,9 +168,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			@Override
 			protected void onClick(ComponentEvent ce)
 			{
-				Logger.log("Click received", Logger.DEBUG);
 				LASAD_Client.getInstance().createTutorialVideosTab();
-				Logger.log("Created tab", Logger.DEBUG);
 			}
 		};
 

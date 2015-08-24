@@ -19,7 +19,7 @@ import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.CenterLayout;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
@@ -146,7 +146,7 @@ public class LoginTab extends LayoutContainer {
 			}
 		};
 
-		Hyperlink helpLink = new Hyperlink("Help", "");
+		Anchor helpLink = new Anchor("Help");
 		helpLink.addClickHandler(new ClickHandler()
 		{
             @Override
@@ -156,8 +156,8 @@ public class LoginTab extends LayoutContainer {
             }
         });
 
-        helpLink.setHTML("<br>" + helpLink.getHTML());
-        helpLink.setVisible(true);
+
+        helpLink.setHTML("<br><style>a:link {color:blue; background-color:transparent; text-decoration:underline} a:visited {color:blue; background-color:transparent; text-decoration:underline} a:hover   {color:purple; background-color:transparent; text-decoration:underline} a:active  {color:blue; background-color:transparent; text-decoration:underline}</style>" + helpLink.getHTML());
 
 		loginForm.add(loginButton);
 		loginForm.add(helpLink);
