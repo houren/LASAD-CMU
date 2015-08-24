@@ -64,9 +64,9 @@
          Java HTTP Connector: /docs/config/http.html (blocking & non-blocking)
          Java AJP  Connector: /docs/config/ajp.html
          APR (HTTP/AJP) Connector: /docs/apr.html
-         Define a non-SSL/TLS HTTP/1.1 Connector on port 8080
+         Define a non-SSL/TLS HTTP/1.1 Connector on port 8080 (CHANGED TO 8099 BY KEVIN LOUGHLIN)
          -->
-        <Connector port="8080" protocol="HTTP/1.1"
+        <Connector port="8099" protocol="HTTP/1.1"
         connectionTimeout="20000"
         redirectPort="8443" />
         <!-- A "Connector" using the shared thread pool-->

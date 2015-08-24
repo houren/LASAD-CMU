@@ -89,7 +89,7 @@ public class LASADGWTServiceBroker implements UserTimeoutListener {
 		try {
 			// TODO Load configuration from file to allow a dynamic configuration of the server that should be used
 			if (server == null) {
-				server = (ServerInterface) Naming.lookup("rmi://localhost:1099/LASAD-1"); // standard
+				server = (ServerInterface) Naming.lookup("rmi://localhost:1899/LASAD-8099"); // standard
 				// server = (ServerInterface) Naming.lookup("rmi://localhost:1199/LASAD-2");
 				// server = (ServerInterface) Naming.lookup("rmi://localhost:1299/LASAD-3"); // Adapterrex 8081
 
