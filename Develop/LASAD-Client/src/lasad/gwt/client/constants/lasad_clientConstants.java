@@ -22,7 +22,7 @@ public interface lasad_clientConstants extends com.google.gwt.i18n.client.Consta
 	@Key("Login")
 	String Login();
 
-	@DefaultStringValue("Login...")
+	@DefaultStringValue("Login")
 	@Key("LoginButton")
 	String LoginButton();
 
@@ -324,7 +324,7 @@ public interface lasad_clientConstants extends com.google.gwt.i18n.client.Consta
 	@Key("CenterContributionText")
 	String CenterContributionText();
 
-	@DefaultStringValue("Center contribution...")
+	@DefaultStringValue("Center contribution")
 	@Key("SearchMenuItem")
 	String SearchMenuItem();
 

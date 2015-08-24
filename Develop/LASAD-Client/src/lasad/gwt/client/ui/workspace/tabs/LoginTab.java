@@ -19,6 +19,9 @@ import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.CenterLayout;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
@@ -143,7 +146,21 @@ public class LoginTab extends LayoutContainer {
 			}
 		};
 
+		Hyperlink helpLink = new Hyperlink("Help", "");
+		helpLink.addClickHandler(new ClickHandler()
+		{
+            @Override
+            public void onClick(ClickEvent ce)
+            {
+               LASAD_Client.getInstance().createTutorialVideosTab();
+            }
+        });
+
+        helpLink.setHTML("<br>" + helpLink.getHTML());
+        helpLink.setVisible(true);
+
 		loginForm.add(loginButton);
+		loginForm.add(helpLink);
 
 		root.add(loginForm);
 		return root;

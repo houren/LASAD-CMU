@@ -27,6 +27,7 @@ import lasad.gwt.client.ui.workspace.tabs.AboutTab;
 import lasad.gwt.client.ui.workspace.tabs.authoring.AuthoringTab;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.FeedbackAuthoringTab;
 import lasad.gwt.client.ui.workspace.tabs.map.MapLoginTab;
+import lasad.gwt.client.ui.workspace.tabs.TutorialVideosTab;
 import lasad.gwt.client.urlparameter.UrlParameterConfig;
 import lasad.shared.communication.objects.Action;
 import lasad.shared.communication.objects.ActionPackage;
@@ -260,9 +261,16 @@ public class LASAD_Client implements EntryPoint {
 
 	public void createAboutTab()
 	{
-		AboutTab about = new AboutTab(myConstants.Introduction());
+		AboutTab about = AboutTab.getInstance();
 		advanced.add(about);
 		advanced.setSelection(about);
+	}
+
+	public void createTutorialVideosTab()
+	{
+		TutorialVideosTab vidTab = TutorialVideosTab.getInstance();
+		advanced.add(vidTab);
+		advanced.setSelection(vidTab);
 	}
 
 	/** Creating tabs **/
@@ -416,7 +424,7 @@ public class LASAD_Client implements EntryPoint {
 			while (iterator.hasNext()) {
 				TabItem tab = iterator.next();
 				if (tab instanceof DebugTab || tab instanceof AuthoringTab || tab instanceof ReplayTab
-						|| tab instanceof FeedbackAuthoringTab || tab instanceof AboutTab) {
+						|| tab instanceof FeedbackAuthoringTab || tab instanceof AboutTab || tab instanceof TutorialVideosTab) {
 					iterator.remove();
 					tab.close();
 				}

@@ -3,6 +3,9 @@
 
 	<!-- Configure path to GWT SDK -->
 	<property name="GWT_HOME" value="../gwt-2.5.1"/>
+    
+    <!-- Configure path to Tomcat -->
+    <property name="TOMCAT" value ="../../Deploy/apache-tomcat-8.0.23"/>
 
 	<property name="gwt.sdk" location="${GWT_HOME}/" />
     
@@ -99,8 +102,8 @@
 		<available file="war/lasad_client/lasad_client.nocache.js" property="gwt_compiled" />
 		<fail unless="gwt_compiled">GWT must be compiled first!</fail>
         
-        <!-- Kevin Loughlin changed war production location.  Be mindful of Tomcat version. -->
-		<zip destfile="../../Deploy/apache-tomcat-8.0.23/webapps/lasad.war">
+        <!-- Kevin Loughlin changed war production location.-->
+		<zip destfile="${TOMCAT}/webapps/lasad.war">
             
 			<zipfileset dir="../LASAD-shared/bin" prefix="WEB-INF/classes/" />
 			<zipfileset dir="war" />
@@ -118,10 +121,10 @@
         <delete dir="war/WEB-INF/deploy"/>
         <delete dir="war/lasad_client"/>
         <delete dir="gwt-unitCache"/>
-        <delete dir="../../Deploy/apache-tomcat-8.0.23/webapps/lasad"/>
+        <delete dir="${TOMCAT}/webapps/lasad"/>
         <delete file="../../Deploy/lasad-server/server.log"/>
         <delete includeEmptyDirs="true">
-            <fileset dir="../../Deploy/apache-tomcat-8.0.23/logs" includes="**/*" defaultexcludes="no"/>
+            <fileset dir="${TOMCAT}/logs" includes="**/*" defaultexcludes="no"/>
         </delete>
     </target>
     <!-- End of content added by Kevin Loughlin -->

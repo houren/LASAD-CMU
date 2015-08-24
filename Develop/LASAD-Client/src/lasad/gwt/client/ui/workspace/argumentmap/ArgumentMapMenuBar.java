@@ -38,6 +38,7 @@ import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.MessageBoxEvent;
+import com.extjs.gxt.ui.client.event.ComponentEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.Dialog;
 import com.extjs.gxt.ui.client.widget.MessageBox;
@@ -77,6 +78,7 @@ import lasad.gwt.client.ui.workspace.argumentmap.CreatePreferencesDialog;
 //import lasad.gwt.client.ui.workspace.argumentmap.ImportMapDialog;
 import com.extjs.gxt.ui.client.widget.Component;
 import lasad.gwt.client.ui.workspace.tabs.map.ImportMapFormPanel;
+import lasad.gwt.client.ui.workspace.tabs.TutorialVideosTab;
 
 /**
  *	Finishes the implementation of the map's menu bar.
@@ -161,6 +163,16 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		final Button itemFile = new Button("File");
 		final Button itemEdit = new Button(myConstants.EditMenu());
 		final Button itemView = new Button("View");
+		final Button itemHelp = new Button("Help")
+		{
+			@Override
+			protected void onClick(ComponentEvent ce)
+			{
+				Logger.log("Click received", Logger.DEBUG);
+				LASAD_Client.getInstance().createTutorialVideosTab();
+				Logger.log("Created tab", Logger.DEBUG);
+			}
+		};
 
 		Menu lasadMenu = createLASADmenu();
 		Menu fileMenu = createFileMenu();
@@ -212,6 +224,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		this.add(itemFile);
 		this.add(itemEdit);
 		this.add(itemView);
+		this.add(itemHelp);
 
 		final Button itemGroup = new Button(myConstants.GroupTools());
 		Menu groupMenu = createGroupMenu();
