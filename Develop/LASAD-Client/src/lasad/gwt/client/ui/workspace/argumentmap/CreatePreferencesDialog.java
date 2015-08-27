@@ -68,7 +68,7 @@ public class CreatePreferencesDialog extends Window
 		super.onRender(parent, index);
 		this.setAutoHeight(true);
 		this.setWidth(500);
-		this.setHeading("Auto Organization Preferences");
+		this.setHeading("Map Organization Preferences");
 		formData = new FormData("-20");
 		createForm();
 	}

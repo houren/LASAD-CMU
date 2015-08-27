@@ -1019,7 +1019,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	 */
 	protected MenuItem createAutoOrganizeItem()
 	{
-		final MenuItem autoOrganizeItem = new MenuItem("Auto Organization");
+		final MenuItem autoOrganizeItem = new MenuItem("Map Organization");
 		autoOrganizeItem.setSubMenu(chooseOrganizationStyle());
 		return autoOrganizeItem;
 	}
