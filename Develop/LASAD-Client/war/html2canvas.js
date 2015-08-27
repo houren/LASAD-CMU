@@ -5,6 +5,15 @@
 
   Released under MIT License
  */
+function changeVid(myTitle, myFile) {
+    console.log("Entered function");
+    var header = document.getElementById("header");
+    header.innerHTML = myTitle;
+    document.querySelector("#playing > source").src = myFile;
+    document.getElementById("playing").load();
+    console.log("Exiting function");
+}
+
 (function(window, document, undefined){
 
 /*
