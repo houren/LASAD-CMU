@@ -12,9 +12,7 @@
 	<target name="all" depends="server-jar,client-war" />
 	<target name="compile" depends="compile-server,compile-client" />
     
-    <!-- Target Java Version changed to 1.8 by Kevin Loughlin.
-         Note that the return value of a method used in LASAD changed between Java 7 and 8, meaning
-         that an attempt to mix the two versions will generate a NoSuchMethod Exception -->
+    <!-- Target Java Version MUST be the version running on your server, and you MUST be running that version on your compilation computer -->
 	<property name="target.java.version" value="1.8" />
     
 	<target name="compile-shared" description="Compiles the shared source">
@@ -102,7 +100,9 @@
 		<available file="war/lasad_client/lasad_client.nocache.js" property="gwt_compiled" />
 		<fail unless="gwt_compiled">GWT must be compiled first!</fail>
         
-        <!-- Kevin Loughlin changed war production location.-->
+        <!-- If you run "ant clean" before compiling, this delete step isn't necessary, but I included it so that when you launch a compiled version of LASAD,
+             Tomcat is guaranteed to deploy the most recently compiled version -->
+        <delete dir="${TOMCAT}/webapps/lasad"/>
 		<zip destfile="${TOMCAT}/webapps/lasad.war">
             
 			<zipfileset dir="../LASAD-shared/bin" prefix="WEB-INF/classes/" />

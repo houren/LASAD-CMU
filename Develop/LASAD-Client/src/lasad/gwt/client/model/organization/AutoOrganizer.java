@@ -53,10 +53,10 @@ public class AutoOrganizer
 {
 	private int boxWidth = 200;
 	private int minBoxHeight = 100;
+	private final double DEFAULT_MIN_VERT_SPACE = 50.0;
 
 	private final boolean DEBUG = false;
 	// The minimum number of pixels between boxes, set as a double for rounding/accuracy purposes
-	private double MIN_SPACE = 50.0;
 
 	// The maximum number of siblings (grouped boxes) a box can have
 	private final int MAX_SIBLINGS = 2;
@@ -125,6 +125,7 @@ public class AutoOrganizer
 	 */
 	public void organizeMap()
 	{
+		double minVertSpace = DEFAULT_MIN_VERT_SPACE;
 		final boolean DOWNWARD = downward;
 		Logger.log("[lasad.gwt.client.model.organization.AutoOrganizer] Beginning organizeMap", Logger.DEBUG);
 		try
@@ -144,6 +145,22 @@ public class AutoOrganizer
 				}
 
 				List<Component> mapComponents = map.getItems();
+
+				for (Component mapComponent : mapComponents)
+				{
+					if(mapComponent instanceof AbstractLinkPanel)
+					{
+						AbstractLinkPanel linkPanel = (AbstractLinkPanel) mapComponent;
+						if (linkPanel.getMyLink().getExtendedElements().size() != 0)
+						{
+							minVertSpace = (int) Math.max(minVertSpace, linkPanel.getSize().height + DEFAULT_MIN_VERT_SPACE);
+						}
+						/*if(!Boolean.parseBoolean(((AbstractLinkPanel) mapComponent).getElementInfo().getElementOption(ParameterTypes.Details))){
+							minVertSpace = (int) Math.max(((AbstractLinkPanel)mapComponent).getElement().getScrollHeight()+50, minVertSpace);
+						}*/
+					}
+				}
+
 				// Important to make a copy so that we don't modify the actual mapComponents
 				List<Component> mapComponentsCopy = new ArrayList<Component>(mapComponents);
 				ArrayList<Component> toRemove = new ArrayList<Component>();
@@ -182,12 +199,6 @@ public class AutoOrganizer
 						}
 						else
 						{
-							if(mapComponent instanceof AbstractLinkPanel){
-								if(!Boolean.parseBoolean(((AbstractLinkPanel) mapComponent).getElementInfo().getElementOption(ParameterTypes.Details))){
-									MIN_SPACE = (int) Math.max(((AbstractLinkPanel)mapComponent).getElement().getScrollHeight()+50, MIN_SPACE);
-								}
-							}
-
 							toRemove.add(mapComponent);
 						}
 					}
@@ -226,11 +237,11 @@ public class AutoOrganizer
 						// Add space between rows
 						if (tallestHeightAtRow != Integer.MIN_VALUE)
 						{
-							rowYcoord += tallestHeightAtRow + MIN_SPACE;
+							rowYcoord += tallestHeightAtRow + minVertSpace;
 						}
 						else
 						{
-							rowYcoord += MIN_SPACE;
+							rowYcoord += minVertSpace;
 						}
 					}
 
@@ -261,7 +272,7 @@ public class AutoOrganizer
 								}
 							}
 
-							nextRowYcoord = nextRowYcoord - MIN_SPACE - tallestHeightAtNextRow;
+							nextRowYcoord = nextRowYcoord - minVertSpace - tallestHeightAtNextRow;
 						}
 					}
 				}

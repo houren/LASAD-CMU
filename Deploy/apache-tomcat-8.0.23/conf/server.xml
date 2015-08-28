@@ -65,6 +65,7 @@
          Java AJP  Connector: /docs/config/ajp.html
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL/TLS HTTP/1.1 Connector on port 8080 (CHANGED TO 8099 BY KEVIN LOUGHLIN)
+         This port must match LASAD's servlet URL port in Deploy/lasad-server/server.cfg)
          -->
         <Connector port="8099" protocol="HTTP/1.1"
         connectionTimeout="20000"

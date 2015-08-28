@@ -87,12 +87,10 @@ public class LASADGWTServiceBroker implements UserTimeoutListener {
 
 	public void sendToRMIServer(ActionPackage p) {
 		try {
-			// TODO Load configuration from file to allow a dynamic configuration of the server that should be used
 			if (server == null) {
-				server = (ServerInterface) Naming.lookup("rmi://localhost:1899/LASAD-8099"); // standard
-				// server = (ServerInterface) Naming.lookup("rmi://localhost:1199/LASAD-2");
-				// server = (ServerInterface) Naming.lookup("rmi://localhost:1299/LASAD-3"); // Adapterrex 8081
-
+				// Be sure format of URL is localhost:[RMI port]/serverName.  Port and servername might need to be updated.
+				// Make sure they match what you set in Deploy/lasad-server/server.cfg
+				server = (ServerInterface) Naming.lookup("rmi://localhost:1899/LASAD-8099");
 			}
 			server.doActionOnServer(p);
 		} catch (Exception E) {
