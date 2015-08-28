@@ -43,7 +43,7 @@ public class TutorialVideosTab extends TabItem
 
 		// TODO This text should be loaded from the server.
 		HTML page = new HTML();
-		StringBuilder buffer = new StringBuilder("<div align=\"center\"><h1 style=\"font-size:20px; font-family:Georgia, serif\">LASAD Tutorial Videos</h1><br><style>a.vidlist:link {color:blue; background-color:transparent; text-decoration:underline} a.vidlist:visited {color:blue; background-color:transparent; text-decoration:underline} a.vidlist:hover   {color:purple; background-color:transparent; text-decoration:underline} a.vidlist:active  {color:blue; background-color:transparent; text-decoration:underline}</style>");//+CHANGE_VID_SCRIPT);
+		StringBuilder buffer = new StringBuilder("<div align=\"center\"><h1 style=\"font-size:20px; font-family:Georgia, serif\">LASAD Tutorial Videos</h1><style>a.vidlist:link {color:blue; background-color:transparent; text-decoration:underline} a.vidlist:visited {color:blue; background-color:transparent; text-decoration:underline} a.vidlist:hover   {color:purple; background-color:transparent; text-decoration:underline} a.vidlist:active  {color:blue; background-color:transparent; text-decoration:underline}</style>");//+CHANGE_VID_SCRIPT);
 		putEntry(DEFAULT, "login.mp4");
 		putEntry("Workspace Tour", "workspace.mp4");
 		putEntry("Adding Contributions", "contributions.mp4");
@@ -58,7 +58,7 @@ public class TutorialVideosTab extends TabItem
 
 		for (String title : titlesFilenames.keySet())
 		{
-			buffer.append("<a class=\"vidlist\" href=\"javascript:changeVid('"+title+"', '"+titlesFilenames.get(title)+"');\" style=\"font-family:Georgia, serif\" style=\"font-size: 0.875em\">"+title+"</a><br>");
+			buffer.append("<a class=\"vidlist\" href=\"javascript:changeVid('"+title+"', '"+titlesFilenames.get(title)+"');\" style=\"font-family:Georgia, serif\" style=\"font-size: 0.750em\">"+title+"</a><br>");
 		}
 
 		buffer.append(vidString(DEFAULT, titlesFilenames.get(DEFAULT)));
