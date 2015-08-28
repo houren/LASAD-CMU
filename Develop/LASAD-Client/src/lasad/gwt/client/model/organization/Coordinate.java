@@ -1,8 +1,8 @@
 package lasad.gwt.client.model.organization;
 
 /**
- *	A representation of a coordinate point on the chessBoard grid for ArgumentGrid and autoOrganizer.  NOT the pixel location of a box,
- *	but rather the column and row indicator.
+ *	A representation of a coordinate (column, row) point on the chessBoard grid for ArgumentGrid and autoOrganizer.
+ *	Again, NOT the pixel location of a box, but rather the column and row indicator.
  *	@author Kevin Loughlin
  *	@since 15 July 2015
  */

@@ -54,6 +54,7 @@ public class ArgumentModel
 		controller = LASAD_Client.getMVCController(mapID);
 	}
 	
+	// By Darlan Santana Farias
 	public void setFontSize(int fontSize, boolean isOriginalCall){
 		this.fontSize = fontSize;
 
@@ -173,6 +174,7 @@ public class ArgumentModel
 		this.argThreads.remove(argThread);
 	}
 
+	// I.e. remove threads that are empty
 	public void removeExcessThreads()
 	{
 		HashSet<ArgumentThread> threadsToRemove = new HashSet<ArgumentThread>();
@@ -285,7 +287,7 @@ public class ArgumentModel
 		return argThreads.size();
 	}
 
-	// Remember, top left is (0,0), not bottom left
+	// Remember, top left is (0,0), not bottom left.  Gets the left most, right most, top most, and bottom most coord of boxes on grid
 	public EdgeCoords calcEdgeCoords()
 	{
 		double top = Double.MAX_VALUE;

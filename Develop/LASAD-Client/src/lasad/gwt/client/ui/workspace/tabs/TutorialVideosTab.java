@@ -6,6 +6,12 @@ import com.extjs.gxt.ui.client.Style.Scroll;
 import java.util.LinkedHashMap;
 import com.google.gwt.user.client.ui.Anchor;
 
+/**
+ *	Represents the singleton instance of the Tutorial Videos Tab, reachable by the "Help" anchor link on the login screen, or by the argument map
+ *	menu bar.  Used javascript function found in html2canvas (writing my own JS file in this code didn't work since it needs to be in the HTML head)
+ *	@author Kevin Loughlin
+ *	@since 28 August 2015
+ */
 public class TutorialVideosTab extends TabItem
 {
 	private final int VID_HEIGHT = 360;
@@ -13,22 +19,6 @@ public class TutorialVideosTab extends TabItem
 	private final String VID_PATH = "resources/videos/";
 	private final String DEFAULT = "Logging in and Joining Maps";
 	private LinkedHashMap<String, String> titlesFilenames;
-	//private final String CHANGE_VID_SCRIPT ="<script type=\"text/JavaScript\" src=\"changevid.js\"></script>";
-
-	//private final String CHANGE_VID_SCRIPT = "<script type=\"text/JavaScript\">function(myTitle, myFile) { console.log(\"Entered function\"); var header = document.getElementById(\"header\"); header.innerHTML = myTitle; document.querySelector(\"#playing > source\").src = myFile; document.getElementById(\"playing\").load(); console.log(\"Exiting function\"); }</script>";
-
-/*
-	"function changeVid(myTitle, myFile) {
-		var header = document.getElementById(\"header\");
-		header.innerHTML = myTitle;
-		document.querySelector(\"#playing > source\").src = myFile;
-		document.getElementById(\"playing\").load();
-		return;
-	}"
-	*/
-
-	// function changeVid(myTitle, myFile) { var header = document.getElementById(\"header\"); header.innerHTML = myTitle; document.querySelector(\"#playing > source\").src = myFile; document.getElementById(\"playing\").load(); return; }
-
 	private static TutorialVideosTab instance = null;
 
 	private TutorialVideosTab()
@@ -39,9 +29,7 @@ public class TutorialVideosTab extends TabItem
 		this.setScrollMode(Scroll.AUTO);
 		this.addStyleName("pad-text");
 		this.setStyleAttribute("backgroundColor", "#FBFBFB");
-		// item.setEnabled(false);
-
-		// TODO This text should be loaded from the server.
+		
 		HTML page = new HTML();
 		StringBuilder buffer = new StringBuilder("<div align=\"center\"><h1 style=\"font-size:20px; font-family:Georgia, serif\">LASAD Tutorial Videos</h1><style>a.vidlist:link {color:blue; background-color:transparent; text-decoration:underline} a.vidlist:visited {color:blue; background-color:transparent; text-decoration:underline} a.vidlist:hover   {color:purple; background-color:transparent; text-decoration:underline} a.vidlist:active  {color:blue; background-color:transparent; text-decoration:underline}</style>");//+CHANGE_VID_SCRIPT);
 		putEntry(DEFAULT, "login.mp4");

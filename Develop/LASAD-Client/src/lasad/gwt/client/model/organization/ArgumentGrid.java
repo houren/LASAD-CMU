@@ -244,6 +244,7 @@ public class ArgumentGrid
 		}
 	}
 
+	// By Darlan Santana Farias
 	private void fixCounterOrientedLinks(Collection<LinkedBox> boxesToPutOnGrid)
 	{
 		for(LinkedBox box : boxesToPutOnGrid)
@@ -284,7 +285,7 @@ public class ArgumentGrid
 	 *	The method that actually organizes the grid and thus is key to auto organization.
 	 *	This should only be called from organizeGrid in ArgumentThread.
 	 *	@param DOWNWARD - The orientation of the organization, true for downward, false for upward
-	 *	@param boxesToPutOnGrid - The corresponding argThread's boxes.
+	 *	@param startBox - The box to start organization with (all other boxes can be reached through it)
 	 *	@return The new, organized ArgumentGrid
 	 */
 	public ArgumentGrid organize(final boolean DOWNWARD, LinkedBox startBox)
@@ -531,6 +532,9 @@ public class ArgumentGrid
 		this.grid = grid;
 	}
 
+	/*
+	 *	Takes the boxes in vertical and horizontal order on a grid and aligns them into a pretty, centered layout
+	 */
 	private HashMap<Coordinate, LinkedBox> alignBoxes(ArgumentGrid origGrid)
 	{
 		Logger.log("[lasad.gwt.client.model.organization.ArgumentGrid] Aligning boxes...", Logger.DEBUG);
@@ -546,12 +550,10 @@ public class ArgumentGrid
 
 		for (int parentLevel = MIN_LEVEL; parentLevel < MAX_LEVEL; parentLevel++)
 		{
-			//Logger.log("PARENT Level is now " + parentLevel, Logger.DEBUG);
 			final int PARENT_LEVEL = parentLevel;
 			final int CHILD_LEVEL = PARENT_LEVEL + 1;
 			ArrayList<LinkedBox> allParentLevelBoxes = origGrid.getBoxesAtHeightLevel(PARENT_LEVEL);
 			ArrayList<LinkedBox> parentBoxesAlreadyOnGrid = finalGrid.getBoxesAtHeightLevel(PARENT_LEVEL);
-
 
 			if (parentBoxesAlreadyOnGrid.size() != 0)
 			{
@@ -569,12 +571,6 @@ public class ArgumentGrid
 				allParentLevelBoxes.addAll(parentBoxesNotOnGrid);
 			}
 
-			/*Logger.log("all Parent Level Boxes...", Logger.DEBUG);
-			for (LinkedBox parent : allParentLevelBoxes)
-			{
-				Logger.log("box " + parent.getRootID(), Logger.DEBUG);
-			}*/
-
 			final int PARENT_LEVEL_SIZE = allParentLevelBoxes.size();
 			ArrayList<LinkedBox> childBoxesOnOldGrid = origGrid.getBoxesAtHeightLevel(CHILD_LEVEL);
 			for (int i = 0; i < PARENT_LEVEL_SIZE; i++)
@@ -590,7 +586,7 @@ public class ArgumentGrid
 					{
 						childGroup.add(childLevelBox);
 					}
-				} //sortAscendingNumParents(parentLevelBox.getChildBoxesOnNextLevel());
+				}
 
 				if (childGroup.size() == 0)
 				{
@@ -607,18 +603,6 @@ public class ArgumentGrid
 						parentGroup.add(otherParent);
 					}
 				}
-
-				/*Logger.log("PARENT group is...", Logger.DEBUG);
-				for (LinkedBox parent : parentGroup)
-				{
-					Logger.log("box " + parent.getRootID(), Logger.DEBUG);
-				}
-
-				Logger.log("CHILD group is...", Logger.DEBUG);
-				for (LinkedBox child : childGroup)
-				{
-					Logger.log("box " + child.getRootID(), Logger.DEBUG);
-				}*/
 
 				if (parentLevel == MIN_LEVEL)
 				{

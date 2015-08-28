@@ -21,6 +21,7 @@ import lasad.gwt.client.model.organization.Coordinate;
  */
 public class LinkedBox
 {
+	// Garbage value
 	private final int ERROR = -1;
 
 	// I.e. premise, conclusion, etc.
@@ -33,7 +34,7 @@ public class LinkedBox
 	private int width;
 	private int height;
 
-	// Note: updating xLeft with class methods will automatically update xCenter and vice-versa.  Same is true for y equivalents.
+	// Note: updating xLeft with METHODS will automatically update xCenter and vice-versa.  Same is true for y equivalents.
 	private double xLeft;
 	private double yTop;
 
@@ -79,8 +80,8 @@ public class LinkedBox
 		this.canBeGrouped = canBeGrouped;
 	}
 
-	// I don't want people to use the default constructor because this LinkedBox needs definitive IDs.  This just quiets the compiler.
-	public LinkedBox()
+	// I don't want people to use the default constructor because this LinkedBox needs definitive IDs.  This is just for cloning.
+	private LinkedBox()
 	{
 		this.boxID = ERROR;
 		this.rootID = ERROR;
@@ -248,6 +249,10 @@ public class LinkedBox
 		return childBoxes;
 	}
 
+	/**
+	 *	Only for use during auto organization, because it requires height levels to be assigned on the grid.
+	 *	Next level is defined as this box's height level plus one
+	 */
 	public HashSet<LinkedBox> getChildBoxesOnNextLevel()
 	{
 		HashSet<LinkedBox> childBoxesOnNextLevel = new HashSet<LinkedBox>(this.getChildBoxes());
@@ -269,6 +274,10 @@ public class LinkedBox
 		return parentBoxes;
 	}
 
+	/**
+	 *	Only for use during auto organization, because it requires height levels to be assigned on the grid.
+	 *	Previous level is defined as this box's height level minus one.
+	 */
 	public HashSet<LinkedBox> getParentBoxesOnPreviousLevel()
 	{
 		HashSet<LinkedBox> parentBoxesOnPreviousLevel = new HashSet<LinkedBox>(this.getParentBoxes());
@@ -334,26 +343,11 @@ public class LinkedBox
 	}
 
 	/**
-	 *	Returns this box and it's extended siblings from left to right order (its siblings and any siblings of those siblings)
+	 *	Returns this box and it's extended siblings (its siblings and any siblings of those siblings) from left to right order (if applicable)
 	 */
 	public HashSet<LinkedBox> getThisAndExtendedSiblings()
 	{
 		return findThisAndExtendedSiblings(this, new HashSet<LinkedBox>());
-	}
-
-	public HashSet<LinkedBox> getExtendedSiblingsWithoutParentsOrChildren()
-	{
-		HashSet<LinkedBox> extSibs = getThisAndExtendedSiblings();
-		extSibs.remove(this);
-		HashSet<LinkedBox> extSibsWithoutOtherFamily = new HashSet<LinkedBox>();
-		for (LinkedBox extSib : extSibs)
-		{
-			if (extSib.getNumParents() == 0 && extSib.getNumChildren() == 0)
-			{
-				extSibsWithoutOtherFamily.add(extSib);
-			}
-		}
-		return extSibsWithoutOtherFamily;
 	}
 
 	// intialize currentBox as this and accumulated should be empty; RECURSIVE
@@ -735,18 +729,22 @@ public class LinkedBox
 		}
 	}
 
-	// Needs a better name, do that tomorrow
-	public boolean okayForLink(LinkedBox endBox)
+	/**
+	 *	If this box is part of a group with a parent link to endBox, then a link cannot be created between this box and endBox
+	 *	@param endBox: The potential endBox of the link
+	 *	@return whether or not this box is part of a group with a parent link to endBox
+	 */
+	public boolean isPartOfGroupWithParentLinkTo(LinkedBox endBox)
 	{
 		HashSet<LinkedBox> startBoxAndExtSibs = this.getThisAndExtendedSiblings();
 		for (LinkedBox startBox : startBoxAndExtSibs)
 		{
 			if (endBox.hasChildLinkWith(startBox))
 			{
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	public void setPosition(int xLeft, int yTop)

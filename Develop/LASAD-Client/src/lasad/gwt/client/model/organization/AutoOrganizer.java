@@ -40,23 +40,29 @@ import lasad.gwt.client.ui.link.AbstractLinkPanel;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 
 /**
- *	An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument. It can also update links
- *	in ArgumentMap representations where a type of relation can create groups of boxes. The overall map organizing function,
- *	accordingly called organizeMap(), is only called when the user clicks the corresponding button on the ArgumentMapMenuBar. Though originally
- *	built for maps using Mara Harrell's template, this class can be applied to any map from any template.  There is a model (see ArgumentModel.java)
- *	that updates with every change to the map.  Thus, we don't need to start from scratch and gather components to update links.
- *	For organizeMap however, we reconstruct the ArgumentGrid each time.
+ *	An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument.
+ *	It can also update links in ArgumentMap representations where a type of relation can create groups of boxes.
+ *	
+ *	The overall map organizing method, accordingly called organizeMap(), is only called when the user clicks the corresponding
+ *	button on the ArgumentMapMenuBar. Though originally built for maps using Mara Harrell's template, this class can be applied
+ *	to any map from any template.  There is a model (see ArgumentModel.java) that updates with every change to the map.
+ *	Thus, we don't need to start from scratch and gather components to update "group" links.
+ *	For organizeMap, we start from scratch - reconstructing the ArgumentGrid each time.
  *	@author Kevin Loughlin and Darlan Santana Farias
- *	@since 12 June 2015, Updated 4 August 2015
+ *	@since 12 June 2015, Updated 28 August 2015
  */
 public class AutoOrganizer
 {
+	// The width that all boxes will take upon organization
 	private int boxWidth = 200;
+
+	// The minimum height boxes will take upon organization (if the box needs more height to fit text, it will expand)
 	private int minBoxHeight = 100;
+
+	// The default minimum space between rows of boxes when organized
 	private final double DEFAULT_MIN_VERT_SPACE = 50.0;
 
 	private final boolean DEBUG = false;
-	// The minimum number of pixels between boxes, set as a double for rounding/accuracy purposes
 
 	// The maximum number of siblings (grouped boxes) a box can have
 	private final int MAX_SIBLINGS = 2;
@@ -65,17 +71,18 @@ public class AutoOrganizer
 	private final double CENTER_X = 2400.0;
 	private final double CENTER_Y = CENTER_X;
 
+	// The orientation of the maps links (true for down, false for up)
 	private boolean downward;
 
 	// The map that this instance of AutoOrganizer corresponds to
 	private AbstractGraphMap map;
 
-
 	// For sending map updates to the server
 	private LASADActionSender communicator = LASADActionSender.getInstance();
 	private ActionFactory actionBuilder = ActionFactory.getInstance();
-
 	private MVController controller;
+
+	// The organization model that we will update (the actual model the server updates is contained within the controller)
 	private ArgumentModel argModel;
 
 	/**
@@ -125,9 +132,13 @@ public class AutoOrganizer
 	 */
 	public void organizeMap()
 	{
+		// Begin as default, but update later if more space is needed (ex. maybe a link has a large panel)
 		double minVertSpace = DEFAULT_MIN_VERT_SPACE;
+
 		final boolean DOWNWARD = downward;
 		Logger.log("[lasad.gwt.client.model.organization.AutoOrganizer] Beginning organizeMap", Logger.DEBUG);
+
+		// Try catch just because organizeMap is complicated and if there's an error we don't want a crash
 		try
 		{
 			HashSet<LinkedBox> boxesToSendToServer = new HashSet<LinkedBox>();
@@ -137,6 +148,7 @@ public class AutoOrganizer
 			// Organize the grid by height and width "levels" (think chess board)
 			for (ArgumentThread argThread : argModel.getArgThreads())
 			{
+				// organizes the grid, and we will then base coordinate positions from this grid organization
 				argThread.organizeGrid(DOWNWARD);
 				ArgumentGrid grid = argThread.getGrid();
 				if (grid.getBoxes().size() == 0)
@@ -144,8 +156,8 @@ public class AutoOrganizer
 					continue;
 				}
 
+				// Take into account the possibility of large elements on the link panel when determining vertical spacing between rows
 				List<Component> mapComponents = map.getItems();
-
 				for (Component mapComponent : mapComponents)
 				{
 					if(mapComponent instanceof AbstractLinkPanel)
@@ -155,20 +167,16 @@ public class AutoOrganizer
 						{
 							minVertSpace = (int) Math.max(minVertSpace, linkPanel.getSize().height + DEFAULT_MIN_VERT_SPACE);
 						}
-						/*if(!Boolean.parseBoolean(((AbstractLinkPanel) mapComponent).getElementInfo().getElementOption(ParameterTypes.Details))){
-							minVertSpace = (int) Math.max(((AbstractLinkPanel)mapComponent).getElement().getScrollHeight()+50, minVertSpace);
-						}*/
 					}
 				}
 
-				// Important to make a copy so that we don't modify the actual mapComponents
+				// Important to make a copy so that we don't modify the actual mapComponents when we remove nonbox elements for below loop speed
 				List<Component> mapComponentsCopy = new ArrayList<Component>(mapComponents);
 				ArrayList<Component> toRemove = new ArrayList<Component>();
 
-				// We need to call setSize from abstractBox, so we temporarily shift from LinkedBoxes to AbstractBoxes
-				// I'm aware it's annoying that we have two types of boxes representing the same thing, but it made life a lot easier
-				// for auto organization to have almost everything I needed in one place (LinkedBox)
-				// We shrink the mapComponents copy as we go for speed
+				/*	We need to call setSize from abstractBox, so we temporarily shift from LinkedBoxes to AbstractBoxes
+					I'm aware it's annoying that we have two types of boxes representing the same thing, but it made life a lot easier
+					for auto organization to have almost everything I needed in one place (LinkedBox) */
 				for (LinkedBox box : grid.getBoxes())
 				{
 					for (Component mapComponent : mapComponentsCopy)
@@ -178,7 +186,8 @@ public class AutoOrganizer
 							AbstractBox myBox = (AbstractBox) mapComponent;
 							if (myBox.getConnectedModel().getId() == box.getBoxID())
 							{
-								// The setSize method will update the textBox appropriately.  We want the box height to be just enough to fit the text
+								/*	The setSize method will update the textBox appropriately.  We want the box height to be just enough to fit the text
+									By shrinking it first, we allow it to be the minimum height and width possible */
 								toRemove.add(mapComponent);
 								myBox.setSize(boxWidth, minBoxHeight);
 								box.setSize(boxWidth, minBoxHeight);
@@ -187,6 +196,7 @@ public class AutoOrganizer
 								{
 									if (childElement instanceof AbstractExtendedTextElement)
 									{
+										// Updates the LinkedBox instance to correspond with the AbstractBox
 										AbstractExtendedTextElement textElt = (AbstractExtendedTextElement) childElement;
 										myBox.textAreaCallNewHeightgrow(textElt.determineBoxHeightChange());
 										box.setHeight(myBox.getHeight());
@@ -213,7 +223,7 @@ public class AutoOrganizer
 				final int MIN_HEIGHT_LEVEL = minMaxRow.getMin();
 				final int MAX_HEIGHT_LEVEL = minMaxRow.getMax();
 
-				// Sets the y coord either top to bottom or bottom to top, providing space between each row.  Each thread should start at the same y-coord
+				// Sets the y coord either top to bottom or bottom to top, providing space between each row. Each thread should start at the same y-coord
 				if (DOWNWARD)
 				{
 					double rowYcoord = CENTER_Y;
@@ -221,6 +231,7 @@ public class AutoOrganizer
 					{
 						ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
 
+						// Make sure there's room at each row to accomodate the tallest box
 						int tallestHeightAtRow = Integer.MIN_VALUE;
 						for (LinkedBox box : row)
 						{
@@ -230,11 +241,10 @@ public class AutoOrganizer
 							if (BOX_HEIGHT > tallestHeightAtRow)
 							{
 								tallestHeightAtRow = BOX_HEIGHT;
-							}
-							
+							}				
 						}
 
-						// Add space between rows
+						// Add space between rows; a value of MIN_VALUE would indicate there were no boxes at the row, which should be impossible
 						if (tallestHeightAtRow != Integer.MIN_VALUE)
 						{
 							rowYcoord += tallestHeightAtRow + minVertSpace;
@@ -244,12 +254,10 @@ public class AutoOrganizer
 							rowYcoord += minVertSpace;
 						}
 					}
-
 				}
 				else
 				{
 					double nextRowYcoord = CENTER_Y;
-
 					for (int rowCount = MIN_HEIGHT_LEVEL; rowCount <= MAX_HEIGHT_LEVEL; rowCount++)
 					{
 						ArrayList<LinkedBox> row = grid.getBoxesAtHeightLevel(rowCount);
@@ -286,7 +294,7 @@ public class AutoOrganizer
 						box.setXLeft(columnXcoord);
 						boxesToSendToServer.add(box);
 					}
-
+					// Space between boxes
 					columnXcoord += (boxWidth * 3) / 4;
 				}
 
@@ -305,7 +313,6 @@ public class AutoOrganizer
 
 			// Position the cursor of the map
 			final double[] SCROLL_EDGE = determineScrollEdge(DOWNWARD);
-
 			communicator.sendActionPackage(actionBuilder.finishAutoOrganization(map.getID(), DOWNWARD, this.getBoxWidth(), this.getMinBoxHeight(), SCROLL_EDGE[0], SCROLL_EDGE[1]));
 
 			// Free some memory for speed (garbage collector will take the nullified values)
@@ -314,6 +321,7 @@ public class AutoOrganizer
 				argThread.getGrid().empty();
 			}
 		}
+		// Just in case
 		catch (Exception e)
 		{
 			LASADInfo.display("Error", "An unknown error has occurred - current arrangement of map cannot be auto organized.");
@@ -341,6 +349,7 @@ public class AutoOrganizer
 		LinkedBox origEndBox = link.getEndBox();
 		String linkType = link.getType();
 
+		// If the newly created link connects a group, make sure all the gorup members point to the same children
 		if (link.getConnectsGroup())
 		{
 			Collection<OrganizerLink> origStartChildLinks = origStartBox.getChildLinks();
@@ -369,6 +378,7 @@ public class AutoOrganizer
 				}
 			}
 		}
+		// else make sure all the grouped parents of the link's child point to the child
 		else
 		{
 			HashSet<LinkedBox> origStartSiblingBoxes = origStartBox.getSiblingBoxes();
@@ -425,10 +435,10 @@ public class AutoOrganizer
 	 *	Keeps track of boxes visited so that the method will eventually end.
 	 *	@param startBox - The box from which we might make a link
 	 *	@param END_BOX - The constant box to which we will be connecting
-	 *	@param LINK_TYPE - The type of connection we will make if necessary
+	 *	@param LINK_TYPE - The constant type of connection we will make if necessary
 	 *  @param holder - The visited boxes and the links that need to be created, should be initialized as empty
 	*/
-	private VisitedAndLinksHolder updateRecursive(LinkedBox startBox, LinkedBox END_BOX, OrganizerLink LINK_DATA, VisitedAndLinksHolder holder)
+	private VisitedAndLinksHolder updateRecursive(LinkedBox startBox, final LinkedBox END_BOX, final OrganizerLink LINK_DATA, VisitedAndLinksHolder holder)
 	{
 		if (!holder.getVisited().contains(startBox))
 		{
@@ -505,6 +515,8 @@ public class AutoOrganizer
 
 	/*	
 	 *	Checks that there aren't existing invalid connections between the startBoxAndExtSibs group and the end Box children.
+	 *	For example, a group link can't be created between box A and B if box A has a child box (C) that is also a parent of Box B.
+	 *	This is because B would then also have to point to C (creating a 2 way link) to maintain that grouped boxes point to the same children.
 	 *	@param startBoxAndExtSibs - The startBox for the new link and its extended siblings
 	 *	@param endBox - The end box for the new link
 	 *	@return true if there are no conflicts, false if the grouped boxes should not be created
@@ -534,7 +546,7 @@ public class AutoOrganizer
 	}
 
 	/*
-	 *	Updates a box position on the map
+	 *	Updates a box's visual position on the map
 	 *	@param box - The box whose position we will update with its new coordinates
 	 */
 	private void updateBoxPositions(Collection<LinkedBox> boxes)
@@ -555,6 +567,10 @@ public class AutoOrganizer
 		}
 	}
 
+	/*
+	 *	Shockingly, this updates a box's visual size on the map
+	 *	@param box - The box whose size we will send to the server for an update
+	 */
 	private void updateBoxSize(LinkedBox box)
 	{
 		if (this.controller.getElement(box.getBoxID()) != null)
@@ -568,36 +584,28 @@ public class AutoOrganizer
 		}
 	}
 
-	private void updateBoxSize(AbstractBox box)
-	{
-		if (this.controller.getElement(box.getConnectedModel().getId()) != null)
-		{
-			communicator.sendActionPackage(actionBuilder.updateBoxSize(map.getID(), box.getConnectedModel().getId(), box.getWidth(), box.getHeight()));
-		}
-		else
-		{
-			Logger.log("ERROR: Tried to update box size of nonexisting element.", Logger.DEBUG);
-		}
-	}
-
 	/*
 	 *	Positions the map cursor either with the top most box(es) at the top of the map or bottom-most at the bottom
 	 *	@param DOWNWARD - if true, put the bottom boxes at the bottom of the screen, false do other option
-	 *	The "edge" is the bottom of the bottom row of boxes in the case of true, top of the top row in case of false
+	 *	The "edge" is the bottom of the bottom row of boxes in the case of true; top of the top row in case of false
 	 */
 	private double[] determineScrollEdge(final boolean DOWNWARD)
 	{
+		// Where end level is either top or bottom depending on DOWNWARD
 		ArrayList<LinkedBox> boxesAtEndLevel = new ArrayList<LinkedBox>();
+
+		// The sum of x-coord positions at the edge row
 		double edgeSum = 0.0;
+
 		int numEdgeBoxes = 0;
 		double edgeCoordY;
 
 		if (DOWNWARD)
 		{
+			// Find min grid height
 			int minGridHeight = Integer.MAX_VALUE;
 			for (ArgumentThread ARG_THREAD : argModel.getArgThreads())
 			{
-
 				final int GRID_MIN = ArgumentGrid.determineMinMaxHeightLevels(ARG_THREAD.getGrid().getBoxes()).getMin();
 				if (GRID_MIN < minGridHeight)
 				{
@@ -605,6 +613,7 @@ public class AutoOrganizer
 				}
 			}
 
+			// Find lowest bottom and lowest grid height level, accumulate boxes at end level
 			double currentBottom = Double.MIN_VALUE;
 			for (ArgumentThread ARG_THREAD : argModel.getArgThreads())
 			{
@@ -660,10 +669,12 @@ public class AutoOrganizer
 			numEdgeBoxes++;
 		}
 
+		// Take the average x at the edge level and put the scroller there
 		if (numEdgeBoxes > 0)
 		{
 			return new double[]{edgeSum / numEdgeBoxes, edgeCoordY};
 		}
+		// If empty, put it at the center
 		else
 		{
 			return new double[]{CENTER_X, CENTER_Y};

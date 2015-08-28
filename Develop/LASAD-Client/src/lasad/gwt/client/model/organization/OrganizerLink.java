@@ -5,12 +5,13 @@ import lasad.gwt.client.model.organization.LinkedBox;
  * OrganizerLink is, like LinkedBox is to AbstractBox, a way of representing an AbstractLinkPanel (and/or an AbstractLink) that is more
  * friendly to AutoOrganizer.  The important info for updating a link via an Action is contained within an OrganizerLink.
  * @author Kevin Loughlin
- * @since 17 June 2015, Updated 23 July 2015
+ * @since 17 June 2015, Updated 28 August 2015
  */
 public class OrganizerLink
 {
+	// Just for helping assign unique linkIDs, not even sure if this is ecessary because LASAD seems to correctly assign link IDs elsewhere
 	private static int lastLinkID = -1;
-	// Be mindful of difference between boxID and rootID.
+
 	private LinkedBox startBox;
 	private LinkedBox endBox;
 
@@ -37,7 +38,7 @@ public class OrganizerLink
 	}
 
 	/**
-	 * Somehow this ID turns out right in the end.  No idea how...
+	 * Somehow this linkID turns out right in the end.  No idea how...
 	 */
 	public OrganizerLink(LinkedBox startBox, LinkedBox endBox, String type, boolean connectsGroup)
 	{
@@ -47,14 +48,6 @@ public class OrganizerLink
 		this.endBox = endBox;
 		this.type = type;
 		this.connectsGroup = connectsGroup;
-	}
-
-	// Don't use the default constructor, hence why it's set as private and does nothing other than shutting the compiler up
-	private OrganizerLink()
-	{
-		this.linkID = lastLinkID + 1;
-		lastLinkID = this.linkID;
-		this.connectsGroup = false;
 	}
 
 	/* Gets */

@@ -14,11 +14,7 @@ import com.extjs.gxt.ui.client.widget.form.SimpleComboValue;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.user.client.Element;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
-
-//import com.extjs.gxt.ui.client.widget.form.CheckBox;
-
 import com.google.gwt.user.client.ui.CheckBox;
-
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 

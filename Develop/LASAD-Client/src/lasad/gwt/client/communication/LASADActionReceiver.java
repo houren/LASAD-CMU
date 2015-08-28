@@ -82,8 +82,6 @@ import lasad.gwt.client.model.ElementInfo;
  * Refactoring Step 1 by Sabine Niebuhr
  */
 public class LASADActionReceiver {
-
-	//private final boolean DEBUG = false;
 	
 	private final String BOX = "box";
 	private final String RELATION = "relation";
@@ -427,9 +425,8 @@ public class LASADActionReceiver {
 
 	}
 
-	private void processMapAction(MVController controller, Action a) {
-
-
+	private void processMapAction(MVController controller, Action a)
+	{
 		ArgumentModel argModel = LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().getArgModel();
 
 		Logger.log("[lasad.gwt.client.communication.LASADActionReceiver][processMapAction] Processing map action...", Logger.DEBUG);
@@ -528,7 +525,7 @@ public class LASADActionReceiver {
 				// Now Register new Element to the Model
 				controller.addElementModel(elementModel);
 
-				// Begin Kevin Loughlin
+				// Begin Kevin Loughlin code
 
 				// Since we're creating a new element, we need to add it to the autoOrganize model and update the siblingLinks on the map
 				String elementSubType = a.getParameterValue(ParameterTypes.ElementId);
@@ -601,12 +598,6 @@ public class LASADActionReceiver {
 					
 					//Added by DSF, run setFontSize so new boxes get the right font size
 					argModel.setFontSize(argModel.getFontSize(), false);
-					/*
-					if (DEBUG)
-					{
-						Logger.log(argModel.toString(), Logger.DEBUG);
-					}
-					*/
 				}
 
 				// If it's a relation, add it to the model
@@ -671,13 +662,6 @@ public class LASADActionReceiver {
 							autoOrganizer.updateSiblingLinks(link);
 						}
 					}
-
-					/*
-					if (DEBUG)
-					{
-						Logger.log(argModel.toString(), Logger.DEBUG);
-					}
-					*/
 				}
 
 				// End Kevin Loughlin
@@ -781,7 +765,6 @@ public class LASADActionReceiver {
 						if (removedLink != null)
 						{
 							argModel.createNewThreadIfNecessary(removedLink);
-							//argModel.removeExcessThreads();
 
 							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)) 
 								&& Integer.parseInt(a.getParameterValue(ParameterTypes.NumActions)) == 1)
@@ -793,13 +776,6 @@ public class LASADActionReceiver {
 						{
 							Logger.log("ERROR: Removed link is null", Logger.DEBUG);
 						}
-
-						/*
-						if (DEBUG)
-						{
-							Logger.log(argModel.toString(), Logger.DEBUG);
-						}
-						*/
 					}
 					else if (elementType.equalsIgnoreCase(BOX))
 					{
@@ -807,21 +783,12 @@ public class LASADActionReceiver {
 						if (removedBox != null)
 						{
 							argModel.removeLinksTo(removedBox);
-							//argModel.removeExcessThreads();
 						}
 						else
 						{
 							Logger.log("ERROR: Removed box is null", Logger.DEBUG);
 						}
-
-						/*
-						if (DEBUG)
-						{
-							Logger.log(argModel.toString(), Logger.DEBUG);
-						}
-						*/
 					}
-					
 					// End Kevin Loughlin
 
 				} else {
@@ -943,7 +910,7 @@ public class LASADActionReceiver {
 				// Now Register new Element to the Model
 				controller.addElementModel(elementModel);
 				
-				// Begin Kevin Loughlin
+				// Begin Kevin Loughlin code
 
 				// Since we're creating a new element, we need to add it to the autoOrganize model and update the siblingLinks on the map
 				String elementSubType = a.getParameterValue(ParameterTypes.ElementId);
@@ -991,7 +958,9 @@ public class LASADActionReceiver {
 					}
 
 					String widthString = newBoxInfo.getUiOption(ParameterTypes.Width);
-					String heightString = newBoxInfo.getUiOption(ParameterTypes.Height);
+
+					// The default height is set incorrectly, don't know how, but it's always 107 yet comes out as 200.
+					//String heightString = newBoxInfo.getUiOption(ParameterTypes.Height);
 					String canBeGroupedString = newBoxInfo.getElementOption(ParameterTypes.CanBeGrouped);
 					boolean canBeGrouped;
 					if (canBeGroupedString == null)
@@ -1003,23 +972,17 @@ public class LASADActionReceiver {
 						canBeGrouped = Boolean.parseBoolean(canBeGroupedString);
 					}
 
-					if (widthString == null || heightString == null)
+					if (widthString == null)
 					{
-						Logger.log("width and/or height string(s) are null", Logger.DEBUG);
+						Logger.log("width string is null", Logger.DEBUG);
 					}
 
 					int width = Integer.parseInt(widthString);
-					int height = Integer.parseInt(heightString);
 
-					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, height, canBeGrouped)));
+					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, DEFAULT_HEIGHT, canBeGrouped)));
 					
-					/*
-					if (DEBUG)
-					{
-						Logger.log(argModel.toString(), Logger.DEBUG);
-					}
-					*/
-
+					//Added by DSF, run setFontSize so new boxes get the right font size
+					argModel.setFontSize(argModel.getFontSize(), false);
 				}
 
 				// If it's a relation, add it to the model
@@ -1084,13 +1047,6 @@ public class LASADActionReceiver {
 							autoOrganizer.updateSiblingLinks(link);
 						}
 					}
-
-					/*
-					if (DEBUG)
-					{
-						Logger.log(argModel.toString(), Logger.DEBUG);
-					}
-					*/
 				}
 
 				// End Kevin Loughlin
@@ -1179,9 +1135,8 @@ public class LASADActionReceiver {
 						if (removedLink != null)
 						{
 							argModel.createNewThreadIfNecessary(removedLink);
-							//argModel.removeExcessThreads();
 
-							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved))
+							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)) 
 								&& Integer.parseInt(a.getParameterValue(ParameterTypes.NumActions)) == 1)
 							{
 								autoOrganizer.determineLinksToRemove(removedLink);
@@ -1191,34 +1146,19 @@ public class LASADActionReceiver {
 						{
 							Logger.log("ERROR: Removed link is null", Logger.DEBUG);
 						}
-
-						/*
-						if (DEBUG)
-						{
-							Logger.log(argModel.toString(), Logger.DEBUG);
-						}
-						*/
 					}
 					else if (elementType.equalsIgnoreCase(BOX))
 					{
 						LinkedBox removedBox = argModel.removeBoxByBoxID(elementID);
 						if (removedBox != null)
 						{
-							//argModel.removeExcessThreads();
+							argModel.removeLinksTo(removedBox);
 						}
 						else
 						{
 							Logger.log("ERROR: Removed box is null", Logger.DEBUG);
 						}
-
-						/*
-						if (DEBUG)
-						{
-							Logger.log(argModel.toString(), Logger.DEBUG);
-						}
-						*/
 					}
-					
 					// End Kevin Loughlin
 
 				} else {

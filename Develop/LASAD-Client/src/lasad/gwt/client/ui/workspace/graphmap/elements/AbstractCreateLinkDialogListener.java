@@ -132,7 +132,7 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
 						}
 						
 					}
-					else if (!alpha.okayForLink(beta))
+					else if (alpha.isPartOfGroupWithParentLinkTo(beta))
 					{
 						LASADInfo.display("Error", "Creating a link here would result in a two-way link - can't create link.");
 					}

@@ -4,17 +4,23 @@ import com.extjs.gxt.ui.client.widget.TabItem;
 import com.google.gwt.user.client.ui.HTML;
 import lasad.gwt.client.settings.DebugSettings;
 
+/**
+ *	Shockingly, this class represents the About Tab for LASAD, i.e. the tab providing general info (version, description, etc)
+ *	Should be used as a singleton
+ *	@author Kevin Loughlin
+ *	@since 28 August 2015
+ */
 public class AboutTab extends TabItem
 {
 	private static AboutTab instance = null;
 
+	// Private, only to be called by getInstance
 	private AboutTab()
 	{
 		this.setText("About");
 		this.setClosable(true);
 		this.addStyleName("pad-text");
 		this.setStyleAttribute("backgroundColor", "#FBFBFB");
-		// item.setEnabled(false);
 
 		// TODO This text should be loaded from the server.
 		HTML introduction = new HTML();
@@ -23,6 +29,7 @@ public class AboutTab extends TabItem
 		this.add(introduction);
 	}
 
+	// Allows for singleton nature
 	public static AboutTab getInstance()
 	{
 		if (instance == null)

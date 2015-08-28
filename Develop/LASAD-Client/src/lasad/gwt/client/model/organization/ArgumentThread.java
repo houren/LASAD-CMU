@@ -61,6 +61,8 @@ public class ArgumentThread
 		Exception myException = null;
 		for (LinkedBox startBox : this.getBoxes())
 		{
+			// Fixes bug where certain startBoxes dont work for grid organization.  Would like to develop the algorithm so that startBox doesn't
+			// matter, but this fixes the bug regardless
 			try
 			{
 				this.setGrid(this.grid.organize(DOWNWARD, startBox));

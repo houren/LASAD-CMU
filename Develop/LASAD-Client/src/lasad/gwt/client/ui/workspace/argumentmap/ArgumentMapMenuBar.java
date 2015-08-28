@@ -81,9 +81,10 @@ import lasad.gwt.client.ui.workspace.tabs.map.ImportMapFormPanel;
 import lasad.gwt.client.ui.workspace.tabs.TutorialVideosTab;
 
 /**
- *	Finishes the implementation of the map's menu bar.
+ *	Finishes the implementation of the map's menu bar.  It has been redone by Kevin Loughlin to fall in line with that of a standard
+ *	application menu
  *	@author Unknown
- *	@since Unknown, Last Updated 21 July 2015 by Kevin Loughlin
+ *	@since Unknown, Last Updated 28 August 2015 by Kevin Loughlin
  */
 public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
@@ -182,6 +183,8 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		itemEdit.setMenu(editMenu);
 		itemView.setMenu(viewMenu);
 
+		/*	Menu was becoming permanently frozen open on double click, so this is a hack to close it instead.  Users should just
+			use a single click. */
 		itemLASAD.addListener(Events.OnDoubleClick, new Listener<BaseEvent>()
 		{
 			@Override
@@ -293,8 +296,8 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		}
 	}
 
-	// An attempt originally by Kevin Loughlin to downsize screen shot, but that now works thanks to Darlan Sanatana Farias
-	// perhaps we should change the method name ;)
+	/*	An attempt originally by Kevin Loughlin to downsize area captured by screen shot, but that now works
+		thanks to Darlan Sanatana Farias.  Perhaps we should change the method name ;) */
 	protected MenuItem kevinCreateScreenshotItem() {
 		final MenuItem screenshot = new MenuItem("Create a screenshot");
 		screenshot.addSelectionListener(new SelectionListener<MenuEvent>() {
@@ -683,11 +686,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		MenuItem about = createAboutItem();
 		menu.add(about);
 
-		/*
-		MenuItem preferencesItem = createPreferencesItem();
-		menu.add(preferencesItem);
-		*/
-
 		MenuItem logOut = createLogOutItem();
 		menu.add(logOut);
 
@@ -722,7 +720,7 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	protected Menu createEditMenu() {
 		Menu menu = new Menu();
 
-		// TODO Re-implement the undo function
+		// TODO Re-implement the undo function (untouched by CMU staff in summer of 2015, to be developed still)
 		// MenuItem editUndoItem = createEditUndoItem();
 		// menu.add(editUndoItem);
 

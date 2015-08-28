@@ -1,5 +1,10 @@
 package lasad.gwt.client.model.organization;
 
+/**
+ *	The top and bottom most y, left and right most x coords, returned as ints
+ *	@author	Kevin Loughlin
+ *	@since	Who Knows, Updated 28 August 2015
+ */
 public class EdgeCoords
 {
 	int top;
