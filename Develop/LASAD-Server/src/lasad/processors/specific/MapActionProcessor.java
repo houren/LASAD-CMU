@@ -2,7 +2,6 @@ package lasad.processors.specific;
 
 import java.util.Vector;
 
-
 import lasad.controller.ManagementController;
 import lasad.entity.ActionParameter;
 import lasad.entity.Element;
@@ -20,6 +19,23 @@ import lasad.shared.communication.objects.categories.Categories;
 import lasad.shared.communication.objects.commands.Commands;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 
+import edu.cmu.pslc.logging.element.ConditionElement;
+import edu.cmu.pslc.logging.element.CustomFieldElement;
+import edu.cmu.pslc.logging.element.DatasetElement;
+import edu.cmu.pslc.logging.element.InterpretationElement;
+import edu.cmu.pslc.logging.element.LevelElement;
+import edu.cmu.pslc.logging.element.MetaElement;
+import edu.cmu.pslc.logging.element.ProblemElement;
+import edu.cmu.pslc.logging.element.PropertyElement;
+import edu.cmu.pslc.logging.element.SkillElement;
+import edu.cmu.pslc.logging.element.StepElement;
+import edu.cmu.pslc.logging.element.StepSequenceElement;
+import edu.cmu.pslc.logging.OliDatabaseLogger;
+import edu.cmu.pslc.logging.*;
+
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * this class handles all actions about map
  * 
@@ -27,9 +43,233 @@ import lasad.shared.communication.objects.parameters.ParameterTypes;
  */
 public class MapActionProcessor extends AbstractActionObserver implements ActionObserver {
 
+	private OliDatabaseLogger dsLogger;
+	private Vector<String> boxList;
+	private Vector<String> relationList;
+
 	public MapActionProcessor() {
 		super();
+		dsLogger = OliDatabaseLogger.create("https://pslc-qa.andrew.cmu.edu/log/server", "UTF-8");
+		boxList = new Vector<String>();
+		relationList = new Vector<String>();
 	}
+
+	/**
+     * Logs some random actions.
+     */
+    private void logToDataShop(Action a, User u)
+    {
+    	try
+    	{
+    		Logger.debugLog("\n**********\nLogging to DataShop...\n**********\n");
+
+	    	Logger.debugLog("Action:\n" + a.toString());
+	    	Logger.debugLog("\nUser:\n" + u.toString());
+
+			String userId = u.getNickname();
+	        String sessionId = u.getSessionID();
+	        String timeString = "" + a.getTimeStamp();
+	        String timeZone = "UTC";//"EST";
+	        String className = "Test class";
+	        String school = "CMU";
+	        String period = "First Period";
+	        String description = "Testing for LASAD";
+	        String instructorOne = "Jim Teacher";
+	        String problemName = Map.getMapName(this.aproc.getMapIDFromAction(a));
+	        String problemContext = "a";
+
+	        Logger.debugLog("Made it to meta element");
+
+	        MetaElement metaElement = new MetaElement(userId, sessionId, timeString, timeZone);
+
+	        ContextMessage contextMsg = ContextMessage.createStartProblem(metaElement);
+
+	        Logger.debugLog("Created context message");
+
+	        contextMsg.setClassName(className);
+	        contextMsg.setSchool(school);
+	        contextMsg.setPeriod(period);
+	        contextMsg.setClassDescription(description);
+	        contextMsg.addInstructor(instructorOne);
+	        contextMsg.addSkill(new SkillElement("1.0", "LoggingSkill", "General", "Basic"));
+	        ProblemElement problem = new ProblemElement(problemName, problemContext);
+	        LevelElement sectionLevel = new LevelElement("Section", "One", problem);
+	        LevelElement unitLevel = new LevelElement("Unit", "A", sectionLevel);
+	        contextMsg.setDataset(new DatasetElement("Testing4Lasad", unitLevel));
+	        /*
+	        contextMsg.addCondition(new ConditionElement("WorkedExamples", "experimental"));
+	        contextMsg.addCondition(new ConditionElement("control"));
+	        */	
+
+	        Logger.debugLog("Beginning creation of tool message");
+
+	        ToolMessage toolMsg = ToolMessage.create(contextMsg);
+	        String selection = a.getParameterValue(ParameterTypes.Id);
+	        String action = a.getCmd().name();
+	        final String input;
+
+	        Logger.debugLog("Determining input");
+
+	        if (action.equals("CreateElement"))
+	        {
+	        	input = "";
+
+	        	String type = a.getParameterValue(ParameterTypes.Type);
+	        	if (type == null)
+	        	{
+	        		return;
+	        	}
+	        	else if (type.equals("box"))
+	        	{
+	        		boxList.add(selection);
+	        		toolMsg.setAsAttempt("Create Box");
+	        	}
+	        	else if (type.equals("relation"))
+	        	{
+	        		relationList.add(selection);
+	        		toolMsg.setAsAttempt("Create Relation");
+	        	}
+	        	else
+	        	{
+	        		return;
+	        	}
+	        }
+	        else if (action.equals("UpdateElement"))
+	        {
+	        	String text = a.getParameterValue(ParameterTypes.Text);
+		        if (text == null)
+		        {
+		        	String posX = a.getParameterValue(ParameterTypes.PosX);
+		        	if (posX == null)
+		        	{
+		        		String width = a.getParameterValue(ParameterTypes.Width);
+		        		if (width == null)
+		        		{
+		        			input = "";
+		        			toolMsg.setAsAttempt("");
+		        		}
+		        		else
+		        		{
+		        			input = "Width: " + width + "; Height: " + a.getParameterValue(ParameterTypes.Height);
+		        			toolMsg.setAsAttempt("Resize Element");
+		        		}
+		        	}
+		        	else
+		        	{
+		        		input = "PosX: " + posX + "; PosY: " + a.getParameterValue(ParameterTypes.PosY);
+		        		toolMsg.setAsAttempt("Reposition Element");
+		        	}
+		        }
+		        else
+		        {
+		        	toolMsg.setAsAttempt("Modify Element Text");
+		        	input = text;
+		        }
+	        }
+	        else if (action.equals("DeleteElement"))
+	        {
+	        	if (boxList.contains(selection))
+	        	{
+	        		toolMsg.setAsAttempt("Delete Box");
+	        		boxList.remove(selection);
+	        	}
+	        	else if (relationList.contains(selection))
+	        	{
+	        		toolMsg.setAsAttempt("Delete Relation");
+	        		relationList.remove(selection);
+	        	}
+	        	else
+	        	{
+	        		return;
+	        	}
+	        	input = "";
+	        }
+	        else if (action.equals("ChangeFontSize"))
+	        {
+	        	toolMsg.setAsAttempt("");
+	        	input = "Font Size: " + a.getParameterValue(ParameterTypes.FontSize);
+	        }
+	        else if (action.equals("AutoOrganize"))
+	        {
+	        	toolMsg.setAsAttempt("");
+	        	String orientationBool = a.getParameterValue(ParameterTypes.OrganizerOrientation);
+	        	String orient;
+	        	if (Boolean.parseBoolean(orientationBool))
+	        	{
+	        		orient = "downward";
+	        	}
+	        	else
+	        	{
+	        		orient = "upward";
+	        	}
+	        	String width = a.getParameterValue(ParameterTypes.OrganizerBoxWidth);
+	        	String height = a.getParameterValue(ParameterTypes.OrganizerBoxHeight);
+	        	input = "Orientation: " + orient + "; Width: " + width + "; Height: " + height;
+	        }
+	        else
+	        {
+	        	return;
+	        }
+	        toolMsg.addSai(selection, action, input);
+
+	        if (!dsLogger.log(contextMsg))
+	        {
+	        	Logger.debugLog("ERROR: context Message log failed!");
+	        }
+
+	        if (!dsLogger.log(toolMsg))
+	        {
+	        	Logger.debugLog("ERROR: tool Message log failed!");
+	        }
+
+	        /*
+	        TutorMessage tutorMsg = TutorMessage.create(toolMsg);
+	        tutorMsg.setAsCorrectAttemptResponse();
+	        tutorMsg.addSai("ButtonOne", "PressButton", "square");
+	        tutorMsg.addSkill(new SkillElement("Dictation", "General", "Basic"));
+	        tutorMsg.addCustomField(new CustomFieldElement("Equation", "y=x+ab+1"));
+	        tutorMsg.addCustomField(new CustomFieldElement("Whatever", "one"));
+	        //of course, you wouldn't really have an interpretation with an SAI (event descriptor)
+	        //this is just an example
+	        StepSequenceElement corSeq = StepSequenceElement.createCorrectSequence();
+	        corSeq.setOrderedFlag(Boolean.TRUE);
+	        corSeq.addStep(new StepElement("MyCorrectStep"));
+	        StepSequenceElement incSeq = StepSequenceElement.createIncorrectSequence();
+	        incSeq.setOrderedFlag(Boolean.FALSE);
+	        incSeq.addStep(new StepElement("BadStepOne"));
+	        incSeq.addStep(new StepElement("BadStepTwo"));
+	        InterpretationElement interp = new InterpretationElement(Boolean.TRUE, corSeq, incSeq);
+	        tutorMsg.addInterpretation(interp);
+
+	        if (!dsLogger.log(tutorMsg))
+	        {
+	        	Logger.debugLog("ERROR: tutor Message log failed!");
+	        }
+
+
+	        PlainMessage plainMsg = PlainMessage.create(contextMsg);
+	        plainMsg.addProperty(new PropertyElement("plain property"));
+	        plainMsg.addProperty(new PropertyElement("name", "contents"));
+	        List<String> entryList = Arrays.asList("one", "two", "three");
+	        plainMsg.addProperty(new PropertyElement("entry list name", entryList));
+
+	        if (!dsLogger.log(plainMsg))
+	        {
+	        	Logger.debugLog("ERROR: plain Message log failed!");
+	        }
+	        */
+
+	        //dsLogger.close();
+		}	    	
+        catch(Exception e)
+        {
+        	e.printStackTrace();
+			Logger.debugLog(e.toString());
+			Logger.debugLog(e.getMessage());
+			Logger.debugLog(e.getStackTrace().toString());
+			Logger.debugLog(e.getClass().toString());
+        }
+    } // end doSomethingCool method
 
 	/**
 	 * create an Element in a map,for Example Box, Link etc. save it in the database
@@ -457,6 +697,10 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			default:
 				break;
 			}
+		}
+		if (returnValue)
+		{
+			logToDataShop(a, u);
 		}
 		return returnValue;
 	}

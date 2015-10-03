@@ -22,6 +22,7 @@ public class Action implements Serializable {
 	private Categories category;
 	private Vector<Parameter> parameters;
 	private ObjectFE objectFE;
+	long timestamp;
 
 	/**
 	 * Creates a general action
@@ -55,6 +56,8 @@ public class Action implements Serializable {
 		this.cmd = command;
 		this.category = category;
 		parameters = new Vector<Parameter>();
+		timestamp = System.currentTimeMillis();
+
 	}
 
 	/**
@@ -68,6 +71,11 @@ public class Action implements Serializable {
 			throw new NullPointerException();
 		}
 		parameters.add(new Parameter(type, value));
+	}
+
+	public long getTimeStamp()
+	{
+		return timestamp;
 	}
 
 	/**

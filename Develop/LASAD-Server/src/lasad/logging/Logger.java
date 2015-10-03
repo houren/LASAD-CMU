@@ -10,7 +10,7 @@ public class Logger {
 
 	private static Vector<LoggerInterface> logger = new Vector<LoggerInterface>();
 
-	private static final boolean IsInDebugMode = false;
+	private static final boolean IsInDebugMode = true;
 
 	public static void addLogger(LoggerInterface loggerImplementation) {
 		logger.add(loggerImplementation);
