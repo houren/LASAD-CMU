@@ -22,7 +22,7 @@ public class Action implements Serializable {
 	private Categories category;
 	private Vector<Parameter> parameters;
 	private ObjectFE objectFE;
-	long timestamp;
+	private long timestamp;
 
 	/**
 	 * Creates a general action
@@ -57,7 +57,6 @@ public class Action implements Serializable {
 		this.category = category;
 		parameters = new Vector<Parameter>();
 		timestamp = System.currentTimeMillis();
-
 	}
 
 	/**

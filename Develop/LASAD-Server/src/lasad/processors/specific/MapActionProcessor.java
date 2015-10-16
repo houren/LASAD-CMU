@@ -35,6 +35,8 @@ import edu.cmu.pslc.logging.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * this class handles all actions about map
@@ -44,14 +46,44 @@ import java.util.List;
 public class MapActionProcessor extends AbstractActionObserver implements ActionObserver {
 
 	private OliDatabaseLogger dsLogger;
-	private Vector<String> boxList;
-	private Vector<String> relationList;
+	private HashMap<String, HashSet<String>> mapBoxes;
+	private HashMap<String, HashSet<String>> mapLinks;
 
-	public MapActionProcessor() {
+	// userName
+	private HashSet<String> harrellClass;
+
+	// user, sessionID
+	private HashMap<String, String> loggedSessions;
+
+	public MapActionProcessor()
+	{
 		super();
 		dsLogger = OliDatabaseLogger.create("https://pslc-qa.andrew.cmu.edu/log/server", "UTF-8");
-		boxList = new Vector<String>();
-		relationList = new Vector<String>();
+		mapBoxes = new HashMap<String, HashSet<String>>();
+		mapLinks = new HashMap<String, HashSet<String>>();
+
+		loggedSessions = new HashMap<String, String>();
+		harrellClass = new HashSet<String>();
+		harrellClass.add("Sam.Speight");
+		harrellClass.add("Mara.Harrell");
+
+		harrellClass.add("Sonia.Lee");
+		harrellClass.add("Jeremy.Meola");
+		harrellClass.add("Sascha.Demetris");
+		harrellClass.add("Kajae.Jones");
+		harrellClass.add("Jonathan.Li");
+
+		harrellClass.add("Nicole.Matamala");
+		harrellClass.add("Brad.Edgington");
+		harrellClass.add("Dave.Singh");
+		harrellClass.add("Izzy.Roscoe");
+		harrellClass.add("Simone.Schneeberg");
+
+		harrellClass.add("Natsuha.Omori");
+		harrellClass.add("Bobbie.Chen");
+		harrellClass.add("Brendan.Wixen");
+		harrellClass.add("Oliver.Liburd");
+		harrellClass.add("Kevin.Riordan");
 	}
 
 	/**
@@ -61,54 +93,61 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
     {
     	try
     	{
-    		Logger.debugLog("\n**********\nLogging to DataShop...\n**********\n");
-
-	    	Logger.debugLog("Action:\n" + a.toString());
-	    	Logger.debugLog("\nUser:\n" + u.toString());
-
-			String userId = u.getNickname();
+			String userName = u.getNickname();
 	        String sessionId = u.getSessionID();
-	        String timeString = "" + a.getTimeStamp();
-	        String timeZone = "UTC";//"EST";
-	        String className = "Test class";
-	        String school = "CMU";
-	        String period = "First Period";
-	        String description = "Testing for LASAD";
-	        String instructorOne = "Jim Teacher";
-	        String problemName = Map.getMapName(this.aproc.getMapIDFromAction(a));
-	        String problemContext = "a";
 
-	        Logger.debugLog("Made it to meta element");
+	        if (loggedSessions.get(userName) == null || !loggedSessions.get(userName).equals(sessionId))
+	        {
+	        	dsLogger.logSession(userName, sessionId);
+	        	loggedSessions.put(userName, sessionId);
+	        }
 
-	        MetaElement metaElement = new MetaElement(userId, sessionId, timeString, timeZone);
+	        String timeString = Long.toString(a.getTimeStamp());
+		    String timeZone = "UTC";
+		    MetaElement metaElement = new MetaElement(userName, sessionId, timeString, timeZone);
+			ContextMessage contextMsg = ContextMessage.createStartProblem(metaElement);
 
-	        ContextMessage contextMsg = ContextMessage.createStartProblem(metaElement);
+			String problemName = Map.getMapName(this.aproc.getMapIDFromAction(a));
+			ProblemElement problem = new ProblemElement(problemName);
 
-	        Logger.debugLog("Created context message");
+	        if (harrellClass.contains(userName))
+	        {
+	        	LevelElement sectionLevel = new LevelElement("Section", "01", problem);
 
-	        contextMsg.setClassName(className);
-	        contextMsg.setSchool(school);
-	        contextMsg.setPeriod(period);
-	        contextMsg.setClassDescription(description);
-	        contextMsg.addInstructor(instructorOne);
-	        contextMsg.addSkill(new SkillElement("1.0", "LoggingSkill", "General", "Basic"));
-	        ProblemElement problem = new ProblemElement(problemName, problemContext);
-	        LevelElement sectionLevel = new LevelElement("Section", "One", problem);
-	        LevelElement unitLevel = new LevelElement("Unit", "A", sectionLevel);
-	        contextMsg.setDataset(new DatasetElement("Testing4Lasad", unitLevel));
-	        /*
-	        contextMsg.addCondition(new ConditionElement("WorkedExamples", "experimental"));
-	        contextMsg.addCondition(new ConditionElement("control"));
-	        */	
+		        String className = "Engineering Ethics";
+		        String school = "CMU";
+		        String period = "01";
+		        String instructorOne = "Mara Harrell";
 
-	        Logger.debugLog("Beginning creation of tool message");
+		        contextMsg.setClassName(className);
+		        contextMsg.setSchool(school);
+		        contextMsg.setPeriod(period);
+		        contextMsg.addInstructor(instructorOne);
+		        contextMsg.setDataset(new DatasetElement("Engineering-Ethics-Test-2", sectionLevel));
+	        }
+	        else
+	        {
+	        	LevelElement sectionLevel = new LevelElement("Section", "", problem);
+
+	        	contextMsg.setClassName("");
+		        contextMsg.setSchool("");
+		        contextMsg.setPeriod("");
+		        contextMsg.addInstructor("");
+	        	contextMsg.setDataset(new DatasetElement("LASAD-Columbus-Test-4", sectionLevel));
+	        }
 
 	        ToolMessage toolMsg = ToolMessage.create(contextMsg);
-	        String selection = a.getParameterValue(ParameterTypes.Id);
+	        String selection;
+	        if (a.getParameterValue(ParameterTypes.Id) == null)
+	        {
+	        	selection = "";
+	        }
+	        else
+	        {
+	        	selection = a.getParameterValue(ParameterTypes.Id);
+	        }
 	        String action = a.getCmd().name();
 	        final String input;
-
-	        Logger.debugLog("Determining input");
 
 	        if (action.equals("CreateElement"))
 	        {
@@ -121,12 +160,30 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        	}
 	        	else if (type.equals("box"))
 	        	{
-	        		boxList.add(selection);
+	        		if (!mapBoxes.keySet().contains(problemName) || mapBoxes.get(problemName) == null)
+	        		{
+	        			HashSet<String> boxes = new HashSet<String>();
+	        			boxes.add(selection);
+	        			mapBoxes.put(problemName, boxes);
+	        		}
+	        		else
+	        		{
+	        			mapBoxes.get(problemName).add(selection);
+	        		}
 	        		toolMsg.setAsAttempt("Create Box");
 	        	}
 	        	else if (type.equals("relation"))
 	        	{
-	        		relationList.add(selection);
+	        		if (!mapLinks.keySet().contains(problemName))
+	        		{
+	        			HashSet<String> links = new HashSet<String>();
+	        			links.add(selection);
+	        			mapLinks.put(problemName, links);
+	        		}
+	        		else
+	        		{
+	        			mapLinks.get(problemName).add(selection);
+	        		}
 	        		toolMsg.setAsAttempt("Create Relation");
 	        	}
 	        	else
@@ -145,8 +202,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		        		String width = a.getParameterValue(ParameterTypes.Width);
 		        		if (width == null)
 		        		{
-		        			input = "";
-		        			toolMsg.setAsAttempt("");
+		        			return;
 		        		}
 		        		else
 		        		{
@@ -168,26 +224,19 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        }
 	        else if (action.equals("DeleteElement"))
 	        {
-	        	if (boxList.contains(selection))
+	        	if (mapBoxes.get(problemName).remove(selection))
 	        	{
 	        		toolMsg.setAsAttempt("Delete Box");
-	        		boxList.remove(selection);
-	        	}
-	        	else if (relationList.contains(selection))
-	        	{
-	        		toolMsg.setAsAttempt("Delete Relation");
-	        		relationList.remove(selection);
-	        	}
+        		}
+        		else if (mapLinks.get(problemName).remove(selection))
+        		{
+        			toolMsg.setAsAttempt("Delete Relation");
+        		}
 	        	else
 	        	{
 	        		return;
 	        	}
 	        	input = "";
-	        }
-	        else if (action.equals("ChangeFontSize"))
-	        {
-	        	toolMsg.setAsAttempt("");
-	        	input = "Font Size: " + a.getParameterValue(ParameterTypes.FontSize);
 	        }
 	        else if (action.equals("AutoOrganize"))
 	        {
@@ -206,72 +255,52 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        	String height = a.getParameterValue(ParameterTypes.OrganizerBoxHeight);
 	        	input = "Orientation: " + orient + "; Width: " + width + "; Height: " + height;
 	        }
+	        else if (action.equals("ChangeFontSize"))
+	        {
+	        	toolMsg.setAsAttempt("");
+	        	input = "Font Size: " + a.getParameterValue(ParameterTypes.FontSize);
+	        }
 	        else
 	        {
 	        	return;
 	        }
-	        toolMsg.addSai(selection, action, input);
+
+	        if (selection != null && action != null && input != null)
+	        {
+	        	toolMsg.addSai(selection, action, input);
+	        }
+	        else
+	        {
+	        	Logger.debugLog("ERROR: cannot log becase sai is null for following action!");
+	        	Logger.debugLog(a.toString());
+	        	return;
+	        }
 
 	        if (!dsLogger.log(contextMsg))
 	        {
-	        	Logger.debugLog("ERROR: context Message log failed!");
+	        	Logger.debugLog("ERROR: context Message log failed for following action!");
+	        	Logger.debugLog(a.toString());
+	        	return;
 	        }
 
 	        if (!dsLogger.log(toolMsg))
 	        {
-	        	Logger.debugLog("ERROR: tool Message log failed!");
+	        	Logger.debugLog("ERROR: tool Message log failed for following action!");
+	        	Logger.debugLog(a.toString());
+	        	return;
 	        }
-
-	        /*
-	        TutorMessage tutorMsg = TutorMessage.create(toolMsg);
-	        tutorMsg.setAsCorrectAttemptResponse();
-	        tutorMsg.addSai("ButtonOne", "PressButton", "square");
-	        tutorMsg.addSkill(new SkillElement("Dictation", "General", "Basic"));
-	        tutorMsg.addCustomField(new CustomFieldElement("Equation", "y=x+ab+1"));
-	        tutorMsg.addCustomField(new CustomFieldElement("Whatever", "one"));
-	        //of course, you wouldn't really have an interpretation with an SAI (event descriptor)
-	        //this is just an example
-	        StepSequenceElement corSeq = StepSequenceElement.createCorrectSequence();
-	        corSeq.setOrderedFlag(Boolean.TRUE);
-	        corSeq.addStep(new StepElement("MyCorrectStep"));
-	        StepSequenceElement incSeq = StepSequenceElement.createIncorrectSequence();
-	        incSeq.setOrderedFlag(Boolean.FALSE);
-	        incSeq.addStep(new StepElement("BadStepOne"));
-	        incSeq.addStep(new StepElement("BadStepTwo"));
-	        InterpretationElement interp = new InterpretationElement(Boolean.TRUE, corSeq, incSeq);
-	        tutorMsg.addInterpretation(interp);
-
-	        if (!dsLogger.log(tutorMsg))
-	        {
-	        	Logger.debugLog("ERROR: tutor Message log failed!");
-	        }
-
-
-	        PlainMessage plainMsg = PlainMessage.create(contextMsg);
-	        plainMsg.addProperty(new PropertyElement("plain property"));
-	        plainMsg.addProperty(new PropertyElement("name", "contents"));
-	        List<String> entryList = Arrays.asList("one", "two", "three");
-	        plainMsg.addProperty(new PropertyElement("entry list name", entryList));
-
-	        if (!dsLogger.log(plainMsg))
-	        {
-	        	Logger.debugLog("ERROR: plain Message log failed!");
-	        }
-	        */
-
-	        //dsLogger.close();
 		}	    	
         catch(Exception e)
         {
-        	e.printStackTrace();
+        	Logger.debugLog("ERROR: Exception thrown for following action!");
+        	Logger.debugLog(a.toString());
+        	Logger.debugLog("EXCEPTION INFO...");
 			Logger.debugLog(e.toString());
-			Logger.debugLog(e.getMessage());
 			Logger.debugLog(e.getStackTrace().toString());
-			Logger.debugLog(e.getClass().toString());
-        }
-    } // end doSomethingCool method
+        } 	
+    }
 
-	/**
+    /**
 	 * create an Element in a map,for Example Box, Link etc. save it in the database
 	 * 
 	 * @param a a specific LASAD action
@@ -735,5 +764,4 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		Logger.doCFLogging(ap);	
 		ManagementController.addToAllUsersOnMapActionQueue(ap, mapID);
 	}
-
 }
