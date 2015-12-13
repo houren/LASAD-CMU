@@ -49,32 +49,32 @@ public class Ontology {
 	public static int getOntologyID(String ontologyName) {
 		Connection con = null; 		
 		String SQL = null;
+		ResultSet rs = null;
+		PreparedStatement getOntologyID = null;
+		int returnInt = -1;
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Ontology.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getOntologyID = con.prepareStatement("SELECT id FROM "+Config.dbName+".ontologies WHERE name = ?;");
+			getOntologyID = con.prepareStatement("SELECT id FROM "+Config.dbName+".ontologies WHERE name = ?;");
 			getOntologyID.setString(1, ontologyName);
 			
 			SQL = getOntologyID.toString();
 			
-			ResultSet rs = getOntologyID.executeQuery();
+			rs = getOntologyID.executeQuery();
 			if(rs.next()) {
-				return rs.getInt(1);
-			}
-			else {
-				return -1;
+				returnInt = rs.getInt(1);
 			}			
 		} catch (SQLException e){
 			System.err.println(SQL);
 			e.printStackTrace();
-			return -1;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return -1;
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getOntologyID.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Ontology.class, con);
 //				try {
@@ -84,13 +84,14 @@ public class Ontology {
 //				}
 			}
 		}
+		return returnInt;
 	}
 	
-	public static Ontology parseOntologyFromFile(File f) {	   	
+	public static Ontology parseOntologyFromFile(File f) {	
+	    FileInputStream in = null;
+	    Ontology newOntology = null;	
 		try {
-			FileInputStream in = new FileInputStream(f);
-	    	
-	    	Ontology newOntology = null;
+			in = new FileInputStream(f);
 	    	String ontologyName;
 	    	
 			SAXBuilder builder = new SAXBuilder();
@@ -109,25 +110,25 @@ public class Ontology {
 				newOntology = new Ontology(ontologyName, ontology);		
 			}
 			
-			return newOntology;
-			
 		} catch(Exception e){
 			e.printStackTrace();
-			return null;
 		}
+		try{in.close();}catch(Exception e){}
+		return newOntology;
 	}
 	
 	public void saveToDatabase() {
 	
 		if(Ontology.getOntologyID(this.name) == -1) { // Ontology does not exist
 			
-			Connection con = null; 		
+			Connection con = null;
+			PreparedStatement insertOntology = null; 		
 			
 			try {
 				con = DatabaseConnectionHandler.getConnection(Ontology.class);
 //				con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 				
-				PreparedStatement insertOntology = con.prepareStatement("INSERT INTO "+Config.dbName+".ontologies (id, name, xmlConfig) VALUES (NULL, ?, ?);");
+				insertOntology = con.prepareStatement("INSERT INTO "+Config.dbName+".ontologies (id, name, xmlConfig) VALUES (NULL, ?, ?);");
 				insertOntology.setString(1, this.name);
 				insertOntology.setString(2, this.xml);
 				insertOntology.executeUpdate();			
@@ -137,6 +138,7 @@ public class Ontology {
 				e.printStackTrace();
 			}
 			finally {
+				try{insertOntology.close();}catch(Exception e){}
 				if(con != null) {
 					DatabaseConnectionHandler.closeConnection(Ontology.class, con);
 //					try {
@@ -174,16 +176,18 @@ public class Ontology {
 	public static String getOntologyXML(int ontologyID) {
 		
 		String ontologyXML = null;
-		Connection con = null; 		
+		Connection con = null; 
+		PreparedStatement getOntologyXML = null;
+		ResultSet rs = null;		
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Ontology.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getOntologyXML = con.prepareStatement("SELECT xmlConfig FROM "+Config.dbName+".ontologies WHERE id = ?;");
+			getOntologyXML = con.prepareStatement("SELECT xmlConfig FROM "+Config.dbName+".ontologies WHERE id = ?;");
 			getOntologyXML.setInt(1, ontologyID);
 			
-			ResultSet rs = getOntologyXML.executeQuery();
+			rs = getOntologyXML.executeQuery();
 			rs.next();
 			
 			ontologyXML = rs.getString(1);			
@@ -193,6 +197,8 @@ public class Ontology {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getOntologyXML.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Ontology.class, con);
 //				try {
@@ -259,16 +265,18 @@ public class Ontology {
 	public static Vector<Ontology> getOntologyList() {
 		Vector<Ontology> ontologyList = new Vector<Ontology>();
 		
-		Connection con = null; 		
+		Connection con = null;
+		Statement getOntologies = null;
+		ResultSet rs = null; 		
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Ontology.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			Statement getOntologies = con.createStatement();
+			getOntologies = con.createStatement();
 			getOntologies.executeQuery("SELECT * FROM "+Config.dbName+".ontologies;");
 			
-			ResultSet rs = getOntologies.executeQuery("SELECT * FROM "+Config.dbName+".ontologies;");
+			rs = getOntologies.executeQuery("SELECT * FROM "+Config.dbName+".ontologies;");
 			while(rs.next()) {
 				ontologyList.add(new Ontology(rs.getInt("id"), rs.getString("name"), rs.getString("xmlConfig")));
 			}
@@ -279,6 +287,8 @@ public class Ontology {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getOntologies.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Ontology.class, con);
 //				try {
@@ -294,16 +304,18 @@ public class Ontology {
 	public static String getOntologyName(int ontologyId) {
 		
 		String ontologyName = null;
-		Connection con = null; 		
+		Connection con = null;
+		PreparedStatement getOntologyXML = null;
+		ResultSet rs = null; 		
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Ontology.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getOntologyXML = con.prepareStatement("SELECT name FROM "+Config.dbName+".ontologies WHERE id = ?;");
+			getOntologyXML = con.prepareStatement("SELECT name FROM "+Config.dbName+".ontologies WHERE id = ?;");
 			getOntologyXML.setInt(1, ontologyId);
 			
-			ResultSet rs = getOntologyXML.executeQuery();
+			rs = getOntologyXML.executeQuery();
 			rs.next();
 			
 			ontologyName = rs.getString(1);			
@@ -313,6 +325,8 @@ public class Ontology {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getOntologyXML.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Ontology.class, con);
 //				try {
@@ -327,13 +341,14 @@ public class Ontology {
 	}
 	
 	public static void removeOntologyFromDB(int ontologyID) {
-		Connection con = null; 		
+		Connection con = null; 	
+		PreparedStatement deleteOntology = null;	
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Ontology.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement deleteOntology = con.prepareStatement("DELETE FROM "+Config.dbName+".ontologies WHERE id = ? LIMIT 1;");
+			deleteOntology = con.prepareStatement("DELETE FROM "+Config.dbName+".ontologies WHERE id = ? LIMIT 1;");
 			deleteOntology.setInt(1, ontologyID);
 			
 			deleteOntology.executeUpdate();
@@ -343,6 +358,7 @@ public class Ontology {
 			e.printStackTrace();
 		}
 		finally {
+			try{deleteOntology.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Ontology.class, con);
 //				try {
@@ -405,15 +421,17 @@ public class Ontology {
 	public static Vector<String> getAllOntologyNames() {
 		Vector<String> ontologyList = new Vector<String>();
 		
-		Connection con = null; 		
+		Connection con = null; 	
+		PreparedStatement getAllOntologyNames = null;
+		ResultSet rs = null;	
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Ontology.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getAllOntologyNames = con.prepareStatement("SELECT name FROM "+Config.dbName+".ontologies;");
+			getAllOntologyNames = con.prepareStatement("SELECT name FROM "+Config.dbName+".ontologies;");
 			
-			ResultSet rs = getAllOntologyNames.executeQuery();
+			rs = getAllOntologyNames.executeQuery();
 			
 			while(rs.next()) {
 				ontologyList.add(rs.getString("name"));
@@ -425,6 +443,8 @@ public class Ontology {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getAllOntologyNames.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Ontology.class, con);
 //				try {
@@ -442,16 +462,18 @@ public class Ontology {
 
 		boolean existent = false;
 		
-		Connection con = null; 		
+		Connection con = null;
+		PreparedStatement getOntology = null;
+		ResultSet rs = null; 		
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Ontology.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getOntology = con.prepareStatement("SELECT id FROM "+Config.dbName+".ontologies WHERE name = ?;");
+			getOntology = con.prepareStatement("SELECT id FROM "+Config.dbName+".ontologies WHERE name = ?;");
 			getOntology.setString(1, ontologyName);
 			
-			ResultSet rs = getOntology.executeQuery();
+			rs = getOntology.executeQuery();
 			if(rs.next()) {
 				existent = true;
 			}
@@ -462,6 +484,8 @@ public class Ontology {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getOntology.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Ontology.class, con);
 //				try {
@@ -498,13 +522,14 @@ public class Ontology {
 //	}
 
 	public static void updateOntologyInDB(String ontologyName, String xml) {
-		Connection con = null; 		
+		Connection con = null;
+		PreparedStatement updateOntology = null; 		
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Ontology.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement updateOntology = con.prepareStatement("UPDATE "+Config.dbName+".ontologies SET xmlConfig = ? WHERE name = ?;");
+			updateOntology = con.prepareStatement("UPDATE "+Config.dbName+".ontologies SET xmlConfig = ? WHERE name = ?;");
 			updateOntology.setString(1, xml);
 			updateOntology.setString(2, ontologyName);
 			
@@ -515,6 +540,7 @@ public class Ontology {
 			e.printStackTrace();
 		}
 		finally {
+			try{updateOntology.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Ontology.class, con);
 //				try {
@@ -557,9 +583,9 @@ public class Ontology {
 		
 		for (File f : ontologies) {
 			if (!f.isHidden()) {
+				FileInputStream in = null; 
 				try {
-					FileInputStream in = new FileInputStream(f);
-			    	
+			    	in = new FileInputStream(f);
 					SAXBuilder builder = new SAXBuilder();
 					Document rootdoc = builder.build(in);
 					
@@ -578,7 +604,7 @@ public class Ontology {
 				} catch(Exception e){
 					e.printStackTrace();
 				}
-				
+				try{in.close();}catch(Exception e){}
 			}
 		}
 		

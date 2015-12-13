@@ -18,10 +18,10 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 
 public class ImageUploadServlet extends HttpServlet{
-	private static final long serialVersionUID = 1L;
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		
+    private static final long serialVersionUID = 1L;
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+        
         // Create a new file upload handler  
         ServletFileUpload upload = new ServletFileUpload();  
   
@@ -45,12 +45,13 @@ public class ImageUploadServlet extends HttpServlet{
                     File f = new File(realPath + "uploads");
                     if(!f.exists())
                     {
-                    	f.mkdir();
+                        f.mkdir();
                     }
                     BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File(realPath + "uploads/"+item.getName().substring(item.getName().lastIndexOf("\\")+1)))); 
                     Streams.copy(inputStream, outputStream, true); 
                     outputStream.flush();
                     outputStream.close();
+                    inputStream.close();
                 }
                 
                 stream.close();
@@ -63,5 +64,5 @@ public class ImageUploadServlet extends HttpServlet{
         } catch (Exception ex) {  
             ex.printStackTrace();  
         }
-	}
+    }
 }

@@ -133,7 +133,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		        contextMsg.setSchool("");
 		        contextMsg.setPeriod("");
 		        contextMsg.addInstructor("");
-	        	contextMsg.setDataset(new DatasetElement("LASAD-Columbus-Test-4", sectionLevel));
+	        	contextMsg.setDataset(new DatasetElement("LASAD-V2", sectionLevel));
 	        }
 
 	        ToolMessage toolMsg = ToolMessage.create(contextMsg);

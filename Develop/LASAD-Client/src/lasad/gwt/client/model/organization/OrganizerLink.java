@@ -9,7 +9,7 @@ import lasad.gwt.client.model.organization.LinkedBox;
  */
 public class OrganizerLink
 {
-	// Just for helping assign unique linkIDs, not even sure if this is ecessary because LASAD seems to correctly assign link IDs elsewhere
+	// Just for helping assign unique linkIDs, not even sure if this is necessary because LASAD seems to correctly assign link IDs elsewhere
 	private static int lastLinkID = -1;
 
 	private LinkedBox startBox;

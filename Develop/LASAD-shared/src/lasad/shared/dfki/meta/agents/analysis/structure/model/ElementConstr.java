@@ -313,13 +313,13 @@ public abstract class ElementConstr implements Serializable {
 		List<Set<String>> typeSets = new Vector<Set<String>>();
 
 		for (String2ConstStringComparison eqCmp : equalityCmps) {
-			Set<String> typeSet = new HashSet();
+			Set<String> typeSet = new HashSet<String>();
 			typeSet.add(eqCmp.getRightExpr());
 			typeSets.add(typeSet);
 		}
 
 		for (String2ConstSetComparison memberCmp : memberCmps) {
-			Set<String> typeSet = new HashSet();
+			Set<String> typeSet = new HashSet<String>();
 			typeSet.addAll(memberCmp.getRightExpr());
 			typeSets.add(typeSet);
 		}
@@ -343,7 +343,7 @@ public abstract class ElementConstr implements Serializable {
 		}
 
 		for (String2ConstSetComparison nonMemberCmp : nonMemberCmps) {
-			Set<String> typeSet = new HashSet();
+			Set<String> typeSet = new HashSet<String>();
 			union.addAll(nonMemberCmp.getRightExpr());
 		}
 		return union;

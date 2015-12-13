@@ -79,6 +79,7 @@ public class DatabaseConnectionHandler {
 			Statement clearAll = con.createStatement();
 			clearAll.execute(dropSQLString.toString());
 			System.out.println("-----Clear All executed-----");
+			try{clearAll.close();}catch(Exception e){}
 		}
 		System.out.println("-----Create Table-----");
 		// Create new tables needed for the system
@@ -128,6 +129,9 @@ public class DatabaseConnectionHandler {
 				.execute("CREATE TABLE "
 						+ dbName
 						+ ".map_to_user_restriction (id INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, map_id SMALLINT ( 5 ) UNSIGNED NOT NULL, user_id SMALLINT ( 5 ) UNSIGNED NOT NULL) engine 'InnoDB' DEFAULT CHARSET=utf8 ;");
+		try{getTableList.close();}catch(Exception e){}
+		try{rs.close();}catch(Exception e){}
+		try{createTable.close();}catch(Exception e){}
 	}
 
 	/**

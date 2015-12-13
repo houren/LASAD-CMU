@@ -755,32 +755,32 @@ public class LinkedBox
 
 	public void setChildLinks(Map<Integer, OrganizerLink> childLinks)
 	{
-		this.childLinks = new HashMap(childLinks);
+		this.childLinks = new HashMap<Integer, OrganizerLink>(childLinks);
 	}
 
 	public void setParentLinks(Map<Integer, OrganizerLink> parentLinks)
 	{
-		this.parentLinks = new HashMap(parentLinks);
+		this.parentLinks = new HashMap<Integer, OrganizerLink>(parentLinks);
 	}
 
 	public void setSiblingLinks(Map<Integer, OrganizerLink> siblingLinks)
 	{
-		this.siblingLinks = new HashMap(siblingLinks);
+		this.siblingLinks = new HashMap<Integer, OrganizerLink>(siblingLinks);
 	}
 
 	public void setChildBoxes(Collection<LinkedBox> childBoxes)
 	{
-		this.childBoxes = new HashSet(childBoxes);
+		this.childBoxes = new HashSet<LinkedBox>(childBoxes);
 	}
 
 	public void setParentBoxes(Collection<LinkedBox> parentBoxes)
 	{
-		this.parentBoxes = new HashSet(parentBoxes);
+		this.parentBoxes = new HashSet<LinkedBox>(parentBoxes);
 	}
 
 	public void setSiblingBoxes(Collection<LinkedBox> siblingBoxes)
 	{
-		this.siblingBoxes = new HashSet(siblingBoxes);
+		this.siblingBoxes = new HashSet<LinkedBox>(siblingBoxes);
 	}
 
 	public void setType(String type)

@@ -42,21 +42,24 @@ public class Revision {
 	}
 
 	public void saveToDatabase() {
-		Connection con = null; 		
+		Connection con = null; 	
+		PreparedStatement insertRevision = null;
+		PreparedStatement getLastID = null;	
+		ResultSet rs = null;
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Revision.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement insertRevision = con.prepareStatement("INSERT INTO "+Config.dbName+".revisions (id, map_id, creator_user_id, description, timestamp) VALUES (NULL, ?, ?, ?, ?);");
+			insertRevision = con.prepareStatement("INSERT INTO "+Config.dbName+".revisions (id, map_id, creator_user_id, description, timestamp) VALUES (NULL, ?, ?, ?, ?);");
 			insertRevision.setInt(1, this.mapID);
 			insertRevision.setInt(2, this.creatorUserID);
 			insertRevision.setString(3, this.description);
 			insertRevision.setTimestamp(4, this.timestamp);
 			insertRevision.executeUpdate();		
 			
-			PreparedStatement getLastID = con.prepareStatement("SELECT LAST_INSERT_ID()");
-			ResultSet rs = getLastID.executeQuery();
+			getLastID = con.prepareStatement("SELECT LAST_INSERT_ID()");
+			rs = getLastID.executeQuery();
 			rs.next();
 			
 			this.id = rs.getInt(1);
@@ -67,6 +70,9 @@ public class Revision {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getLastID.close();}catch(Exception e){}
+			try{insertRevision.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Revision.class, con);
 //				try {
@@ -121,13 +127,14 @@ public class Revision {
 	public static boolean isEndRevisionOfAnElement(int revisionID) {
 		boolean end = false;
 		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement isEndRevision = null;
 		
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Revision.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement isEndRevision = con.prepareStatement("SELECT id FROM "+Config.dbName+".elements WHERE end_revision_id = ?;");
+			isEndRevision = con.prepareStatement("SELECT id FROM "+Config.dbName+".elements WHERE end_revision_id = ?;");
 			isEndRevision.setInt(1, revisionID);
 
 			rs = isEndRevision.executeQuery();
@@ -142,6 +149,8 @@ public class Revision {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{isEndRevision.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Revision.class, con);
 //				try {
@@ -165,19 +174,21 @@ public class Revision {
 	
 
 	public static void removeRevisionFromDB(int revID) {
-		Connection con = null; 		
+		Connection con = null; 	
+		PreparedStatement deleteRevision = null;
+		PreparedStatement deleteRevisionActions = null;	
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Revision.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
 			// Delete actual revision
-			PreparedStatement deleteRevision = con.prepareStatement("DELETE FROM "+Config.dbName+".revisions WHERE id = ? LIMIT 1;");
+			deleteRevision = con.prepareStatement("DELETE FROM "+Config.dbName+".revisions WHERE id = ? LIMIT 1;");
 			deleteRevision.setInt(1, revID);
 			deleteRevision.executeUpdate();
 			
 			// Delete revision actions
-			PreparedStatement deleteRevisionActions = con.prepareStatement("DELETE FROM "+Config.dbName+".actions WHERE revision_id = ?;");
+			deleteRevisionActions = con.prepareStatement("DELETE FROM "+Config.dbName+".actions WHERE revision_id = ?;");
 			deleteRevisionActions.setInt(1, revID);
 			deleteRevisionActions.executeUpdate();
 			
@@ -187,6 +198,8 @@ public class Revision {
 			e.printStackTrace();
 		}
 		finally {
+			try{deleteRevision.close();}catch(Exception e){}
+			try{deleteRevisionActions.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Revision.class, con);
 //				try {
@@ -203,11 +216,12 @@ public class Revision {
 		
 		Connection con = null; 		
 		ResultSet rs = null;
+		PreparedStatement getRevisionIDs = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Revision.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getRevisionIDs = con.prepareStatement("SELECT id FROM "+Config.dbName+".revisions WHERE map_id = ?;");
+			getRevisionIDs = con.prepareStatement("SELECT id FROM "+Config.dbName+".revisions WHERE map_id = ?;");
 			getRevisionIDs.setInt(1, mapID);
 			
 			rs = getRevisionIDs.executeQuery();
@@ -221,6 +235,8 @@ public class Revision {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getRevisionIDs.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Revision.class, con);
 //				try {
@@ -236,24 +252,30 @@ public class Revision {
 	public static long getTime(Integer firstElement) {		
 		Connection con = null; 		
 		ResultSet rs = null;
+		PreparedStatement getRevisionTime = null;
+		long returnVal = -1;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Revision.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getRevisionTime = con.prepareStatement("SELECT timestamp FROM "+Config.dbName+".revisions WHERE id = ?;");
+			getRevisionTime = con.prepareStatement("SELECT timestamp FROM "+Config.dbName+".revisions WHERE id = ?;");
 			getRevisionTime.setInt(1, firstElement);
 			
 			rs = getRevisionTime.executeQuery();
 			
 			if(rs.next()) {
-				return (rs.getTimestamp("timestamp")).getTime();
+				returnVal = (rs.getTimestamp("timestamp")).getTime();
 			}
 		} catch (SQLException e){
 			e.printStackTrace();
+			returnVal = -1;
 		} catch (Exception e) {
 			e.printStackTrace();
+			returnVal = -1;
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getRevisionTime.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Revision.class, con);
 //				try {
@@ -263,7 +285,7 @@ public class Revision {
 //				}
 			}
 		}
-		return -1;
+		return returnVal;
 	}
 
 	public static long getTimeOfMapRevision(int mapID, int whichTime) {
@@ -282,11 +304,12 @@ public class Revision {
 		
 		Connection con = null; 		
 		ResultSet rs = null;
+		PreparedStatement getRevisionTime = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Revision.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getRevisionTime = con.prepareStatement("SELECT timestamp FROM "+Config.dbName+".revisions WHERE map_id = ? ORDER BY id "+sort+" LIMIT 1;");
+			getRevisionTime = con.prepareStatement("SELECT timestamp FROM "+Config.dbName+".revisions WHERE map_id = ? ORDER BY id "+sort+" LIMIT 1;");
 			getRevisionTime.setInt(1, mapID);
 			
 			rs = getRevisionTime.executeQuery();
@@ -300,6 +323,8 @@ public class Revision {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getRevisionTime.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Revision.class, con);
 //				try {

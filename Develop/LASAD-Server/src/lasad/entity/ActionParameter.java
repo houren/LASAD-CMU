@@ -15,13 +15,14 @@ public class ActionParameter {
 	
 	public static void saveParametersForRevision(int revision_id, int element_id, Action a) {
 		a = removeActionOverhead(a);
-		Connection con = null; 		
+		Connection con = null; 	
+		PreparedStatement insertParameter = null;	
 		
 		try {
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			con = DatabaseConnectionHandler.getConnection(ActionParameter.class);
 			
-			PreparedStatement insertParameter = con.prepareStatement("INSERT INTO "+Config.dbName+".actions (id, revision_id, element_id, parameter, value) VALUES (NULL, ?, ?, ?, ?);");
+			insertParameter = con.prepareStatement("INSERT INTO "+Config.dbName+".actions (id, revision_id, element_id, parameter, value) VALUES (NULL, ?, ?, ?, ?);");
 			
 			for(Parameter p : a.getParameters()) {
 				insertParameter.setInt(1, revision_id);
@@ -37,6 +38,7 @@ public class ActionParameter {
 			e.printStackTrace();
 		}
 		finally {
+			try{insertParameter.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(ActionParameter.class, con);
 //				try {
@@ -51,13 +53,14 @@ public class ActionParameter {
 	public static void saveParametersForRevision(int revision_id, Action a) {
 		a = removeActionOverhead(a);
 		
-		Connection con = null; 		
+		Connection con = null;
+		PreparedStatement insertParameter = null; 		
 		
 		try {
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			con = DatabaseConnectionHandler.getConnection(ActionParameter.class);
 			
-			PreparedStatement insertParameter = con.prepareStatement("INSERT INTO "+Config.dbName+".actions (id, revision_id, element_id, parameter, value) VALUES (NULL, ?, NULL, ?, ?);");
+			insertParameter = con.prepareStatement("INSERT INTO "+Config.dbName+".actions (id, revision_id, element_id, parameter, value) VALUES (NULL, ?, NULL, ?, ?);");
 			
 			for(Parameter p : a.getParameters()) {
 				insertParameter.setInt(1, revision_id);
@@ -72,6 +75,7 @@ public class ActionParameter {
 			e.printStackTrace();
 		}
 		finally {
+			try{insertParameter.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(ActionParameter.class, con);
 //				try {

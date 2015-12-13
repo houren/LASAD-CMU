@@ -122,6 +122,9 @@ public class Map {
 			}
 
 			Connection con = null;
+			PreparedStatement insertRevision = null;
+			PreparedStatement getLastID = null;
+			ResultSet rs = null;
 
 			try {
 				con = DatabaseConnectionHandler.getConnection(Map.class);
@@ -141,7 +144,7 @@ public class Map {
 				 * insertRevision.executeUpdate(); }
 				 */
 
-				PreparedStatement insertRevision = con.prepareStatement("INSERT INTO " + Config.dbName
+				insertRevision = con.prepareStatement("INSERT INTO " + Config.dbName
 						+ ".maps (id, name, template_id, creator_user_id, last_root_element_id, timestamp) VALUES (NULL, ?, ?, ?, ?, ?);");
 				insertRevision.setString(1, this.name);
 				insertRevision.setInt(2, this.template_id);
@@ -150,8 +153,8 @@ public class Map {
 				insertRevision.setTimestamp(5, this.timestamp);
 				insertRevision.executeUpdate();
 
-				PreparedStatement getLastID = con.prepareStatement("SELECT LAST_INSERT_ID()");
-				ResultSet rs = getLastID.executeQuery();
+				getLastID = con.prepareStatement("SELECT LAST_INSERT_ID()");
+				rs = getLastID.executeQuery();
 				rs.next();
 
 				this.id = rs.getInt(1);
@@ -172,6 +175,9 @@ public class Map {
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
+				try{rs.close();}catch(Exception e){}
+				try{insertRevision.close();}catch(Exception e){}
+				try{getLastID.close();}catch(Exception e){}
 				if (con != null) {
 					DatabaseConnectionHandler.closeConnection(Map.class, con);
 					// try {
@@ -263,12 +269,15 @@ public class Map {
 
 		ResultSet rs = null;
 		Connection con = null;
+		PreparedStatement mapList = null;
+		PreparedStatement restricted_user_List = null;
+		ResultSet rs1 = null;
 
 		try {
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
-			PreparedStatement mapList = con.prepareStatement("SELECT * FROM " + Config.dbName + ".maps;");
+			mapList = con.prepareStatement("SELECT * FROM " + Config.dbName + ".maps;");
 			rs = mapList.executeQuery();
 
 			while (rs.next()) {
@@ -280,10 +289,10 @@ public class Map {
 				Vector<Integer> userList = new Vector<Integer>();
 				try {
 
-					PreparedStatement restricted_user_List = con.prepareStatement("SELECT user_id FROM " + Config.dbName
+					restricted_user_List = con.prepareStatement("SELECT user_id FROM " + Config.dbName
 							+ ".map_to_user_restriction WHERE map_id = ?;");
 					restricted_user_List.setInt(1, rs.getInt(1));
-					ResultSet rs1 = restricted_user_List.executeQuery();
+					rs1 = restricted_user_List.executeQuery();
 
 					while (rs1.next()) {
 						userList.add(rs1.getInt(1));
@@ -305,6 +314,10 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{rs1.close();}catch(Exception e){}
+			try{mapList.close();}catch(Exception e){}
+			try{restricted_user_List.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -322,12 +335,13 @@ public class Map {
 
 		ResultSet rs = null;
 		Connection con = null;
+		PreparedStatement mapList = null;
 
 		try {
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
-			PreparedStatement mapList = con.prepareStatement("SELECT id FROM " + Config.dbName + ".maps WHERE id = ?;");
+			mapList = con.prepareStatement("SELECT id FROM " + Config.dbName + ".maps WHERE id = ?;");
 			mapList.setInt(1, mapID);
 			rs = mapList.executeQuery();
 			exists = rs.next();
@@ -337,6 +351,8 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{mapList.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -353,35 +369,41 @@ public class Map {
 		Template t = null;
 
 		Connection con = null;
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		PreparedStatement mapIDQuery = null;
+		PreparedStatement templateQuery = null;
 
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
 			// Get template ID
-			PreparedStatement mapIDQuery = con.prepareStatement("SELECT template_id FROM " + Config.dbName + ".maps WHERE id = ?;");
+			mapIDQuery = con.prepareStatement("SELECT template_id FROM " + Config.dbName + ".maps WHERE id = ?;");
 			mapIDQuery.setInt(1, mapID);
 
 			rs = mapIDQuery.executeQuery();
 			rs.next();
 
 			int templateID = rs.getInt(1);
-			rs = null;
 
 			// Get template information
-			PreparedStatement templateQuery = con.prepareStatement("SELECT * FROM " + Config.dbName + ".templates WHERE id = ?;");
+			templateQuery = con.prepareStatement("SELECT * FROM " + Config.dbName + ".templates WHERE id = ?;");
 			templateQuery.setInt(1, templateID);
 
-			rs = templateQuery.executeQuery();
-			rs.next();
+			rs1 = templateQuery.executeQuery();
+			rs1.next();
 
-			t = new Template(templateID, rs.getString("name"), rs.getString("xmlConfig"), rs.getInt("ontology_id"));
+			t = new Template(templateID, rs1.getString("name"), rs1.getString("xmlConfig"), rs1.getInt("ontology_id"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{rs1.close();}catch(Exception e){}
+			try{mapIDQuery.close();}catch(Exception e){}
+			try{templateQuery.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -448,14 +470,16 @@ public class Map {
 		int rootElementID = 0;
 
 		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement mapIDQuery = null;
+		PreparedStatement rootElementIDUpdate = null;
 
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
 			// Get ROOTELEMENTID
-			PreparedStatement mapIDQuery = con
+			mapIDQuery = con
 					.prepareStatement("SELECT last_root_element_id FROM " + Config.dbName + ".maps WHERE id = ?;");
 			mapIDQuery.setInt(1, mapID);
 
@@ -466,7 +490,7 @@ public class Map {
 			rootElementID++;
 
 			// Update the ROOTELEMENTID counter in maps table
-			PreparedStatement rootElementIDUpdate = con.prepareStatement("UPDATE " + Config.dbName
+			rootElementIDUpdate = con.prepareStatement("UPDATE " + Config.dbName
 					+ ".maps SET last_root_element_id = ? WHERE maps.id = ?;");
 			rootElementIDUpdate.setInt(1, rootElementID);
 			rootElementIDUpdate.setInt(2, mapID);
@@ -478,6 +502,9 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{mapIDQuery.close();}catch(Exception e){}
+			try{rootElementIDUpdate.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -508,9 +535,10 @@ public class Map {
 		// PERSISTENT (not required)
 
 		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement mapIDQuery = null;
 
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
@@ -519,7 +547,7 @@ public class Map {
 					+ ".users AS U ON U.id = R.creator_user_id LEFT JOIN " + Config.dbName
 					+ ".elements AS E ON A.element_id = E.id WHERE R.map_id = ?";
 
-			PreparedStatement mapIDQuery = con.prepareStatement(sql);
+			mapIDQuery = con.prepareStatement(sql);
 			mapIDQuery.setInt(1, mapID);
 
 			rs = mapIDQuery.executeQuery();
@@ -660,6 +688,8 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{mapIDQuery.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -688,9 +718,10 @@ public class Map {
 		// PERSISTENT (not required)
 
 		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement mapIDQuery = null;
 
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
@@ -699,7 +730,7 @@ public class Map {
 					+ ".users AS U ON U.id = R.creator_user_id LEFT JOIN " + Config.dbName
 					+ ".elements AS E ON A.element_id = E.id WHERE R.map_id = ?";
 
-			PreparedStatement mapIDQuery = con.prepareStatement(sql);
+			mapIDQuery = con.prepareStatement(sql);
 			mapIDQuery.setInt(1, mapID);
 
 			rs = mapIDQuery.executeQuery();
@@ -812,6 +843,8 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{mapIDQuery.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -826,24 +859,28 @@ public class Map {
 
 	public static void removeMapFromDB(int mapID) {
 		Connection con = null;
+		PreparedStatement deleteMap = null;
+		PreparedStatement deleteMapAlt = null;
 
 		try {
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
-			PreparedStatement deleteMap = con.prepareStatement("DELETE FROM " + Config.dbName + ".maps WHERE id = ? LIMIT 1;");
+			deleteMap = con.prepareStatement("DELETE FROM " + Config.dbName + ".maps WHERE id = ? LIMIT 1;");
 			deleteMap.setInt(1, mapID);
 			deleteMap.executeUpdate();
 
-			deleteMap = con.prepareStatement("DELETE FROM " + Config.dbName + ".map_to_user_restriction WHERE map_id = ? LIMIT 1;");
-			deleteMap.setInt(1, mapID);
-			deleteMap.executeUpdate();
+			deleteMapAlt = con.prepareStatement("DELETE FROM " + Config.dbName + ".map_to_user_restriction WHERE map_id = ? LIMIT 1;");
+			deleteMapAlt.setInt(1, mapID);
+			deleteMapAlt.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{deleteMap.close();}catch(Exception e){}
+			try{deleteMapAlt.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -921,11 +958,12 @@ public class Map {
 
 		Connection con = null;
 		ResultSet rs = null;
+		PreparedStatement getMapName = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
-			PreparedStatement getMapName = con.prepareStatement("SELECT name FROM " + Config.dbName + ".maps WHERE id = ?;");
+			getMapName = con.prepareStatement("SELECT name FROM " + Config.dbName + ".maps WHERE id = ?;");
 			getMapName.setInt(1, mapID);
 
 			rs = getMapName.executeQuery();
@@ -937,6 +975,8 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{getMapName.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -971,27 +1011,28 @@ public class Map {
 
 	public static int getMapID(String mapName) {
 		Connection con = null;
+		PreparedStatement getMapName = null;
+		ResultSet rs = null;
+		int returnInt = -1;
 
 		try {
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
-			PreparedStatement getMapName = con.prepareStatement("SELECT id FROM " + Config.dbName + ".maps WHERE name = ? LIMIT 1;");
+			getMapName = con.prepareStatement("SELECT id FROM " + Config.dbName + ".maps WHERE name = ? LIMIT 1;");
 			getMapName.setString(1, mapName);
-			ResultSet rs = getMapName.executeQuery();
+			rs = getMapName.executeQuery();
 			if (rs.next()) {
-				return rs.getInt(1);
-			} else {
-				return -1;
+				returnInt = rs.getInt(1);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return -1;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return -1;
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{getMapName.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -1001,6 +1042,7 @@ public class Map {
 				// }
 			}
 		}
+		return returnInt;
 	}
 
 	public static Vector<Integer> getIDsOfMapsThatUseTheTemplate(int templateID) {
@@ -1008,11 +1050,12 @@ public class Map {
 
 		Connection con = null;
 		ResultSet rs = null;
+		PreparedStatement getMapIDs = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
-			PreparedStatement getMapIDs = con.prepareStatement("SELECT id FROM " + Config.dbName + ".maps WHERE template_id = ?;");
+			getMapIDs = con.prepareStatement("SELECT id FROM " + Config.dbName + ".maps WHERE template_id = ?;");
 			getMapIDs.setInt(1, templateID);
 
 			rs = getMapIDs.executeQuery();
@@ -1026,6 +1069,8 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{getMapIDs.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -1044,11 +1089,12 @@ public class Map {
 
 		Connection con = null;
 		ResultSet rs = null;
+		PreparedStatement getMapIDs = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
-			PreparedStatement getMapIDs = con.prepareStatement("SELECT id FROM " + Config.dbName + ".maps WHERE creator_user_id = ?;");
+			getMapIDs = con.prepareStatement("SELECT id FROM " + Config.dbName + ".maps WHERE creator_user_id = ?;");
 			getMapIDs.setInt(1, userID);
 
 			rs = getMapIDs.executeQuery();
@@ -1062,6 +1108,8 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{getMapIDs.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -1077,10 +1125,11 @@ public class Map {
 
 	public static void setLastRootElementID(int mapID, int maxRootElementID) {
 		Connection con = null;
+		PreparedStatement update = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
-			PreparedStatement update = con.prepareStatement("UPDATE " + Config.dbName
+			update = con.prepareStatement("UPDATE " + Config.dbName
 					+ ".maps SET last_root_element_id = ? WHERE maps.id = ? LIMIT 1;");
 			update.setInt(1, maxRootElementID);
 			update.setInt(2, mapID);
@@ -1094,6 +1143,7 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{update.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -1110,11 +1160,12 @@ public class Map {
 
 		Connection con = null;
 		ResultSet rs = null;
+		PreparedStatement getMapIDs = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
-			PreparedStatement getMapIDs = con.prepareStatement("SELECT COUNT(*) FROM " + Config.dbName
+			getMapIDs = con.prepareStatement("SELECT COUNT(*) FROM " + Config.dbName
 					+ ".revisions WHERE creator_user_id = ?;");
 			getMapIDs.setInt(1, userID);
 
@@ -1129,6 +1180,8 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{getMapIDs.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -1145,11 +1198,14 @@ public class Map {
 	// TODO Zhenyu
 	public static void setBackgroundImage(int mapID, String imageurl) {
 		Connection con = null;
+		PreparedStatement tableCol = null;
+		PreparedStatement update = null;
+		ResultSet rs = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
-			PreparedStatement tableCol = con.prepareStatement("desc maps");
-			ResultSet rs = tableCol.executeQuery();
+			tableCol = con.prepareStatement("desc maps");
+			rs = tableCol.executeQuery();
 			boolean exitsImageUrl = false;
 			while (rs.next()) {
 				if(rs.getString(1).contains("backgroundimageurl"))
@@ -1160,7 +1216,7 @@ public class Map {
 			
 			if(exitsImageUrl)
 			{
-				PreparedStatement update = con.prepareStatement("UPDATE " + Config.dbName
+				update = con.prepareStatement("UPDATE " + Config.dbName
 						+ ".maps SET backgroundimageurl = ? WHERE maps.id = ? LIMIT 1;");
 				update.setString(1, imageurl);
 				update.setInt(2, mapID);
@@ -1174,6 +1230,9 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{tableCol.close();}catch(Exception e){}
+			try{update.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 			}
@@ -1186,11 +1245,14 @@ public class Map {
 
 		Connection con = null;
 		ResultSet rs = null;
+		ResultSet rs1 = null;
+		PreparedStatement tableCol = null;
+		PreparedStatement getMapIDs = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Map.class);
 			// con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
-			PreparedStatement tableCol = con.prepareStatement("desc maps");
+			tableCol = con.prepareStatement("desc maps");
 			rs = tableCol.executeQuery();
 			boolean exitsImageUrl = false;
 			while (rs.next()) {
@@ -1202,14 +1264,14 @@ public class Map {
 			
 			if(exitsImageUrl)
 			{
-				PreparedStatement getMapIDs = con.prepareStatement("SELECT backgroundimageurl FROM " + Config.dbName
+				getMapIDs = con.prepareStatement("SELECT backgroundimageurl FROM " + Config.dbName
 						+ ".maps WHERE maps.id = ?;");
 				getMapIDs.setInt(1, mapID);
 
-				rs = getMapIDs.executeQuery();
+				rs1 = getMapIDs.executeQuery();
 
-				while (rs.next()) {
-					url = rs.getString(1);
+				while (rs1.next()) {
+					url = rs1.getString(1);
 				}
 			}
 			
@@ -1219,6 +1281,10 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try{rs.close();}catch(Exception e){}
+			try{rs1.close();}catch(Exception e){}
+			try{tableCol.close();}catch(Exception e){}
+			try{getMapIDs.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {

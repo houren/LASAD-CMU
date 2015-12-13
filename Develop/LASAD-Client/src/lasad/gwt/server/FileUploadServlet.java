@@ -70,7 +70,9 @@ public class FileUploadServlet extends HttpServlet {
 						ZipEntry entry = entries.nextElement();
 						InputStream entryStream = zf.getInputStream(entry);
 						this.processInputStream(entryStream, entry.getName());
+						try{entryStream.close();}catch(Exception e){}
 					}
+					try{zf.close();}catch(Exception e){}
 					validFileType = true;
 
 				}

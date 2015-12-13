@@ -35,7 +35,7 @@ public class ArgumentGrid
 	private ArgumentGrid(HashMap<Coordinate, LinkedBox> grid)
 	{
 		this();
-		this.grid = (HashMap) grid.clone();
+		this.grid = (HashMap<Coordinate, LinkedBox>) grid.clone();
 	}
 
 	/**
@@ -389,7 +389,7 @@ public class ArgumentGrid
 			{
 				LinkedBox rowBox = rowBoxes.get(i);
 
-				HashSet<LinkedBox> parents = new HashSet(rowBox.getParentBoxes());
+				HashSet<LinkedBox> parents = new HashSet<LinkedBox>(rowBox.getParentBoxes());
 				HashSet<LinkedBox> toRemove = new HashSet<LinkedBox>();
 				for (LinkedBox parent : parents)
 				{

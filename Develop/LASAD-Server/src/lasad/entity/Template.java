@@ -56,11 +56,12 @@ public class Template {
 		
 		Connection con = null; 		
 		ResultSet rs = null;
+		PreparedStatement getTemplateName = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Template.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getTemplateName = con.prepareStatement("SELECT name FROM "+Config.dbName+".templates WHERE id = ?;");
+			getTemplateName = con.prepareStatement("SELECT name FROM "+Config.dbName+".templates WHERE id = ?;");
 			getTemplateName.setInt(1, templateID);
 			
 			rs = getTemplateName.executeQuery();
@@ -74,6 +75,8 @@ public class Template {
 			e.printStackTrace();
 		}
 		finally {
+			try { rs.close();}catch(Exception e){}
+			try { getTemplateName.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Template.class, con);
 //				try {
@@ -89,8 +92,10 @@ public class Template {
 	
 	public static boolean isCorrectTemplateFile(String tName, File f) {
 		
+		boolean returnVal = false;
+		FileInputStream in = null;
 		try {
-			FileInputStream in = new FileInputStream(f);
+			in = new FileInputStream(f);
 	    	
 	    	String templateName;
 	    	
@@ -104,27 +109,24 @@ public class Template {
 				templateName = rootElement.getAttributeValue("uniquename");
 				
 				if(tName.equals(templateName)) {
-					return true;
+					returnVal = true;
 				}
-				else {
-					return false;
-				}
-			}
-			else {
-				return false;
 			}
 							
 		} catch(Exception e){
 			e.printStackTrace();
-			return false;
 		}
+		try{in.close();}catch(Exception e){}
+		return returnVal;
 	}
 	
-	public static Template parseTemplateFromFile(File f) {	   	
+	public static Template parseTemplateFromFile(File f) {
+		FileInputStream in = null;
+		Template newTemplate = null;
+
 		try {
-			FileInputStream in = new FileInputStream(f);
+			in = new FileInputStream(f);
 	    	
-	    	Template newTemplate = null;
 	    	String templateName;
 	    	String ontologyName;
 	    	int ontologyID;
@@ -144,28 +146,28 @@ public class Template {
 				XMLOutputter out = new XMLOutputter();
 				String template = out.outputString(rootdoc);
 				newTemplate = new Template(templateName, template, ontologyID);		
-			}
-			
-			return newTemplate;
+			}		
 			
 		} catch(Exception e){
 			e.printStackTrace();
-			return null;
 		}
+		try{in.close();}catch(Exception e){}
+		return newTemplate;
 	}
 
 	public void saveToDatabase() {
 		
 		if(Template.getTemplateID(this.name) == -1) { // Template does not exist
 			
-			Connection con = null; 		
+			Connection con = null; 	
+			PreparedStatement insertTemplate = null;	
 			
 			String SQL = null;
 			try {
 				con = DatabaseConnectionHandler.getConnection(Template.class);
 //				con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 				
-				PreparedStatement insertTemplate = con.prepareStatement("INSERT INTO "+Config.dbName+".templates (id, name, xmlConfig, ontology_id) VALUES (NULL, ?, ?, ?);");
+				insertTemplate = con.prepareStatement("INSERT INTO "+Config.dbName+".templates (id, name, xmlConfig, ontology_id) VALUES (NULL, ?, ?, ?);");
 				insertTemplate.setString(1, this.name);
 				insertTemplate.setString(2, this.xml);
 				insertTemplate.setInt(3, ontologyID);
@@ -180,6 +182,7 @@ public class Template {
 				e.printStackTrace();
 			}
 			finally {
+				try{insertTemplate.close();}catch(Exception e){}
 				if(con != null) {
 					DatabaseConnectionHandler.closeConnection(Template.class, con);
 //					try {
@@ -196,29 +199,31 @@ public class Template {
 	}
 
 	public static int getTemplateID(String template) {
-		Connection con = null; 		
+		Connection con = null; 
+		PreparedStatement getTemplateID = null;	
+		ResultSet rs = null;
+		int returnVal = -1;	
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Template.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getTemplateID = con.prepareStatement("SELECT id FROM "+Config.dbName+".templates WHERE name = ?;");
+			getTemplateID = con.prepareStatement("SELECT id FROM "+Config.dbName+".templates WHERE name = ?;");
 			getTemplateID.setString(1, template);
-			ResultSet rs = getTemplateID.executeQuery();
+			rs = getTemplateID.executeQuery();
 			if(rs.next()) {
-				return rs.getInt(1);
-			}
-			else {
-				return -1;
-			}			
+				returnVal = rs.getInt(1);
+			}		
 		} catch (SQLException e){
 			e.printStackTrace();
-			return -1;
+			returnVal = -1;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return -1;
+			returnVal = -1;
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getTemplateID.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Template.class, con);
 //				try {
@@ -228,30 +233,36 @@ public class Template {
 //				}
 			}
 		}
+		return returnVal;
 	}
 	
 	public static int getOntologyID(String template) {
-		Connection con = null; 		
+		Connection con = null; 
+		PreparedStatement getOntologyID = null;	
+		ResultSet rs = null;
+		int returnVal = -1;		
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Template.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getOntologyID = con.prepareStatement("SELECT ontology_id FROM "+Config.dbName+".templates WHERE name = ?;");
+			getOntologyID = con.prepareStatement("SELECT ontology_id FROM "+Config.dbName+".templates WHERE name = ?;");
 			getOntologyID.setString(1, template);
-			ResultSet rs = getOntologyID.executeQuery();
+			rs = getOntologyID.executeQuery();
 			rs.next();
 			
-			return rs.getInt("ontology_id");			
+			returnVal = rs.getInt("ontology_id");			
 		} catch (SQLException e){
 			e.printStackTrace();
 			System.out.println(e.getSQLState());
-			return -1;
+			returnVal = -1;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return -1;
+			returnVal = -1;
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getOntologyID.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Template.class, con);
 //				try {
@@ -261,12 +272,14 @@ public class Template {
 //				}
 			}
 		}
+		return returnVal;
 	}
 	
 	public static int getTemplateMaxUsers(String xml) {
 		int maximumUsers = 0;
+		Reader in = null;
 		try {
-			Reader in = new StringReader(xml);
+			in = new StringReader(xml);
 	    	
 			SAXBuilder builder = new SAXBuilder();
 			Document rootdoc = builder.build(in);
@@ -284,18 +297,20 @@ public class Template {
 		} catch(Exception e){
 			e.printStackTrace();
 		}
+		try{in.close();}catch(Exception e){}
 		return maximumUsers;
 	
 	}
 	
 	public String getTitle() {
 		String templateTitle = null;
+		Reader in = null;
 		
 		try {    	
 	    	
 			SAXBuilder builder = new SAXBuilder();
 			
-			Reader in = new StringReader(this.xml);
+			in = new StringReader(this.xml);
 			Document rootdoc = builder.build(in);
 			
 			Element rootElement = rootdoc.getRootElement();
@@ -307,21 +322,23 @@ public class Template {
 		} catch(Exception e){
 			e.printStackTrace();
 		}
-		
+		try{in.close();}catch(Exception e){}
 		return templateTitle;
 	}
 	
 	public String getOntologyNameFromDB() {		
 		String ontologyName = null;
-		Connection con = null; 		
+		Connection con = null;
+		PreparedStatement getTemplateID = null; 
+		ResultSet rs = null;		
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Template.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getTemplateID = con.prepareStatement("SELECT name FROM "+Config.dbName+".ontologies WHERE id = ?;");
+			getTemplateID = con.prepareStatement("SELECT name FROM "+Config.dbName+".ontologies WHERE id = ?;");
 			getTemplateID.setInt(1, this.ontologyID);
-			ResultSet rs = getTemplateID.executeQuery();
+			rs = getTemplateID.executeQuery();
 			rs.next();
 			
 			ontologyName = rs.getString(1);			
@@ -331,6 +348,8 @@ public class Template {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getTemplateID.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Template.class, con);
 //				try {
@@ -405,18 +424,16 @@ public class Template {
 		options.setAttribute("track-cursor", a.getParameterValue(ParameterTypes.UseCursorTracking));
 		options.setAttribute("selection-details", a.getParameterValue(ParameterTypes.UseSelectionDetails));
 		
-		// additional options, Kevin Loughlin added autoOrganize
+		// additional options
 		options.setAttribute("onlyauthorcanmodify", a.getParameterValue(ParameterTypes.OnlyAuthorCanModify));
 		options.setAttribute("committextbyenter", a.getParameterValue(ParameterTypes.CommitTextByEnter));
 		options.setAttribute("straightlink", a.getParameterValue(ParameterTypes.StraightLink));
-		//options.setAttribute("autoorganize", a.getParameterValue(ParameterTypes.AutoOrganize));
 
 		// MODIFIED BY BM Adds the Parameter to the options Use the
 		// Parametertype name as Key
 		options.setAttribute(ParameterTypes.AutoGrowTextArea.name(),
 				a.getParameterValue(ParameterTypes.AutoGrowTextArea));
 		// MODIFY END
-		options.setAttribute("allowlinkstolinks", a.getParameterValue(ParameterTypes.AllowLinksToLinks));
 
 		mapdetails.addContent(description);
 		mapdetails.addContent(options);
@@ -468,15 +485,17 @@ public class Template {
 	public static Vector<Template> getAllTemplatesWithOntology(int ontologyID) {
 		Vector<Template> templateList = new Vector<Template>();
 			
-		Connection con = null; 		
+		Connection con = null; 
+		PreparedStatement getTemplate = null;
+		ResultSet rs = null;		
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Template.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getTemplate = con.prepareStatement("SELECT * FROM "+Config.dbName+".templates WHERE ontology_id = ?;");
+			getTemplate = con.prepareStatement("SELECT * FROM "+Config.dbName+".templates WHERE ontology_id = ?;");
 			getTemplate.setInt(1, ontologyID);
-			ResultSet rs = getTemplate.executeQuery();
+			rs = getTemplate.executeQuery();
 			
 			while(rs.next()) {
 				templateList.add(new Template(rs.getInt("id"), rs.getString("name"), rs.getString("xmlConfig"), ontologyID));
@@ -488,6 +507,8 @@ public class Template {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getTemplate.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Template.class, con);
 //				try {
@@ -503,16 +524,18 @@ public class Template {
 
 	public static String getXMLString(int template_id) {
 		String templateXML = null;
-		Connection con = null; 		
+		Connection con = null; 
+		PreparedStatement getTemplateXML = null;
+		ResultSet rs = null;		
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Template.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getTemplateXML = con.prepareStatement("SELECT xmlConfig FROM "+Config.dbName+".templates WHERE id = ?;");
+			getTemplateXML = con.prepareStatement("SELECT xmlConfig FROM "+Config.dbName+".templates WHERE id = ?;");
 			getTemplateXML.setInt(1, template_id);
 			
-			ResultSet rs = getTemplateXML.executeQuery();
+			rs = getTemplateXML.executeQuery();
 			
 			
 			boolean foundTemplate = rs.next();
@@ -526,6 +549,8 @@ public class Template {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getTemplateXML.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Template.class, con);
 //				try {
@@ -542,15 +567,17 @@ public class Template {
 	public static Vector<Template> getAllTemplates() {
 		Vector<Template> t = new Vector<Template>();
 	
-		Connection con = null; 		
+		Connection con = null; 	
+		PreparedStatement getTemplateXML = null;
+		ResultSet rs = null;	
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Template.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getTemplateXML = con.prepareStatement("SELECT name, ontology_id FROM "+Config.dbName+".templates;");
+			getTemplateXML = con.prepareStatement("SELECT name, ontology_id FROM "+Config.dbName+".templates;");
 			
-			ResultSet rs = getTemplateXML.executeQuery();
+			rs = getTemplateXML.executeQuery();
 			
 			while(rs.next()) {
 				t.add(new Template(rs.getString("name"), rs.getInt("ontology_id")));
@@ -562,6 +589,8 @@ public class Template {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getTemplateXML.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Template.class, con);
 //				try {
@@ -591,13 +620,14 @@ public class Template {
 	}
 
 	public static void removeTemplateFromDB(int templateID) {
-		Connection con = null; 		
+		Connection con = null; 	
+		PreparedStatement deleteTemplate = null;	
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Template.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement deleteTemplate = con.prepareStatement("DELETE FROM "+Config.dbName+".templates WHERE id = ? LIMIT 1;");
+			deleteTemplate = con.prepareStatement("DELETE FROM "+Config.dbName+".templates WHERE id = ? LIMIT 1;");
 			deleteTemplate.setInt(1, templateID);
 			
 			deleteTemplate.executeUpdate();
@@ -607,6 +637,7 @@ public class Template {
 			e.printStackTrace();
 		}
 		finally {
+			try{deleteTemplate.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Template.class, con);
 //				try {
@@ -642,11 +673,12 @@ public class Template {
 				
 				Connection con = null; 		
 				ResultSet rs = null;
+				PreparedStatement getTemplateIDs = null;
 				try {
 					con = DatabaseConnectionHandler.getConnection(Template.class);
 //					con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 					
-					PreparedStatement getTemplateIDs = con.prepareStatement("SELECT id FROM "+Config.dbName+".templates WHERE ontology_id = ?;");
+					getTemplateIDs = con.prepareStatement("SELECT id FROM "+Config.dbName+".templates WHERE ontology_id = ?;");
 					getTemplateIDs.setInt(1, ontologyID);
 					
 					rs = getTemplateIDs.executeQuery();
@@ -661,6 +693,8 @@ public class Template {
 					e.printStackTrace();
 				}
 				finally {
+					try{rs.close();}catch(Exception e){}
+					try{getTemplateIDs.close();}catch(Exception e){}
 					if(con != null) {
 						DatabaseConnectionHandler.closeConnection(Template.class, con);
 //						try {
@@ -677,15 +711,16 @@ public class Template {
 	public static Template getTemplate(String templateName) {
 		Template t = null;
 	
-		Connection con = null; 		
+		Connection con = null; 	
+		ResultSet rs = null;	
+		PreparedStatement templateQuery = null;
 		
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Template.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
 			// Get template information
-			PreparedStatement templateQuery = con.prepareStatement("SELECT * FROM "+Config.dbName+".templates WHERE name = ?;");
+			templateQuery = con.prepareStatement("SELECT * FROM "+Config.dbName+".templates WHERE name = ?;");
 			templateQuery.setString(1, templateName);
 
 			rs = templateQuery.executeQuery();
@@ -698,6 +733,8 @@ public class Template {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{templateQuery.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(Template.class, con);
 //				try {

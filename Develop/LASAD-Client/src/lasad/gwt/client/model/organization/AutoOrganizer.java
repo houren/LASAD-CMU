@@ -1,6 +1,5 @@
 package lasad.gwt.client.model.organization;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Collection;
 import java.util.ArrayList;
@@ -315,11 +314,6 @@ public class AutoOrganizer
 			final double[] SCROLL_EDGE = determineScrollEdge(DOWNWARD);
 			communicator.sendActionPackage(actionBuilder.finishAutoOrganization(map.getID(), DOWNWARD, this.getBoxWidth(), this.getMinBoxHeight(), SCROLL_EDGE[0], SCROLL_EDGE[1]));
 
-			// Free some memory for speed (garbage collector will take the nullified values)
-			for (ArgumentThread argThread : argModel.getArgThreads())
-			{
-				argThread.getGrid().empty();
-			}
 		}
 		// Just in case
 		catch (Exception e)
@@ -330,6 +324,14 @@ public class AutoOrganizer
 			Logger.log(e.getMessage(), Logger.DEBUG);
 			Logger.log(e.getStackTrace().toString(), Logger.DEBUG);
 			Logger.log(e.getClass().toString(), Logger.DEBUG);
+		}
+		finally
+		{
+			// Free some memory for speed (garbage collector will take the nullified values)
+			for (ArgumentThread argThread : argModel.getArgThreads())
+			{
+				argThread.getGrid().empty();
+			}
 		}
 		Logger.log("[lasad.gwt.client.model.organization.AutoOrganizer] Finishing organizeMap", Logger.DEBUG);		
 	}

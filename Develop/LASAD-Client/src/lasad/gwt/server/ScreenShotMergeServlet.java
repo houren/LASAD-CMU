@@ -90,6 +90,7 @@ public class ScreenShotMergeServlet extends HttpServlet {
 
 		g2d.dispose();
 		System.out.println("Image concatenated.....");
+		try{reader.close();}catch(Exception e){}
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

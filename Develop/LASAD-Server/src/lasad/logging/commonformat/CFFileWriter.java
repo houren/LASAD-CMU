@@ -54,6 +54,7 @@ public class CFFileWriter implements CFWriter {
 			outputFile.println(cf2SUtil.preamble2String(preamble));
 			outputFile.println(CF2StringUtil.getOpenActions());
 		}
+		try{outputFile.close();}catch(Exception e){}
 	}
 	
 	@Override
@@ -67,6 +68,7 @@ public class CFFileWriter implements CFWriter {
 				outputFile.println(cf2SUtil.action2String(act));
 			}
 		}
+		try{outputFile.close();}catch(Exception e){}
 	}
 	
 	public void closeFile(String sessionID){

@@ -51,6 +51,9 @@ public class SaveToXmlServlet extends HttpServlet{
 		fw.write(requestData);
 		fw.flush();
 		fw.close();
+		if (reader != null) {
+		    reader.close();
+		}
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

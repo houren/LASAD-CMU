@@ -31,21 +31,24 @@ public class Element {
 		
 		this.typeValue = a.getParameterValue(ParameterTypes.Type);
 		
-		Connection con = null; 		
+		Connection con = null;
+		PreparedStatement insertElement = null;
+		PreparedStatement getLastID = null;
+		ResultSet rs = null;		
 		
 		try {
 			
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 			
-			PreparedStatement insertElement = con.prepareStatement("INSERT INTO "+Config.dbName+".elements (id, map_id, start_revision_id, end_revision_id, type) VALUES (NULL, ?, ?, NULL, ?);");
+			insertElement = con.prepareStatement("INSERT INTO "+Config.dbName+".elements (id, map_id, start_revision_id, end_revision_id, type) VALUES (NULL, ?, ?, NULL, ?);");
 			insertElement.setInt(1, map_id);
 			insertElement.setInt(2, start_revision_id);
 			insertElement.setString(3, this.typeValue);
 			insertElement.executeUpdate();		
 			
-			PreparedStatement getLastID = con.prepareStatement("SELECT LAST_INSERT_ID()");
-			ResultSet rs = getLastID.executeQuery();
+			getLastID = con.prepareStatement("SELECT LAST_INSERT_ID()");
+			rs = getLastID.executeQuery();
 			rs.next();
 			
 			this.id = rs.getInt(1);
@@ -82,6 +85,9 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try{insertElement.close();}catch(Exception e){}
+			try{getLastID.close();}catch(Exception e){}
+			try{rs.close();}catch(Exception e){}
 			if(con != null) {
 //				try {
 //					con.close();
@@ -101,7 +107,7 @@ public class Element {
 		insertMapping.setInt(1, elementID);
 		insertMapping.setInt(2, parentElementID);
 		insertMapping.executeUpdate();					
-		
+		try{insertMapping.close();}catch(Exception e){}
 	}
 
 	public int getId() {
@@ -115,13 +121,14 @@ public class Element {
 	public static void updateEndRevisionID(int elementID, int endRevisionID) {
 		
 		Connection con = null;
+		PreparedStatement endRevision = null;
 		
 		try {
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 			
 			// Update end revision id
-			PreparedStatement endRevision = con.prepareStatement("UPDATE "+Config.dbName+".elements SET end_revision_id = ? WHERE id = ?;");
+			endRevision = con.prepareStatement("UPDATE "+Config.dbName+".elements SET end_revision_id = ? WHERE id = ?;");
 			endRevision.setInt(1, endRevisionID);
 			endRevision.setInt(2, elementID);
 
@@ -133,6 +140,7 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try{endRevision.close();}catch(Exception e){}
 			if(con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -148,13 +156,14 @@ public class Element {
 	public static void updateEndRevisionIDs(Vector<Integer> childElementsIDs, int endRevisionID) {
 		if(childElementsIDs.size() > 0) {
 			Connection con = null;
+			PreparedStatement endRevision = null;
 			
 			try {
 				con = DatabaseConnectionHandler.getConnection(Element.class);
 //				con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 				
 				// Update end revision id
-				PreparedStatement endRevision = con.prepareStatement("UPDATE "+Config.dbName+".elements SET end_revision_id = ? WHERE id = ?;");
+				endRevision = con.prepareStatement("UPDATE "+Config.dbName+".elements SET end_revision_id = ? WHERE id = ?;");
 				
 				for(Integer i : childElementsIDs) {
 					endRevision.setInt(1, endRevisionID);
@@ -168,6 +177,7 @@ public class Element {
 				e.printStackTrace();
 			}
 			finally {
+    			try { endRevision.close(); } catch (Exception e) { /* ignored */ }
 				if(con != null) {
 					//close Connection
 					DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -185,13 +195,14 @@ public class Element {
 		Vector<Integer> children = new Vector<Integer>();
 		
 		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement childElement = null;
 		
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement childElement = con.prepareStatement("SELECT element_id FROM "+Config.dbName+".element_parent_mapping WHERE parent_element_id = ?;");
+			childElement = con.prepareStatement("SELECT element_id FROM "+Config.dbName+".element_parent_mapping WHERE parent_element_id = ?;");
 			childElement.setInt(1, elementID);
 
 			rs = childElement.executeQuery();
@@ -206,6 +217,8 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try { rs.close(); } catch (Exception e) { /* ignored */ }
+    		try { childElement.close(); } catch (Exception e) { /* ignored */ }
 			if(con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -224,13 +237,14 @@ public class Element {
 		String value = null;
 		
 		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement elementValue = null;
 		
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement elementValue = con.prepareStatement("SELECT value, revision_id FROM "+Config.dbName+".actions WHERE element_id = ? AND parameter = ? ORDER BY revision_id DESC LIMIT 1;");
+			elementValue = con.prepareStatement("SELECT value, revision_id FROM "+Config.dbName+".actions WHERE element_id = ? AND parameter = ? ORDER BY revision_id DESC LIMIT 1;");
 			elementValue.setInt(1, elementID);
 			elementValue.setString(2, parameter);
 
@@ -246,6 +260,8 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try { rs.close(); } catch (Exception e) { /* ignored */ }
+    		try { elementValue.close(); } catch (Exception e) { /* ignored */ }
 			if(con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -266,13 +282,14 @@ public class Element {
 		int result = 0;
 		
 		Connection con = null;
-		
+		ResultSet rs = null;
+		PreparedStatement childElement = null;
+
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement childElement = con.prepareStatement("SELECT start_revision_id FROM "+Config.dbName+".elements WHERE id = ?;");
+			childElement = con.prepareStatement("SELECT start_revision_id FROM "+Config.dbName+".elements WHERE id = ?;");
 			childElement.setInt(1, elementID);
 
 			rs = childElement.executeQuery();
@@ -287,6 +304,8 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try { rs.close(); } catch (Exception e) { /* ignored */ }
+    		try { childElement.close(); } catch (Exception e) { /* ignored */ }
 			if(con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -304,13 +323,14 @@ public class Element {
 		Vector<Integer> parents = new Vector<Integer>();
 		
 		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement childElement = null;
 		
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement childElement = con.prepareStatement("SELECT parent_element_id FROM "+Config.dbName+".element_parent_mapping WHERE element_id = ?;");
+			childElement = con.prepareStatement("SELECT parent_element_id FROM "+Config.dbName+".element_parent_mapping WHERE element_id = ?;");
 			childElement.setInt(1, elementID);
 
 			rs = childElement.executeQuery();
@@ -325,6 +345,8 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try { rs.close(); } catch (Exception e) { /* ignored */ }
+    		try { childElement.close(); } catch (Exception e) { /* ignored */ }
 			if(con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -343,13 +365,14 @@ public class Element {
 		Vector<Integer> elementsDeletedOnRevision = new Vector<Integer>();
 		
 		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement childElement = null;
 		
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement childElement = con.prepareStatement("SELECT id FROM "+Config.dbName+".elements WHERE end_revision_id = ? ORDER BY id DESC;");
+			childElement = con.prepareStatement("SELECT id FROM "+Config.dbName+".elements WHERE end_revision_id = ? ORDER BY id DESC;");
 			childElement.setInt(1, revisionID);
 
 			rs = childElement.executeQuery();
@@ -364,6 +387,8 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try { rs.close(); } catch (Exception e) { /* ignored */ }
+    		try { childElement.close(); } catch (Exception e) { /* ignored */ }
 			if(con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -383,13 +408,14 @@ public class Element {
 		int elementID = 0;
 		
 		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement awarenessCursorElement = null;
 		
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement awarenessCursorElement = con.prepareStatement("SELECT E.id FROM "+Config.dbName+".elements AS E INNER JOIN "+Config.dbName+".revisions AS R ON E.start_revision_id = R.id WHERE E.map_id = ? AND type = ? AND R.creator_user_id = ? AND E.end_revision_id IS NULL;");
+			awarenessCursorElement = con.prepareStatement("SELECT E.id FROM "+Config.dbName+".elements AS E INNER JOIN "+Config.dbName+".revisions AS R ON E.start_revision_id = R.id WHERE E.map_id = ? AND type = ? AND R.creator_user_id = ? AND E.end_revision_id IS NULL;");
 			awarenessCursorElement.setInt(1, mapID);
 			awarenessCursorElement.setString(2, "awareness-cursor");
 			awarenessCursorElement.setInt(3, userID);
@@ -406,6 +432,8 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try { rs.close(); } catch (Exception e) { /* ignored */ }
+    		try { awarenessCursorElement.close(); } catch (Exception e) { /* ignored */ }
 			if(con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -425,13 +453,14 @@ public class Element {
 		int lockedElementID = 0;
 		
 		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement getLastLockedElementID = null;
 		
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getLastLockedElementID = con.prepareStatement("SELECT A.element_id, A.value FROM "+Config.dbName+".actions AS A INNER JOIN "+Config.dbName+".revisions AS R ON A.revision_id = R.id INNER JOIN "+Config.dbName+".users AS U ON R.creator_user_id = U.id WHERE parameter = ? AND R.creator_user_id = ? AND R.map_id = ? ORDER BY R.id DESC LIMIT 1;");
+			getLastLockedElementID = con.prepareStatement("SELECT A.element_id, A.value FROM "+Config.dbName+".actions AS A INNER JOIN "+Config.dbName+".revisions AS R ON A.revision_id = R.id INNER JOIN "+Config.dbName+".users AS U ON R.creator_user_id = U.id WHERE parameter = ? AND R.creator_user_id = ? AND R.map_id = ? ORDER BY R.id DESC LIMIT 1;");
 			getLastLockedElementID.setString(1, "STATUS");
 			getLastLockedElementID.setInt(2, u.getUserID());
 			getLastLockedElementID.setInt(3, mapID);
@@ -450,6 +479,8 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try { rs.close(); } catch (Exception e) { /* ignored */ }
+    		try { getLastLockedElementID.close(); } catch (Exception e) { /* ignored */ }
 			if(con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -473,11 +504,12 @@ public class Element {
 
 		Connection con = null;
 		ResultSet rs = null;
+		PreparedStatement getRevisionIDs = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 
-			PreparedStatement getRevisionIDs = con.prepareStatement("SELECT id FROM " + Config.dbName + ".elements WHERE start_revision_id = ? OR end_revision_id = ?;");
+			getRevisionIDs = con.prepareStatement("SELECT id FROM " + Config.dbName + ".elements WHERE start_revision_id = ? OR end_revision_id = ?;");
 			getRevisionIDs.setInt(1, revID);
 			getRevisionIDs.setInt(2, revID);
 
@@ -492,6 +524,8 @@ public class Element {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try { rs.close(); } catch (Exception e) { /* ignored */ }
+    		try { getRevisionIDs.close(); } catch (Exception e) { /* ignored */ }
 			if (con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -507,7 +541,9 @@ public class Element {
 	}
 
 	public static void delete(int elementID) {
-		Connection con = null; 		
+		Connection con = null;
+		PreparedStatement deleteElement = null; 
+		PreparedStatement deleteElementMappings = null;		
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(Element.class);
@@ -515,12 +551,12 @@ public class Element {
 			
 			// Delete actual element
 			
-			PreparedStatement deleteElement = con.prepareStatement("DELETE FROM "+Config.dbName+".elements WHERE id = ? LIMIT 1;");
+			deleteElement = con.prepareStatement("DELETE FROM "+Config.dbName+".elements WHERE id = ? LIMIT 1;");
 			deleteElement.setInt(1, elementID);
 			deleteElement.executeUpdate();
 			
 			// Delete element_parent_mapping with this element
-			PreparedStatement deleteElementMappings = con.prepareStatement("DELETE FROM "+Config.dbName+".element_parent_mapping WHERE element_id = ? OR parent_element_id = ?;");
+			deleteElementMappings = con.prepareStatement("DELETE FROM "+Config.dbName+".element_parent_mapping WHERE element_id = ? OR parent_element_id = ?;");
 			deleteElementMappings.setInt(1, elementID);
 			deleteElementMappings.setInt(2, elementID);
 			deleteElementMappings.executeUpdate();			
@@ -531,6 +567,8 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try{ deleteElement.close(); } catch(Exception e){}
+			try{ deleteElementMappings.close(); } catch(Exception e){}
 			if(con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -548,13 +586,14 @@ public class Element {
 		boolean isActive = true;
 		
 		Connection con = null;
-		
+		ResultSet rs = null;
+		PreparedStatement endRevision = null;
+
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement endRevision = con.prepareStatement("SELECT end_revision_id FROM "+Config.dbName+".elements WHERE id = ?;");
+			endRevision = con.prepareStatement("SELECT end_revision_id FROM "+Config.dbName+".elements WHERE id = ?;");
 			endRevision.setInt(1, elementID);
 		
 			rs = endRevision.executeQuery();
@@ -571,6 +610,8 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try{ rs.close(); } catch(Exception e){}
+			try{ endRevision.close(); } catch(Exception e){}
 			if(con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -586,12 +627,13 @@ public class Element {
 
 	public static void updateModificationTime(int id, long modificationTime) {
 		Connection con = null;
+		PreparedStatement updModificationTime = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
 			// Update end revision id
-			PreparedStatement updModificationTime = con.prepareStatement("UPDATE "+Config.dbName+".elements SET last_modified = ? WHERE id = ? LIMIT 1;");
+			updModificationTime = con.prepareStatement("UPDATE "+Config.dbName+".elements SET last_modified = ? WHERE id = ? LIMIT 1;");
 			updModificationTime.setLong(1, modificationTime);
 			updModificationTime.setInt(2, id);
 
@@ -603,6 +645,7 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try{ updModificationTime.close(); } catch(Exception e){}
 			if(con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);
@@ -618,13 +661,14 @@ public class Element {
 	public static long getLastModificationTime(int elementID) {
 		long lastModificationTime = 0;
 		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement childElement = null;
 		
 		try {
-			ResultSet rs = null;
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement childElement = con.prepareStatement("SELECT last_modified FROM "+Config.dbName+".elements WHERE id = ?;");
+			childElement = con.prepareStatement("SELECT last_modified FROM "+Config.dbName+".elements WHERE id = ?;");
 			childElement.setInt(1, elementID);
 
 			rs = childElement.executeQuery();
@@ -639,6 +683,8 @@ public class Element {
 			e.printStackTrace();
 		}
 		finally {
+			try { rs.close(); } catch (Exception e) { /* ignored */ }
+    		try { childElement.close(); } catch (Exception e) { /* ignored */ }
 			if(con != null) {
 				//close Connection
 				DatabaseConnectionHandler.closeConnection(Element.class, con);

@@ -42,12 +42,6 @@ public class ArgumentModel
 	private int fontSize = 10;
 	private MVController controller;
 
-	// Just for this class, if we need to create a new instance below
-	private ArgumentModel()
-	{
-		this.argThreads = new HashSet<ArgumentThread>();
-	}
-
 	public ArgumentModel(String mapID)
 	{
 		this.argThreads = new HashSet<ArgumentThread>();

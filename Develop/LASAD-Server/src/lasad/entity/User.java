@@ -36,9 +36,7 @@ public class User {
 	
 	boolean usingWebservice = false;
 	
-	public User()
-	{
-	}
+	public User() { }
 	
 	public User(String nickname, String password, String role) {
 		this(nickname, password, role, false);
@@ -89,31 +87,32 @@ public class User {
 			return null;
 		}
 		
-		Connection con = null; 		
+		Connection con = null; 
+		PreparedStatement getUserID = null;		
+		ResultSet rs = null;
+		int returnVal = -1;
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(User.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getUserID = con.prepareStatement("SELECT id FROM "+Config.dbName+".users WHERE name = ?;");
+			getUserID = con.prepareStatement("SELECT id FROM "+Config.dbName+".users WHERE name = ?;");
 			getUserID.setString(1, name);
-			ResultSet rs = getUserID.executeQuery();
+			rs = getUserID.executeQuery();
 			if(rs.next()) {
-				return rs.getInt(1);
+				returnVal = rs.getInt(1);
 			}
-			else {
-				return -1;
-			}
-			
 						
 		} catch (SQLException e){
 			e.printStackTrace();
-			return -1;
+			returnVal = -1;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return -1;
+			returnVal = -1;
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getUserID.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(User.class, con);
 //				try {
@@ -123,6 +122,8 @@ public class User {
 //				}
 			}
 		}
+
+		return returnVal;
 	}
 	
 	public static File generateUserConfigurationFile(Action a) {
@@ -156,15 +157,17 @@ public class User {
 
 		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 
+		FileOutputStream output = null;
 		try {
-			FileOutputStream output = new FileOutputStream(f);
+			output = new FileOutputStream(f);
 			outputter.output(doc, output);
 			output.flush();
-			output.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try{output.close();}catch(Exception e){}
 		}
 		
 		return f;
@@ -183,13 +186,14 @@ public class User {
 		if (!isPasswordEncrypted){
 			pw = MD5Converter.toMD5(pw);
 		}
-		Connection con = null; 		
+		Connection con = null; 	
+		PreparedStatement getUser = null;	
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(User.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getUser = con.prepareStatement("SELECT * FROM "+Config.dbName+".users WHERE name = ? AND pw = ?;");
+			getUser = con.prepareStatement("SELECT * FROM "+Config.dbName+".users WHERE name = ? AND pw = ?;");
 			getUser.setString(1, name);
 			getUser.setString(2, pw);
 			rs = getUser.executeQuery();
@@ -204,6 +208,8 @@ public class User {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getUser.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(User.class, con);
 //				try {
@@ -226,13 +232,14 @@ public class User {
 		
 		if(User.getUserID(this.nickname) == -1) { // User does not exist
 		
-			Connection con = null; 		
+			Connection con = null; 
+			PreparedStatement insertUser = null;		
 			
 			try {
 				con = DatabaseConnectionHandler.getConnection(User.class);
 //				con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 				
-				PreparedStatement insertUser = con.prepareStatement("INSERT INTO "+Config.dbName+".users (id, name, pw, role) VALUES (NULL, ?, ?, ?);");
+				insertUser = con.prepareStatement("INSERT INTO "+Config.dbName+".users (id, name, pw, role) VALUES (NULL, ?, ?, ?);");
 				insertUser.setString(1, this.nickname);
 				insertUser.setString(2, this.password);
 				insertUser.setString(3, this.role);
@@ -244,6 +251,7 @@ public class User {
 				e.printStackTrace();
 			}
 			finally {
+				try{insertUser.close();}catch(Exception e){}
 				if(con != null) {
 					DatabaseConnectionHandler.closeConnection(User.class, con);
 //					try {
@@ -262,15 +270,17 @@ public class User {
 	public static Vector<User> getAllUsers() {
 		Vector<User> u = new Vector<User>();
 	
-		Connection con = null; 		
+		Connection con = null; 	
+		PreparedStatement getAllUsersWithoutPW = null;	
+		ResultSet rs = null;
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(User.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getAllUsersWithoutPW = con.prepareStatement("SELECT name, role FROM "+Config.dbName+".users;");
+			getAllUsersWithoutPW = con.prepareStatement("SELECT name, role FROM "+Config.dbName+".users;");
 			
-			ResultSet rs = getAllUsersWithoutPW.executeQuery();
+			rs = getAllUsersWithoutPW.executeQuery();
 			
 			while(rs.next()) {
 				if(!rs.getString("name").equals("Unknown")) {
@@ -284,6 +294,8 @@ public class User {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getAllUsersWithoutPW.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(User.class, con);
 //				try {
@@ -300,15 +312,17 @@ public class User {
 	public static Vector<String> getUserListWithoutRoles() {
 		Vector<String> u = new Vector<String>();
 	
-		Connection con = null; 		
+		Connection con = null; 	
+		PreparedStatement getAllUsernames = null;	
+		ResultSet rs = null;
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(User.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getAllUsernames = con.prepareStatement("SELECT name FROM "+Config.dbName+".users;");
+			getAllUsernames = con.prepareStatement("SELECT name FROM "+Config.dbName+".users;");
 			
-			ResultSet rs = getAllUsernames.executeQuery();
+			rs = getAllUsernames.executeQuery();
 			
 			while(rs.next()) {
 				u.add(rs.getString("name"));
@@ -320,6 +334,8 @@ public class User {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getAllUsernames.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(User.class, con);
 //				try {
@@ -379,11 +395,12 @@ public class User {
 		
 		Connection con = null; 		
 		ResultSet rs = null;
+		PreparedStatement getUser = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(User.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getUser = con.prepareStatement("SELECT name FROM "+Config.dbName+".users WHERE id = ?;");
+			getUser = con.prepareStatement("SELECT name FROM "+Config.dbName+".users WHERE id = ?;");
 			getUser.setInt(1, id);
 			
 			rs = getUser.executeQuery();
@@ -397,6 +414,8 @@ public class User {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getUser.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(User.class, con);
 //				try {
@@ -416,10 +435,11 @@ public class User {
 		
 		Connection con = null; 		
 		ResultSet rs = null;
+		PreparedStatement getUser = null;
 		try {
 			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getUser = con.prepareStatement("SELECT id FROM "+Config.dbName+".users WHERE name = ?;");
+			getUser = con.prepareStatement("SELECT id FROM "+Config.dbName+".users WHERE name = ?;");
 			getUser.setString(1, name);
 			
 			rs = getUser.executeQuery();
@@ -433,6 +453,8 @@ public class User {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getUser.close();}catch(Exception e){}
 			if(con != null) {
 				try {
 					con.close();
@@ -451,11 +473,12 @@ public class User {
 		
 		Connection con = null; 		
 		ResultSet rs = null;
+		PreparedStatement getRole = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(User.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getRole = con.prepareStatement("SELECT role FROM "+Config.dbName+".users WHERE name = ?;");
+			getRole = con.prepareStatement("SELECT role FROM "+Config.dbName+".users WHERE name = ?;");
 			getRole.setString(1, username);
 			
 			rs = getRole.executeQuery();
@@ -469,6 +492,8 @@ public class User {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getRole.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(User.class, con);
 //				try {
@@ -488,11 +513,12 @@ public class User {
 		
 		Connection con = null; 		
 		ResultSet rs = null;
+		PreparedStatement getRole = null;
 		try {
 			con = DatabaseConnectionHandler.getConnection(User.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			PreparedStatement getRole = con.prepareStatement("SELECT role FROM "+Config.dbName+".users WHERE id = ?;");
+			getRole = con.prepareStatement("SELECT role FROM "+Config.dbName+".users WHERE id = ?;");
 			getRole.setInt(1, userID);
 			
 			rs = getRole.executeQuery();
@@ -506,6 +532,8 @@ public class User {
 			e.printStackTrace();
 		}
 		finally {
+			try{rs.close();}catch(Exception e){}
+			try{getRole.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(User.class, con);
 //				try {
@@ -530,26 +558,29 @@ public class User {
 	}
 	
 	public static void removeUserFromDB(int userID, int newUserID) {
-		Connection con = null; 		
+		Connection con = null; 
+		PreparedStatement deleteUser = null;
+		PreparedStatement updateUserP1 = null;
+		PreparedStatement updateUserP2 = null;		
 		
 		try {
 			con = DatabaseConnectionHandler.getConnection(User.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
 			// Delete the concrete user
-			PreparedStatement deleteUser = con.prepareStatement("DELETE FROM "+Config.dbName+".users WHERE id = ? LIMIT 1;");
+			deleteUser = con.prepareStatement("DELETE FROM "+Config.dbName+".users WHERE id = ? LIMIT 1;");
 			deleteUser.setInt(1, userID);
 			
 			deleteUser.executeUpdate();
 			
 			// Replace the user relations by a new one - Part 1
-			PreparedStatement updateUserP1 = con.prepareStatement("UPDATE revisions SET creator_user_id = ? WHERE creator_user_id = ?;");
+			updateUserP1 = con.prepareStatement("UPDATE revisions SET creator_user_id = ? WHERE creator_user_id = ?;");
 			updateUserP1.setInt(1, newUserID);
 			updateUserP1.setInt(2, userID);
 			updateUserP1.executeUpdate();
 			
 			// Replace the user relations by a new one - Part 2
-			PreparedStatement updateUserP2 = con.prepareStatement("UPDATE maps SET creator_user_id = ? WHERE creator_user_id = ?;");
+			updateUserP2 = con.prepareStatement("UPDATE maps SET creator_user_id = ? WHERE creator_user_id = ?;");
 			updateUserP2.setInt(1, newUserID);
 			updateUserP2.setInt(2, userID);
 			updateUserP2.executeUpdate();
@@ -567,6 +598,9 @@ public class User {
 			e.printStackTrace();
 		}
 		finally {
+			try{deleteUser.close();}catch(Exception e){}
+			try{updateUserP1.close();}catch(Exception e){}
+			try{updateUserP2.close();}catch(Exception e){}
 			if(con != null) {
 				DatabaseConnectionHandler.closeConnection(User.class, con);
 //				try {
@@ -611,15 +645,17 @@ public class User {
 								
 								XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 
+								FileOutputStream output = null;
 								try {
-									FileOutputStream output = new FileOutputStream(f);
+									output = new FileOutputStream(f);
 									outputter.output(doc, output);
 									output.flush();
-									output.close();
 								} catch (FileNotFoundException e) {
 									e.printStackTrace();
 								} catch (IOException e) {
 									e.printStackTrace();
+								} finally {
+									output.close();
 								}
 								
 								Logger.log("Removing user from file: "+f);
