@@ -55,6 +55,9 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	// user, sessionID
 	private HashMap<String, String> loggedSessions;
 
+	// user + session + prob
+	private HashSet<String> loggedContexts;
+
 	public MapActionProcessor()
 	{
 		super();
@@ -63,6 +66,8 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		mapLinks = new HashMap<String, HashSet<String>>();
 
 		loggedSessions = new HashMap<String, String>();
+		loggedContexts = new HashSet<String>();
+
 		harrellClass = new HashSet<String>();
 		harrellClass.add("Sam.Speight");
 		harrellClass.add("Mara.Harrell");
@@ -94,25 +99,29 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
     	try
     	{
 			String userName = u.getNickname();
-	        String sessionId = u.getSessionID();
+	        String sessionID = u.getSessionID();
+	        String problemName = Map.getMapName(this.aproc.getMapIDFromAction(a));
+	        final String CONTEXT_REF = problemName + sessionID + userName;
 
-	        if (loggedSessions.get(userName) == null || !loggedSessions.get(userName).equals(sessionId))
+	        if (loggedSessions.get(userName) == null || !loggedSessions.get(userName).equals(sessionID))
 	        {
-	        	dsLogger.logSession(userName, sessionId);
-	        	loggedSessions.put(userName, sessionId);
+	        	dsLogger.logSession(userName, sessionID);
+	        	loggedSessions.put(userName, sessionID);
 	        }
+
+	        boolean shouldLogContext = !loggedContexts.contains(CONTEXT_REF);
 
 	        String timeString = Long.toString(a.getTimeStamp());
 		    String timeZone = "UTC";
-		    MetaElement metaElement = new MetaElement(userName, sessionId, timeString, timeZone);
+		    MetaElement metaElement = new MetaElement(userName, sessionID, timeString, timeZone);
 			ContextMessage contextMsg = ContextMessage.createStartProblem(metaElement);
 
-			String problemName = Map.getMapName(this.aproc.getMapIDFromAction(a));
 			ProblemElement problem = new ProblemElement(problemName);
+			LevelElement sectionLevel;
 
 	        if (harrellClass.contains(userName))
 	        {
-	        	LevelElement sectionLevel = new LevelElement("Section", "01", problem);
+	        	sectionLevel = new LevelElement("Section", "01", problem);
 
 		        String className = "Engineering Ethics";
 		        String school = "CMU";
@@ -123,21 +132,21 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		        contextMsg.setSchool(school);
 		        contextMsg.setPeriod(period);
 		        contextMsg.addInstructor(instructorOne);
-		        contextMsg.setDataset(new DatasetElement("Engineering-Ethics-Test-2", sectionLevel));
 	        }
 	        else
 	        {
-	        	LevelElement sectionLevel = new LevelElement("Section", "", problem);
+	        	sectionLevel = new LevelElement("Section", "N/A", problem);
 
-	        	contextMsg.setClassName("");
-		        contextMsg.setSchool("");
-		        contextMsg.setPeriod("");
-		        contextMsg.addInstructor("");
-	        	contextMsg.setDataset(new DatasetElement("LASAD-V2", sectionLevel));
+	        	contextMsg.setClassName("N/A");
+		        contextMsg.setSchool("N/A");
+		        contextMsg.setPeriod("N/A");
+		        contextMsg.addInstructor("N/A");
 	        }
 
+	        contextMsg.setDataset(new DatasetElement("LASAD-V2", sectionLevel));
+
 	        ToolMessage toolMsg = ToolMessage.create(contextMsg);
-	        String selection;
+	        final String selection;
 	        if (a.getParameterValue(ParameterTypes.Id) == null)
 	        {
 	        	selection = "";
@@ -146,10 +155,12 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        {
 	        	selection = a.getParameterValue(ParameterTypes.Id);
 	        }
-	        String action = a.getCmd().name();
-	        final String input;
+	        String command = a.getCmd().name();
 
-	        if (action.equals("CreateElement"))
+	        final String input;
+	        final String action;
+
+	        if (command.equals("CreateElement"))
 	        {
 	        	input = "";
 
@@ -170,7 +181,8 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        		{
 	        			mapBoxes.get(problemName).add(selection);
 	        		}
-	        		toolMsg.setAsAttempt("Create Box");
+	        		action = "Create Box";
+	        		toolMsg.setAsAttempt("");
 	        	}
 	        	else if (type.equals("relation"))
 	        	{
@@ -184,14 +196,15 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        		{
 	        			mapLinks.get(problemName).add(selection);
 	        		}
-	        		toolMsg.setAsAttempt("Create Relation");
+	        		action = "Create Relation";
+	        		toolMsg.setAsAttempt("");
 	        	}
 	        	else
 	        	{
 	        		return;
 	        	}
 	        }
-	        else if (action.equals("UpdateElement"))
+	        else if (command.equals("UpdateElement"))
 	        {
 	        	String text = a.getParameterValue(ParameterTypes.Text);
 		        if (text == null)
@@ -207,30 +220,35 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		        		else
 		        		{
 		        			input = "Width: " + width + "; Height: " + a.getParameterValue(ParameterTypes.Height);
-		        			toolMsg.setAsAttempt("Resize Element");
+		        			action = "Resize Element";
+		        			toolMsg.setAsAttempt("");
 		        		}
 		        	}
 		        	else
 		        	{
 		        		input = "PosX: " + posX + "; PosY: " + a.getParameterValue(ParameterTypes.PosY);
-		        		toolMsg.setAsAttempt("Reposition Element");
+		        		action = "Reposition Element";
+		        		toolMsg.setAsAttempt("");
 		        	}
 		        }
 		        else
 		        {
-		        	toolMsg.setAsAttempt("Modify Element Text");
+		        	action = "Modify Element Text";
+		        	toolMsg.setAsAttempt("");
 		        	input = text;
 		        }
 	        }
-	        else if (action.equals("DeleteElement"))
+	        else if (command.equals("DeleteElement"))
 	        {
 	        	if (mapBoxes.get(problemName).remove(selection))
 	        	{
-	        		toolMsg.setAsAttempt("Delete Box");
+	        		action = "Delete Box";
+	        		toolMsg.setAsAttempt("");
         		}
         		else if (mapLinks.get(problemName).remove(selection))
         		{
-        			toolMsg.setAsAttempt("Delete Relation");
+        			action = "Delete Relation";
+        			toolMsg.setAsAttempt("");
         		}
 	        	else
 	        	{
@@ -238,7 +256,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        	}
 	        	input = "";
 	        }
-	        else if (action.equals("AutoOrganize"))
+	        else if (command.equals("AutoOrganize"))
 	        {
 	        	toolMsg.setAsAttempt("");
 	        	String orientationBool = a.getParameterValue(ParameterTypes.OrganizerOrientation);
@@ -254,11 +272,13 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        	String width = a.getParameterValue(ParameterTypes.OrganizerBoxWidth);
 	        	String height = a.getParameterValue(ParameterTypes.OrganizerBoxHeight);
 	        	input = "Orientation: " + orient + "; Width: " + width + "; Height: " + height;
+	        	action = "Auto Organize";
 	        }
-	        else if (action.equals("ChangeFontSize"))
+	        else if (command.equals("ChangeFontSize"))
 	        {
 	        	toolMsg.setAsAttempt("");
 	        	input = "Font Size: " + a.getParameterValue(ParameterTypes.FontSize);
+	        	action = "Change Font Size";
 	        }
 	        else
 	        {
@@ -276,11 +296,19 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        	return;
 	        }
 
-	        if (!dsLogger.log(contextMsg))
+	        if (shouldLogContext)
 	        {
-	        	Logger.debugLog("ERROR: context Message log failed for following action!");
-	        	Logger.debugLog(a.toString());
-	        	return;
+	        	Logger.debugLog("Logging context message");
+	        	if (dsLogger.log(contextMsg))
+		        {
+		        	loggedContexts.add(CONTEXT_REF);
+		        }
+		        else
+		        {
+		        	Logger.debugLog("ERROR: context Message log failed for following action!");
+		        	Logger.debugLog(a.toString());
+		        	return;
+		        }
 	        }
 
 	        if (!dsLogger.log(toolMsg))
