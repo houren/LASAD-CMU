@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import sun.misc.BASE64Decoder;
+// Deprecated, relaced with DataTypeConverter by Kevin Loughlin
+	//import sun.misc.BASE64Decoder;
+import javax.xml.bind.DatatypeConverter;
 
 public class ScreenShotServlet extends HttpServlet {
 
@@ -27,9 +29,15 @@ public class ScreenShotServlet extends HttpServlet {
 		}
 		String filename = requestData.substring(0, requestData.indexOf(":"));
 		requestData = requestData.substring(requestData.indexOf(":") + 1);
-		// Imageconverter.stringToimage(requestData, "image.png");
-		BASE64Decoder decoder = new BASE64Decoder();
-		byte[] decodedBytes = decoder.decodeBuffer(requestData);
+
+		// Don't know what this is or why it was here, most likely something similar to the replacement I (Kevin Loughlin) made
+			// Imageconverter.stringToimage(requestData, "image.png");
+
+		// I got rid of these two lines because they were deprecated, replaced with line below it
+			// BASE64Decoder decoder = new BASE64Decoder();
+			// byte[] decodedBytes = decoder.decodeBuffer(requestData);
+		byte[] decodedBytes = DatatypeConverter.parseBase64Binary(requestData);
+
 		File f = new File(System.getProperty("java.io.tmpdir") + File.separator + filename + ".png");
 
 		BufferedImage image = ImageIO.read(new ByteArrayInputStream(decodedBytes));

@@ -1,6 +1,7 @@
 html {
 	height: 100%;
 }
+
 body {
 	margin: 0;
 	padding: 0;
@@ -10,11 +11,11 @@ body {
 
 .instruction-text {
 	padding: 3px;
-	font-size: 11px;	
+	font-size: 11px;
 	font-family: tahoma, arial, helvetica, sans-serif;
 }
 
-.userlist{
+.userlist {
 	font-size: 11px;
 	font-family: tahoma, arial, helvetica, sans-serif;
 	background-color: #E1E9F2;
@@ -22,7 +23,7 @@ body {
 
 /** Awareness **/
 .awareness_cursor_root {
-	float: left;	
+	float: left;
 	background-image: url(images/awareness/transparent.png) !important;
 	background-repeat: repeat;
 }
@@ -60,7 +61,6 @@ body {
 	padding-left: 44px;
 }
 
-
 /** Feedback Visualization **/
 .feedback_cluster_icon {
 	background-image: url(images/feedback/red-star.png) !important;
@@ -76,7 +76,7 @@ body {
 	border: 1pt solid lightgrey;
 }
 
-.feedbackText-div{
+.feedbackText-div {
 	float: left;
 	padding: 2px;
 	border: 1pt solid #000000;
@@ -85,7 +85,7 @@ body {
 /** Link **/
 .link_highlight_border {
 	border: #FF0000 solid 1px !important;
-}	
+}
 
 .link_header {
 	font-size: 10px;
@@ -112,7 +112,7 @@ body {
 	padding-bottom: 1px;
 	padding-left: 3px;
 	color: black;
-	}
+}
 
 .link_content_principle_text {
 	font-size: 9px;
@@ -122,8 +122,7 @@ body {
 	padding-left: 3px;
 	color: black;
 	text-align: left;
-	}
-
+}
 
 .link_delete_button {
 	background-image: url(images/common/close.gif) !important;
@@ -179,6 +178,7 @@ body {
 	height: 10px;
 	cursor: pointer;
 }
+
 .line-textarea {
 	padding-top: 0px !important;
 	line-height: 12px;
@@ -192,21 +192,21 @@ body {
 
 .popup {
 	background-color: gray;
-  	border-color: gray gray gray gray;
+	border-color: gray gray gray gray;
 	border-width: 1px 1px 1px 1px;
-  	border-style: solid solid solid solid;
-}
- 
-.popup-item {
-  	font-weight: normal;
-	font-size: 70%;
-  	color: black;
-  	background-color: white;
+	border-style: solid solid solid solid;
 }
 
-.popup .gwt-MenuItem-selected{
-  	background-color: #C0C0C0;
-  	color: black;
+.popup-item {
+	font-weight: normal;
+	font-size: 70%;
+	color: black;
+	background-color: white;
+}
+
+.popup .gwt-MenuItem-selected {
+	background-color: #C0C0C0;
+	color: black;
 }
 
 .plain_text_area_view_mode {
@@ -226,9 +226,7 @@ body {
 	padding-left: 2px;
 }
 
-
 /* LOGIN TAB RELATED STUFF */
-
 .loginTab_MapInfoPanel div {
 	padding: 10px;
 	color: #000000 !important;

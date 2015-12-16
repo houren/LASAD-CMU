@@ -117,11 +117,20 @@ public class ActionFactory {
 		return p;
 	}
 
+	public ActionPackage startAutoOrganization(String mapID)
+	{
+		ActionPackage p = new ActionPackage();
+		Action a = new Action(Commands.StartAutoOrganize, Categories.Map);
+		a.addParameter(ParameterTypes.MapId, mapID);
+		p.addAction(a);
+		return p;
+	}
+
 	// Created by Kevin Loughlin
 	public ActionPackage finishAutoOrganization(String mapID, boolean isDownward, int boxWidth, int minBoxHeight, double edgeCoordX, double edgeCoordY)
 	{
 		ActionPackage p = new ActionPackage();
-		Action a = new Action(Commands.AutoOrganize, Categories.Map);
+		Action a = new Action(Commands.FinishAutoOrganize, Categories.Map);
 		a.addParameter(ParameterTypes.MapId, mapID);
 		a.addParameter(ParameterTypes.OrganizerOrientation, String.valueOf(isDownward));
 		a.addParameter(ParameterTypes.OrganizerBoxWidth, String.valueOf(boxWidth));
@@ -146,6 +155,18 @@ public class ActionFactory {
 	public ActionPackage updateBoxSize(String mapID, int boxID, int width, int height) {
 		ActionPackage p = new ActionPackage();
 		Action a = new Action(Commands.UpdateElement, Categories.Map);
+//		Action a = new Action("UPDATE-ELEMENT", "MAP");
+		a.addParameter(ParameterTypes.MapId, mapID);
+		a.addParameter(ParameterTypes.Id, String.valueOf(boxID));
+		a.addParameter(ParameterTypes.Width, String.valueOf(width));
+		a.addParameter(ParameterTypes.Height, String.valueOf(height));
+		p.addAction(a);
+		return p;
+	}
+
+	public ActionPackage autoResizeTextBox(String mapID, int boxID, int width, int height) {
+		ActionPackage p = new ActionPackage();
+		Action a = new Action(Commands.AutoResizeTextBox, Categories.Map);
 //		Action a = new Action("UPDATE-ELEMENT", "MAP");
 		a.addParameter(ParameterTypes.MapId, mapID);
 		a.addParameter(ParameterTypes.Id, String.valueOf(boxID));

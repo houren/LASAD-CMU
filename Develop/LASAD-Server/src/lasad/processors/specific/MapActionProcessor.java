@@ -35,7 +35,7 @@ import edu.cmu.pslc.logging.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashSet;
 
 /**
@@ -46,27 +46,30 @@ import java.util.HashSet;
 public class MapActionProcessor extends AbstractActionObserver implements ActionObserver {
 
 	private OliDatabaseLogger dsLogger;
-	private HashMap<String, HashSet<String>> mapBoxes;
-	private HashMap<String, HashSet<String>> mapLinks;
+	private ConcurrentHashMap<String, HashSet<String>> mapBoxes;
+	private ConcurrentHashMap<String, HashSet<String>> mapLinks;
 
 	// userName
 	private HashSet<String> harrellClass;
 
 	// user, sessionID
-	private HashMap<String, String> loggedSessions;
+	private ConcurrentHashMap<String, String> loggedSessions;
 
-	// user + session + prob
-	private HashSet<String> loggedContexts;
+	// user + session + prob --> contextMSG
+	private ConcurrentHashMap<String, ContextMessage> loggedContexts;
+
+	// map -> doingAutoOrganize
+	private ConcurrentHashMap<String, Boolean> autoOrganizeStatuses = new ConcurrentHashMap<String, Boolean>();
 
 	public MapActionProcessor()
 	{
 		super();
 		dsLogger = OliDatabaseLogger.create("https://pslc-qa.andrew.cmu.edu/log/server", "UTF-8");
-		mapBoxes = new HashMap<String, HashSet<String>>();
-		mapLinks = new HashMap<String, HashSet<String>>();
+		mapBoxes = new ConcurrentHashMap<String, HashSet<String>>();
+		mapLinks = new ConcurrentHashMap<String, HashSet<String>>();
 
-		loggedSessions = new HashMap<String, String>();
-		loggedContexts = new HashSet<String>();
+		loggedSessions = new ConcurrentHashMap<String, String>();
+		loggedContexts = new ConcurrentHashMap<String, ContextMessage>();
 
 		harrellClass = new HashSet<String>();
 		harrellClass.add("Sam.Speight");
@@ -101,6 +104,12 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			String userName = u.getNickname();
 	        String sessionID = u.getSessionID();
 	        String problemName = Map.getMapName(this.aproc.getMapIDFromAction(a));
+	        // map -> doingAutoOrganize
+			if (autoOrganizeStatuses.get(problemName) == null)
+			{
+				autoOrganizeStatuses.put(problemName, false);
+			}
+
 	        final String CONTEXT_REF = problemName + sessionID + userName;
 
 	        if (loggedSessions.get(userName) == null || !loggedSessions.get(userName).equals(sessionID))
@@ -109,44 +118,52 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        	loggedSessions.put(userName, sessionID);
 	        }
 
-	        boolean shouldLogContext = !loggedContexts.contains(CONTEXT_REF);
+	        boolean shouldLogContext = false;
+	        ProblemElement problem = new ProblemElement(problemName);
 
 	        String timeString = Long.toString(a.getTimeStamp());
-		    String timeZone = "UTC";
-		    MetaElement metaElement = new MetaElement(userName, sessionID, timeString, timeZone);
-			ContextMessage contextMsg = ContextMessage.createStartProblem(metaElement);
+			String timeZone = "UTC";
+		        
+			ContextMessage contextMsg = loggedContexts.get(CONTEXT_REF);
+			if (contextMsg == null)
+			{
+			    MetaElement metaElement = new MetaElement(userName, sessionID, timeString, timeZone);
+				shouldLogContext = true;
+				contextMsg = ContextMessage.createStartProblem(metaElement);
 
-			ProblemElement problem = new ProblemElement(problemName);
-			LevelElement sectionLevel;
+				LevelElement sectionLevel;
 
-	        if (harrellClass.contains(userName))
-	        {
-	        	sectionLevel = new LevelElement("Section", "01", problem);
+		        if (harrellClass.contains(userName))
+		        {
+		        	sectionLevel = new LevelElement("Section", "01", problem);
 
-		        String className = "Engineering Ethics";
-		        String school = "CMU";
-		        String period = "01";
-		        String instructorOne = "Mara Harrell";
+			        String className = "Engineering Ethics";
+			        String school = "CMU";
+			        String period = "01";
+			        String instructorOne = "Mara Harrell";
 
-		        contextMsg.setClassName(className);
-		        contextMsg.setSchool(school);
-		        contextMsg.setPeriod(period);
-		        contextMsg.addInstructor(instructorOne);
-	        }
-	        else
-	        {
-	        	sectionLevel = new LevelElement("Section", "N/A", problem);
+			        contextMsg.setClassName(className);
+			        contextMsg.setSchool(school);
+			        contextMsg.setPeriod(period);
+			        contextMsg.addInstructor(instructorOne);
+		        }
+		        else
+		        {
+		        	sectionLevel = new LevelElement("Section", "N/A", problem);
 
-	        	contextMsg.setClassName("N/A");
-		        contextMsg.setSchool("N/A");
-		        contextMsg.setPeriod("N/A");
-		        contextMsg.addInstructor("N/A");
-	        }
+		        	contextMsg.setClassName("N/A");
+			        contextMsg.setSchool("N/A");
+			        contextMsg.setPeriod("N/A");
+			        contextMsg.addInstructor("N/A");
+		        }
 
-	        contextMsg.setDataset(new DatasetElement("LASAD-V2", sectionLevel));
+		        contextMsg.setDataset(new DatasetElement("December16-01", sectionLevel));
+			}	
 
 	        ToolMessage toolMsg = ToolMessage.create(contextMsg);
-	        final String selection;
+	        toolMsg.setTimeString(timeString);
+
+	        String selection;
 	        if (a.getParameterValue(ParameterTypes.Id) == null)
 	        {
 	        	selection = "";
@@ -155,134 +172,147 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        {
 	        	selection = a.getParameterValue(ParameterTypes.Id);
 	        }
-	        String command = a.getCmd().name();
 
 	        final String input;
 	        final String action;
 
-	        if (command.equals("CreateElement"))
+	        switch (a.getCmd())
 	        {
-	        	input = "";
+	        	case CreateElement:
+		        //if (command.equals("CreateElement"))
+		        //{
+		        	input = "";
 
-	        	String type = a.getParameterValue(ParameterTypes.Type);
-	        	if (type == null)
-	        	{
-	        		return;
-	        	}
-	        	else if (type.equals("box"))
-	        	{
-	        		if (!mapBoxes.keySet().contains(problemName) || mapBoxes.get(problemName) == null)
-	        		{
-	        			HashSet<String> boxes = new HashSet<String>();
-	        			boxes.add(selection);
-	        			mapBoxes.put(problemName, boxes);
-	        		}
-	        		else
-	        		{
-	        			mapBoxes.get(problemName).add(selection);
-	        		}
-	        		action = "Create Box";
-	        		toolMsg.setAsAttempt("");
-	        	}
-	        	else if (type.equals("relation"))
-	        	{
-	        		if (!mapLinks.keySet().contains(problemName))
-	        		{
-	        			HashSet<String> links = new HashSet<String>();
-	        			links.add(selection);
-	        			mapLinks.put(problemName, links);
-	        		}
-	        		else
-	        		{
-	        			mapLinks.get(problemName).add(selection);
-	        		}
-	        		action = "Create Relation";
-	        		toolMsg.setAsAttempt("");
-	        	}
-	        	else
-	        	{
-	        		return;
-	        	}
-	        }
-	        else if (command.equals("UpdateElement"))
-	        {
-	        	String text = a.getParameterValue(ParameterTypes.Text);
-		        if (text == null)
-		        {
-		        	String posX = a.getParameterValue(ParameterTypes.PosX);
-		        	if (posX == null)
+		        	String type = a.getParameterValue(ParameterTypes.Type);
+		        	if (type == null)
 		        	{
-		        		String width = a.getParameterValue(ParameterTypes.Width);
-		        		if (width == null)
+		        		return;
+		        	}
+		        	else if (type.equals("box"))
+		        	{
+		        		if (!mapBoxes.keySet().contains(problemName) || mapBoxes.get(problemName) == null)
 		        		{
-		        			return;
+		        			HashSet<String> boxes = new HashSet<String>();
+		        			boxes.add(selection);
+		        			mapBoxes.put(problemName, boxes);
 		        		}
 		        		else
 		        		{
-		        			input = "Width: " + width + "; Height: " + a.getParameterValue(ParameterTypes.Height);
-		        			action = "Resize Element";
-		        			toolMsg.setAsAttempt("");
+		        			mapBoxes.get(problemName).add(selection);
 		        		}
+		        		action = "Create Box";
+		        		toolMsg.setAsAttempt("");
+		        	}
+		        	else if (type.equals("relation"))
+		        	{
+		        		if (!mapLinks.keySet().contains(problemName))
+		        		{
+		        			HashSet<String> links = new HashSet<String>();
+		        			links.add(selection);
+		        			mapLinks.put(problemName, links);
+		        		}
+		        		else
+		        		{
+		        			mapLinks.get(problemName).add(selection);
+		        		}
+		        		action = "Create Relation";
+		        		toolMsg.setAsAttempt("");
 		        	}
 		        	else
 		        	{
-		        		input = "PosX: " + posX + "; PosY: " + a.getParameterValue(ParameterTypes.PosY);
-		        		action = "Reposition Element";
-		        		toolMsg.setAsAttempt("");
+		        		return;
 		        	}
-		        }
-		        else
-		        {
-		        	action = "Modify Element Text";
-		        	toolMsg.setAsAttempt("");
-		        	input = text;
-		        }
-	        }
-	        else if (command.equals("DeleteElement"))
-	        {
-	        	if (mapBoxes.get(problemName).remove(selection))
-	        	{
-	        		action = "Delete Box";
+	        		break;
+	        	case AutoResizeTextBox:
+	        		input = "Width: " + a.getParameterValue(ParameterTypes.Width) + "; Height: " + a.getParameterValue(ParameterTypes.Height);
+			        action = "Auto Resize Text Box";
+			        toolMsg.setAsAttempt("");
+	        		break;
+	        	case UpdateElement:
+	        		String text = a.getParameterValue(ParameterTypes.Text);
+			        if (text == null)
+			        {
+			        	String posX = a.getParameterValue(ParameterTypes.PosX);
+			        	if (posX == null)
+			        	{
+			        		String width = a.getParameterValue(ParameterTypes.Width);
+			        		if (width == null)
+			        		{
+			        			return;
+			        		}
+			        		else
+			        		{
+			        			input = "Width: " + width + "; Height: " + a.getParameterValue(ParameterTypes.Height);
+			        			action = "Resize Element";
+			        			toolMsg.setAsAttempt("");
+			        		}
+			        	}
+			        	else
+			        	{
+			        		input = "PosX: " + posX + "; PosY: " + a.getParameterValue(ParameterTypes.PosY);
+			        		action = "Reposition Element";
+			        		toolMsg.setAsAttempt("");
+			        	}
+			        }
+			        else
+			        {
+			        	if (text == null || text.length() == 0)
+			        	{
+			        		action = "Delete Element Text";
+			        	}
+			        	else
+			        	{
+			        		action = "Insert Element Text";
+			        	}
+
+			        	// hack, box ID is always 1 less than text box ID
+			        	selection = String.valueOf(Integer.parseInt(selection) - 1);
+
+			        	toolMsg.setAsAttempt("");
+			        	input = text;
+			        }
+	        		break;
+	        	case DeleteElement:
+	        		if (mapBoxes.get(problemName).remove(selection))
+		        	{
+		        		action = "Delete Box";
+		        		toolMsg.setAsAttempt("");
+	        		}
+	        		else if (mapLinks.get(problemName).remove(selection))
+	        		{
+	        			action = "Delete Relation";
+	        			toolMsg.setAsAttempt("");
+	        		}
+		        	else
+		        	{
+		        		return;
+		        	}
+		        	input = "";
+	        		break;
+	        	case FinishAutoOrganize:
 	        		toolMsg.setAsAttempt("");
-        		}
-        		else if (mapLinks.get(problemName).remove(selection))
-        		{
-        			action = "Delete Relation";
-        			toolMsg.setAsAttempt("");
-        		}
-	        	else
-	        	{
+		        	String orientationBool = a.getParameterValue(ParameterTypes.OrganizerOrientation);
+		        	String orient;
+		        	if (Boolean.parseBoolean(orientationBool))
+		        	{
+		        		orient = "downward";
+		        	}
+		        	else
+		        	{
+		        		orient = "upward";
+		        	}
+		        	String width = a.getParameterValue(ParameterTypes.OrganizerBoxWidth);
+		        	String height = a.getParameterValue(ParameterTypes.OrganizerBoxHeight);
+		        	input = "Orientation: " + orient + "; Width: " + width + "; Height: " + height;
+		        	action = "Auto Organize";
+	        		break;
+	        	case ChangeFontSize:
+	        		toolMsg.setAsAttempt("");
+		        	input = "Font Size: " + a.getParameterValue(ParameterTypes.FontSize);
+		        	action = "Change Font Size";
+	        		break;
+	        	default:
 	        		return;
-	        	}
-	        	input = "";
-	        }
-	        else if (command.equals("AutoOrganize"))
-	        {
-	        	toolMsg.setAsAttempt("");
-	        	String orientationBool = a.getParameterValue(ParameterTypes.OrganizerOrientation);
-	        	String orient;
-	        	if (Boolean.parseBoolean(orientationBool))
-	        	{
-	        		orient = "downward";
-	        	}
-	        	else
-	        	{
-	        		orient = "upward";
-	        	}
-	        	String width = a.getParameterValue(ParameterTypes.OrganizerBoxWidth);
-	        	String height = a.getParameterValue(ParameterTypes.OrganizerBoxHeight);
-	        	input = "Orientation: " + orient + "; Width: " + width + "; Height: " + height;
-	        	action = "Auto Organize";
-	        }
-	        else if (command.equals("ChangeFontSize"))
-	        {
-	        	toolMsg.setAsAttempt("");
-	        	input = "Font Size: " + a.getParameterValue(ParameterTypes.FontSize);
-	        	action = "Change Font Size";
-	        }
-	        else
-	        {
-	        	return;
 	        }
 
 	        if (selection != null && action != null && input != null)
@@ -298,10 +328,9 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 
 	        if (shouldLogContext)
 	        {
-	        	Logger.debugLog("Logging context message");
 	        	if (dsLogger.log(contextMsg))
 		        {
-		        	loggedContexts.add(CONTEXT_REF);
+		        	loggedContexts.put(CONTEXT_REF, contextMsg);
 		        }
 		        else
 		        {
@@ -722,6 +751,9 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		boolean returnValue = false;
 		if (u != null && a.getCategory().equals(Categories.Map)) {
 			switch (a.getCmd()) {
+			case StartAutoOrganize:
+				autoOrganizeStatuses.put(Map.getMapName(this.aproc.getMapIDFromAction(a)), true);
+				break;	
 			case ChangeFontSize:
 				processChangeFontSize(a, u);
 				returnValue = true;
@@ -731,6 +763,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				returnValue = true;
 				break;
 			case UpdateElement:
+			case AutoResizeTextBox:
 				processUpdateElement(a, u);
 				returnValue = true;
 				break;
@@ -747,7 +780,8 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				processBackgroudImage(a, u);
 				returnValue = true;
 				break;
-			case AutoOrganize:
+			case FinishAutoOrganize:
+				autoOrganizeStatuses.put(Map.getMapName(this.aproc.getMapIDFromAction(a)), false);
 				processAutoOrganize(a, u);
 				returnValue = true;
 				break;
@@ -755,7 +789,16 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				break;
 			}
 		}
-		if (returnValue)
+		boolean shouldLog;
+		try
+		{
+			shouldLog = !autoOrganizeStatuses.get(Map.getMapName(this.aproc.getMapIDFromAction(a)));
+		}
+		catch (Exception e)
+		{
+			shouldLog = true;
+		}
+		if (returnValue && shouldLog)
 		{
 			logToDataShop(a, u);
 		}

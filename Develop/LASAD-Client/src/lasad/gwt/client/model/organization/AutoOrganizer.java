@@ -137,6 +137,8 @@ public class AutoOrganizer
 		final boolean DOWNWARD = downward;
 		Logger.log("[lasad.gwt.client.model.organization.AutoOrganizer] Beginning organizeMap", Logger.DEBUG);
 
+		communicator.sendActionPackage(actionBuilder.startAutoOrganization(map.getID()));
+
 		// Try catch just because organizeMap is complicated and if there's an error we don't want a crash
 		try
 		{
@@ -310,10 +312,6 @@ public class AutoOrganizer
 			// Send the new positions to the server
 			updateBoxPositions(boxesToSendToServer);
 
-			// Position the cursor of the map
-			final double[] SCROLL_EDGE = determineScrollEdge(DOWNWARD);
-			communicator.sendActionPackage(actionBuilder.finishAutoOrganization(map.getID(), DOWNWARD, this.getBoxWidth(), this.getMinBoxHeight(), SCROLL_EDGE[0], SCROLL_EDGE[1]));
-
 		}
 		// Just in case
 		catch (Exception e)
@@ -327,13 +325,18 @@ public class AutoOrganizer
 		}
 		finally
 		{
+			// Position the cursor of the map
+			final double[] SCROLL_EDGE = determineScrollEdge(DOWNWARD);
+			communicator.sendActionPackage(actionBuilder.finishAutoOrganization(map.getID(), DOWNWARD, this.getBoxWidth(), this.getMinBoxHeight(), SCROLL_EDGE[0], SCROLL_EDGE[1]));
+
 			// Free some memory for speed (garbage collector will take the nullified values)
 			for (ArgumentThread argThread : argModel.getArgThreads())
 			{
 				argThread.getGrid().empty();
 			}
+
+			Logger.log("[lasad.gwt.client.model.organization.AutoOrganizer] Finishing organizeMap", Logger.DEBUG);		
 		}
-		Logger.log("[lasad.gwt.client.model.organization.AutoOrganizer] Finishing organizeMap", Logger.DEBUG);		
 	}
 
 	/**

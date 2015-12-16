@@ -6,7 +6,7 @@
 	position: absolute;
 	z-index: 0;
 	color: #000000;
-	}
+}
 
 .gwt-diagrams-vml-group {
 	position: absolute;
@@ -27,21 +27,22 @@
 	width: 1px;
 }
 
-
 .gwt-diagrams-line {
 	position: absolute;
 	background-color: #000000;
 	border: 0px none transparent;
 	width: 1px;
 	height: 1px;
-    font-size: 1px;
-    line-height: 0;
+	font-size: 1px;
+	line-height: 0;
 }
 
 .gwt-diagrams-line-vertical {
+	
 }
 
 .gwt-diagrams-line-horizontal {
+	
 }
 
 .gwt-diagrams-ending {

@@ -1597,10 +1597,13 @@ public abstract class AbstractBox extends LASADBoxComponent implements MVCViewRe
 	 * @author BM
 	 * @date 25.06.2012
 	 */	
-	public void textAreaCallNewHeightgrow(int height) {
-		autogrow = true;
-		setSize(getWidth(), getHeight()+ height);
-		LASADActionSender.getInstance().sendActionPackage(ActionFactory.getInstance().updateBoxSize(myMap.getID(), AbstractBox.this.getConnectedModel().getId(), getWidth(), getHeight()));
-		autogrow = false;
+	public void textAreaCallNewHeightgrow(int heightToAdd) {
+		if (heightToAdd != 0)
+		{
+			autogrow = true;
+			setSize(getWidth(), getHeight()+ heightToAdd);
+			LASADActionSender.getInstance().sendActionPackage(ActionFactory.getInstance().autoResizeTextBox(myMap.getID(), AbstractBox.this.getConnectedModel().getId(), getWidth(), getHeight()));
+			autogrow = false;
+		}
 	}
 }

@@ -728,10 +728,14 @@ public class LASADActionReceiver {
 					controller.updateElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)), a.getParameters());
 				}
 			}
-			else if (a.getCmd().equals(Commands.AutoOrganize))
+			else if (a.getCmd().equals(Commands.FinishAutoOrganize))
 			{
-				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] AUTO-ORGANIZE", Logger.DEBUG);
+				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] FINISHING AUTO-ORGANIZE", Logger.DEBUG);
 				this.handleAutoOrganization(a);
+			}
+			else if (a.getCmd().equals(Commands.StartAutoOrganize))
+			{
+				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] STARTING AUTO-ORGANIZE", Logger.DEBUG);
 			}
 			else if (a.getCmd().equals(Commands.UpdateCursorPosition)) {
 
@@ -1097,9 +1101,13 @@ public class LASADActionReceiver {
 				}
 
 			}
-			else if (a.getCmd().equals(Commands.AutoOrganize))
+			else if (a.getCmd().equals(Commands.StartAutoOrganize))
 			{
-				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] AUTO-ORGANIZE", Logger.DEBUG);
+				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] STARTING AUTO-ORGANIZE", Logger.DEBUG);
+			}
+			else if (a.getCmd().equals(Commands.FinishAutoOrganize))
+			{
+				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] FINISHING AUTO-ORGANIZE", Logger.DEBUG);
 				this.handleAutoOrganization(a);
 			}
 			else if (a.getCmd().equals(Commands.UpdateCursorPosition)) {
@@ -1287,7 +1295,8 @@ public class LASADActionReceiver {
 		case UpdateElement:
 		case DeleteElement:
 		case ChangeFontSize:
-		case AutoOrganize:
+		case StartAutoOrganize:
+		case FinishAutoOrganize:
 		case ChatMsg:
 			init.createAllReplayActions(a);
 			break;
