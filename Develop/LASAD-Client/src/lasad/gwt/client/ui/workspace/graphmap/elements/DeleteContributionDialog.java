@@ -1,6 +1,6 @@
 package lasad.gwt.client.ui.workspace.graphmap.elements;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -41,7 +41,7 @@ public class DeleteContributionDialog extends Window
 	private String correspondingMapId;
 
 	private ArgumentModel argModel;
-	private HashSet<LinkedBox> boxes;
+	private Set<LinkedBox> boxes;
 	private final LASADActionSender communicator = LASADActionSender.getInstance();
 	private final ActionFactory actionBuilder = ActionFactory.getInstance();
 	private MVController myController = null;

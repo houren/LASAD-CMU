@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Map;
-import java.util.Collection;
 import java.util.ArrayList;
 
 import lasad.gwt.client.model.organization.OrganizerLink;
@@ -42,13 +41,13 @@ public class LinkedBox
 	private double yCenter;
 
 	// In these hashmaps, integer is linkID
-	private HashMap<Integer, OrganizerLink> childLinks;
-	private HashMap<Integer, OrganizerLink> parentLinks;
-	private HashMap<Integer, OrganizerLink> siblingLinks;
+	private Map<Integer, OrganizerLink> childLinks;
+	private Map<Integer, OrganizerLink> parentLinks;
+	private Map<Integer, OrganizerLink> siblingLinks;
 
-	private HashSet<LinkedBox> childBoxes;
-	private HashSet<LinkedBox> parentBoxes;
-	private HashSet<LinkedBox> siblingBoxes;
+	private Set<LinkedBox> childBoxes;
+	private Set<LinkedBox> parentBoxes;
+	private Set<LinkedBox> siblingBoxes;
 
 	// Height and width level will be used like a coordinate grid once we come to organizeMap() of AutoOrganizer
 	private int heightLevel;
@@ -229,22 +228,22 @@ public class LinkedBox
 		this.yTop = yCenter - this.height / 2.0;
 	}
 
-	public Collection<OrganizerLink> getChildLinks()
+	public Set<OrganizerLink> getChildLinks()
 	{
-		return childLinks.values();
+		return new HashSet(childLinks.values());
 	}
 
-	public Collection<OrganizerLink> getParentLinks()
+	public Set<OrganizerLink> getParentLinks()
 	{
-		return parentLinks.values();
+		return new HashSet(parentLinks.values());
 	}
 
-	public Collection<OrganizerLink> getSiblingLinks()
+	public Set<OrganizerLink> getSiblingLinks()
 	{
-		return siblingLinks.values();
+		return new HashSet(siblingLinks.values());
 	}
 
-	public HashSet<LinkedBox> getChildBoxes()
+	public Set<LinkedBox> getChildBoxes()
 	{
 		return childBoxes;
 	}
@@ -253,10 +252,10 @@ public class LinkedBox
 	 *	Only for use during auto organization, because it requires height levels to be assigned on the grid.
 	 *	Next level is defined as this box's height level plus one
 	 */
-	public HashSet<LinkedBox> getChildBoxesOnNextLevel()
+	public Set<LinkedBox> getChildBoxesOnNextLevel()
 	{
-		HashSet<LinkedBox> childBoxesOnNextLevel = new HashSet<LinkedBox>(this.getChildBoxes());
-		HashSet<LinkedBox> toRemove = new HashSet<LinkedBox>();
+		Set<LinkedBox> childBoxesOnNextLevel = new HashSet<LinkedBox>(this.getChildBoxes());
+		Set<LinkedBox> toRemove = new HashSet<LinkedBox>();
 		final int CHILD_HEIGHT = this.getHeightLevel() + 1;
 		for (LinkedBox box : childBoxesOnNextLevel)
 		{
@@ -269,7 +268,7 @@ public class LinkedBox
 		return childBoxesOnNextLevel;
 	}
 
-	public HashSet<LinkedBox> getParentBoxes()
+	public Set<LinkedBox> getParentBoxes()
 	{
 		return parentBoxes;
 	}
@@ -278,10 +277,10 @@ public class LinkedBox
 	 *	Only for use during auto organization, because it requires height levels to be assigned on the grid.
 	 *	Previous level is defined as this box's height level minus one.
 	 */
-	public HashSet<LinkedBox> getParentBoxesOnPreviousLevel()
+	public Set<LinkedBox> getParentBoxesOnPreviousLevel()
 	{
-		HashSet<LinkedBox> parentBoxesOnPreviousLevel = new HashSet<LinkedBox>(this.getParentBoxes());
-		HashSet<LinkedBox> toRemove = new HashSet<LinkedBox>();
+		Set<LinkedBox> parentBoxesOnPreviousLevel = new HashSet<LinkedBox>(this.getParentBoxes());
+		Set<LinkedBox> toRemove = new HashSet<LinkedBox>();
 		final int PARENT_HEIGHT = this.getHeightLevel() - 1;
 		for (LinkedBox box : parentBoxesOnPreviousLevel)
 		{
@@ -294,7 +293,7 @@ public class LinkedBox
 		return parentBoxesOnPreviousLevel;
 	}
 
-	public HashSet<LinkedBox> getSiblingBoxes()
+	public Set<LinkedBox> getSiblingBoxes()
 	{
 		return siblingBoxes;
 	}
@@ -345,13 +344,13 @@ public class LinkedBox
 	/**
 	 *	Returns this box and it's extended siblings (its siblings and any siblings of those siblings) from left to right order (if applicable)
 	 */
-	public HashSet<LinkedBox> getThisAndExtendedSiblings()
+	public Set<LinkedBox> getThisAndExtendedSiblings()
 	{
 		return findThisAndExtendedSiblings(this, new HashSet<LinkedBox>());
 	}
 
 	// intialize currentBox as this and accumulated should be empty; RECURSIVE
-	private HashSet<LinkedBox> findThisAndExtendedSiblings(LinkedBox currentBox, HashSet<LinkedBox> accumulated)
+	private Set<LinkedBox> findThisAndExtendedSiblings(LinkedBox currentBox, Set<LinkedBox> accumulated)
 	{
 		if (!accumulated.contains(currentBox))
 		{
@@ -465,9 +464,9 @@ public class LinkedBox
 	/**
 	 *	Gets ALL directly related boxes (parents, chidlren, and immediate siblings)
 	 */
-	public HashSet<LinkedBox> getRelatedBoxes()
+	public Set<LinkedBox> getRelatedBoxes()
 	{
-		HashSet<LinkedBox> relatedBoxes = new HashSet<LinkedBox>();
+		Set<LinkedBox> relatedBoxes = new HashSet<LinkedBox>();
 		relatedBoxes.addAll(this.getChildBoxes());
 		relatedBoxes.addAll(this.getParentBoxes());
 		relatedBoxes.addAll(this.getSiblingBoxes());
@@ -637,7 +636,7 @@ public class LinkedBox
 	 */
 	class VisitedAndBoolHolder
 	{
-		private HashSet<LinkedBox> visited;
+		private Set<LinkedBox> visited;
 		private boolean foundExtendedSibling;
 
 		public VisitedAndBoolHolder()
@@ -656,7 +655,7 @@ public class LinkedBox
 			foundExtendedSibling = found;
 		}
 
-		public HashSet<LinkedBox> getVisited()
+		public Set<LinkedBox> getVisited()
 		{
 			return visited;
 		}
@@ -686,7 +685,7 @@ public class LinkedBox
 			}
 			else
 			{
-				HashSet<LinkedBox> siblingBoxes = box.getSiblingBoxes();
+				Set<LinkedBox> siblingBoxes = box.getSiblingBoxes();
 				for (LinkedBox siblingBox : siblingBoxes)
 				{
 					if (extendedSiblingRecursive(siblingBox, BOX_TO_FIND, holder).getFound())
@@ -736,7 +735,7 @@ public class LinkedBox
 	 */
 	public boolean isPartOfGroupWithParentLinkTo(LinkedBox endBox)
 	{
-		HashSet<LinkedBox> startBoxAndExtSibs = this.getThisAndExtendedSiblings();
+		Set<LinkedBox> startBoxAndExtSibs = this.getThisAndExtendedSiblings();
 		for (LinkedBox startBox : startBoxAndExtSibs)
 		{
 			if (endBox.hasChildLinkWith(startBox))
@@ -768,17 +767,17 @@ public class LinkedBox
 		this.siblingLinks = new HashMap<Integer, OrganizerLink>(siblingLinks);
 	}
 
-	public void setChildBoxes(Collection<LinkedBox> childBoxes)
+	public void setChildBoxes(Set<LinkedBox> childBoxes)
 	{
 		this.childBoxes = new HashSet<LinkedBox>(childBoxes);
 	}
 
-	public void setParentBoxes(Collection<LinkedBox> parentBoxes)
+	public void setParentBoxes(Set<LinkedBox> parentBoxes)
 	{
 		this.parentBoxes = new HashSet<LinkedBox>(parentBoxes);
 	}
 
-	public void setSiblingBoxes(Collection<LinkedBox> siblingBoxes)
+	public void setSiblingBoxes(Set<LinkedBox> siblingBoxes)
 	{
 		this.siblingBoxes = new HashSet<LinkedBox>(siblingBoxes);
 	}

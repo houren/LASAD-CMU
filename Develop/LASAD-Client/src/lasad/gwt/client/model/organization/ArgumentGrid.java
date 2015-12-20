@@ -3,7 +3,9 @@ package lasad.gwt.client.model.organization;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.Collection;
 
 import lasad.gwt.client.model.organization.LinkedBox;
@@ -25,17 +27,17 @@ public class ArgumentGrid
 	private final int VERT_SPACE = 1;
 
 	// The actual grid, wrapped in this class
-	private HashMap<Coordinate, LinkedBox> grid;
+	private Map<Coordinate, LinkedBox> grid;
 
 	public ArgumentGrid()
 	{
 		grid = new HashMap<Coordinate, LinkedBox>();
 	}
 
-	private ArgumentGrid(HashMap<Coordinate, LinkedBox> grid)
+	private ArgumentGrid(Map<Coordinate, LinkedBox> grid)
 	{
 		this();
-		this.grid = (HashMap<Coordinate, LinkedBox>) grid.clone();
+		this.grid = new HashMap<Coordinate, LinkedBox>(grid);
 	}
 
 	/**
@@ -51,13 +53,13 @@ public class ArgumentGrid
 		return this.grid.size();
 	}
 
-	public Collection<LinkedBox> getBoxes()
+	public Set<LinkedBox> getBoxes()
 	{
-		return grid.values();
+		return new HashSet(grid.values());
 	}
 
 	/* If they want the boxes, they can get them with getBoxes.  This is just for inside this class. */
-	private HashMap<Coordinate, LinkedBox> getGrid()
+	private Map<Coordinate, LinkedBox> getGrid()
 	{
 		return grid;
 	}
@@ -65,7 +67,7 @@ public class ArgumentGrid
 	/*
 		Recursively sets height levels, assuming upward orientation (if downward orientation is being used, we will flip at the end of organization)
 	*/
-	private HashSet<LinkedBox> recursivelySetHeightLevels(LinkedBox box, final int HEIGHT_LEVEL, HashSet<LinkedBox> visited)
+	private Set<LinkedBox> recursivelySetHeightLevels(LinkedBox box, final int HEIGHT_LEVEL, Set<LinkedBox> visited)
 	{
 		if (!visited.contains(box))
 		{
@@ -124,11 +126,11 @@ public class ArgumentGrid
 		This base row then allows us to build the other rows from it.  Boxes will be placed into groups, with groups with higher average
 		number of parents going to the middle and ones with fewer parents going to the edges of the row.
 	*/
-	private void sortAndPutStartRow(Collection<LinkedBox> startRow)
+	private void sortAndPutStartRow(Set<LinkedBox> startRow)
 	{
 		Logger.log("[lasad.gwt.client.model.organization.ArgumentGrid] Adding start row to grid...", Logger.DEBUG);
 		final int SIZE = startRow.size();
-		HashSet<LinkedBox> visited = new HashSet<LinkedBox>();
+		Set<LinkedBox> visited = new HashSet<LinkedBox>();
 
 		// Even single boxes will be treated as "groups" of 1 box, so that we can treat groups/solo boxes in the same manner for simplicity
 		ArrayList<ArrayList<LinkedBox>> boxesAsGroups = new ArrayList<ArrayList<LinkedBox>>();
@@ -156,7 +158,7 @@ public class ArgumentGrid
 		}
 
 		// The key is the arraylist of the organized group in ascending width order.  the value is the average number of parents for each box in the group
-		HashMap<ArrayList<LinkedBox>, Integer> groupWithAverageParents = new HashMap<ArrayList<LinkedBox>, Integer>();
+		Map<ArrayList<LinkedBox>, Integer> groupWithAverageParents = new HashMap<ArrayList<LinkedBox>, Integer>();
 
 		// Calculate the average number of parents for each group and put it in the hashmap
 		for (ArrayList<LinkedBox> group : boxesAsGroups)
@@ -245,7 +247,7 @@ public class ArgumentGrid
 	}
 
 	// By Darlan Santana Farias
-	private void fixCounterOrientedLinks(Collection<LinkedBox> boxesToPutOnGrid)
+	private void fixCounterOrientedLinks(Set<LinkedBox> boxesToPutOnGrid)
 	{
 		for(LinkedBox box : boxesToPutOnGrid)
 		{
@@ -300,7 +302,7 @@ public class ArgumentGrid
 			return this;
 		}
 
-		HashSet<LinkedBox> boxesToPutOnGrid = recursivelySetHeightLevels(startBox, 0, new HashSet<LinkedBox>());
+		Set<LinkedBox> boxesToPutOnGrid = recursivelySetHeightLevels(startBox, 0, new HashSet<LinkedBox>());
 
 		fixCounterOrientedLinks(boxesToPutOnGrid);
 
@@ -316,7 +318,7 @@ public class ArgumentGrid
 		final int MAX_ROW = minMaxHeightLevels.getMax();
 
 		// Gather the maxRow boxes
-		HashSet<LinkedBox> maxRowBoxes = new HashSet<LinkedBox>();
+		Set<LinkedBox> maxRowBoxes = new HashSet<LinkedBox>();
 		for (LinkedBox box : boxesToPutOnGrid)
 		{
 			final int HEIGHT = box.getHeightLevel();
@@ -389,8 +391,8 @@ public class ArgumentGrid
 			{
 				LinkedBox rowBox = rowBoxes.get(i);
 
-				HashSet<LinkedBox> parents = new HashSet<LinkedBox>(rowBox.getParentBoxes());
-				HashSet<LinkedBox> toRemove = new HashSet<LinkedBox>();
+				Set<LinkedBox> parents = new HashSet<LinkedBox>(rowBox.getParentBoxes());
+				Set<LinkedBox> toRemove = new HashSet<LinkedBox>();
 				for (LinkedBox parent : parents)
 				{
 					if (parent.getHeightLevel() != HEIGHT_BELOW)
@@ -401,7 +403,7 @@ public class ArgumentGrid
 
 				parents.removeAll(toRemove);
 
-				HashSet<LinkedBox> sharers = new HashSet<LinkedBox>();
+				Set<LinkedBox> sharers = new HashSet<LinkedBox>();
 
 				// We put parents that are "sharing" children to the right, that way they can be near both their children.
 				// This is why they are handled separately below.  We also only deal with parents that aren't already on the grid.
@@ -527,7 +529,7 @@ public class ArgumentGrid
 	}
 
 	// Just to update the grid if we need to internally
-	private void setGrid(HashMap<Coordinate, LinkedBox> grid)
+	private void setGrid(Map<Coordinate, LinkedBox> grid)
 	{
 		this.grid = grid;
 	}
@@ -535,7 +537,7 @@ public class ArgumentGrid
 	/*
 	 *	Takes the boxes in vertical and horizontal order on a grid and aligns them into a pretty, centered layout
 	 */
-	private HashMap<Coordinate, LinkedBox> alignBoxes(ArgumentGrid origGrid)
+	private Map<Coordinate, LinkedBox> alignBoxes(ArgumentGrid origGrid)
 	{
 		Logger.log("[lasad.gwt.client.model.organization.ArgumentGrid] Aligning boxes...", Logger.DEBUG);
 		final ArgumentGrid origGridCopy = origGrid.clone();
@@ -578,7 +580,7 @@ public class ArgumentGrid
 				LinkedBox parentLevelBox = allParentLevelBoxes.get(i);	
 				ArrayList<LinkedBox> parentGroup = new ArrayList<LinkedBox>();
 				parentGroup.add(parentLevelBox);
-				HashSet<LinkedBox> unsortedChildGroup = parentLevelBox.getChildBoxes();
+				Set<LinkedBox> unsortedChildGroup = parentLevelBox.getChildBoxes();
 				ArrayList<LinkedBox> childGroup = new ArrayList<LinkedBox>();
 				for (LinkedBox childLevelBox : childBoxesOnOldGrid)
 				{
@@ -597,7 +599,7 @@ public class ArgumentGrid
 				for (int j = i + 1; j < PARENT_LEVEL_SIZE; j++)
 				{
 					LinkedBox otherParent = allParentLevelBoxes.get(j);
-					HashSet<LinkedBox> otherChildren = otherParent.getChildBoxes();
+					Set<LinkedBox> otherChildren = otherParent.getChildBoxes();
 					if (otherChildren.containsAll(childGroup))
 					{
 						parentGroup.add(otherParent);
@@ -665,9 +667,9 @@ public class ArgumentGrid
 		}
 	}
 
-	private ArrayList<LinkedBox> sortAscendingNumParents(final Collection<LinkedBox> group)
+	private ArrayList<LinkedBox> sortAscendingNumParents(final Set<LinkedBox> group)
 	{
-		HashSet<LinkedBox> unsortedChildGroup = new HashSet<LinkedBox>(group);
+		Set<LinkedBox> unsortedChildGroup = new HashSet<LinkedBox>(group);
 		ArrayList<LinkedBox> sortedChildGroup = new ArrayList<LinkedBox>();
 
 		final int SIZE = group.size();
@@ -697,7 +699,7 @@ public class ArgumentGrid
 	// Sorts a collection of boxes from lowest to greatest widthLevel, returned as an ArrayList
 	private ArrayList<LinkedBox> sortAscendingWidth(final Collection<LinkedBox> origBoxes)
 	{
-		HashSet<LinkedBox> boxes = new HashSet<LinkedBox>(origBoxes);
+		Set<LinkedBox> boxes = new HashSet<LinkedBox>(origBoxes);
 		ArrayList<LinkedBox> sortedBoxes = new ArrayList<LinkedBox>();
 
 		final int SIZE = boxes.size();
@@ -787,7 +789,7 @@ public class ArgumentGrid
 	 */
 	private ArrayList<LinkedBox> sortGroup(LinkedBox original)
 	{
-		HashSet<LinkedBox> siblings = original.getSiblingBoxes();
+		Set<LinkedBox> siblings = original.getSiblingBoxes();
 		if (siblings.size() < 2)
 		{
 			return sortGroup(original, original.getWidthLevel());
@@ -797,7 +799,7 @@ public class ArgumentGrid
 			ArrayList<LinkedBox> orderedSiblings = sortAscendingWidth(siblings);
 			final int origWidthLevel = original.getWidthLevel();
 			final int origHeightLevel = original.getHeightLevel();
-			HashSet<LinkedBox> siblingGroup = new HashSet<LinkedBox>();
+			Set<LinkedBox> siblingGroup = new HashSet<LinkedBox>();
 			siblingGroup.add(original);
 			boolean isFirstSibling = true;
 
@@ -821,7 +823,7 @@ public class ArgumentGrid
 	/*
 	 *	Siblings in one direction should all increase in widthLevel, the other direction must decrease
 	 */
-	private HashSet<LinkedBox> assignGridPositionToSibling(LinkedBox box, final boolean shouldIncrease, final int widthLevel, final int heightLevel, HashSet<LinkedBox> visited)
+	private Set<LinkedBox> assignGridPositionToSibling(LinkedBox box, final boolean shouldIncrease, final int widthLevel, final int heightLevel, Set<LinkedBox> visited)
 	{
 		if (!visited.contains(box))
 		{
@@ -845,7 +847,7 @@ public class ArgumentGrid
 	/**
 	 *	Get the min and max height levels of the passed set of boxes.
 	 */
-	public static IntPair determineMinMaxHeightLevels(Collection<LinkedBox> boxes)
+	public static IntPair determineMinMaxHeightLevels(Set<LinkedBox> boxes)
 	{
 		int minLevel = Integer.MAX_VALUE;
 		int maxLevel = Integer.MIN_VALUE;
@@ -871,7 +873,7 @@ public class ArgumentGrid
 	/**
 	 *	Get the min and max width levels of the passed set of boxes.
 	 */
-	public static IntPair determineMinMaxWidthLevels(Collection<LinkedBox> boxes)
+	public static IntPair determineMinMaxWidthLevels(Set<LinkedBox> boxes)
 	{
 		int minLevel = Integer.MAX_VALUE;
 		int maxLevel = Integer.MIN_VALUE;
@@ -897,9 +899,9 @@ public class ArgumentGrid
 	/**
 	 *	Gets the boxes on the grid at the passed width level, returning them in no particular order
 	 */
-	public HashSet<LinkedBox> getBoxesAtWidthLevel(int widthLevel)
+	public Set<LinkedBox> getBoxesAtWidthLevel(int widthLevel)
 	{
-		HashSet<LinkedBox> boxesAtWidthLevel = new HashSet<LinkedBox>();
+		Set<LinkedBox> boxesAtWidthLevel = new HashSet<LinkedBox>();
 		for (LinkedBox box : grid.values())
 		{
 			if (box.getWidthLevel() == widthLevel)
@@ -916,7 +918,7 @@ public class ArgumentGrid
 	 */
 	public ArrayList<LinkedBox> getBoxesAtHeightLevel(int heightLevel)
 	{
-		HashSet<LinkedBox> boxesAtHeightLevel = new HashSet<LinkedBox>();
+		Set<LinkedBox> boxesAtHeightLevel = new HashSet<LinkedBox>();
 		for (LinkedBox box : grid.values())
 		{
 			if (box.getHeightLevel() == heightLevel)
@@ -996,11 +998,11 @@ public class ArgumentGrid
 	@Override
 	public String toString()
 	{
-		IntPair heightData = determineMinMaxHeightLevels(grid.values());
+		IntPair heightData = determineMinMaxHeightLevels(new HashSet(grid.values()));
 		int minHeight = heightData.getMin();
 		int maxHeight = heightData.getMax();
 
-		IntPair widthData = determineMinMaxWidthLevels(grid.values());
+		IntPair widthData = determineMinMaxWidthLevels(new HashSet(grid.values()));
 		int minWidth = widthData.getMin();
 		int maxWidth = widthData.getMax();
 

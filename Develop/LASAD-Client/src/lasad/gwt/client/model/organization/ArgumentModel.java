@@ -2,7 +2,8 @@ package lasad.gwt.client.model.organization;
 
 import java.util.HashSet;
 import java.util.HashMap;
-import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ import com.extjs.gxt.ui.client.widget.Component;
  */
 public class ArgumentModel
 {
-	private HashSet<ArgumentThread> argThreads;
+	private Set<ArgumentThread> argThreads;
 	private int fontSize = 10;
 	private MVController controller;
 
@@ -106,9 +107,9 @@ public class ArgumentModel
 		LinkedBox startBox = removedLink.getStartBox();
 		LinkedBox endBox = removedLink.getEndBox();
 
-		HashSet<LinkedBox> origThreadBoxes = new HashSet<LinkedBox>();
+		Set<LinkedBox> origThreadBoxes = new HashSet<LinkedBox>();
 
-		HashSet<LinkedBox> possibleNewThreadBoxes = new HashSet<LinkedBox>();
+		Set<LinkedBox> possibleNewThreadBoxes = new HashSet<LinkedBox>();
 
 		if (startBox != null && endBox != null)
 		{
@@ -139,7 +140,7 @@ public class ArgumentModel
 	 *	@param box - The box currently being visited, should be initialized as the endBox of the deleted link
 	 *	@param boxesReached - The boxes so far reached, should be initialized as a new, empty HashSet
 	 */
-	private HashSet<LinkedBox> visitRecursive(LinkedBox box, HashSet<LinkedBox> boxesReached)
+	private Set<LinkedBox> visitRecursive(LinkedBox box, Set<LinkedBox> boxesReached)
 	{
 		if (!boxesReached.contains(box))
 		{
@@ -171,10 +172,10 @@ public class ArgumentModel
 	// I.e. remove threads that are empty
 	public void removeExcessThreads()
 	{
-		HashSet<ArgumentThread> threadsToRemove = new HashSet<ArgumentThread>();
+		Set<ArgumentThread> threadsToRemove = new HashSet<ArgumentThread>();
 		for (ArgumentThread argThread : argThreads)
 		{
-			Collection<LinkedBox> boxes = argThread.getBoxes();
+			Set<LinkedBox> boxes = argThread.getBoxes();
 			if (boxes.size() == 0)
 			{
 				threadsToRemove.add(argThread);
@@ -202,9 +203,9 @@ public class ArgumentModel
 		}
 	}
 
-	public HashSet<LinkedBox> getBoxes()
+	public Set<LinkedBox> getBoxes()
 	{
-		HashSet<LinkedBox> boxes = new HashSet<LinkedBox>();
+		Set<LinkedBox> boxes = new HashSet<LinkedBox>();
 		for (ArgumentThread argThread : this.getArgThreads())
 		{
 			boxes.addAll(argThread.getBoxes());
@@ -271,7 +272,7 @@ public class ArgumentModel
 		return null;
 	}
 
-	public HashSet<ArgumentThread> getArgThreads()
+	public Set<ArgumentThread> getArgThreads()
 	{
 		return argThreads;
 	}

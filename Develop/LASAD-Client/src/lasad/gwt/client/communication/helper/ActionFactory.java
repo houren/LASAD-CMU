@@ -408,6 +408,7 @@ public class ActionFactory {
 //		Action a = new Action("DELETE-ELEMENT", "MAP");
 		a.addParameter(ParameterTypes.MapId, mapID);
 		a.addParameter(ParameterTypes.Id, String.valueOf(id));
+		a.addParameter(ParameterTypes.Type, LASAD_Client.getMVCController(mapID).getElement(id).getType());
 		a.addParameter(ParameterTypes.LinksAlreadyRemoved, "false");
 		return a;
 	}
@@ -417,6 +418,7 @@ public class ActionFactory {
 		Action a = new Action(Commands.DeleteElement, Categories.Map);
 //		Action a = new Action("DELETE-ELEMENT", "MAP");
 		a.addParameter(ParameterTypes.MapId, mapID);
+		a.addParameter(ParameterTypes.Type, LASAD_Client.getMVCController(mapID).getElement(id).getType());
 		a.addParameter(ParameterTypes.Id, String.valueOf(id));
 		a.addParameter(ParameterTypes.LinksAlreadyRemoved, "false");
 
@@ -431,6 +433,7 @@ public class ActionFactory {
 		Action a = new Action(Commands.DeleteElement, Categories.Map);
 //		Action a = new Action("DELETE-ELEMENT", "MAP");
 		a.addParameter(ParameterTypes.MapId, mapID);
+		a.addParameter(ParameterTypes.Type, LASAD_Client.getMVCController(mapID).getElement(id).getType());
 		a.addParameter(ParameterTypes.Id, String.valueOf(id));
 		a.addParameter(ParameterTypes.LinksAlreadyRemoved, "true");
 

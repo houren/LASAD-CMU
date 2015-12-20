@@ -1,10 +1,11 @@
 package lasad.gwt.client.model.organization;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.HashSet;
 import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.model.organization.OrganizerLink;
-import java.util.Collection;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.organization.ArgumentGrid;
 
@@ -18,7 +19,7 @@ import lasad.gwt.client.model.organization.ArgumentGrid;
 public class ArgumentThread
 {
 	// HashMap allows for constant lookup time by BoxID
-	private HashMap<Integer, LinkedBox> boxMap;
+	private Map<Integer, LinkedBox> boxMap;
 
 	private static int assigner = Integer.MIN_VALUE;
 
@@ -41,7 +42,7 @@ public class ArgumentThread
 		this.addBox(box);
 	}
 
-	public ArgumentThread(Collection<LinkedBox> boxes)
+	public ArgumentThread(Set<LinkedBox> boxes)
 	{
 		this();
 		for (LinkedBox box : boxes)
@@ -50,9 +51,9 @@ public class ArgumentThread
 		}
 	}
 
-	public Collection<LinkedBox> getBoxes()
+	public Set<LinkedBox> getBoxes()
 	{
-		return boxMap.values();
+		return new HashSet(boxMap.values());
 	}
 
 	// This is kinda a weird way of doing this but it works and seems neat enough, so I guess don't fix something that isn't broken? TBD
@@ -104,7 +105,7 @@ public class ArgumentThread
 		}
 	}
 
-	public void addBoxes(Collection<LinkedBox> boxes)
+	public void addBoxes(Set<LinkedBox> boxes)
 	{
 		for (LinkedBox box : boxes)
 		{
@@ -142,7 +143,7 @@ public class ArgumentThread
 
 	public void removeLinksTo(LinkedBox boxBeingRemoved)
 	{
-		HashSet<LinkedBox> relatedBoxes = boxBeingRemoved.getRelatedBoxes();
+		Set<LinkedBox> relatedBoxes = boxBeingRemoved.getRelatedBoxes();
 		for (LinkedBox box : this.getBoxes())
 		{
 			if (relatedBoxes.contains(box))
@@ -152,7 +153,7 @@ public class ArgumentThread
 		}
 	}
 
-	public void removeBoxes(Collection<LinkedBox> boxes)
+	public void removeBoxes(Set<LinkedBox> boxes)
 	{
 		for (LinkedBox box : boxes)
 		{
@@ -203,9 +204,9 @@ public class ArgumentThread
 		if (o instanceof ArgumentThread)
 		{
 			ArgumentThread other = (ArgumentThread) o;
-			Collection<LinkedBox> thisBoxes = this.getBoxes();
+			Set<LinkedBox> thisBoxes = this.getBoxes();
 			int thisSize = thisBoxes.size();
-			Collection<LinkedBox> otherBoxes = other.getBoxes();
+			Set<LinkedBox> otherBoxes = other.getBoxes();
 			if (thisSize != otherBoxes.size())
 			{
 				return false;

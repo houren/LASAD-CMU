@@ -1,9 +1,9 @@
 package lasad.gwt.client.model.organization;
 
 import java.util.HashSet;
-import java.util.Collection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import lasad.gwt.client.communication.helper.ActionFactory;
 import lasad.gwt.client.communication.LASADActionSender;
@@ -142,7 +142,7 @@ public class AutoOrganizer
 		// Try catch just because organizeMap is complicated and if there's an error we don't want a crash
 		try
 		{
-			HashSet<LinkedBox> boxesToSendToServer = new HashSet<LinkedBox>();
+			Set<LinkedBox> boxesToSendToServer = new HashSet<LinkedBox>();
 
 			double columnXcoord = CENTER_X;
 
@@ -289,7 +289,7 @@ public class AutoOrganizer
 				// Sets the x coord left to right
 				for (int columnNumber = MIN_WIDTH_LEVEL; columnNumber <= MAX_WIDTH_LEVEL; columnNumber++)
 				{
-					HashSet<LinkedBox> column = grid.getBoxesAtWidthLevel(columnNumber);
+					Set<LinkedBox> column = grid.getBoxesAtWidthLevel(columnNumber);
 					for (LinkedBox box : column)
 					{
 						box.setXLeft(columnXcoord);
@@ -347,7 +347,7 @@ public class AutoOrganizer
 	 */
 	public void updateSiblingLinks(OrganizerLink link)
 	{
-		HashSet<OrganizerLink> linksToCreate = new HashSet<OrganizerLink>();
+		Set<OrganizerLink> linksToCreate = new HashSet<OrganizerLink>();
 
 		// The original link data
 		LinkedBox origStartBox = link.getStartBox();
@@ -357,11 +357,11 @@ public class AutoOrganizer
 		// If the newly created link connects a group, make sure all the gorup members point to the same children
 		if (link.getConnectsGroup())
 		{
-			Collection<OrganizerLink> origStartChildLinks = origStartBox.getChildLinks();
-			HashSet<LinkedBox> origStartChildBoxes = origStartBox.getChildBoxes();
+			Set<OrganizerLink> origStartChildLinks = origStartBox.getChildLinks();
+			Set<LinkedBox> origStartChildBoxes = origStartBox.getChildBoxes();
 
-			Collection<OrganizerLink> origEndChildLinks = origEndBox.getChildLinks();
-			HashSet<LinkedBox> origEndChildBoxes = origEndBox.getChildBoxes();
+			Set<OrganizerLink> origEndChildLinks = origEndBox.getChildLinks();
+			Set<LinkedBox> origEndChildBoxes = origEndBox.getChildBoxes();
 
 			for (OrganizerLink origStartChildLink : origStartChildLinks)
 			{
@@ -386,7 +386,7 @@ public class AutoOrganizer
 		// else make sure all the grouped parents of the link's child point to the child
 		else
 		{
-			HashSet<LinkedBox> origStartSiblingBoxes = origStartBox.getSiblingBoxes();
+			Set<LinkedBox> origStartSiblingBoxes = origStartBox.getSiblingBoxes();
 
 			// We only need the first one, hence why I break, but I use this for loop in case origStartSiblingBoxes is empty so that it will skip
 			for (LinkedBox origStartSiblingBox : origStartSiblingBoxes)
@@ -405,8 +405,8 @@ public class AutoOrganizer
 	 */
 	class VisitedAndLinksHolder
 	{
-		private HashSet<LinkedBox> visited;
-		private HashSet<OrganizerLink> links;
+		private Set<LinkedBox> visited;
+		private Set<OrganizerLink> links;
 
 		public VisitedAndLinksHolder()
 		{
@@ -424,12 +424,12 @@ public class AutoOrganizer
 			links.add(link);
 		}
 
-		public HashSet<LinkedBox> getVisited()
+		public Set<LinkedBox> getVisited()
 		{
 			return visited;
 		}
 
-		public HashSet<OrganizerLink> getLinks()
+		public Set<OrganizerLink> getLinks()
 		{
 			return links;
 		}
@@ -528,8 +528,8 @@ public class AutoOrganizer
 	 */
 	private boolean isCompatible(LinkedBox startBox, LinkedBox endBox)
 	{
-		HashSet<LinkedBox> startChildBoxes = startBox.getChildBoxes();
-		HashSet<LinkedBox> endChildBoxes = endBox.getChildBoxes();
+		Set<LinkedBox> startChildBoxes = startBox.getChildBoxes();
+		Set<LinkedBox> endChildBoxes = endBox.getChildBoxes();
 		
 		for (LinkedBox startChildBox : startChildBoxes)
 		{
@@ -554,7 +554,7 @@ public class AutoOrganizer
 	 *	Updates a box's visual position on the map
 	 *	@param box - The box whose position we will update with its new coordinates
 	 */
-	private void updateBoxPositions(Collection<LinkedBox> boxes)
+	private void updateBoxPositions(Set<LinkedBox> boxes)
 	{
 		for (LinkedBox box : boxes)
 		{
@@ -689,7 +689,7 @@ public class AutoOrganizer
 	/*
 	 *	Wraps each new link to be created as an actionPackage, which is sent to server to be added to the model and map.
 	 */
-	private void addLinksToVisual(HashSet<OrganizerLink> linksToCreate)
+	private void addLinksToVisual(Set<OrganizerLink> linksToCreate)
 	{
 		String elementType = "relation";
 
@@ -719,7 +719,7 @@ public class AutoOrganizer
 	 */
 	public void determineLinksToRemove(OrganizerLink removedLink)
 	{
-		HashSet<OrganizerLink> linksToRemove = new HashSet<OrganizerLink>();
+		Set<OrganizerLink> linksToRemove = new HashSet<OrganizerLink>();
 
 		if (!removedLink.getConnectsGroup())
 		{
@@ -727,7 +727,7 @@ public class AutoOrganizer
 
 			if (startBox != null)
 			{
-				Collection<OrganizerLink> siblingLinks = startBox.getSiblingLinks();
+				Set<OrganizerLink> siblingLinks = startBox.getSiblingLinks();
 				for (OrganizerLink link : siblingLinks)
 				{
 					linksToRemove.add(link);
@@ -746,7 +746,7 @@ public class AutoOrganizer
 	 *	Helper method called by determineLinksToRemove that actually sends the actionPackage to the server, telling the server to
 	 *	remove each necessary link from the map.
 	 */
-	private void removeLinksFromVisual(HashSet<OrganizerLink> linksToRemove)
+	private void removeLinksFromVisual(Set<OrganizerLink> linksToRemove)
 	{
 		for (OrganizerLink link : linksToRemove)
 		{

@@ -1,6 +1,6 @@
 package lasad.gwt.client.ui.workspace.graphmap.elements;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -43,7 +43,7 @@ public class DeleteRelationDialog extends Window
 	private SimpleComboBox<String> comboEnd = new SimpleComboBox<String>();
 	private String correspondingMapId;
 	private ArgumentModel argModel;
-	private HashSet<LinkedBox> boxes;
+	private Set<LinkedBox> boxes;
 	private final LASADActionSender communicator = LASADActionSender.getInstance();
 	private final ActionFactory actionBuilder = ActionFactory.getInstance();
 	private MVController myController = null;
@@ -113,7 +113,7 @@ public class DeleteRelationDialog extends Window
 
 				// Important to remember to fetch box by rootID
 				LinkedBox startBox = argModel.getBoxByRootID(Integer.parseInt(comboStart.getRawValue()));
-				HashSet<LinkedBox> relatedBoxes = startBox.getRelatedBoxes();
+				Set<LinkedBox> relatedBoxes = startBox.getRelatedBoxes();
 
 				// Add related boxes to end combo box
 				for (LinkedBox box : relatedBoxes)
@@ -142,7 +142,7 @@ public class DeleteRelationDialog extends Window
 				comboStart.removeAll();
 				// Important to use rootID
 				LinkedBox endBox = argModel.getBoxByRootID(Integer.parseInt(comboEnd.getRawValue()));
-				HashSet<LinkedBox> relatedBoxes = endBox.getRelatedBoxes();
+				Set<LinkedBox> relatedBoxes = endBox.getRelatedBoxes();
 
 				for (LinkedBox box : relatedBoxes)
 				{

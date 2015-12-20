@@ -46,8 +46,6 @@ import java.util.HashSet;
 public class MapActionProcessor extends AbstractActionObserver implements ActionObserver {
 
 	private OliDatabaseLogger dsLogger;
-	private ConcurrentHashMap<String, HashSet<String>> mapBoxes;
-	private ConcurrentHashMap<String, HashSet<String>> mapLinks;
 
 	// userName
 	private HashSet<String> harrellClass;
@@ -55,18 +53,16 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	// user, sessionID
 	private ConcurrentHashMap<String, String> loggedSessions;
 
-	// user + session + prob --> contextMSG
+	// session + user + mapID --> contextMSG
 	private ConcurrentHashMap<String, ContextMessage> loggedContexts;
 
-	// map -> doingAutoOrganize
-	private ConcurrentHashMap<String, Boolean> autoOrganizeStatuses = new ConcurrentHashMap<String, Boolean>();
+	// mapID -> doingAutoOrganize
+	private ConcurrentHashMap<Integer, Boolean> autoOrganizeStatuses = new ConcurrentHashMap<Integer, Boolean>();
 
 	public MapActionProcessor()
 	{
 		super();
 		dsLogger = OliDatabaseLogger.create("https://pslc-qa.andrew.cmu.edu/log/server", "UTF-8");
-		mapBoxes = new ConcurrentHashMap<String, HashSet<String>>();
-		mapLinks = new ConcurrentHashMap<String, HashSet<String>>();
 
 		loggedSessions = new ConcurrentHashMap<String, String>();
 		loggedContexts = new ConcurrentHashMap<String, ContextMessage>();
@@ -103,14 +99,15 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
     	{
 			String userName = u.getNickname();
 	        String sessionID = u.getSessionID();
-	        String problemName = Map.getMapName(this.aproc.getMapIDFromAction(a));
+	        Integer mapID = this.aproc.getMapIDFromAction(a);
+
 	        // map -> doingAutoOrganize
-			if (autoOrganizeStatuses.get(problemName) == null)
+			if (autoOrganizeStatuses.get(mapID) == null)
 			{
-				autoOrganizeStatuses.put(problemName, false);
+				autoOrganizeStatuses.put(mapID, false);
 			}
 
-	        final String CONTEXT_REF = problemName + sessionID + userName;
+	        final String CONTEXT_REF = sessionID + userName + String.valueOf(mapID);
 
 	        if (loggedSessions.get(userName) == null || !loggedSessions.get(userName).equals(sessionID))
 	        {
@@ -119,7 +116,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        }
 
 	        boolean shouldLogContext = false;
-	        ProblemElement problem = new ProblemElement(problemName);
+	        ProblemElement problem = new ProblemElement(Map.getMapName(mapID));
 
 	        String timeString = Long.toString(a.getTimeStamp());
 			String timeZone = "UTC";
@@ -175,6 +172,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 
 	        final String input;
 	        final String action;
+	        String eltType = a.getParameterValue(ParameterTypes.Type);
 
 	        switch (a.getCmd())
 	        {
@@ -182,39 +180,17 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		        //if (command.equals("CreateElement"))
 		        //{
 		        	input = "";
-
-		        	String type = a.getParameterValue(ParameterTypes.Type);
-		        	if (type == null)
+		        	if (eltType == null)
 		        	{
 		        		return;
 		        	}
-		        	else if (type.equals("box"))
+		        	else if (eltType.equals("box"))
 		        	{
-		        		if (!mapBoxes.keySet().contains(problemName) || mapBoxes.get(problemName) == null)
-		        		{
-		        			HashSet<String> boxes = new HashSet<String>();
-		        			boxes.add(selection);
-		        			mapBoxes.put(problemName, boxes);
-		        		}
-		        		else
-		        		{
-		        			mapBoxes.get(problemName).add(selection);
-		        		}
 		        		action = "Create Box";
 		        		toolMsg.setAsAttempt("");
 		        	}
-		        	else if (type.equals("relation"))
+		        	else if (eltType.equals("relation"))
 		        	{
-		        		if (!mapLinks.keySet().contains(problemName))
-		        		{
-		        			HashSet<String> links = new HashSet<String>();
-		        			links.add(selection);
-		        			mapLinks.put(problemName, links);
-		        		}
-		        		else
-		        		{
-		        			mapLinks.get(problemName).add(selection);
-		        		}
 		        		action = "Create Relation";
 		        		toolMsg.setAsAttempt("");
 		        	}
@@ -256,14 +232,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			        }
 			        else
 			        {
-			        	if (text == null || text.length() == 0)
-			        	{
-			        		action = "Delete Element Text";
-			        	}
-			        	else
-			        	{
-			        		action = "Insert Element Text";
-			        	}
+			        	action = "Modify Element Text";
 
 			        	// hack, box ID is always 1 less than text box ID
 			        	selection = String.valueOf(Integer.parseInt(selection) - 1);
@@ -273,12 +242,16 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			        }
 	        		break;
 	        	case DeleteElement:
-	        		if (mapBoxes.get(problemName).remove(selection))
+		        	if (eltType == null)
+		        	{
+		        		return;
+		        	}
+		        	else if (eltType.equals("box"))
 		        	{
 		        		action = "Delete Box";
 		        		toolMsg.setAsAttempt("");
 	        		}
-	        		else if (mapLinks.get(problemName).remove(selection))
+	        		else if (eltType.equals("relation"))
 	        		{
 	        			action = "Delete Relation";
 	        			toolMsg.setAsAttempt("");
@@ -752,7 +725,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		if (u != null && a.getCategory().equals(Categories.Map)) {
 			switch (a.getCmd()) {
 			case StartAutoOrganize:
-				autoOrganizeStatuses.put(Map.getMapName(this.aproc.getMapIDFromAction(a)), true);
+				autoOrganizeStatuses.put(this.aproc.getMapIDFromAction(a), true);
 				break;	
 			case ChangeFontSize:
 				processChangeFontSize(a, u);
@@ -781,7 +754,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				returnValue = true;
 				break;
 			case FinishAutoOrganize:
-				autoOrganizeStatuses.put(Map.getMapName(this.aproc.getMapIDFromAction(a)), false);
+				autoOrganizeStatuses.put(this.aproc.getMapIDFromAction(a), false);
 				processAutoOrganize(a, u);
 				returnValue = true;
 				break;
@@ -792,7 +765,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		boolean shouldLog;
 		try
 		{
-			shouldLog = !autoOrganizeStatuses.get(Map.getMapName(this.aproc.getMapIDFromAction(a)));
+			shouldLog = !autoOrganizeStatuses.get(this.aproc.getMapIDFromAction(a));
 		}
 		catch (Exception e)
 		{
