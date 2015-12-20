@@ -1,2 +1,0 @@
-serviceClass: lasad.gwt.client.communication.servlet.LASADServletService
-path: D8D24D857F9A10D09CFDB55C5C41E9E6.gwt.rpc
