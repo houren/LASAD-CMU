@@ -35,6 +35,8 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 
 	protected GraphMapSpace myArgumentMapSpace;
 
+	protected int numBoxes;
+
 //	protected MVCViewSession myViewSession;
 
 //	lasad_clientConstants myConstants = GWT.create(lasad_clientConstants.class);
@@ -69,6 +71,7 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 	protected AutoOrganizer autoOrganizer;
 
 	public AbstractGraphMap(GraphMapSpace parentElement) {
+		numBoxes = 0;
 		this.myArgumentMapSpace = parentElement;
 		//this.myViewSession = myArgumentMapSpace.getSession();
 		//ID = myViewSession.getController().getMapInfo().getMapID();
@@ -106,6 +109,21 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 	public AutoOrganizer getAutoOrganizer()
 	{
 		return this.autoOrganizer;
+	}
+
+	public void incNumBoxes()
+	{
+		numBoxes++;
+	}
+
+	public void decNumBoxes()
+	{
+		numBoxes--;
+	}
+
+	public int getNumBoxes()
+	{
+		return numBoxes;
 	}
 
 	public ArgumentModel getArgModel()

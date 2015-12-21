@@ -45,6 +45,8 @@ import java.util.HashSet;
  */
 public class MapActionProcessor extends AbstractActionObserver implements ActionObserver {
 
+	private final boolean DS_LOGGING_IS_ON = false;
+
 	private OliDatabaseLogger dsLogger;
 
 	// userName
@@ -68,7 +70,13 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		loggedContexts = new ConcurrentHashMap<String, ContextMessage>();
 
 		harrellClass = new HashSet<String>();
-		harrellClass.add("Sam.Speight");
+		harrellClass.add("t0");
+
+		for (int i = 1; i <= 30; i++)
+		{
+			harrellClass.add("s" + i);
+		}
+		/*
 		harrellClass.add("Mara.Harrell");
 
 		harrellClass.add("Sonia.Lee");
@@ -88,6 +96,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		harrellClass.add("Brendan.Wixen");
 		harrellClass.add("Oliver.Liburd");
 		harrellClass.add("Kevin.Riordan");
+		*/
 	}
 
 	/**
@@ -143,6 +152,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			        contextMsg.setSchool(school);
 			        contextMsg.setPeriod(period);
 			        contextMsg.addInstructor(instructorOne);
+			        contextMsg.setDataset(new DatasetElement("Study", sectionLevel));
 		        }
 		        else
 		        {
@@ -152,9 +162,8 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			        contextMsg.setSchool("N/A");
 			        contextMsg.setPeriod("N/A");
 			        contextMsg.addInstructor("N/A");
-		        }
-
-		        contextMsg.setDataset(new DatasetElement("December16-01", sectionLevel));
+			        contextMsg.setDataset(new DatasetElement("Non-Study", sectionLevel));
+		        }		        
 			}	
 
 	        ToolMessage toolMsg = ToolMessage.create(contextMsg);
@@ -177,8 +186,6 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        switch (a.getCmd())
 	        {
 	        	case CreateElement:
-		        //if (command.equals("CreateElement"))
-		        //{
 		        	input = "";
 		        	if (eltType == null)
 		        	{
@@ -218,21 +225,53 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			        		}
 			        		else
 			        		{
+			        			if (eltType == null)
+					        	{
+					        		return;
+					        	}
+					        	else if (eltType.equals("box"))
+					        	{
+					        		action = "Resize Box";
+					        	}
+					        	else if (eltType.equals("relation"))
+					        	{
+					        		action = "Resize Relation";
+					        	}
+					        	else
+					        	{
+					        		return;
+					        	}
+
 			        			input = "Width: " + width + "; Height: " + a.getParameterValue(ParameterTypes.Height);
-			        			action = "Resize Element";
 			        			toolMsg.setAsAttempt("");
 			        		}
 			        	}
 			        	else
 			        	{
+			        		if (eltType == null)
+					        	{
+					        		return;
+					        	}
+					        	else if (eltType.equals("box"))
+					        	{
+					        		action = "Reposition Box";
+					        	}
+					        	else if (eltType.equals("relation"))
+					        	{
+					        		action = "Reposition Relation";
+					        	}
+					        	else
+					        	{
+					        		return;
+					        	}
+
 			        		input = "PosX: " + posX + "; PosY: " + a.getParameterValue(ParameterTypes.PosY);
-			        		action = "Reposition Element";
 			        		toolMsg.setAsAttempt("");
 			        	}
 			        }
 			        else
 			        {
-			        	action = "Modify Element Text";
+			        	action = "Modify Text";
 
 			        	// hack, box ID is always 1 less than text box ID
 			        	selection = String.valueOf(Integer.parseInt(selection) - 1);
@@ -762,19 +801,23 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				break;
 			}
 		}
-		boolean shouldLog;
-		try
+		if (DS_LOGGING_IS_ON)
 		{
-			shouldLog = !autoOrganizeStatuses.get(this.aproc.getMapIDFromAction(a));
+			boolean shouldLog;
+			try
+			{
+				shouldLog = !autoOrganizeStatuses.get(this.aproc.getMapIDFromAction(a));
+			}
+			catch (Exception e)
+			{
+				shouldLog = true;
+			}
+			if (returnValue && shouldLog)
+			{
+				logToDataShop(a, u);
+			}
 		}
-		catch (Exception e)
-		{
-			shouldLog = true;
-		}
-		if (returnValue && shouldLog)
-		{
-			logToDataShop(a, u);
-		}
+		
 		return returnValue;
 	}
 

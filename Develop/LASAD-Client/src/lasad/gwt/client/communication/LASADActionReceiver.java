@@ -541,6 +541,7 @@ public class LASADActionReceiver {
 				// If it's a box, add it to the model
 				if (elementType.equalsIgnoreCase(BOX))
 				{
+					LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().incNumBoxes();
 					String xLeftString = a.getParameterValue(ParameterTypes.PosX);
 					double xLeft;
 					if (xLeftString != null)
@@ -782,6 +783,7 @@ public class LASADActionReceiver {
 					}
 					else if (elementType.equalsIgnoreCase(BOX))
 					{
+						LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().decNumBoxes();
 						LinkedBox removedBox = argModel.removeBoxByBoxID(elementID);
 						if (removedBox != null)
 						{
@@ -855,6 +857,7 @@ public class LASADActionReceiver {
 			
 			if (a.getCmd().equals(Commands.CreateElement)) {
 
+				LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().incNumBoxes();
 				// Check if the feedback is for the current user, if not -->
 				// ignore
 				String elementType = a.getParameterValue(ParameterTypes.Type);
@@ -1156,6 +1159,7 @@ public class LASADActionReceiver {
 					}
 					else if (elementType.equalsIgnoreCase(BOX))
 					{
+						LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().decNumBoxes();
 						LinkedBox removedBox = argModel.removeBoxByBoxID(elementID);
 						if (removedBox != null)
 						{
