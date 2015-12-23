@@ -119,10 +119,6 @@ public abstract class GraphMapMenuBar extends ToolBar
 			@Override
 			public void componentSelected(MenuEvent me) {
 				handleCreateNewBoxItemSelectionEvent(me, currentElement);
-//				int tempPosX = GraphMapMenuBar.this.getMyMapSpace().getMyMap().getHScrollPosition() + GraphMapMenuBar.this.getMyMapSpace().getMyMap().getInnerWidth() / 2 - (Integer.parseInt(currentElement.getUiOption(ParameterTypes.Width)) / 2);
-//				int tempPosY = GraphMapMenuBar.this.getMyMapSpace().getMyMap().getVScrollPosition() + GraphMapMenuBar.this.getMyMapSpace().getMyMap().getInnerHeight() / 2 - (Integer.parseInt(currentElement.getUiOption(ParameterTypes.Height)) / 2);
-//				GraphMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-//				communicator.sendActionPackage(actionBuilder.createBoxWithElements(currentElement, GraphMapMenuBar.this.getMyMapSpace().getMyMap().getID(), tempPosX, tempPosY));
 			}
 		});
 		return boxItem;

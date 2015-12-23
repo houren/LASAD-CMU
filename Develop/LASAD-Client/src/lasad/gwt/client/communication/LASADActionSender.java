@@ -117,6 +117,7 @@ public class LASADActionSender {
 
 		if(connectEventService()) {
 			LASADStatusBar.getInstance().setConnectionBusy(true);
+			/*
 			for (Action a : actionSet.getActions())
 			{
 				switch (a.getCmd())
@@ -134,6 +135,7 @@ public class LASADActionSender {
 						break;
 				}
 			}
+			*/
 
 			actionSet.addParameter(ParameterTypes.SessionId, clientID); //"CLIENT-ID"
 			

@@ -515,8 +515,16 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 				+ ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getInnerHeight() / 2
 				- (Integer.parseInt(currentElement.getUiOption(ParameterTypes.Height)) / 2);
 		ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-		communicator.sendActionPackage(actionBuilder.createBoxWithElements(currentElement, ArgumentMapMenuBar.this.getMyMapSpace()
+		if (ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getNumBoxes() < 50)
+		{
+			communicator.sendActionPackage(actionBuilder.createBoxWithElements(currentElement, ArgumentMapMenuBar.this.getMyMapSpace()
 				.getMyMap().getID(), tempPosX, tempPosY));
+		}
+		else
+		{
+			LASADInfo.display("Error", "Max of 50 contributions permitted per map. Delete unwanted contributions or create a separate map.");
+		}
+		
 	}
 
 	@Override

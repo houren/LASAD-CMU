@@ -45,7 +45,7 @@ import java.util.HashSet;
  */
 public class MapActionProcessor extends AbstractActionObserver implements ActionObserver {
 
-	private final boolean DS_LOGGING_IS_ON = false;
+	private final boolean DS_LOGGING_IS_ON = true;
 
 	private OliDatabaseLogger dsLogger;
 
@@ -143,16 +143,16 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		        {
 		        	sectionLevel = new LevelElement("Section", "01", problem);
 
-			        String className = "Engineering Ethics";
+			        String className = "MyClass";
 			        String school = "CMU";
 			        String period = "01";
-			        String instructorOne = "Mara Harrell";
+			        String instructorOne = "Miss Wormwood";
 
 			        contextMsg.setClassName(className);
 			        contextMsg.setSchool(school);
 			        contextMsg.setPeriod(period);
 			        contextMsg.addInstructor(instructorOne);
-			        contextMsg.setDataset(new DatasetElement("Study", sectionLevel));
+			        contextMsg.setDataset(new DatasetElement("Adapterrex-Study-Testing", sectionLevel));
 		        }
 		        else
 		        {
@@ -162,7 +162,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			        contextMsg.setSchool("N/A");
 			        contextMsg.setPeriod("N/A");
 			        contextMsg.addInstructor("N/A");
-			        contextMsg.setDataset(new DatasetElement("Non-Study", sectionLevel));
+			        contextMsg.setDataset(new DatasetElement("Adapterrex-Non-Study-Testing", sectionLevel));
 		        }		        
 			}	
 
