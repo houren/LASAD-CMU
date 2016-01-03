@@ -1,42 +1,26 @@
 package lasad.gwt.client.model.organization;
 
-import java.util.HashSet;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import lasad.gwt.client.communication.helper.ActionFactory;
-import lasad.gwt.client.communication.LASADActionSender;
-import lasad.gwt.client.communication.LASADActionReceiver;
-
 import lasad.gwt.client.LASAD_Client;
-
-import lasad.gwt.client.model.argument.MVController;
-import lasad.gwt.client.model.ElementInfo;
-
-// I'm aware that importing from the same package is unnecessary, but I do it in case I change the package of this class ever.
-import lasad.gwt.client.model.organization.ArgumentModel;
-import lasad.gwt.client.model.organization.ArgumentThread;
-import lasad.gwt.client.model.organization.LinkedBox;
-import lasad.gwt.client.model.organization.GroupedBoxesStatusCodes;
-import lasad.gwt.client.model.organization.OrganizerLink;
-import lasad.gwt.client.model.organization.IntPair;
-import lasad.gwt.client.model.organization.ArgumentGrid;
-import lasad.gwt.client.model.organization.Coordinate;
-
+import lasad.gwt.client.communication.LASADActionSender;
+import lasad.gwt.client.communication.helper.ActionFactory;
 import lasad.gwt.client.logger.Logger;
-import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
-import lasad.gwt.client.ui.workspace.LASADInfo;
-
-import lasad.shared.communication.objects.ActionPackage;
-
+import lasad.gwt.client.model.ElementInfo;
+import lasad.gwt.client.model.argument.MVController;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.common.AbstractExtendedElement;
 import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
-import com.extjs.gxt.ui.client.widget.Component;
-
 import lasad.gwt.client.ui.link.AbstractLinkPanel;
-import lasad.shared.communication.objects.parameters.ParameterTypes;
+import lasad.gwt.client.ui.workspace.LASADInfo;
+import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
+import lasad.shared.communication.objects.ActionPackage;
+
+import com.extjs.gxt.ui.client.widget.Component;
+// I'm aware that importing from the same package is unnecessary, but I do it in case I change the package of this class ever.
 
 /**
  *	An AutoOrganizer can clean up the user's workspace into a clearer visual representation of the argument.
@@ -216,11 +200,11 @@ public class AutoOrganizer
 					mapComponentsCopy.removeAll(toRemove);
 				}
 				
-				IntPair minMaxColumn = grid.determineMinMaxWidthLevels(grid.getBoxes());
+				IntPair minMaxColumn = ArgumentGrid.determineMinMaxWidthLevels(grid.getBoxes());
 				final int MIN_WIDTH_LEVEL = minMaxColumn.getMin();
 				final int MAX_WIDTH_LEVEL = minMaxColumn.getMax();
 
-				IntPair minMaxRow = grid.determineMinMaxHeightLevels(grid.getBoxes());
+				IntPair minMaxRow = ArgumentGrid.determineMinMaxHeightLevels(grid.getBoxes());
 				final int MIN_HEIGHT_LEVEL = minMaxRow.getMin();
 				final int MAX_HEIGHT_LEVEL = minMaxRow.getMax();
 

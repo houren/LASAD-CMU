@@ -2,8 +2,8 @@ package lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.patternarea;
 
 import java.util.TreeMap;
 
-import lasad.gwt.client.model.GraphMapInfo;
 import lasad.gwt.client.model.ElementInfo;
+import lasad.gwt.client.model.GraphMapInfo;
 import lasad.gwt.client.model.pattern.PatternGraphMapInfo;
 import lasad.gwt.client.model.pattern.PatternMVCViewSession;
 import lasad.gwt.client.ui.box.AbstractBox;

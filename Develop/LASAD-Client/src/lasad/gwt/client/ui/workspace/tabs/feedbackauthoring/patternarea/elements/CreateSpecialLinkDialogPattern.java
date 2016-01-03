@@ -75,7 +75,8 @@ public class CreateSpecialLinkDialogPattern extends
 		//myController = FeedbackAuthoringTabContent.getInstance().getPatternServerManager().getController(agentId, correspondingMapId);
 	}
 	
-	private void createForm() {
+	@Override
+	protected void createForm() {
 		FormPanel simple = new FormPanel();
 		simple.setFrame(true);
 		simple.setHeaderVisible(false);

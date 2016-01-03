@@ -2,9 +2,15 @@ package lasad.gwt.client.ui.workspace.graphmap.elements;
 
 import java.util.Collection;
 
+import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.ElementInfo;
+import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.model.organization.GroupedBoxesStatusCodes;
+import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.link.AbstractLink;
+import lasad.gwt.client.ui.workspace.LASADInfo;
 import lasad.gwt.client.ui.workspace.graphmap.GraphMap;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 
@@ -12,16 +18,6 @@ import com.extjs.gxt.ui.client.event.Events;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
-
-import lasad.gwt.client.model.organization.ArgumentModel;
-import lasad.gwt.client.model.organization.LinkedBox;
-import lasad.gwt.client.model.organization.OrganizerLink;
-import lasad.gwt.client.model.organization.AutoOrganizer;
-import lasad.gwt.client.model.organization.GroupedBoxesStatusCodes;
-import lasad.gwt.client.logger.Logger;
-import lasad.gwt.client.ui.workspace.LASADInfo;
-
-import lasad.gwt.client.LASAD_Client;
 
 public abstract class AbstractCreateLinkDialogListener implements EventListener {
 
@@ -33,7 +29,7 @@ public abstract class AbstractCreateLinkDialogListener implements EventListener 
     protected GraphMap myMap;
     private AbstractCreateLinkDialog myDialogue;
     private AbstractBox b1, b2;
-    private AbstractLink l1, l2;
+    private AbstractLink l2;
 
     public AbstractCreateLinkDialogListener(GraphMap map, AbstractCreateLinkDialog dialogue, AbstractBox b1, AbstractBox b2) {
 		this.myMap = map;

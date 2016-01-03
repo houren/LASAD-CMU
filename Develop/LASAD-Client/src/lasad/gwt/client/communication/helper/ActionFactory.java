@@ -98,6 +98,7 @@ public class ActionFactory {
 		ActionPackage p = new ActionPackage();
 		Action a = new Action(Commands.UpdateElement, Categories.Map);
 //		Action a = new Action("UPDATE-ELEMENT", "MAP");
+		a.addParameter(ParameterTypes.Type, LASAD_Client.getMVCController(mapID).getElement(boxID).getType());
 		a.addParameter(ParameterTypes.MapId, mapID);
 		a.addParameter(ParameterTypes.Id, String.valueOf(boxID));
 		a.addParameter(ParameterTypes.PosX, String.valueOf(x));
@@ -145,6 +146,7 @@ public class ActionFactory {
 		ActionPackage p = new ActionPackage();
 		Action a = new Action(Commands.UpdateElement, Categories.Map);
 //		Action a = new Action("UPDATE-ELEMENT", "MAP");
+		a.addParameter(ParameterTypes.Type, LASAD_Client.getMVCController(mapID).getElement(linkID).getType());
 		a.addParameter(ParameterTypes.MapId, mapID);
 		a.addParameter(ParameterTypes.Id, String.valueOf(linkID));
 		a.addParameter(ParameterTypes.Percent, String.valueOf(per));
@@ -156,6 +158,7 @@ public class ActionFactory {
 		ActionPackage p = new ActionPackage();
 		Action a = new Action(Commands.UpdateElement, Categories.Map);
 //		Action a = new Action("UPDATE-ELEMENT", "MAP");
+		a.addParameter(ParameterTypes.Type, LASAD_Client.getMVCController(mapID).getElement(boxID).getType());
 		a.addParameter(ParameterTypes.MapId, mapID);
 		a.addParameter(ParameterTypes.Id, String.valueOf(boxID));
 		a.addParameter(ParameterTypes.Width, String.valueOf(width));

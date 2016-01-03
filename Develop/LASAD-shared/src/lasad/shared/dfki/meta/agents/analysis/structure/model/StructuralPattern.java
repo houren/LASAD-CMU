@@ -36,8 +36,10 @@ public class StructuralPattern implements Serializable {
 	/**
 	 * Only for RMI serialization. DO NOT USE THIS CONSTRUCTOR!
 	 */
+	/*
 	private StructuralPattern() {
 	}
+	*/
 
 	public StructuralPattern(String ID) {
 		this.ID = ID;

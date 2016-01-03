@@ -83,8 +83,7 @@ public class FeedbackAuthoringProcessorStatus {
 			AgentDescriptionFE tmp = new AgentDescriptionFE();
 			tmp.setAgentID(agentId);
 			int index = agentDescriptionList.getAgentDescriptions().indexOf(tmp);
-			//TODO
-			//agentDescriptionList.getAgentDescriptions().get(index).
+			//TODO Incomplete
 		}
 	}
 

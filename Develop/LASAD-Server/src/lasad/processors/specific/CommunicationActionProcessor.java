@@ -10,6 +10,7 @@ import lasad.shared.communication.objects.Action;
 import lasad.shared.communication.objects.ActionPackage;
 import lasad.shared.communication.objects.categories.Categories;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
+import lasad.processors.ActionProcessor;
 
 /** 
  * this class records all communications between users
@@ -37,7 +38,7 @@ public class CommunicationActionProcessor extends AbstractActionObserver
 		if (u != null&&a.getCategory().equals(Categories.Communication)){
 			// Currently, there are only chat messages in this category, thus, a
 			// further differentiation is not needed
-			int mapID = aproc.getMapIDFromAction(a);
+			int mapID = ActionProcessor.getMapIDFromAction(a);
 
 			Revision r = new Revision(mapID, "Chat message", u.getUserID());
 			r.saveToDatabase();

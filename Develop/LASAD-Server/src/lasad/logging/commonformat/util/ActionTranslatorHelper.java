@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 import lasad.logging.commonformat.util.jaxb.Action;
 import lasad.logging.commonformat.util.jaxb.Actiontype;
 import lasad.logging.commonformat.util.jaxb.Object;

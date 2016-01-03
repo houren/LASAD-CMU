@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.HashMap;
 
 import lasad.gwt.client.communication.LASADActionSender;
 import lasad.gwt.client.communication.helper.ActionFactory;
@@ -13,21 +12,20 @@ import lasad.gwt.client.constants.lasad_clientConstants;
 import lasad.gwt.client.logger.ConsoleLogger;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.argument.MVController;
-import lasad.gwt.client.settings.DebugSettings;
 import lasad.gwt.client.ui.LASADStatusBar;
 import lasad.gwt.client.ui.replay.ReplayControl;
 import lasad.gwt.client.ui.workspace.loaddialogues.LoadingLoginDialogue;
 import lasad.gwt.client.ui.workspace.tableview.ArgumentEditionStyleEnum;
+import lasad.gwt.client.ui.workspace.tabs.AboutTab;
 import lasad.gwt.client.ui.workspace.tabs.DebugTab;
 import lasad.gwt.client.ui.workspace.tabs.LoginInfoTab;
 import lasad.gwt.client.ui.workspace.tabs.LoginTab;
 import lasad.gwt.client.ui.workspace.tabs.MapTab;
 import lasad.gwt.client.ui.workspace.tabs.ReplayTab;
-import lasad.gwt.client.ui.workspace.tabs.AboutTab;
+import lasad.gwt.client.ui.workspace.tabs.TutorialVideosTab;
 import lasad.gwt.client.ui.workspace.tabs.authoring.AuthoringTab;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.FeedbackAuthoringTab;
 import lasad.gwt.client.ui.workspace.tabs.map.MapLoginTab;
-import lasad.gwt.client.ui.workspace.tabs.TutorialVideosTab;
 import lasad.gwt.client.urlparameter.UrlParameterConfig;
 import lasad.shared.communication.objects.Action;
 import lasad.shared.communication.objects.ActionPackage;
@@ -59,9 +57,8 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.Timer;
-
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.

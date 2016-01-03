@@ -1,6 +1,5 @@
 package lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.event;
 
-import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.grid.CustomizedGrid;
 
 /**
  * @author Anahuac

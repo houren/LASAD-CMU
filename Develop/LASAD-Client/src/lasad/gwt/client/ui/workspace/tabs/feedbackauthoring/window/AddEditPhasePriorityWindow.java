@@ -8,7 +8,6 @@ import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.data.GridElementLabe
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.grid.PhasePriorityGrid;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.Data2ModelConverter;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FATConstants;
-import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FATDebug;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FeedbackAuthoringStrings;
 
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -112,7 +111,6 @@ public class AddEditPhasePriorityWindow {
 	}
 	
 	private void doAction(String elementId, String elementName, int sliderValue){
-		//TODO
 		if(mode == FATConstants.ADD_TYPE){
 			phasePriorityGridRef.handleAddPhasePriority(elementId, elementName, sliderValue);
 		} else{

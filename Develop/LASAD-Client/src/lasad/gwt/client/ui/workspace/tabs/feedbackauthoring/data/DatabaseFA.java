@@ -191,17 +191,6 @@ public class DatabaseFA {
 		return sessionStore.get(sessionId);
 	}
 	
-//	public boolean deleteSession(String sessionId){
-//	boolean error = true;
-//	if(sessionStore.containsKey(sessionId)){
-//		SessionFA session = sessionStore.remove(sessionId);
-//		deleteSesFromOntoTracker(sessionId, session.getOntology());
-//		id2NameSession.remove(session.getId());
-//		error = false;
-//	}
-//	return error;
-//}
-	
 	public List<String> getSessionsWithOntology(String ontology){
 		List<String> tmp = new Vector<String>();
 		if(session2OntoTracker.containsKey(ontology)){
@@ -568,19 +557,4 @@ public class DatabaseFA {
 			session2OntoTracker.put(ontology, listOnto);
 		}
 	}
-	
-	/**
-     * deletes a session from an ontology
-     *
-     * @param  session 
-     * @param  ontology ontology's name
-     */
-	private void deleteSesFromOntoTracker(String sessionId, String ontology){
-		
-		if(session2AgentTracker.containsKey(ontology)){
-			List<String> listAgOnto = session2OntoTracker.get(ontology);
-			listAgOnto.remove(sessionId);
-		}
-	}
-	
 }

@@ -1,10 +1,10 @@
 package lasad.gwt.client.ui.workspace.tableview.elements;
 
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.dom.client.Element;
-
 import lasad.gwt.client.logger.Logger;
+
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.TextArea;
 
 public class ExtendedTextArea extends TextArea{
 	public ExtendedTextArea(){

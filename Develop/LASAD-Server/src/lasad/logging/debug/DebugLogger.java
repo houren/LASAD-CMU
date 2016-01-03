@@ -4,7 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
-
 import lasad.gui.ServerGUI;
 import lasad.logging.LoggerInterface;
 import lasad.shared.communication.objects.Action;

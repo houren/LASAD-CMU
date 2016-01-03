@@ -1,6 +1,5 @@
 package lasad.shared.dfki.meta.agents.analysis.structure.model;
 
-import lasad.shared.dfki.meta.agents.analysis.structure.model.Comparison;
 
 /**
  * {@link Comparison}s will be sorted into one of 20 different bins. For each

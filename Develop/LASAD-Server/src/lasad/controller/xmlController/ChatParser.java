@@ -51,7 +51,11 @@ public class ChatParser {
 	public Vector<String[]> GetChatMessages() {
 		if (chatMessages == null) {
 			chatMessages = new Vector<String[]>();
-			List<org.jdom.Element> elements = rootElement.getChildren("msg");
+			List<org.jdom.Element> elements = new Vector<org.jdom.Element>();
+			for (Object o : rootElement.getChildren("msg"))
+			{
+				elements.add((org.jdom.Element) o);
+			}
 			String[] message = new String[5];
 
 			for (org.jdom.Element element : elements) {

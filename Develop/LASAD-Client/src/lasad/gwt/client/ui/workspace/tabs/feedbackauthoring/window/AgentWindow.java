@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 import lasad.gwt.client.model.pattern.PatternGraphMapInfo;
@@ -21,7 +20,6 @@ import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.grid.PhasePriorityGr
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.grid.PhasesGrid;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.patternarea.manager.PatternController;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.patternarea.manager.PatternDrawingAreaMVCViewSession;
-import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.ComparisonUtil;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.CounterCriterionOperatorTranslator;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.CustomDualListFieldEvent;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.CustomDualListFieldEventType;
@@ -59,17 +57,7 @@ import lasad.shared.dfki.meta.agents.analysis.counter.InstanceTypeGeneral;
 import lasad.shared.dfki.meta.agents.analysis.counter.InstanceTypeSpecific;
 import lasad.shared.dfki.meta.agents.analysis.counter.InstanceTypeSpecific_Object;
 import lasad.shared.dfki.meta.agents.analysis.counter.InstanceTypeSpecific_Pattern;
-import lasad.shared.dfki.meta.agents.analysis.structure.StructuralAnalysisTypeManipulator;
 import lasad.shared.dfki.meta.agents.analysis.structure.StructureAnalysisType;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.ElementVariableProp;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.LinkVariable;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.NodeVariable;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.String2ConstSetComparison;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.String2ConstStringComparison;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.String2SetOperator;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.String2StringOperator;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.String2VarStringComparison;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.StructuralPattern;
 import lasad.shared.dfki.meta.agents.provision.ProvisionTimeDef;
 import lasad.shared.dfki.meta.agents.provision.ProvisionTimeDef_OnRequest;
 import lasad.shared.dfki.meta.agents.provision.ProvisionTimeDef_Periodically;
@@ -84,9 +72,6 @@ import lasad.shared.dfki.meta.agents.provision.priority.MsgSortCriterion;
 import lasad.shared.dfki.meta.agents.provision.priority.MsgSortCriterionUtil;
 import lasad.shared.dfki.meta.agents.provision.priority.PriorityProvisionType;
 import lasad.shared.dfki.meta.ontology.Ontology;
-import lasad.shared.dfki.meta.ontology.descr.NonStandardPropDescr;
-import lasad.shared.dfki.meta.ontology.descr.PropDescr;
-import lasad.shared.dfki.meta.ontology.descr.StandardPropDescr;
 
 import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
@@ -141,6 +126,24 @@ import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Widget;
+
+/* If using method test, uncomment these imports
+import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.ComparisonUtil;
+import lasad.shared.dfki.meta.agents.analysis.structure.model.ElementVariableProp;
+import lasad.shared.dfki.meta.agents.analysis.structure.model.LinkVariable;
+import lasad.shared.dfki.meta.agents.analysis.structure.model.NodeVariable;
+import lasad.shared.dfki.meta.agents.analysis.structure.model.String2ConstSetComparison;
+import lasad.shared.dfki.meta.agents.analysis.structure.model.String2ConstStringComparison;
+import lasad.shared.dfki.meta.agents.analysis.structure.model.String2SetOperator;
+import lasad.shared.dfki.meta.agents.analysis.structure.model.String2StringOperator;
+import lasad.shared.dfki.meta.agents.analysis.structure.model.String2VarStringComparison;
+import lasad.shared.dfki.meta.agents.analysis.structure.model.StructuralPattern;
+import lasad.shared.dfki.meta.agents.analysis.structure.StructuralAnalysisTypeManipulator;
+import lasad.shared.dfki.meta.ontology.descr.NonStandardPropDescr;
+import lasad.shared.dfki.meta.ontology.descr.PropDescr;
+import lasad.shared.dfki.meta.ontology.descr.StandardPropDescr;
+import java.util.Set;
+*/
 
 /**
  * Agent window, can be displayed in EDIT_MODE or VIEW_MODE
@@ -359,6 +362,7 @@ public class AgentWindow{
 	/*
 	 * code for testing quickly
 	 */
+	/*
 	private void test(){
 		String ontologyId = "LARGO"; //LARGO
 		String nodeId = "fact";
@@ -447,6 +451,7 @@ public class AgentWindow{
 		ElementConstraintsWindow re = new ElementConstraintsWindow(agentId, patternId, nodeVar.getVarID(), ComparisonUtil.getComponentType(nodeVar));
 		re.show();
 	}
+	*/
 	
 	private ContentPanel initStatusPanel(){
 		ContentPanel panel = new ContentPanel();

@@ -1,5 +1,4 @@
 package lasad.gwt.client.model.organization;
-import lasad.gwt.client.model.organization.LinkedBox;
 
 /**
  * OrganizerLink is, like LinkedBox is to AbstractBox, a way of representing an AbstractLinkPanel (and/or an AbstractLink) that is more

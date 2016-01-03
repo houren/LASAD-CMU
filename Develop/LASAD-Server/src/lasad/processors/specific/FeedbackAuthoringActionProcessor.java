@@ -261,7 +261,7 @@ public class FeedbackAuthoringActionProcessor extends AbstractActionObserver imp
 	 * @author Anahuac Valero
 	 */
 	private void processMapDetails(Action a, User u) {
-		//TODO
+		//TODO Incomplete
 		Logger.debugLog("[lasad.processors.specific][FeedbackAuthoringActionProcessor] Processing request: Map Details");
 	}
 	

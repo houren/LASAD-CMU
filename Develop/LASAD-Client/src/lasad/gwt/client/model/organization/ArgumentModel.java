@@ -1,34 +1,20 @@
 package lasad.gwt.client.model.organization;
 
 import java.util.HashSet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-// Aware that this is unnecessary, I just do it as a reminder in case I change location
-import lasad.gwt.client.model.organization.ArgumentThread;
-import lasad.gwt.client.model.organization.OrganizerLink;
-import lasad.gwt.client.model.organization.LinkedBox;
-import lasad.gwt.client.model.organization.EdgeCoords;
-import lasad.gwt.client.model.argument.MVController;
 import lasad.gwt.client.LASAD_Client;
-import lasad.gwt.client.model.ElementInfo;
-import lasad.gwt.client.communication.LASADActionReceiver;
 import lasad.gwt.client.communication.LASADActionSender;
 import lasad.gwt.client.communication.helper.ActionFactory;
-import lasad.shared.communication.objects.ActionPackage;
 import lasad.gwt.client.logger.Logger;
-import lasad.gwt.client.model.AbstractUnspecifiedElementModel;
-import lasad.shared.communication.objects.parameters.ParameterTypes;
-import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
+import lasad.gwt.client.model.argument.MVController;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.common.AbstractExtendedElement;
+import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.dom.client.Element;
 import com.extjs.gxt.ui.client.widget.Component;
+// Aware that this is unnecessary, I just do it as a reminder in case I change location
 
 
 /**

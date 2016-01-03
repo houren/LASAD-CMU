@@ -12,7 +12,6 @@ import lasad.gwt.client.ui.workspace.graphmap.elements.AbstractCreateBoxDialogLi
 import lasad.gwt.client.ui.workspace.transcript.TranscriptLinkData;
 import lasad.shared.communication.objects.Action;
 import lasad.shared.communication.objects.ActionPackage;
-import lasad.gwt.client.ui.workspace.LASADInfo;
 
 public class CreateBoxDialogListenerArgument extends AbstractCreateBoxDialogListener{
 	private final LASADActionSender communicator = LASADActionSender.getInstance();
@@ -35,17 +34,9 @@ public class CreateBoxDialogListenerArgument extends AbstractCreateBoxDialogList
 			transcriptLinkAction = actionBuilder.createTranscriptLink(mapID, "LAST-ID", myTData);
 		}
 		// Send Action --> Server
-		if (myMap.getNumBoxes() < 50)
-		{
-			ActionPackage actionPackage = actionBuilder.createBoxWithElements(info, mapID, posX, posY);
-			actionPackage.addAction(transcriptLinkAction);
-			communicator.sendActionPackage(actionPackage);
-		}
-		else
-		{
-			LASADInfo.display("Error", "Max of 50 contributions permitted per map. Delete unwanted contributions or create a separate map.");
-		}
-			
+		ActionPackage actionPackage = actionBuilder.createBoxWithElements(info, mapID, posX, posY);
+		actionPackage.addAction(transcriptLinkAction);
+		communicator.sendActionPackage(actionPackage);
 	}
 
 	@Override

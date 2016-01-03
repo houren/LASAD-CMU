@@ -6,11 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import com.extjs.gxt.ui.client.event.Listener;
-import com.extjs.gxt.ui.client.event.MessageBoxEvent;
-import com.extjs.gxt.ui.client.widget.Dialog;
-import com.extjs.gxt.ui.client.widget.MessageBox;
-
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.data.ElementModel;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.data.GridElementLabel;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FeedbackAuthoringStrings;
@@ -25,6 +20,11 @@ import lasad.shared.dfki.meta.agents.provision.ProvisionType;
 import lasad.shared.dfki.meta.agents.provision.RecipientDef_Group;
 import lasad.shared.dfki.meta.agents.provision.RecipientDef_Individuals;
 import lasad.shared.dfki.meta.agents.provision.priority.PriorityProvisionType;
+
+import com.extjs.gxt.ui.client.event.Listener;
+import com.extjs.gxt.ui.client.event.MessageBoxEvent;
+import com.extjs.gxt.ui.client.widget.Dialog;
+import com.extjs.gxt.ui.client.widget.MessageBox;
 
 /**
  * Creates the strategies grid panel displayed in the strategies tab.

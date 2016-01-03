@@ -1,11 +1,11 @@
 package lasad.gwt.client.ui.workspace.graphmap;
 
-import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.helper.connection.Connection;
 import lasad.gwt.client.helper.connection.GenericStraightTwoEndedConnection;
 import lasad.gwt.client.helper.connector.Connector;
 import lasad.gwt.client.helper.connector.Direction;
+import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.AbstractMVCViewSession;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.box.SimpleConnector;

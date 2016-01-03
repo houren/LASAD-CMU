@@ -142,7 +142,6 @@ public abstract class AbstractMVCViewSession {
 		return new Vector<MVCViewRecipient>();
 	}
 
-	// TODO 
 	public void registerMVCViewRecipientForModel(MVCViewRecipient r, AbstractUnspecifiedElementModel model) {
 		Vector<MVCViewRecipient> newRecipients = null;
 

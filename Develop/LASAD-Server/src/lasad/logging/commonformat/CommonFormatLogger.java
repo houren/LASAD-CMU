@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-
 import lasad.logging.LoggerInterface;
 import lasad.logging.commonformat.util.CFConstants;
 import lasad.logging.commonformat.util.CFTranslationResult;

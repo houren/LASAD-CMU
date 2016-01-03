@@ -7,6 +7,7 @@ import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.CustomDualListF
 
 import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.IconButtonEvent;
+import com.extjs.gxt.ui.client.widget.form.DualListField;
 
 /**
  * Custom implementation of {@link DualListField} throws events for MoveSelectedDown, MoveSelectedUp,

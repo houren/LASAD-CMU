@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import lasad.shared.dfki.meta.ontology.base.BaseType;
+import lasad.shared.dfki.meta.ontology.base.RatingType;
+import lasad.shared.dfki.meta.ontology.base.TextType;
 
 
 /**

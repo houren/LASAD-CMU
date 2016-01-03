@@ -47,9 +47,11 @@ public class RectilinearEnding extends ConnectionEnding {
 		this((Widget) endings.get(Direction.UP), (Widget) endings.get(Direction.DOWN), (Widget) endings.get(Direction.LEFT), (Widget) endings.get(Direction.RIGHT));
 	}
 
+	/*
 	public RectilinearEnding(RectilinearEndingsImageBundle imageBundle) {
 		this(imageBundle.up().createImage(), imageBundle.down().createImage(), imageBundle.left().createImage(), imageBundle.right().createImage());
 	}
+	*/
 
 	/**
 	 * @see lasad.gwt.client.helper.connection.ending.ConnectionEnding#update(int,

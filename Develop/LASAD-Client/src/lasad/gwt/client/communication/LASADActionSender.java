@@ -29,9 +29,6 @@ import de.novanic.eventservice.client.event.listener.unlisten.UnlistenEvent;
 import de.novanic.eventservice.client.event.listener.unlisten.UnlistenEventListener.Scope;
 import de.novanic.eventservice.client.event.listener.unlisten.UnlistenEventListenerAdapter;
 
-import lasad.shared.communication.objects.commands.Commands;
-import lasad.shared.communication.objects.Action;
-
 
 /** Helper class to send ActionPackage to the server **/
 public class LASADActionSender {
@@ -117,25 +114,6 @@ public class LASADActionSender {
 
 		if(connectEventService()) {
 			LASADStatusBar.getInstance().setConnectionBusy(true);
-			/*
-			for (Action a : actionSet.getActions())
-			{
-				switch (a.getCmd())
-				{
-					case CreateElement:
-						String eltType = a.getParameterValue(ParameterTypes.Type);
-						String mapID = a.getParameterValue(ParameterTypes.MapId);
-						if (eltType != null && mapID != null && eltType.equals("box") && LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getNumBoxes() >= 50)
-						{
-							LASADInfo.display("Error", "Max of 50 contributions permitted per map.");
-							LASADStatusBar.getInstance().setConnectionBusy(false);
-							return;	
-						}
-					default:
-						break;
-				}
-			}
-			*/
 
 			actionSet.addParameter(ParameterTypes.SessionId, clientID); //"CLIENT-ID"
 			
@@ -223,9 +201,9 @@ public class LASADActionSender {
 									counter = 0;
 									// If there are active maps, leave and rejoin them to make sure the state is consistent
 									
-									if(LASAD_Client.getInstance().getMapTabs().keySet().size() > 0) {
+									if(LASAD_Client.getMapTabs().keySet().size() > 0) {
 										
-										final Set<String> mapIDs = LASAD_Client.getInstance().getMapTabs().keySet();
+										final Set<String> mapIDs = LASAD_Client.getMapTabs().keySet();
 										final int size = mapIDs.size();
 										
 										ReloadingMapsDialogue.getInstance().setMapCount(size);
@@ -272,9 +250,9 @@ public class LASADActionSender {
 					} else {
 						Logger.log("Reconnection was not possible", Logger.DEBUG);
 						LASAD_Client.getInstance().disable(true);
-						if(LASAD_Client.getInstance().getMapTabs().keySet().size() > 0) {
+						if(LASAD_Client.getMapTabs().keySet().size() > 0) {
 							
-							final Set<String> mapIDs = LASAD_Client.getInstance().getMapTabs().keySet();
+							final Set<String> mapIDs = LASAD_Client.getMapTabs().keySet();
 							final int size = mapIDs.size();
 							
 							ReloadingMapsDialogue.getInstance().setMapCount(size);

@@ -6,8 +6,8 @@ import java.util.TreeMap;
 
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.constants.lasad_clientConstants;
-import lasad.gwt.client.model.GraphMapInfo;
 import lasad.gwt.client.model.ElementInfo;
+import lasad.gwt.client.model.GraphMapInfo;
 import lasad.gwt.client.settings.DebugSettings;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.link.AbstractLink;
@@ -30,10 +30,6 @@ import com.extjs.gxt.ui.client.widget.menu.MenuItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
-
-import lasad.gwt.client.model.organization.AutoOrganizer;
-
-import lasad.gwt.client.logger.Logger;
 
 /**
  *	The beginning implementation for the map's menu bar.  Continued in subclass ArgumentMapMenuBar.

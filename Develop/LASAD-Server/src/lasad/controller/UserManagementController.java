@@ -33,7 +33,7 @@ public class UserManagementController {
 	 */
 	public static void processJoin(Action a, User u) {
 
-		int mapID = ActionProcessor.getInstance().getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 
 		// Check if map exists
 		if (Map.isExisting(mapID)) {

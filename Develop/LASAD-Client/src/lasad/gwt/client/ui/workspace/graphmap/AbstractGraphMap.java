@@ -5,6 +5,9 @@ import java.util.Map;
 
 import lasad.gwt.client.helper.connector.Direction;
 import lasad.gwt.client.model.AbstractMVCViewSession;
+// Kevin Loughlin
+import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.model.organization.AutoOrganizer;
 import lasad.gwt.client.ui.common.FocusableInterface;
 import lasad.gwt.client.ui.common.GenericFocusHandler;
 import lasad.gwt.client.ui.common.GenericSelectionHandler;
@@ -15,11 +18,6 @@ import lasad.gwt.client.ui.common.highlight.HighlightableElementInterface;
 import com.extjs.gxt.ui.client.util.Size;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.google.gwt.user.client.Timer;
-
-// Kevin Loughlin
-import lasad.gwt.client.model.organization.ArgumentModel;
-import lasad.gwt.client.logger.Logger;
-import lasad.gwt.client.model.organization.AutoOrganizer;
 
 /*
  * refactoring of AbstractArgumentMap

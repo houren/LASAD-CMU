@@ -2,6 +2,7 @@ package lasad.logging.commonformat.util;
 
 import java.util.List;
 import java.util.Vector;
+
 import lasad.logging.commonformat.util.jaxb.Object;
 
 /**

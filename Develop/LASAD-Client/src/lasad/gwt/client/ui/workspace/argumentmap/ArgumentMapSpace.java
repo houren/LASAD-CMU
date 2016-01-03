@@ -21,7 +21,6 @@ import com.extjs.gxt.ui.client.util.Size;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
-import lasad.gwt.client.logger.Logger;
 
 public class ArgumentMapSpace extends GraphMapSpace {
 	

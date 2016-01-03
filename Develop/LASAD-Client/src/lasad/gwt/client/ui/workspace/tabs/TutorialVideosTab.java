@@ -1,10 +1,10 @@
 package lasad.gwt.client.ui.workspace.tabs;
 
+import java.util.LinkedHashMap;
+
+import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.google.gwt.user.client.ui.HTML;
-import com.extjs.gxt.ui.client.Style.Scroll;
-import java.util.LinkedHashMap;
-import com.google.gwt.user.client.ui.Anchor;
 
 /**
  *	Represents the singleton instance of the Tutorial Videos Tab, reachable by the "Help" anchor link on the login screen, or by the argument map

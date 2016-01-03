@@ -1,6 +1,5 @@
 package lasad.shared.dfki.meta.agents.analysis.structure.model;
 
-import lasad.shared.dfki.meta.agents.analysis.structure.model.ElementVariableProp;
 
 /**
  * Indicates whether LHS and RHS of a {@link Comparison} refer to

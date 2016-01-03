@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.Vector;
 
 import lasad.gwt.client.logger.Logger;
-import lasad.gwt.client.model.GraphMapInfo;
 import lasad.gwt.client.model.AbstractMVCViewSession;
 import lasad.gwt.client.model.AbstractMVController;
 import lasad.gwt.client.model.AbstractUnspecifiedElementModel;
+import lasad.gwt.client.model.GraphMapInfo;
 import lasad.gwt.client.model.events.LasadEvent;
 import lasad.shared.communication.objects.Parameter;
 import lasad.shared.communication.objects.parameters.ParameterTypes;

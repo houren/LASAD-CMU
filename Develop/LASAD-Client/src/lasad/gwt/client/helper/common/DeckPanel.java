@@ -19,11 +19,11 @@ package lasad.gwt.client.helper.common;
  * the License.
  */
 
+import lasad.gwt.client.logger.Logger;
+
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import lasad.gwt.client.logger.Logger;
 
 
 /**

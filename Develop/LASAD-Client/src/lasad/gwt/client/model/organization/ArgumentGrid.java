@@ -1,18 +1,13 @@
 package lasad.gwt.client.model.organization;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.logger.Logger;
-import lasad.gwt.client.model.organization.Coordinate;
-import lasad.gwt.client.model.organization.IntPair;
-import lasad.gwt.client.ui.workspace.LASADInfo;
 
 /**
  *	Provides a chessboard like organization of each argument thread, with specific coordinate positions translated from this model by AutoOrganizer.
@@ -55,7 +50,7 @@ public class ArgumentGrid
 
 	public Set<LinkedBox> getBoxes()
 	{
-		return new HashSet(grid.values());
+		return new HashSet<LinkedBox>(grid.values());
 	}
 
 	/* If they want the boxes, they can get them with getBoxes.  This is just for inside this class. */
@@ -667,35 +662,6 @@ public class ArgumentGrid
 		}
 	}
 
-	private ArrayList<LinkedBox> sortAscendingNumParents(final Set<LinkedBox> group)
-	{
-		Set<LinkedBox> unsortedChildGroup = new HashSet<LinkedBox>(group);
-		ArrayList<LinkedBox> sortedChildGroup = new ArrayList<LinkedBox>();
-
-		final int SIZE = group.size();
-		for (int i = 0; i < SIZE; i++)
-		{
-			int minNumParents = Integer.MAX_VALUE;
-			LinkedBox minBox = null;
-
-			for (LinkedBox box : unsortedChildGroup)
-			{
-				if (box.getNumParents() < minNumParents)
-				{
-					minNumParents = box.getNumParents();
-					minBox = box;
-				}
-			}
-			if (minBox != null)
-			{
-				unsortedChildGroup.remove(minBox);
-				sortedChildGroup.add(minBox);
-			}
-		}
-
-		return sortedChildGroup;
-	}
-
 	// Sorts a collection of boxes from lowest to greatest widthLevel, returned as an ArrayList
 	private ArrayList<LinkedBox> sortAscendingWidth(final Collection<LinkedBox> origBoxes)
 	{
@@ -998,11 +964,11 @@ public class ArgumentGrid
 	@Override
 	public String toString()
 	{
-		IntPair heightData = determineMinMaxHeightLevels(new HashSet(grid.values()));
+		IntPair heightData = determineMinMaxHeightLevels(new HashSet<LinkedBox>(grid.values()));
 		int minHeight = heightData.getMin();
 		int maxHeight = heightData.getMax();
 
-		IntPair widthData = determineMinMaxWidthLevels(new HashSet(grid.values()));
+		IntPair widthData = determineMinMaxWidthLevels(new HashSet<LinkedBox>(grid.values()));
 		int minWidth = widthData.getMin();
 		int maxWidth = widthData.getMax();
 

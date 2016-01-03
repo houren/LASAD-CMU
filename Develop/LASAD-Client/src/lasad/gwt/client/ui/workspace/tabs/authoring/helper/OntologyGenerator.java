@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.ElementInfo;
 import lasad.shared.communication.objects.Parameter;
 import lasad.shared.communication.objects.RadioButtonParameter;
@@ -13,8 +14,6 @@ import lasad.shared.communication.objects.parameters.ParameterTypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.XMLParser;
-
-import lasad.gwt.client.logger.Logger;
 
 
 

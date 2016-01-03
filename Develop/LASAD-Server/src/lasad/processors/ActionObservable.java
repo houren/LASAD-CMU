@@ -2,7 +2,6 @@ package lasad.processors;
 
 import java.util.Vector;
 
-
 import lasad.entity.User;
 import lasad.shared.communication.objects.Action;
 import lasad.shared.communication.objects.commands.Commands;

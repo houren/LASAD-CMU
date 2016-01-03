@@ -2,7 +2,6 @@ package lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.window;
 
 import java.util.List;
 
-import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FATDebug;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FeedbackAuthoringStrings;
 
 import com.extjs.gxt.ui.client.Style.Orientation;
@@ -11,7 +10,6 @@ import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.event.WindowEvent;
 import com.extjs.gxt.ui.client.event.WindowListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
-import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.Label;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;

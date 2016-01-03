@@ -220,7 +220,7 @@ public class StructuralAnalysisTypeManipulator implements Serializable {
 	public List<Comparison> getComparisonsInvalidatedOnOntologyChange(
 			Ontology newOntology) {
 		List<Comparison> invalidatedComparisons = new Vector<Comparison>();
-		// TODO
+		//TODO Incomplete
 		return invalidatedComparisons;
 	}
 

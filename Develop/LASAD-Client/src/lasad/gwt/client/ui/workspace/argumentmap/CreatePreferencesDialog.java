@@ -1,34 +1,22 @@
 package lasad.gwt.client.ui.workspace.argumentmap;
 
+import lasad.gwt.client.LASAD_Client;
+import lasad.gwt.client.model.organization.AutoOrganizer;
+
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
-import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.widget.Slider;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.FormButtonBinding;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
-import com.extjs.gxt.ui.client.widget.form.SimpleComboBox;
-import com.extjs.gxt.ui.client.widget.form.SimpleComboValue;
-import com.extjs.gxt.ui.client.widget.layout.FormData;
-import com.google.gwt.user.client.Element;
-import com.extjs.gxt.ui.client.widget.form.ComboBox;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-
-import lasad.gwt.client.model.organization.AutoOrganizer;
-import lasad.gwt.client.model.organization.ArgumentModel;
-
-import lasad.gwt.client.LASAD_Client;
-import com.extjs.gxt.ui.client.widget.Slider;
 import com.extjs.gxt.ui.client.widget.form.SliderField;
-import com.extjs.gxt.ui.client.event.Events;
-import com.extjs.gxt.ui.client.event.Listener; 
-import com.extjs.gxt.ui.client.event.BaseEvent;
-
-import lasad.gwt.client.logger.Logger;
+import com.extjs.gxt.ui.client.widget.layout.FormData;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.CheckBox;
 
 /**
  *	Creates the preferences menu that appears when selected from the LASAD menu, found in ArgumentMapMenuBar.

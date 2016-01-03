@@ -1,11 +1,12 @@
 package lasad.logging.commonformat.util;
 
 import java.io.IOException;
-import java.io.StringBufferInputStream;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
-import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -104,7 +105,7 @@ public class PreambleTranslator {
 				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 				DocumentBuilder db = dbf.newDocumentBuilder();
 
-				Document doc = db.parse(new StringBufferInputStream(ontologyData));
+				Document doc = db.parse(new ByteArrayInputStream(ontologyData.getBytes(StandardCharsets.UTF_8)));
 				
 //				InputSource is = new InputSource();
 //				is.setEncoding("UTF-8");

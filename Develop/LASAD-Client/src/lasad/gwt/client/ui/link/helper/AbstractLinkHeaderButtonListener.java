@@ -11,9 +11,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 
-import lasad.gwt.client.LASAD_Client;
-import lasad.gwt.client.ui.link.AbstractLinkPanel;
-
 public abstract class AbstractLinkHeaderButtonListener implements EventListener {
 
 //	private final LASADActionSender communicator = LASADActionSender.getInstance();

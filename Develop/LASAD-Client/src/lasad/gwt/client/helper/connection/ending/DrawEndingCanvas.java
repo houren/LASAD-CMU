@@ -5,8 +5,6 @@ import lasad.gwt.client.helper.connection.data.Point;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 
-import lasad.gwt.client.logger.Logger;
-
 public class DrawEndingCanvas extends DrawEnding {
 
 	private Element styledDiv;

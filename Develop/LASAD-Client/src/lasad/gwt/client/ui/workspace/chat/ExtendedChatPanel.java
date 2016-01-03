@@ -27,7 +27,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
@@ -81,7 +80,6 @@ public class ExtendedChatPanel extends ContentPanel implements CommonChatInterfa
 	DialogBox dialogbox;
 	PopupPanel glass;
 	VerticalPanel DialogBoxContents;
-	ClickListener listener;
 	HTML message;
 	Button button;
 	SimplePanel holder;

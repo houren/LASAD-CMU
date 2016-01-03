@@ -240,9 +240,7 @@ public class FeedbackAuthoringTabContent extends ContentPanel{
 	}
 	
 	public void refreshPanels(){
-		//TODO
-		//Clean current data
-		//clean panels
+		//TODO Clean current data and clean panels
 	}
 	
 	private void getAgentList(){
@@ -1592,7 +1590,7 @@ public class FeedbackAuthoringTabContent extends ContentPanel{
 	}
 	
 	public void handleComponentRuntimeStatusChanged(String componentId, ServiceStatus oldStatus, ServiceStatus newStatus){
-		//TODO
+		//TODO Incomplete
 	}
 	public void handleSessionRuntimeStatusChanged(String sessionId, ServiceStatus oldStatus, ServiceStatus newStatus){
 		//String sessionName = getSessionNameDB(sessionId);

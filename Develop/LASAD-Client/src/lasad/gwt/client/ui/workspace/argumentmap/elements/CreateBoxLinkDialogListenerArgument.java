@@ -10,7 +10,6 @@ import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.workspace.graphmap.GraphMap;
 import lasad.gwt.client.ui.workspace.graphmap.elements.AbstractCreateBoxLinkDialog;
 import lasad.gwt.client.ui.workspace.graphmap.elements.AbstractCreateBoxLinkDialogListener;
-import lasad.gwt.client.ui.workspace.LASADInfo;
 
 public class CreateBoxLinkDialogListenerArgument extends AbstractCreateBoxLinkDialogListener {
 	
@@ -32,14 +31,7 @@ public class CreateBoxLinkDialogListenerArgument extends AbstractCreateBoxLinkDi
 	protected void onClickSendUpdateToServer(ElementInfo boxInfo,
 			ElementInfo linkInfo, String mapID, int x, int y, String start,
 			String end) {
-		if (myMap.getNumBoxes() < 50)
-		{
-			communicator.sendActionPackage(actionBuilder.createBoxAndLink(boxInfo, linkInfo, mapID, x, y, start, end));
-		}
-		else
-		{
-			LASADInfo.display("Error", "Max of 50 contributions permitted per map. Delete unwanted contributions or create a separate map.");
-		}
+		communicator.sendActionPackage(actionBuilder.createBoxAndLink(boxInfo, linkInfo, mapID, x, y, start, end));
 	}
 
 	@Override
@@ -47,5 +39,4 @@ public class CreateBoxLinkDialogListenerArgument extends AbstractCreateBoxLinkDi
 		return ((MVCViewSession)myMap.getMyViewSession()).getController().getMapInfo().getElementsByType(type).values();
 //		return myMap.getMyViewSession().getController().getMapInfo().getElementsByType(type).values();
 	}
-
 }

@@ -2,7 +2,6 @@ package lasad.processors;
 
 import java.sql.SQLException;
 
-
 import lasad.Server;
 import lasad.controller.ClientCommunicationController;
 import lasad.controller.ManagementController;
@@ -260,6 +259,8 @@ public class ActionProcessor extends ActionObservable {
 			case DeleteElement:
 				numActions++;
 				break;
+			default:
+				break;
 			}
 		}
 		// Nothing to add?
@@ -276,6 +277,8 @@ public class ActionProcessor extends ActionObservable {
 			case DeleteElement:
 				a.addParameter(ParameterTypes.UserActionId, sessionID + time);
 				a.addParameter(ParameterTypes.NumActions, "" + numActions);
+				break;
+			default:
 				break;
 			}
 		}

@@ -3,7 +3,6 @@ package lasad;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-
 import lasad.entity.Map;
 import lasad.entity.User;
 import lasad.shared.communication.objects.ActionPackage;

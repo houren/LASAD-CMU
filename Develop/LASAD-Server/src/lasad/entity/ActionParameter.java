@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-
 import lasad.Config;
 import lasad.database.DatabaseConnectionHandler;
 import lasad.shared.communication.objects.Action;

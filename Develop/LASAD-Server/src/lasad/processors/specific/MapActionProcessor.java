@@ -1,6 +1,10 @@
 package lasad.processors.specific;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.HashSet;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import lasad.controller.ManagementController;
 import lasad.entity.ActionParameter;
@@ -18,25 +22,13 @@ import lasad.shared.communication.objects.Parameter;
 import lasad.shared.communication.objects.categories.Categories;
 import lasad.shared.communication.objects.commands.Commands;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
-
-import edu.cmu.pslc.logging.element.ConditionElement;
-import edu.cmu.pslc.logging.element.CustomFieldElement;
+import edu.cmu.pslc.logging.ContextMessage;
+import edu.cmu.pslc.logging.OliDatabaseLogger;
+import edu.cmu.pslc.logging.ToolMessage;
 import edu.cmu.pslc.logging.element.DatasetElement;
-import edu.cmu.pslc.logging.element.InterpretationElement;
 import edu.cmu.pslc.logging.element.LevelElement;
 import edu.cmu.pslc.logging.element.MetaElement;
 import edu.cmu.pslc.logging.element.ProblemElement;
-import edu.cmu.pslc.logging.element.PropertyElement;
-import edu.cmu.pslc.logging.element.SkillElement;
-import edu.cmu.pslc.logging.element.StepElement;
-import edu.cmu.pslc.logging.element.StepSequenceElement;
-import edu.cmu.pslc.logging.OliDatabaseLogger;
-import edu.cmu.pslc.logging.*;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.HashSet;
 
 /**
  * this class handles all actions about map
@@ -64,7 +56,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	public MapActionProcessor()
 	{
 		super();
-		dsLogger = OliDatabaseLogger.create("https://pslc-qa.andrew.cmu.edu/log/server", "UTF-8");
+		dsLogger = OliDatabaseLogger.create("http://pslc-qa.andrew.cmu.edu/log/server", "UTF-8");
 
 		loggedSessions = new ConcurrentHashMap<String, String>();
 		loggedContexts = new ConcurrentHashMap<String, ContextMessage>();
@@ -108,7 +100,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
     	{
 			String userName = u.getNickname();
 	        String sessionID = u.getSessionID();
-	        Integer mapID = this.aproc.getMapIDFromAction(a);
+	        Integer mapID = ActionProcessor.getMapIDFromAction(a);
 
 	        // map -> doingAutoOrganize
 			if (autoOrganizeStatuses.get(mapID) == null)
@@ -364,8 +356,10 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
         	Logger.debugLog("ERROR: Exception thrown for following action!");
         	Logger.debugLog(a.toString());
         	Logger.debugLog("EXCEPTION INFO...");
-			Logger.debugLog(e.toString());
-			Logger.debugLog(e.getStackTrace().toString());
+        	StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			Logger.debugLog(sw.toString());
         } 	
     }
 
@@ -377,7 +371,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	 * @author ZGE
 	 */
 	public void processCreateElement(Action a, User u) {
-		int mapID = this.aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 
 		Vector<String> parents = a.getParameterValues(ParameterTypes.Parent);
 		if (parents != null) {
@@ -488,7 +482,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	 */
 	private Action replacePlaceHoldersAddIDsAddMetadata(Action a, int ID, String username) {
 
-		int mapID = this.aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 
 		boolean usernamePresent = false, idPresent = false;
 		boolean relation = false;
@@ -511,6 +505,8 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				break;
 			case Id:
 				idPresent = true;
+				break;
+			default:
 				break;
 			}
 
@@ -560,7 +556,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	public void processUpdateElement(Action a, User u) {
 		a.addParameter(ParameterTypes.Received, System.currentTimeMillis() + "");
 
-		int mapID = this.aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 		int elementID = Integer.parseInt(a.getParameterValue(ParameterTypes.Id));
 
 		synchronized (ActionProcessor.DeleteUpdateJoinActionLock) {
@@ -628,13 +624,12 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	}
 
 	/**
-	 * TODO?
 	 * 
 	 * @param a, u
 	 * @author ZGE
 	 */
 	private void distributeToAllUsersButMeWithoutSaving(Action a, User u) {
-		int mapID = this.aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 
 		ActionPackage ap = ActionPackage.wrapAction(a);
 		Logger.doCFLogging(ap);
@@ -650,7 +645,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	 */
 	public void processDeleteElement(Action a, User u) {
 
-		int mapID = this.aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 		int elementID = Integer.parseInt(a.getParameterValue(ParameterTypes.Id));
 
 		synchronized (ActionProcessor.DeleteUpdateJoinActionLock) {
@@ -746,7 +741,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 
 	private void processAutoOrganize(Action a, User u)
 	{
-		int mapID = this.aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 		
 		// Create new revision of the map
 		Revision r = createNewRevision(mapID, u, a);
@@ -764,7 +759,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		if (u != null && a.getCategory().equals(Categories.Map)) {
 			switch (a.getCmd()) {
 			case StartAutoOrganize:
-				autoOrganizeStatuses.put(this.aproc.getMapIDFromAction(a), true);
+				autoOrganizeStatuses.put(ActionProcessor.getMapIDFromAction(a), true);
 				break;	
 			case ChangeFontSize:
 				processChangeFontSize(a, u);
@@ -793,7 +788,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				returnValue = true;
 				break;
 			case FinishAutoOrganize:
-				autoOrganizeStatuses.put(this.aproc.getMapIDFromAction(a), false);
+				autoOrganizeStatuses.put(ActionProcessor.getMapIDFromAction(a), false);
 				processAutoOrganize(a, u);
 				returnValue = true;
 				break;
@@ -806,7 +801,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			boolean shouldLog;
 			try
 			{
-				shouldLog = !autoOrganizeStatuses.get(this.aproc.getMapIDFromAction(a));
+				shouldLog = !autoOrganizeStatuses.get(ActionProcessor.getMapIDFromAction(a));
 			}
 			catch (Exception e)
 			{
@@ -822,7 +817,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	}
 
 	private void processChangeFontSize(Action a, User u){
-		int mapID = this.aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 		
 		Revision r = createNewRevision(mapID, u, a);
 		r.setDescription("Changing the font size");
@@ -836,7 +831,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	//TODO Zhenyu
 	private void processBackgroudImage(Action a,User u)
 	{
-		int mapID = this.aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 		
 		//Save the url in the database
 		Map.setBackgroundImage(mapID, a.getParameterValue(ParameterTypes.BackgroundImageURL));

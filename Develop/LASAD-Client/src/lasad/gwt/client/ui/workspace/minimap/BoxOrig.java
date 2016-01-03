@@ -1,6 +1,7 @@
 package lasad.gwt.client.ui.workspace.minimap;
 
 import java.util.ArrayList;
+
 import com.extjs.gxt.ui.client.util.Rectangle;
 
 /**

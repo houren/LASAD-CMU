@@ -3,7 +3,6 @@ package lasad.gwt.client.ui.link;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.HashMap;
 
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.helper.connection.Connection;

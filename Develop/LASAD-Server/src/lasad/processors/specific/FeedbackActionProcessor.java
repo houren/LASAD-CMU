@@ -2,7 +2,6 @@ package lasad.processors.specific;
 
 import java.util.Vector;
 
-
 import lasad.controller.ManagementController;
 import lasad.controller.MapController;
 import lasad.entity.ActionParameter;
@@ -18,6 +17,7 @@ import lasad.shared.communication.objects.ActionPackage;
 import lasad.shared.communication.objects.categories.Categories;
 import lasad.shared.communication.objects.commands.Commands;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
+import lasad.processors.ActionProcessor;
 
 /**
  * This class handles all feedback related actions distributed by the ActionProcessor
@@ -55,7 +55,7 @@ public class FeedbackActionProcessor extends AbstractActionObserver implements A
 	 * @author FL
 	 */
 	private void distributeToAllUsersWithoutSaving(Action a, User u) {
-		int mapID = aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 
 		ActionPackage ap = ActionPackage.wrapAction(a);
 		Logger.doCFLogging(ap);
@@ -70,7 +70,7 @@ public class FeedbackActionProcessor extends AbstractActionObserver implements A
 	 * @author FL
 	 */
 	private void processCreateElement(Action a, User u) {
-		int mapID = aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 
 		Vector<String> parents = a.getParameterValues(ParameterTypes.Parent);
 		if (parents != null) {

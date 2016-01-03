@@ -5,13 +5,13 @@ import java.util.List;
 import lasad.logging.commonformat.CfXmppWriter;
 import lasad.logging.commonformat.util.jaxb.Action;
 import lasad.logging.commonformat.util.jaxb.Actiontype;
+import lasad.logging.commonformat.util.jaxb.Object;
 import lasad.logging.commonformat.util.jaxb.ObjectDef;
 import lasad.logging.commonformat.util.jaxb.Objects;
 import lasad.logging.commonformat.util.jaxb.Preamble;
 import lasad.logging.commonformat.util.jaxb.Properties;
 import lasad.logging.commonformat.util.jaxb.Property;
 import lasad.logging.commonformat.util.jaxb.User;
-import lasad.logging.commonformat.util.jaxb.Object;
 
 public class CF2StringUtil {
 	public static final String NEXTLINE = "\n";

@@ -2,7 +2,7 @@ package lasad;
 
 import java.rmi.AccessException;
 import java.rmi.NoSuchObjectException;
-import java.rmi.RMISecurityManager;
+// deprecated import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -111,7 +111,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
 			//
 			// java.rmi.server.useCodebaseOnly
 
-			System.setSecurityManager(new RMISecurityManager());
+			System.setSecurityManager(new SecurityManager());
 		}
 
 		try {

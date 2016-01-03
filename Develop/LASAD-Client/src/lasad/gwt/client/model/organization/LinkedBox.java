@@ -1,14 +1,9 @@
 package lasad.gwt.client.model.organization;
 
-import java.util.HashSet;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.ArrayList;
-
-import lasad.gwt.client.model.organization.OrganizerLink;
-import lasad.gwt.client.logger.Logger;
-import lasad.gwt.client.model.organization.Coordinate;
+import java.util.Set;
 
 /**
  *	LinkedBox is an alternative representation to AbstractBox, more conducive for map organization and modeling.  Each LinkedBox has its boxID
@@ -230,17 +225,17 @@ public class LinkedBox
 
 	public Set<OrganizerLink> getChildLinks()
 	{
-		return new HashSet(childLinks.values());
+		return new HashSet<OrganizerLink>(childLinks.values());
 	}
 
 	public Set<OrganizerLink> getParentLinks()
 	{
-		return new HashSet(parentLinks.values());
+		return new HashSet<OrganizerLink>(parentLinks.values());
 	}
 
 	public Set<OrganizerLink> getSiblingLinks()
 	{
-		return new HashSet(siblingLinks.values());
+		return new HashSet<OrganizerLink>(siblingLinks.values());
 	}
 
 	public Set<LinkedBox> getChildBoxes()

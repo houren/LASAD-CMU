@@ -8,10 +8,10 @@ import lasad.gwt.client.communication.helper.ActionFactory;
 import lasad.gwt.client.importer.ImportFileChecker;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.ui.workspace.LASADInfo;
+import lasad.gwt.client.ui.workspace.argumentmap.ImportMapDialog;
 import lasad.gwt.client.ui.workspace.loaddialogues.ImportingMapDialogue;
 import lasad.gwt.client.ui.workspace.loaddialogues.LoadingMapFromFileDialogue;
 import lasad.gwt.client.xml.LoadSessionFromXMLFileParser;
-import lasad.gwt.client.ui.workspace.argumentmap.ImportMapDialog;
 import lasad.shared.communication.objects.ActionPackage;
 
 import com.extjs.gxt.ui.client.event.ComponentEvent;

@@ -3,7 +3,6 @@ package lasad.processors.specific;
 import java.util.TreeMap;
 import java.util.Vector;
 
-
 import lasad.controller.ManagementController;
 import lasad.controller.UserManagementController;
 import lasad.entity.Map;
@@ -37,7 +36,7 @@ public class ManagementActionProcessor extends AbstractActionObserver implements
 	 */
 	public void processJoin(Action a, User u) {
 
-		int mapID = this.aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 
 		// Check if map exists
 		if (Map.isExisting(mapID)) {
@@ -194,6 +193,8 @@ public class ManagementActionProcessor extends AbstractActionObserver implements
 				break;
 			case UpdateElement:
 				workonUpdateElementForJoin(action, updateActions);
+				break;
+			default:
 				break;
 			}
 		}
@@ -377,7 +378,7 @@ public class ManagementActionProcessor extends AbstractActionObserver implements
 	 * @author FL
 	 */
 	private void processGetOntology(Action a, User u) {
-		int mapID = aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 		ActionPackage ap = ActionPackageFactory.getOntology(mapID);
 		Logger.doCFLogging(ap);
 		ManagementController.addToUsersActionQueue(ap, u.getSessionID());
@@ -434,7 +435,7 @@ public class ManagementActionProcessor extends AbstractActionObserver implements
 	 */
 	private void processLeaveMap(Action a, User u) {
 
-		int mapID = aproc.getMapIDFromAction(a);
+		int mapID = ActionProcessor.getMapIDFromAction(a);
 
 		ActionPackage ap1 = ActionPackageFactory.forcedClose();
 		Logger.doCFLogging(ap1);

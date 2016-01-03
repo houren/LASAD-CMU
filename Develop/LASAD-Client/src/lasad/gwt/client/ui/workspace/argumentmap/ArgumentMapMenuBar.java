@@ -1,21 +1,21 @@
 package lasad.gwt.client.ui.workspace.argumentmap;
 
 import java.util.Iterator;
-import java.util.TreeMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.communication.LASADActionSender;
 import lasad.gwt.client.communication.helper.ActionFactory;
 import lasad.gwt.client.helper.connector.Direction;
-import lasad.gwt.client.importer.ARGUNAUT.ArgunautParser;
-import lasad.gwt.client.importer.LARGO.LARGOParser;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.AbstractUnspecifiedElementModel;
 import lasad.gwt.client.model.ElementInfo;
 import lasad.gwt.client.model.GraphMapInfo;
 import lasad.gwt.client.model.argument.MVCViewSession;
 import lasad.gwt.client.model.argument.MVController;
+import lasad.gwt.client.model.organization.AutoOrganizer;
+import lasad.gwt.client.model.organization.EdgeCoords;
 import lasad.gwt.client.settings.DebugSettings;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.link.AbstractLink;
@@ -25,6 +25,8 @@ import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
 import lasad.gwt.client.ui.workspace.graphmap.GraphMapMenuBar;
 import lasad.gwt.client.ui.workspace.graphmap.GraphMapSpace;
 import lasad.gwt.client.ui.workspace.graphmap.elements.AbstractCreateSpecialLinkDialog;
+import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteContributionDialog;
+import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteRelationDialog;
 import lasad.gwt.client.ui.workspace.loaddialogues.ExportScreenShotDialogue;
 import lasad.gwt.client.ui.workspace.tableview.ArgumentEditionStyleEnum;
 import lasad.gwt.client.ui.workspace.tableview.TableZoomEnum;
@@ -33,52 +35,31 @@ import lasad.gwt.client.xml.MapToXMLConverter;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 
 import com.extjs.gxt.ui.client.event.BaseEvent;
-import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.ComponentEvent;
+import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.MessageBoxEvent;
-import com.extjs.gxt.ui.client.event.ComponentEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.widget.Dialog;
+//import lasad.gwt.client.ui.workspace.argumentmap.ImportMapDialog;
+import com.extjs.gxt.ui.client.widget.Component;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.SimpleComboBox;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
+import com.extjs.gxt.ui.client.widget.menu.CheckMenuItem;
 import com.extjs.gxt.ui.client.widget.menu.Menu;
 import com.extjs.gxt.ui.client.widget.menu.MenuItem;
-import com.extjs.gxt.ui.client.widget.menu.CheckMenuItem;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.FileUpload;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
-import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.xml.client.impl.DOMParseException;
-
-import lasad.gwt.client.model.organization.AutoOrganizer;
-import lasad.gwt.client.model.organization.ArgumentModel;
-import lasad.gwt.client.model.organization.LinkedBox;
-import lasad.gwt.client.model.organization.EdgeCoords;
-import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteContributionDialog;
-import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteRelationDialog;
-
-import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
-import lasad.gwt.client.ui.workspace.argumentmap.CreatePreferencesDialog;
-//import lasad.gwt.client.ui.workspace.argumentmap.ImportMapDialog;
-import com.extjs.gxt.ui.client.widget.Component;
-import lasad.gwt.client.ui.workspace.tabs.map.ImportMapFormPanel;
-import lasad.gwt.client.ui.workspace.tabs.TutorialVideosTab;
 
 /**
  *	Finishes the implementation of the map's menu bar.  It has been redone by Kevin Loughlin to fall in line with that of a standard
@@ -515,16 +496,8 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 				+ ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getInnerHeight() / 2
 				- (Integer.parseInt(currentElement.getUiOption(ParameterTypes.Height)) / 2);
 		ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-		if (ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getNumBoxes() < 50)
-		{
-			communicator.sendActionPackage(actionBuilder.createBoxWithElements(currentElement, ArgumentMapMenuBar.this.getMyMapSpace()
+		communicator.sendActionPackage(actionBuilder.createBoxWithElements(currentElement, ArgumentMapMenuBar.this.getMyMapSpace()
 				.getMyMap().getID(), tempPosX, tempPosY));
-		}
-		else
-		{
-			LASADInfo.display("Error", "Max of 50 contributions permitted per map. Delete unwanted contributions or create a separate map.");
-		}
-		
 	}
 
 	@Override

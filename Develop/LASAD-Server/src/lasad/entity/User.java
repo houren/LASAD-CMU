@@ -13,20 +13,19 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Vector;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
-
-
 import lasad.Config;
 import lasad.database.DatabaseConnectionHandler;
 import lasad.helper.MD5Converter;
 import lasad.logging.Logger;
 import lasad.shared.communication.objects.Action;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 public class User {
 	

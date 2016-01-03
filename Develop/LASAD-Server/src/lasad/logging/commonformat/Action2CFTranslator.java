@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-
 import lasad.logging.commonformat.util.ActionTranslatorHelper;
 import lasad.logging.commonformat.util.CFConstants;
 import lasad.logging.commonformat.util.CFGUIAction;
@@ -15,7 +14,6 @@ import lasad.logging.commonformat.util.jaxb.Action;
 import lasad.logging.commonformat.util.jaxb.Actiontype;
 import lasad.logging.commonformat.util.jaxb.Object;
 import lasad.logging.commonformat.util.jaxb.ObjectFactory;
-import lasad.logging.commonformat.util.jaxb.Preamble;
 import lasad.logging.commonformat.util.jaxb.User;
 import lasad.shared.communication.objects.ActionPackage;
 import lasad.shared.communication.objects.Parameter;
@@ -61,26 +59,6 @@ public class Action2CFTranslator {
 				cfTranslationResult.setSessionID(sessionID);
 				sessionFlag = true;
 			}
-//			registerSession(sessionID);
-
-//			// translate feedback request
-//			if (isFeedbackRequest(actionCategory, actionCommand)) {
-//				UserFeedbackRequestEvent feedbackRequestEvent = translateFeedbackRequestAction(action);
-//				generatedEventsList.add(feedbackRequestEvent);
-//			}
-//
-//			// process feedback presentation to user
-//			else if (isFeedbackElementDisplayed(actionCategory, actionCommand,
-//					paramMap)) {
-//				processFeedbackElementDisplayedAction(action, paramMap);
-//			}
-			
-			// translate map ontology to preamble
-//			if (isOntologyAction(actionCategory, actionCommand, paramMap)) {
-//				Preamble preamble =  transHelper.translateOntology(actionCategory, actionCommand, paramMap);
-//				//cfWriter.writePreamble(sessionID,preamble);
-//				cfTranslationResult.setPreamble(preamble);
-//			}
 			// translate user logins into LASAD
 			else if (isUserLogin(actionCategory, actionCommand)) {
 				Action newAct =  transHelper.translateUserLoginAction(actionCategory, actionCommand, paramMap);
@@ -152,17 +130,6 @@ public class Action2CFTranslator {
 //		System.out.println("Number of generated replayed Events:"
 //				+ replayedEvents.size());
 		return replayedEvents;
-	}
-	
-	private boolean isOntologyAction(String actionCategory, String actionCommand, ParamMap paramMap){
-		boolean isOntologyAction = false;
-		if (actionCategory.equalsIgnoreCase(Categories.Map.getOldCategories()) 
-			&& actionCommand.equalsIgnoreCase(Commands.Join.getOldCommands())
-				&& paramMap.getFirstValue(Commands.Ontology.getOldCommands()) != null){
-			isOntologyAction = true;
-		}
-		
-		return isOntologyAction;
 	}
 	
 	private boolean isChatMsg(String actionCategory, String actionCommand) {

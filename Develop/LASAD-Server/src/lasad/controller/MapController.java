@@ -2,7 +2,6 @@ package lasad.controller;
 
 import java.util.Vector;
 
-
 import lasad.Server;
 import lasad.controller.xmlController.ChatParser;
 import lasad.controller.xmlController.MapParser;
@@ -367,6 +366,8 @@ public class MapController {
 				break;
 			case Id:
 				idPresent = true;
+				break;
+			default:
 				break;
 			}
 

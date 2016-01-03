@@ -64,8 +64,7 @@ GraphicalElementInterface {
 	}
 
 	private void initLinkPanel(boolean isReplay) {
-		// TODO
-		// ParameterTypes.Details should be read from elementUIOptions
+		// TODO ParameterTypes.Details should be read from elementUIOptions
 
 		if (config.getElementOption(ParameterTypes.Details) != null) {
 			//linkPanel = new LinkPanel(this, config.getElementOption(ParameterTypes.Details),isReplay);
@@ -143,7 +142,7 @@ GraphicalElementInterface {
 	public void setLineWidth(String width) {
 		DOM.setStyleAttribute(this.getCurveStyleElement(), "width", width);
 	}
-	//ZyG,19.05.2011 TODO
+	//TODO ZyG,19.05.2011 
 	BezierConnectionData bdata;
 	public BezierConnectionData getBezierConnectionData()
 	{

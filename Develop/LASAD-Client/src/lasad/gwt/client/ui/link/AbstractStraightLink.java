@@ -13,8 +13,6 @@ import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.ElementInfo;
 import lasad.gwt.client.ui.workspace.graphmap.GraphMap;
 
-import lasad.gwt.client.logger.Logger;
-
 
 public abstract class AbstractStraightLink extends AbstractLink {
 	public AbstractStraightLink(GraphMap myMap, ElementInfo config, Connector cn1,

@@ -6,8 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import lasad.gwt.client.model.GraphMapInfo;
 import lasad.gwt.client.model.ElementInfo;
+import lasad.gwt.client.model.GraphMapInfo;
 import lasad.gwt.client.ui.workspace.questionnaire.QuestionConfig;
 import lasad.gwt.client.ui.workspace.questionnaire.QuestionnaireStepConfig;
 import lasad.gwt.client.ui.workspace.tutorial.TutorialConfig;
@@ -406,22 +406,6 @@ public class OntologyReader {
 					}
 				}
 			}
-		}
-	}
-
-	private static void modifyContributionToElementAndInitiateElementToChildrenMap(String contributionType, String elementType, HashMap<String, Vector<String>> contributionToElement, HashMap<String, Vector<String>> elementToChildren) {
-		contributionToElement.get(contributionType).add(elementType);
-
-		if (elementToChildren.get(elementType) == null) {
-			elementToChildren.put(elementType, new Vector<String>());
-		}
-	}
-
-	private static void modifyOntologyToContributionMapAndInitiateContributionToElementMap(String ontologyName, String contributionType, HashMap<String, Vector<String>> ontologyToContribution, HashMap<String, Vector<String>> contributionToElement) {
-		ontologyToContribution.get(ontologyName).add(contributionType);
-
-		if (contributionToElement.get(contributionType) == null) {
-			contributionToElement.put(contributionType, new Vector<String>());
 		}
 	}
 }

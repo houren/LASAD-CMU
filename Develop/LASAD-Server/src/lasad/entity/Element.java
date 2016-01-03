@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-
 import lasad.Config;
 import lasad.State;
 import lasad.database.DatabaseConnectionHandler;

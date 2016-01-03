@@ -3,7 +3,10 @@ package lasad.gwt.client.ui.workspace.graphmap.elements;
 import java.util.Collection;
 
 import lasad.gwt.client.model.ElementInfo;
+import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.ui.box.AbstractBox;
+import lasad.gwt.client.ui.workspace.LASADInfo;
 import lasad.gwt.client.ui.workspace.graphmap.GraphMap;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 
@@ -11,13 +14,6 @@ import com.extjs.gxt.ui.client.event.Events;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
-
-import lasad.gwt.client.model.organization.ArgumentModel;
-import lasad.gwt.client.model.organization.LinkedBox;
-import lasad.gwt.client.logger.Logger;
-import lasad.gwt.client.ui.workspace.LASADInfo;
-
-import lasad.gwt.client.LASAD_Client;
 
 /**
  * This class represents the abstract action handler for the CreateBoxLink dialog box.

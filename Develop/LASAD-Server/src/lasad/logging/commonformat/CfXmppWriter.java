@@ -2,12 +2,11 @@ package lasad.logging.commonformat;
 
 import java.util.List;
 
-import de.kuei.metafora.xmpp.XMPPBridge;
-
 import lasad.logging.commonformat.util.CF2StringUtil;
 import lasad.logging.commonformat.util.CFWriter;
 import lasad.logging.commonformat.util.jaxb.Action;
 import lasad.logging.commonformat.util.jaxb.Preamble;
+import de.kuei.metafora.xmpp.XMPPBridge;
 
 public class CfXmppWriter implements CFWriter{
 

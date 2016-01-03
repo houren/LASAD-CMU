@@ -56,7 +56,7 @@ public abstract class AbstractExtendedImageElement extends AbstractExtendedEleme
 
 	private EventListener myEventListener = null;
 	private EventListener myOnloadEventListener = null;
-	private EventListener myFocusLostEventListener = null;
+	//private EventListener myFocusLostEventListener = null;
 
 	Element spaceTD = DOM.createTD();
 	private Element elementContent = null;

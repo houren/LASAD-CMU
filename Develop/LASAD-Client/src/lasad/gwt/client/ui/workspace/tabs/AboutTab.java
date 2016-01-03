@@ -1,8 +1,9 @@
 package lasad.gwt.client.ui.workspace.tabs;
 
+import lasad.gwt.client.settings.DebugSettings;
+
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.google.gwt.user.client.ui.HTML;
-import lasad.gwt.client.settings.DebugSettings;
 
 /**
  *	Shockingly, this class represents the About Tab for LASAD, i.e. the tab providing general info (version, description, etc)

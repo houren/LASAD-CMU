@@ -1,6 +1,5 @@
 package lasad.gwt.client.ui.box.pattern.helper;
 
-import lasad.gwt.client.model.pattern.PatternGraphMapInfo;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.box.helper.AbstractDelElementFromBoxDialog;
 import lasad.gwt.client.ui.box.helper.AbstractDelElementFromBoxDialogListener;

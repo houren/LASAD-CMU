@@ -4,8 +4,13 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.model.AbstractMVController;
 import lasad.gwt.client.model.ElementInfo;
+import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.model.organization.AutoOrganizer;
+import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.link.AbstractLink;
 import lasad.gwt.client.ui.workspace.LASADInfo;
@@ -18,24 +23,13 @@ import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.FormButtonBinding;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.SimpleComboBox;
 import com.extjs.gxt.ui.client.widget.form.SimpleComboValue;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.user.client.Element;
-import com.extjs.gxt.ui.client.widget.form.ComboBox;
-
-import lasad.gwt.client.model.organization.ArgumentModel;
-import lasad.gwt.client.model.organization.LinkedBox;
-import lasad.gwt.client.model.organization.OrganizerLink;
-import lasad.gwt.client.model.organization.ArgumentThread;
-import lasad.gwt.client.model.organization.AutoOrganizer;
-import lasad.gwt.client.logger.Logger;
-
-import lasad.gwt.client.LASAD_Client;
-
-import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
 
 /**
  * This class creates the dialog box for when the user selects to add a relation via the argument map drop down menu.
@@ -86,7 +80,7 @@ public abstract class AbstractCreateSpecialLinkDialog extends Window {
 		createForm();
 	}
 
-	private void createForm() {
+	protected void createForm() {
 		FormPanel simple = new FormPanel();
 		simple.setFrame(true);
 		simple.setHeaderVisible(false);

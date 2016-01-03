@@ -2,6 +2,16 @@ package lasad.gwt.client.ui.workspace.graphmap.elements;
 
 import java.util.Set;
 
+import lasad.gwt.client.LASAD_Client;
+import lasad.gwt.client.communication.LASADActionSender;
+import lasad.gwt.client.communication.helper.ActionFactory;
+import lasad.gwt.client.model.AbstractMVController;
+import lasad.gwt.client.model.argument.MVController;
+import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.model.organization.OrganizerLink;
+import lasad.gwt.client.ui.workspace.LASADInfo;
+
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
@@ -9,26 +19,13 @@ import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.FormButtonBinding;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.SimpleComboBox;
 import com.extjs.gxt.ui.client.widget.form.SimpleComboValue;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.user.client.Element;
-import com.extjs.gxt.ui.client.widget.form.ComboBox;
-
-import lasad.gwt.client.model.organization.ArgumentModel;
-import lasad.gwt.client.model.organization.LinkedBox;
-import lasad.gwt.client.model.organization.OrganizerLink;
-import lasad.gwt.client.model.AbstractMVController;
-import lasad.gwt.client.model.argument.MVController;
-
-import lasad.gwt.client.ui.workspace.LASADInfo;
-import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
-
-import lasad.gwt.client.LASAD_Client;
-import lasad.gwt.client.communication.LASADActionSender;
-import lasad.gwt.client.communication.helper.ActionFactory;
 
 /**
  *	This class creates the dialog box for when the user selects to delete a relation via the argument map drop down menu.

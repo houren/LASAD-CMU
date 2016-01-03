@@ -5,10 +5,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.dom.client.Style;
-
 public class BoxResizeCornerListener implements EventListener {
 
 	public void onBrowserEvent(Event be) {

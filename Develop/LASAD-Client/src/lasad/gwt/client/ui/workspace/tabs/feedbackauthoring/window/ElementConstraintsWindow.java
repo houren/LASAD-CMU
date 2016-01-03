@@ -25,7 +25,6 @@ import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FATDebug;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FeedbackAuthoringStrings;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.IdGenerator;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.ontology.OntologyXML2ObjReader;
-import lasad.shared.communication.objects.Parameter;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 import lasad.shared.dfki.meta.agents.ServiceClass;
 import lasad.shared.dfki.meta.agents.ServiceID;
@@ -34,11 +33,8 @@ import lasad.shared.dfki.meta.agents.analysis.structure.model.Comparison;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.ElementVariable;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.ElementVariableProp;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.LinkVariable;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.NodeVariable;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.Num2VarNumComparison;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.Operator;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.PropConstr;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.VariableComparison;
 import lasad.shared.dfki.meta.ontology.Ontology;
 import lasad.shared.dfki.meta.ontology.descr.ComparisonDataType;
 import lasad.shared.dfki.meta.ontology.descr.JessDataType;
@@ -942,11 +938,6 @@ public class ElementConstraintsWindow implements AbstractConfigWindow {
 	private void refreshView(){
 		if(elementTree.isRendered())
 			elementTree.getView().refresh(false);
-	}
-	
-	
-	private void addElementActionHandler(){
-		
 	}
 	
 	public boolean isStandardPropDescr(String propId){

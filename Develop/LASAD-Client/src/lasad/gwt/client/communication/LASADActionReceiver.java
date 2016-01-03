@@ -15,18 +15,25 @@ import lasad.gwt.client.importer.ARGUNAUT.ArgunautParser;
 import lasad.gwt.client.importer.LARGO.LARGOParser;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.AbstractUnspecifiedElementModel;
+import lasad.gwt.client.model.ElementInfo;
 import lasad.gwt.client.model.argument.MVCViewSession;
 import lasad.gwt.client.model.argument.MVController;
 import lasad.gwt.client.model.argument.MapInfo;
 import lasad.gwt.client.model.argument.UnspecifiedElementModelArgument;
 import lasad.gwt.client.model.events.LasadEvent;
+import lasad.gwt.client.model.organization.ArgumentModel;
+import lasad.gwt.client.model.organization.ArgumentThread;
+// Added for autoOrganizer support by Kevin Loughlin
+import lasad.gwt.client.model.organization.AutoOrganizer;
+import lasad.gwt.client.model.organization.LinkedBox;
+import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.ui.LASADStatusBar;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.replay.ReplayInitializer;
 import lasad.gwt.client.ui.workspace.LASADInfo;
+import lasad.gwt.client.ui.workspace.argumentmap.ArgumentMap;
 import lasad.gwt.client.ui.workspace.argumentmap.ArgumentMapMVCViewSession;
 import lasad.gwt.client.ui.workspace.argumentmap.ArgumentMapMenuBar;
-import lasad.gwt.client.ui.workspace.argumentmap.ArgumentMap;
 import lasad.gwt.client.ui.workspace.feedback.argument.FeedbackPanelArgument;
 import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
 import lasad.gwt.client.ui.workspace.loaddialogues.ImportingMapDialogue;
@@ -63,15 +70,6 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.xml.client.impl.DOMParseException;
-
-// Added for autoOrganizer support by Kevin Loughlin
-import lasad.gwt.client.model.organization.AutoOrganizer;
-import lasad.gwt.client.model.organization.ArgumentThread;
-import lasad.gwt.client.model.organization.ArgumentModel;
-import lasad.gwt.client.model.organization.LinkedBox;
-import lasad.gwt.client.model.organization.OrganizerLink;
-import java.util.Collection;
-import lasad.gwt.client.model.ElementInfo;
 
 
 
@@ -331,17 +329,19 @@ public class LASADActionReceiver {
 					// Start graph view (Default)
 					ArgumentMapMVCViewSession mapSession = new ArgumentMapMVCViewSession(newController, mapTab);
 					newController.registerViewSession(mapSession);
-			}
-			// TODO Zhenyu
-			if (a.getParameterValue(ParameterTypes.BackgroundImageURL) != null) {
-				mapTab.getMyMapSpace().getMyMap().add(new Image(a.getParameterValue(ParameterTypes.BackgroundImageURL)));
-				mapTab.getMyMapSpace().getMyMap().layout();
-			}
-				
-			// This is needed for auto-reconnect. Once the connection crashes, the user will have to rejoin all maps. After that,
-			// the infinite loading screen has to disappear. This will be done here.
-			ReloadingMapsDialogue.getInstance().decreaseMapCount();
-			break;
+				}
+				// TODO Zhenyu
+				if (a.getParameterValue(ParameterTypes.BackgroundImageURL) != null) {
+					mapTab.getMyMapSpace().getMyMap().add(new Image(a.getParameterValue(ParameterTypes.BackgroundImageURL)));
+					mapTab.getMyMapSpace().getMyMap().layout();
+				}
+					
+				// This is needed for auto-reconnect. Once the connection crashes, the user will have to rejoin all maps. After that,
+				// the infinite loading screen has to disappear. This will be done here.
+				ReloadingMapsDialogue.getInstance().decreaseMapCount();
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -541,7 +541,6 @@ public class LASADActionReceiver {
 				// If it's a box, add it to the model
 				if (elementType.equalsIgnoreCase(BOX))
 				{
-					LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().incNumBoxes();
 					String xLeftString = a.getParameterValue(ParameterTypes.PosX);
 					double xLeft;
 					if (xLeftString != null)
@@ -783,7 +782,6 @@ public class LASADActionReceiver {
 					}
 					else if (elementType.equalsIgnoreCase(BOX))
 					{
-						LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().decNumBoxes();
 						LinkedBox removedBox = argModel.removeBoxByBoxID(elementID);
 						if (removedBox != null)
 						{
@@ -857,7 +855,6 @@ public class LASADActionReceiver {
 			
 			if (a.getCmd().equals(Commands.CreateElement)) {
 
-				LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().incNumBoxes();
 				// Check if the feedback is for the current user, if not -->
 				// ignore
 				String elementType = a.getParameterValue(ParameterTypes.Type);
@@ -1159,7 +1156,6 @@ public class LASADActionReceiver {
 					}
 					else if (elementType.equalsIgnoreCase(BOX))
 					{
-						LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().decNumBoxes();
 						LinkedBox removedBox = argModel.removeBoxByBoxID(elementID);
 						if (removedBox != null)
 						{
@@ -1491,6 +1487,8 @@ public class LASADActionReceiver {
 				};
 
 				MessageBox.confirm("Confirm", a.getParameterValue(ParameterTypes.Message), l);
+				break;
+			default:
 				break;
 			}
 		}

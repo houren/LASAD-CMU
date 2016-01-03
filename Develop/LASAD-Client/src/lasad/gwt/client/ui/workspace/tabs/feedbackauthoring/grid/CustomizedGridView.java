@@ -1,7 +1,5 @@
 package lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.grid;
 
-import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FATDebug;
-
 import com.extjs.gxt.ui.client.widget.grid.GridView;
 
 /**

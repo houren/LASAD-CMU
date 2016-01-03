@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.Vector;
 
-
 import lasad.Server;
 import lasad.entity.Element;
 import lasad.entity.Map;
@@ -239,6 +238,8 @@ public class ManagementController {
 				break;
 			case UpdateElement:
 				workonUpdateElementForJoin(action, updateActions);
+				break;
+			default:
 				break;
 			}
 		}

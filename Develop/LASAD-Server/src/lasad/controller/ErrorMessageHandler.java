@@ -3,7 +3,6 @@ package lasad.controller;
 import lasad.entity.User;
 import lasad.helper.ActionPackageFactory;
 import lasad.logging.Logger;
-import lasad.processors.ActionProcessor;
 import lasad.shared.communication.objects.ActionPackage;
 
 public class ErrorMessageHandler {

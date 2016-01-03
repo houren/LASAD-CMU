@@ -1,13 +1,11 @@
 package lasad.gwt.client.model.organization;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
-import lasad.gwt.client.model.organization.LinkedBox;
-import lasad.gwt.client.model.organization.OrganizerLink;
+
 import lasad.gwt.client.logger.Logger;
-import lasad.gwt.client.model.organization.ArgumentGrid;
 
 /**
  *	An argument thread is a connected chain of boxes on the argument map space.
@@ -53,7 +51,7 @@ public class ArgumentThread
 
 	public Set<LinkedBox> getBoxes()
 	{
-		return new HashSet(boxMap.values());
+		return new HashSet<LinkedBox>(boxMap.values());
 	}
 
 	// This is kinda a weird way of doing this but it works and seems neat enough, so I guess don't fix something that isn't broken? TBD

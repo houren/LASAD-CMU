@@ -4,11 +4,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
-import com.extjs.gxt.ui.client.event.Listener;
-import com.extjs.gxt.ui.client.event.MessageBoxEvent;
-import com.extjs.gxt.ui.client.widget.Dialog;
-import com.extjs.gxt.ui.client.widget.MessageBox;
-
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.data.ElementModel;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.data.GridElementLabel;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FATDebug;
@@ -31,6 +26,11 @@ import lasad.shared.dfki.meta.agents.analysis.AnalysisType;
 import lasad.shared.dfki.meta.agents.analysis.counter.CounterAnalysisType;
 import lasad.shared.dfki.meta.agents.analysis.structure.StructureAnalysisType;
 import lasad.shared.dfki.meta.agents.provision.ProvisionType;
+
+import com.extjs.gxt.ui.client.event.Listener;
+import com.extjs.gxt.ui.client.event.MessageBoxEvent;
+import com.extjs.gxt.ui.client.widget.Dialog;
+import com.extjs.gxt.ui.client.widget.MessageBox;
 
 /**
  * Creates the feeedbakc messages grid panel displayed in the messages tab.

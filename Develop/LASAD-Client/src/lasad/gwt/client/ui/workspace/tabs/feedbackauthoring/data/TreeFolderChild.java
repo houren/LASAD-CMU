@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.extjs.gxt.ui.client.data.BaseTreeModel;
+import com.extjs.gxt.ui.client.widget.treegrid.TreeGrid;
 
 public class TreeFolderChild extends BaseTreeModel implements Serializable, Comparable<TreeFolderChild> {
 

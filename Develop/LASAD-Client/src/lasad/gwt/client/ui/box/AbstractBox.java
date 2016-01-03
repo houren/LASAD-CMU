@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Vector;
 
 import lasad.gwt.client.LASAD_Client;
+import lasad.gwt.client.communication.LASADActionSender;
+import lasad.gwt.client.communication.helper.ActionFactory;
 import lasad.gwt.client.helper.connection.Connection;
 import lasad.gwt.client.helper.connector.Connector;
 import lasad.gwt.client.helper.connector.Direction;
@@ -26,6 +28,7 @@ import lasad.gwt.client.ui.common.ExtendedElementContainerMasterInterface;
 import lasad.gwt.client.ui.common.FocusableInterface;
 import lasad.gwt.client.ui.common.GenericFocusHandler;
 import lasad.gwt.client.ui.common.SelectableInterface;
+import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
 import lasad.gwt.client.ui.common.fade.FadeableElementInterface;
 import lasad.gwt.client.ui.common.helper.TextSelection;
 import lasad.gwt.client.ui.common.highlight.GenericHighlightHandler;
@@ -36,8 +39,6 @@ import lasad.gwt.client.ui.workspace.graphmap.GraphMap;
 import lasad.gwt.client.ui.workspace.graphmap.elements.AbstractCreateLinkDialog;
 import lasad.gwt.client.ui.workspace.transcript.TranscriptLinkData;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
-import lasad.gwt.client.model.organization.ArgumentModel;
-import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
 
 import com.extjs.gxt.ui.client.core.XDOM;
 import com.extjs.gxt.ui.client.dnd.DropTarget;
@@ -50,18 +51,12 @@ import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.ResizeEvent;
 import com.extjs.gxt.ui.client.event.ResizeListener;
 import com.extjs.gxt.ui.client.fx.Resizable;
-import com.extjs.gxt.ui.client.widget.BoxComponent;
 import com.extjs.gxt.ui.client.widget.Component;
 import com.extjs.gxt.ui.client.widget.ComponentHelper;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.dom.client.Style.Cursor;
-
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.dom.client.Style;
-import lasad.gwt.client.communication.LASADActionSender;
-import lasad.gwt.client.communication.helper.ActionFactory; 
 
 /**
  * Visual representation of each box in the graph-layout

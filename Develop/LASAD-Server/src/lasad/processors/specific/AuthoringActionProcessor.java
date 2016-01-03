@@ -3,7 +3,6 @@ package lasad.processors.specific;
 import java.io.File;
 import java.util.Vector;
 
-
 import lasad.Server;
 import lasad.controller.ManagementController;
 import lasad.controller.MapController;

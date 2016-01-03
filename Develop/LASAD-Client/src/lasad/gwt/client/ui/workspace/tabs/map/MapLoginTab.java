@@ -286,8 +286,8 @@ public class MapLoginTab extends ContentPanel {
 		activeSessionsTree.setAutoExpandColumn("name");
 		activeSessionsTree.setAutoExpandMax(1000);
 		activeSessionsTree.setTrackMouseOver(false);
-		activeSessionsTree.addListener(Events.OnClick, new Listener<TreeGridEvent>() {
-			public void handleEvent(TreeGridEvent be) {
+		activeSessionsTree.addListener(Events.OnClick, new Listener<TreeGridEvent<ModelData>>() {
+			public void handleEvent(TreeGridEvent<ModelData> be) {
 				ModelData m = be.getModel();
 				if (m != null) {
 					if (m.get("mapid") != null) {
@@ -313,8 +313,8 @@ public class MapLoginTab extends ContentPanel {
 		priorSessionsTree.setAutoExpandColumn("name");
 		priorSessionsTree.setAutoExpandMax(1000);
 		priorSessionsTree.setTrackMouseOver(false);
-		priorSessionsTree.addListener(Events.OnClick, new Listener<TreeGridEvent>() {
-			public void handleEvent(TreeGridEvent be) {
+		priorSessionsTree.addListener(Events.OnClick, new Listener<TreeGridEvent<ModelData>>() {
+			public void handleEvent(TreeGridEvent<ModelData> be) {
 				ModelData m = be.getModel();
 				if (m != null) {
 					if (m.get("mapid") != null) {

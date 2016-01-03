@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-
 import lasad.gwt.client.ui.LASADBoxComponent;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.Comparison;
@@ -19,6 +16,9 @@ import lasad.shared.dfki.meta.agents.analysis.structure.model.Set2ConstSetCompar
 import lasad.shared.dfki.meta.agents.analysis.structure.model.Set2ConstStringComparison;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.String2ConstSetComparison;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.String2ConstStringComparison;
+
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 
 /**
  * Class with text representations of available comparison operators

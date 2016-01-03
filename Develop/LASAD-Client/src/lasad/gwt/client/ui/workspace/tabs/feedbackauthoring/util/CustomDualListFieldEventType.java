@@ -1,5 +1,7 @@
 package lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util;
 
+import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.widget.CustomDualListField;
+
 import com.extjs.gxt.ui.client.event.EventType;
 
 /**

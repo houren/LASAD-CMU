@@ -5,7 +5,6 @@ import java.util.Map;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.data.ElementModel;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.data.GridElementLabel;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.Data2ModelConverter;
-import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FATDebug;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.FeedbackAuthoringStrings;
 
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -14,7 +13,6 @@ import com.extjs.gxt.ui.client.event.WindowEvent;
 import com.extjs.gxt.ui.client.event.WindowListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
-import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.Label;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;

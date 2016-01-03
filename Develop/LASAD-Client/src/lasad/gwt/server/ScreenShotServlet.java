@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 // Deprecated, relaced with DataTypeConverter by Kevin Loughlin
 	//import sun.misc.BASE64Decoder;
 import javax.xml.bind.DatatypeConverter;

@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import lasad.gwt.client.importer.ImportFileChecker;
 import lasad.gwt.client.logger.Logger;
-import lasad.gwt.client.ui.workspace.loaddialogues.ExportSessionDialogue;
 import lasad.gwt.server.filehandling.Imageconverter;
 
 import org.apache.commons.fileupload.FileItemIterator;

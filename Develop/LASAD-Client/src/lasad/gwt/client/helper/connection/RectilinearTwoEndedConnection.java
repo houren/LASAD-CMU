@@ -25,11 +25,10 @@ import lasad.gwt.client.helper.connection.data.ConnectionData;
 import lasad.gwt.client.helper.connection.data.Point;
 import lasad.gwt.client.helper.connector.Connector;
 import lasad.gwt.client.helper.connector.Direction;
+import lasad.gwt.client.logger.Logger;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
-
-import lasad.gwt.client.logger.Logger;
 
 /**
  * Rectilinear connection widget

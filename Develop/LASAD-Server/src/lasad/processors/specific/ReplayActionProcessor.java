@@ -2,7 +2,6 @@ package lasad.processors.specific;
 
 import java.util.Vector;
 
-
 import lasad.controller.ManagementController;
 import lasad.entity.Map;
 import lasad.entity.Revision;
@@ -14,6 +13,7 @@ import lasad.shared.communication.objects.Action;
 import lasad.shared.communication.objects.ActionPackage;
 import lasad.shared.communication.objects.categories.Categories;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
+import lasad.processors.ActionProcessor;
 
 public class ReplayActionProcessor extends AbstractActionObserver implements
 		ActionObserver {
@@ -26,7 +26,7 @@ public class ReplayActionProcessor extends AbstractActionObserver implements
 	public boolean processAction(Action a, User u, String sessionID) {
 		boolean returnValue = false;
 		if (u != null&&a.getCategory().equals(Categories.Replay)){
-			int mapID = aproc.getMapIDFromAction(a);
+			int mapID = ActionProcessor.getMapIDFromAction(a);
 
 			Vector<Integer> allMapRevisionIDs = Revision.getIDsOfRevisionsConnectedToMap(mapID);
 
