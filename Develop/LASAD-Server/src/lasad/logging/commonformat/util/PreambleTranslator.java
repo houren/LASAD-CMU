@@ -62,13 +62,13 @@ public class PreambleTranslator {
 	*/
 	public void writeDocumentToOutput(Node node) {
 		// get element name
-		String nodeName = node.getNodeName();
+		//String nodeName = node.getNodeName();
 		// get element value
-		String nodeValue = getElementValue(node);
+		//String nodeValue = getElementValue(node);
 		//System.out.println("NodeName: " + nodeName + ", NodeValue: " + nodeValue);
 		NamedNodeMap attributes = node.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {
-			Node attribute = attributes.item(i);
+			//Node attribute = attributes.item(i);
 			//System.out.println("AttributeName: " + attribute.getNodeName() + ", attributeValue: " + attribute.getNodeValue());
 		}
 		
@@ -117,12 +117,12 @@ public class PreambleTranslator {
 				//System.out.println ("Root element of the doc is " + doc.getDocumentElement().getNodeName());
 				// get root node of xml tree structure
 				Node root = doc.getDocumentElement();
-				String nodeName = root.getNodeName();		// get element name
+				//String nodeName = root.getNodeName();		// get element name
 				//String nodeValue = getElementValue(root);	// get element value
 				
-				NamedNodeMap ontologyAttributes = root.getAttributes();
-				Node ontAttribute = ontologyAttributes.getNamedItem(CFVocabulary.ATTR_TYPE);
-				String ontologyType = ontAttribute.getNodeValue();
+				//NamedNodeMap ontologyAttributes = root.getAttributes();
+				//Node ontAttribute = ontologyAttributes.getNamedItem(CFVocabulary.ATTR_TYPE);
+				//String ontologyType = ontAttribute.getNodeValue();
 				
 				//System.out.println("NodeName: " + nodeName + " , Type:" + ontologyType);
 				
@@ -132,7 +132,7 @@ public class PreambleTranslator {
 					Node nodeElements = children.item(i);
 					if (nodeElements.getNodeType() == Node.ELEMENT_NODE) {
 						
-						String childName = nodeElements.getNodeName(); // get element name
+						//String childName = nodeElements.getNodeName(); // get element name
 						//String childValue = getElementValue(nodeElements); // get element value
 						//System.out.println("NodeName: " + childName);
 						

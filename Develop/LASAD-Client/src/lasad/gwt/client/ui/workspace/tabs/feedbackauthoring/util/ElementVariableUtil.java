@@ -7,11 +7,11 @@ import java.util.Vector;
 import lasad.shared.dfki.meta.agents.analysis.structure.StructuralAnalysisTypeManipulator;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.Comparison;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.ElementVariable;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.ElementVariableProp;
+//import lasad.shared.dfki.meta.agents.analysis.structure.model.ElementVariableProp;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.LinkVariable;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.NodeVariable;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.Num2VarNumComparison;
-import lasad.shared.dfki.meta.agents.analysis.structure.model.Operator;
+//import lasad.shared.dfki.meta.agents.analysis.structure.model.Operator;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.StructuralPattern;
 import lasad.shared.dfki.meta.agents.analysis.structure.model.VariableComparison;
 
@@ -69,15 +69,15 @@ public class ElementVariableUtil {
 	}
 	
 	public static String generatedReadableStrFromComparison(StructuralAnalysisTypeManipulator patManipulator, Comparison comparison){
-		ElementVariableProp leftExpr = comparison.getLeftExpr();
-		String propId = leftExpr.getPropId();
-		Operator oper = comparison.getOperator();
+		//ElementVariableProp leftExpr = comparison.getLeftExpr();
+		//String propId = leftExpr.getPropId();
+		//Operator oper = comparison.getOperator();
 		
 		StringBuffer value = new StringBuffer();
 		if (comparison instanceof VariableComparison){
 			String rElemId = ((VariableComparison)comparison).getRightExpr().getElementVar().getVarID();
 			String rPropId = ((VariableComparison)comparison).getRightExpr().getPropId();
-			String rRhsComponentID = ((VariableComparison)comparison).getRightExpr().getCompID();
+//			String rRhsComponentID = ((VariableComparison)comparison).getRightExpr().getCompID();
 //			String rCompId = null;
 //			if (!PropDescr.DEFAULT_COMPONENT_ID.equals(rRhsComponentID)) {
 //				rCompId = rRhsComponentID;
@@ -120,15 +120,15 @@ public class ElementVariableUtil {
 	}
 	
 	public static String generatedReadableStrFromComparison(HashMap<String, String> elemMap, Comparison comparison){
-		ElementVariableProp leftExpr = comparison.getLeftExpr();
-		String propId = leftExpr.getPropId();
-		Operator oper = comparison.getOperator();
+		//ElementVariableProp leftExpr = comparison.getLeftExpr();
+		//String propId = leftExpr.getPropId();
+		//Operator oper = comparison.getOperator();
 		
 		StringBuffer value = new StringBuffer();
 		if (comparison instanceof VariableComparison){
 			String rElemId = ((VariableComparison)comparison).getRightExpr().getElementVar().getVarID();
 			String rPropId = ((VariableComparison)comparison).getRightExpr().getPropId();
-			String rRhsComponentID = ((VariableComparison)comparison).getRightExpr().getCompID();
+//			String rRhsComponentID = ((VariableComparison)comparison).getRightExpr().getCompID();
 //			String rCompId = null;
 //			if (!PropDescr.DEFAULT_COMPONENT_ID.equals(rRhsComponentID)) {
 //				rCompId = rRhsComponentID;

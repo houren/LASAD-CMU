@@ -572,7 +572,7 @@ public class Map {
 							String itemsSize = deletedElementIDs.size() + "";
 							a.replaceParameter(ParameterTypes.NumActions, itemsSize);
 							int tmpID = Integer.parseInt(a.getParameterValue(ParameterTypes.Id));
-							String tmpUserActionID = a.getParameterValue(ParameterTypes.UserActionId);
+							//String tmpUserActionID = a.getParameterValue(ParameterTypes.UserActionId);
 
 							for (Integer i : deletedElementIDs) {
 								if (tmpID == i) { // only create actions for the children, the container delete-action is "a".

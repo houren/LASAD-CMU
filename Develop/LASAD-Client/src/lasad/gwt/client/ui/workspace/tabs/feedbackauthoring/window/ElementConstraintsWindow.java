@@ -612,7 +612,7 @@ public class ElementConstraintsWindow implements AbstractConfigWindow {
 				      @Override
 				      public void componentSelected(ButtonEvent ce){
 				    	  final String id = model.get(GridElementLabel.ID); //constraint id
-				    	  String name = model.get(GridElementLabel.OPER); //constraint operator
+				    	  //String name = model.get(GridElementLabel.OPER); //constraint operator
 				    	  String status = model.get(GridElementLabel.STATUS); //constraint value
 				    	  final String parentId = model.get(GridElementLabel.PARENT_ID); //property id
 				    	  String parentName = model.get(GridElementLabel.PARENT_NAME); //property name

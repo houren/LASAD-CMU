@@ -65,17 +65,17 @@ public class ValidateAgentDescription {
 	 * @return
 	 */
 	public static String validateConf(AgentDescriptionFE agent){
-		boolean error = false;
+		//boolean error = false;
 		StringBuilder retVal = new StringBuilder();
 		if(agent != null){
 			if(agent.getDisplayName() == null || agent.getDisplayName().equals("")){
 				retVal.append(FeedbackAuthoringStrings.AGENT_NAME_LABEL + " " + IS_NOT_SPECIFIED + BREAK_LINE);
-				error = true;
+				//error = true;
 			}
 			if (agent.getSupportedOntology() == null || agent.getSupportedOntology().getSupportedOntologies() == null
 					|| agent.getSupportedOntology().getSupportedOntologies().size() < 1){
 				retVal.append(FeedbackAuthoringStrings.ONTOLOGY_LABEL + " " + IS_NOT_SPECIFIED  + BREAK_LINE);
-				error = true;
+				//error = true;
 	    	}
 			retVal.append(checkPhases(agent));
 			retVal.append(checkAnalysisTypeList(agent));
@@ -86,13 +86,13 @@ public class ValidateAgentDescription {
 	}
 	
 	private static String checkProvisionTypeList(AgentDescriptionFE agent){
-		boolean error = false;
+		//boolean error = false;
 		StringBuilder retVal = new StringBuilder();
 		List<ProvisionType> provList = new Vector<ProvisionType>(agent.getConfData().getProvisionTypes());
 		
 		if(provList.size() == 0){
 			retVal.append(NO_PRIORITIES_DEFINED + ", " + AT_LEAST_ONE_IS_REQUIRED + BREAK_LINE);
-			error = true;
+			//error = true;
 		}
 		
 		Map<ServiceID, String> actMap = new HashMap<ServiceID, String>();
@@ -108,7 +108,7 @@ public class ValidateAgentDescription {
 				//basic
 				if(prov.getName() == null || prov.getName().equals("")){
 					retVal.append(FeedbackAuthoringStrings.STRATEGY_NAME_LABEL + " " + IS_NOT_SPECIFIED  + BREAK_LINE);
-					error = true;
+					//error = true;
 				}
 				
 				if(prov.getProvisionTime() instanceof ProvisionTimeDef_OnRequest){
@@ -118,7 +118,7 @@ public class ValidateAgentDescription {
 								+ FeedbackAuthoringStrings.PROVISION_TIME_LABEL + ", " 
 								+ FeedbackAuthoringStrings.DISPLAY_NAME_LABEL + " " 
 								+ provTime.getDisplayName() + " " + ALREADY_EXISTS + BREAK_LINE);
-						error = true;
+						//error = true;
 					} else{
 						provTimeNameMap.put(provTime.getDisplayName(), provTime.getDisplayName());
 					}
@@ -128,14 +128,14 @@ public class ValidateAgentDescription {
 				if(actionList == null || actionList.getServiceIDs() == null || actionList.getServiceIDs().size() == 0){
 					retVal.append(FeedbackAuthoringStrings.STRATEGY_LABEL + " " + prov.getName() + ", " 
 									+ FeedbackAuthoringStrings.MESSAGE_LABEL + "s" + " " + ARE_NOT_SPECIFIED + BREAK_LINE);
-					error = true;
+					//error = true;
 				} else{
 					//validate that referred message exist
 					for(ServiceID actId : actionList.getServiceIDs()){
 						if(!actMap.containsKey(actId)){
 							retVal.append(FeedbackAuthoringStrings.STRATEGY_LABEL + " " + prov.getName() + ", " 
 									+ REFERS_2_NOT_EXISTING_MSG + BREAK_LINE);
-							error = true;
+							//error = true;
 						}
 					}
 				}
@@ -150,7 +150,7 @@ public class ValidateAgentDescription {
 	}
 	
 	private static String checkActionTypes(AgentDescriptionFE agent){
-		boolean error = false;
+		//boolean error = false;
 		StringBuilder retVal = new StringBuilder();
 		
 		Map<ServiceID, String> patternMap = new HashMap<ServiceID, String>();
@@ -162,28 +162,28 @@ public class ValidateAgentDescription {
 		List<ActionType> actionList = new Vector<ActionType>(agent.getConfData().getActionTypes());
 		if(actionList.size() == 0){
 			retVal.append(NO_MESSAGES_DEFINED + ", " + AT_LEAST_ONE_IS_REQUIRED + BREAK_LINE);
-			error = true;
+			//error = true;
 		}
 		for(ActionType actionType : actionList){
 			if(actionType instanceof FeedbackActionType){
 				FeedbackActionType at = (FeedbackActionType)actionType;
 				if(at.getName() == null || at.getName().equals("")){
 					retVal.append(FeedbackAuthoringStrings.MESSAGE_NAME_LABEL + " " + IS_NOT_SPECIFIED  + BREAK_LINE);
-					error = true;
+					//error = true;
 				}
 				ServiceID trigger = at.getTriggerID();
 				if(trigger == null){
 					retVal.append(FeedbackAuthoringStrings.MESSAGE_LABEL + " " + at.getName() + ", " + "trigger" + " " + IS_NOT_SPECIFIED + BREAK_LINE);
-					error = true;
+					//error = true;
 				} else if(!patternMap.containsKey(trigger)){
 						retVal.append(FeedbackAuthoringStrings.MESSAGE_LABEL + " " + at.getName() + ", " + "trigger" + " " + REFERS_2_NOT_EXISTING_PAT + BREAK_LINE);
-					error = true;
+					//error = true;
 				}
 				//Validate short and long message
 				if(at.getMsgCompDefs() == null){
 					retVal.append(FeedbackAuthoringStrings.MESSAGE_LABEL + " " + at.getName() + ", " + FeedbackAuthoringStrings.SHORT_MESSAGE_LABEL +  " " 
 									+ "&" + " " + FeedbackAuthoringStrings.LONG_MESSAGE_LABEL + ARE_NOT_SPECIFIED + BREAK_LINE);
-					error = true;
+					//error = true;
 				} else{
 					boolean shortMsg = false;
 					boolean longMsg = false;
@@ -201,12 +201,12 @@ public class ValidateAgentDescription {
 					if(shortMsg){
 						retVal.append(FeedbackAuthoringStrings.MESSAGE_LABEL + " " + at.getName() + ", " 
 									+ FeedbackAuthoringStrings.SHORT_MESSAGE_LABEL +  " " + IS_NOT_SPECIFIED + BREAK_LINE);
-						error = true;
+						//error = true;
 					}
 					if(longMsg){
 						retVal.append(FeedbackAuthoringStrings.MESSAGE_LABEL + " " + at.getName() + ", " 
 									+ FeedbackAuthoringStrings.LONG_MESSAGE_LABEL +  " " + IS_NOT_SPECIFIED + BREAK_LINE);
-						error = true;
+						//error = true;
 					}
 				}
 				PriorityDef priorityDef = at.getPriorityDef();
@@ -222,7 +222,7 @@ public class ValidateAgentDescription {
 					for(String phaseId : priorityDef.getPhase2Priority().keySet()){
 						if(!phasesMap.containsKey(phaseId)){
 							retVal.append(FeedbackAuthoringStrings.MESSAGE_LABEL + " " + at.getName() + ", " + "trigger" + " " + REFERS_2_NOT_EXISTING_PHASE + BREAK_LINE);
-							error = true;
+							//error = true;
 						}
 					}
 				}
@@ -237,13 +237,13 @@ public class ValidateAgentDescription {
 	}
 	
 	private static String checkAnalysisTypeList(AgentDescriptionFE agent){
-		boolean error = false;
+		//boolean error = false;
 		StringBuilder retVal = new StringBuilder();
 		List<AnalysisType> oldList = new Vector<AnalysisType>(agent.getConfData().getAnalysisTypes());
 		if(oldList != null){
 			if(oldList.size() == 0){
 				retVal.append(NO_PATTERNS_DEFINED + ", " + AT_LEAST_ONE_IS_REQUIRED + BREAK_LINE);
-				error = true;
+				//error = true;
 			}
 			for(AnalysisType an : oldList){
 				retVal.append(checkAnalysisType(an, agent));
@@ -254,12 +254,12 @@ public class ValidateAgentDescription {
 	}
 	
 	private static String checkAnalysisType(AnalysisType analysisType, AgentDescriptionFE agent){
-		boolean error = false;
+		//boolean error = false;
 		StringBuilder retVal = new StringBuilder();
 		
 		if(analysisType.getName() == null || analysisType.getName().equals("")){
 			retVal.append(FeedbackAuthoringStrings.PATTERN_NAME_LABEL + " " + IS_NOT_SPECIFIED  + BREAK_LINE);
-			error = true;
+			//error = true;
 		}
 		
 		if(analysisType instanceof CounterAnalysisType){
@@ -281,7 +281,7 @@ public class ValidateAgentDescription {
 						String id = ((InstanceTypeSpecific_Pattern)type).getTypeID();
 						if(!patternMap.containsKey(id)){
 							retVal.append(FeedbackAuthoringStrings.PATTERN_LABEL + " " + analysisType.getName() + " " + REFERS_2_NOT_EXISTING_PAT + " " + BREAK_LINE);
-							error = true;
+							//error = true;
 						}
 					}
 				}
@@ -290,7 +290,7 @@ public class ValidateAgentDescription {
 			
 			if(((CounterAnalysisType) analysisType).getCounterCriteria().size() < 1){
 				retVal.append(FeedbackAuthoringStrings.PATTERN_LABEL + " " + analysisType.getName() + ", " + FeedbackAuthoringStrings.COUNT_CONDITION + " " + IS_NOT_SPECIFIED + BREAK_LINE);
-				error = true;
+				//error = true;
 			}
 			
 		} else if(analysisType instanceof StructureAnalysisType){
@@ -299,7 +299,7 @@ public class ValidateAgentDescription {
 			Collection<StructuralPattern> notPatterns = ((StructureAnalysisType)analysisType).getPattern().getNotPatterns();
 			if(nodeVars.size() == 0 && linkVars.size() == 0 && notPatterns.size() == 0){
 				retVal.append(FeedbackAuthoringStrings.PATTERN_LABEL + " " + analysisType.getName() + " " + "does not have elements defined" + BREAK_LINE);
-				error = true;
+				//error = true;
 			} else{
 				//TODO is it requited to add same validation as in PatternServerManager.isValidRelation?
 			}
@@ -314,7 +314,7 @@ public class ValidateAgentDescription {
 	}
 	
 	private static String checkPhases(AgentDescriptionFE agent){
-		boolean error = false;
+		//boolean error = false;
 		StringBuilder retVal = new StringBuilder();
 		
 		PhaseModelerDef newPhaseMod = agent.getConfData().getPhaseModelerDef();
@@ -324,7 +324,7 @@ public class ValidateAgentDescription {
 			for(PhaseDef phase : phasesDef.getPhases()){
 				if(map.containsKey(phase.getName())){
 					retVal.append(FeedbackAuthoringStrings.PHASE_NAME_LABEL + ":" + phase.getName() + " " + ALREADY_EXISTS + BREAK_LINE);
-					error = true;
+					//error = true;
 				} else{
 					map.put(phase.getName(), phase.getName());
 				}

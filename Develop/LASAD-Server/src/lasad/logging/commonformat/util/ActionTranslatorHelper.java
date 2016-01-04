@@ -614,7 +614,7 @@ public class ActionTranslatorHelper {
 		boolean flag = false;
 		String objectID = newObject.getId();
 		if (objectTracker.containsKey(objectID)) {
-			CFObjectBasicData currentObj = objectTracker.remove(objectID);
+			/*CFObjectBasicData currentObj = */ objectTracker.remove(objectID);
 			objectTracker.put(objectID, newObject);
 			flag = true;
 		}

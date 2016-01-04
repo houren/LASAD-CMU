@@ -42,7 +42,7 @@ public class BoxConnectorElement extends BoxComponent {
 	}
 
 	private void makeDraggable() {
-		final DragSource dragSource = new DragSource(this) {
+		/*final DragSource dragSource = */ new DragSource(this) {
 			@Override
 			public void onDragStart(DNDEvent e) {
 				e.setData(myBox);

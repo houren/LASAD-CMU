@@ -961,13 +961,13 @@ return radiobuttons;
 
 			String[] ddOptions = dropDownElements.getValue().split("\n");
 
-			String startSelection = "";
+			//String startSelection = "";
 			String ddOptionsString = "";
 			for (int i = 0; i < ddOptions.length; i++) {
 				if (i != 0) {
 					ddOptionsString += ",";
 				} else {
-					startSelection = ddOptions[i].trim();
+					/*startSelection =*/ ddOptions[i].trim();
 				}
 				ddOptionsString += ddOptions[i].trim();
 			}

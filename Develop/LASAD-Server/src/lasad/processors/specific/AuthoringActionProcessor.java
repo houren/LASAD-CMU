@@ -142,7 +142,7 @@ public class AuthoringActionProcessor extends AbstractActionObserver implements 
 				newOntology.saveToDatabase();
 			}
 
-			File f = Ontology.generateOntologyConfigurationFile(a);
+			/*File f = */Ontology.generateOntologyConfigurationFile(a);
 			ap = processGetOntologies();
 
 			// TODO: Zhenyu

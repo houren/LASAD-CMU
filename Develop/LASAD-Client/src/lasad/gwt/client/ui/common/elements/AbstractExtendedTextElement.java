@@ -69,8 +69,8 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 			// MODIFIED BY SN in order to fix Preview of Nodes when creating them in a ontology. (added try/catch block)
 			this.autoResize = false;
 		} catch (Exception e) {
-			for (StackTraceElement stackElement : e.getStackTrace()) {
-			}
+			/*for (StackTraceElement stackElement : e.getStackTrace()) {
+			}*/
 
 			// MODIFIED BY SN in order to fix Preview of Nodes when creating them in a ontology. (added try/catch block)
 			this.autoResize = false;

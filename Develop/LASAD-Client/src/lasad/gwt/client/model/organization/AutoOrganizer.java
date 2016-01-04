@@ -336,7 +336,7 @@ public class AutoOrganizer
 		// The original link data
 		LinkedBox origStartBox = link.getStartBox();
 		LinkedBox origEndBox = link.getEndBox();
-		String linkType = link.getType();
+		//String linkType = link.getType();
 
 		// If the newly created link connects a group, make sure all the gorup members point to the same children
 		if (link.getConnectsGroup())
@@ -677,7 +677,7 @@ public class AutoOrganizer
 	{
 		String elementType = "relation";
 
-		MVController controller = LASAD_Client.getMVCController(map.getID());
+		//MVController controller = LASAD_Client.getMVCController(map.getID());
 
 		ElementInfo linkInfo = new ElementInfo();
 		linkInfo.setElementType(elementType);

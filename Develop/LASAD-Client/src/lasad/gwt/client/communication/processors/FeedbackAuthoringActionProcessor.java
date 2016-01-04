@@ -3,7 +3,7 @@ package lasad.gwt.client.communication.processors;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
+//import java.util.Vector;
 
 import lasad.gwt.client.ui.workspace.loaddialogues.LoadingInfoDialogue;
 import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.FeedbackAuthoringTabContent;
@@ -167,7 +167,7 @@ public class FeedbackAuthoringActionProcessor {
 				FATDebug.print(FATDebug.DEBUG,"cmd:" + cmd);
 			}
 			
-			Vector<String> tmp = new Vector<String>(FeedbackAuthoringTabContent.getInstance().getInitMsgsTracker());
+			//Vector<String> tmp = new Vector<String>(FeedbackAuthoringTabContent.getInstance().getInitMsgsTracker());
 			while(FeedbackAuthoringTabContent.getInstance().getInitMsgsTracker().size() > 0){
 				String cmd = FeedbackAuthoringTabContent.getInstance().getInitMsgsTracker().get(0);
 				

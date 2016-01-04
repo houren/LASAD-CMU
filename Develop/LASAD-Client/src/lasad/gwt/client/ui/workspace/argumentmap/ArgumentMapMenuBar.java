@@ -596,17 +596,19 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 						if (be.getButtonClicked().getText().equalsIgnoreCase("OK")) {
 							if (be.getValue() == null) {
 								LASADInfo.display("Error", "No valid value entered.");
-							} else {
+							} 
+							// TODO Sending the action was commented out, so I commented out the rest of the code.  Why was this so?
+							/*else {
 								String[] input = be.getValue().split(",");
 								String id = input[0];
 								String attribute = input[1];
-								/*String value = "";
+								String value = "";
 								if (input.length == 3) {
 									value = input[2];
 								}
 								communicator.sendActionPackage(actionBuilder.editAttribute(GraphMapMenuBar.this.getMyMapSpace().getMyMap().getID(),
-								id, attribute, value)); */
-							}
+								id, attribute, value)); 
+							} */
 						}
 					}
 				});

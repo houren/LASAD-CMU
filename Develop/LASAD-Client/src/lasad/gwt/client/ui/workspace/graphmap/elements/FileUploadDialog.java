@@ -9,7 +9,7 @@ import lasad.gwt.client.ui.workspace.graphmap.GraphMap;
 import com.extjs.gxt.ui.client.widget.BoxComponent;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.InputElement;
+//import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
@@ -49,8 +49,8 @@ public class FileUploadDialog extends BoxComponent implements FocusableInterface
 		// Create a FileUpload widget.
 		final FileUpload upload = new FileUpload();
 		upload.setName("uploadFormElement");
-		Element input = DOM.createElement("input");
-		InputElement inputElement = Document.get().createFileInputElement(); // GXT
+		//Element input = DOM.createElement("input");
+		/*InputElement inputElement = */Document.get().createFileInputElement(); // GXT
 																				// Library
 																				// checken
 

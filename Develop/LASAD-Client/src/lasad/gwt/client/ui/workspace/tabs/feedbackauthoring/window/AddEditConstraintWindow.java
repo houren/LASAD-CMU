@@ -896,7 +896,7 @@ public class AddEditConstraintWindow {
 	private void setComparisonOperatorAndInitDisplayValuePanel(String compareAgainstOpt, String operatorId){		
 		resetInputValuePanel();
 		
-		String propId = property.getPropID();
+		//String propId = property.getPropID();
 		//boolean isStdProp = parentRef.isStandardPropDescr(propId);
 		
 		ComparisonDataType cdt = property.getComparisonDataType(PropDescr.DEFAULT_COMPONENT_ID);

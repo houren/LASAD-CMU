@@ -294,7 +294,7 @@ public abstract class AbstractExtendedRadioButtonElement extends AbstractExtende
 	protected void setElementSize(Size size) {
 		
 		int balanceWidth=4;
-		int balanceHeight=4;
+		//int balanceHeight=4;
 		
 		
 		if(this.row != null)  {

@@ -682,7 +682,7 @@ public class FeedbackAuthoringActionProcessor extends AbstractActionObserver imp
 		if (changedStr != null && Boolean.parseBoolean(changedStr) == true){
 			ActionPackage ap = new ActionPackage();
 			ap.addAction(a);
-			User dfkiUser = getDFKIUser();
+			//User dfkiUser = getDFKIUser();
 			String agentId = a.getParameterValue(ParameterTypes.AgentId);
 			List<String> ontologyList = a.getParameterValues(ParameterTypes.Ontology); 
 			List<String> sessionIdList = a.getParameterValues(ParameterTypes.SessionId);
@@ -713,10 +713,10 @@ public class FeedbackAuthoringActionProcessor extends AbstractActionObserver imp
 		if (changedStr != null && Boolean.parseBoolean(changedStr) == true){
 			ActionPackage ap = new ActionPackage();
 			ap.addAction(a);
-			User dfkiUser = getDFKIUser();
-			String componentId = a.getParameterValue(ParameterTypes.ChangedComponentID);
-			String oldStatus = a.getParameterValue(ParameterTypes.OldStatus);
-			String newStatus = a.getParameterValue(ParameterTypes.NewStatus);
+			//User dfkiUser = getDFKIUser();
+			//String componentId = a.getParameterValue(ParameterTypes.ChangedComponentID);
+			//String oldStatus = a.getParameterValue(ParameterTypes.OldStatus);
+			//String newStatus = a.getParameterValue(ParameterTypes.NewStatus);
 			//TODO update faStatusKeeper
 			//faStatusKeeper.setListSessionStatus(value);
 			distributeToUsersWithoutSaving(a, u);

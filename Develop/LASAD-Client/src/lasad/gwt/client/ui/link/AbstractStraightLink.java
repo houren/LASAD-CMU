@@ -99,7 +99,7 @@ public abstract class AbstractStraightLink extends AbstractLink {
 						angle += 180f;
 					}
 
-					float newangle = angle + 90f;
+					//float newangle = angle + 90f;
 
 					getEnding(1).update(p1.left, p1.top, angle + 90f);
 				}

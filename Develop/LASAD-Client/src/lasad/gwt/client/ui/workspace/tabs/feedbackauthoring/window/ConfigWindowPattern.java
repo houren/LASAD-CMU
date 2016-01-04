@@ -2,7 +2,7 @@ package lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.window;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+//import java.util.List;
 import java.util.Map;
 
 import lasad.gwt.client.ui.common.helper.AbstractConfigWindow;
@@ -14,7 +14,7 @@ import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.util.ontology.Ontolo
 import lasad.shared.dfki.meta.ontology.Ontology;
 import lasad.shared.dfki.meta.ontology.descr.ElementDescr;
 import lasad.shared.dfki.meta.ontology.descr.NodeDescr;
-import lasad.shared.dfki.meta.ontology.descr.StandardPropDescr;
+//import lasad.shared.dfki.meta.ontology.descr.StandardPropDescr;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.Orientation;
@@ -253,9 +253,9 @@ public class ConfigWindowPattern implements AbstractConfigWindow{
 	    	OntologyXML2ObjReader.parseOntology(ontology, FeedbackAuthoringTabContent.getInstance().getOntologyDB(ontologyId).getXml());
 	    	FeedbackAuthoringTabContent.getInstance().getOntologyDB(ontologyId).setOntology(ontology);
 	    }
-	    Ontology ontology = FeedbackAuthoringTabContent.getInstance().getOntologyDB(ontologyId).getOntology();
+	    //Ontology ontology = FeedbackAuthoringTabContent.getInstance().getOntologyDB(ontologyId).getOntology();
 	    
-	    List<StandardPropDescr> stdElemPropsList = Ontology.getStandardElemProperties();
+	    //List<StandardPropDescr> stdElemPropsList = Ontology.getStandardElemProperties();
 //	    List<NonStandardPropDescr> nonStdElemPropsList = ontology.getNonStandardElemProperties(nodeId);
 	    
 	    
@@ -372,7 +372,7 @@ public class ConfigWindowPattern implements AbstractConfigWindow{
 	    view.setForceFit(true);  
 	    view.setGroupRenderer(new GridGroupRenderer() {  
 	      public String render(GroupColumnData data) {  
-	        String f = cm.getColumnById(data.field).getHeader();  
+	        //String f = cm.getColumnById(data.field).getHeader();  
 	        String l = data.models.size() == 1 ? "Item" : "Items";  
 	        //return f + ": " + data.group + " (" + data.models.size() + " " + l + ")";
 	        return data.group + " (" + data.models.size() + " " + l + ")";

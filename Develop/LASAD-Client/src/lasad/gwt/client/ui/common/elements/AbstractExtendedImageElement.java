@@ -16,8 +16,8 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.button.ToolButton;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
+//import com.google.gwt.event.dom.client.MouseOutEvent;
+//import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
@@ -662,7 +662,7 @@ public abstract class AbstractExtendedImageElement extends AbstractExtendedEleme
 		hPanel.add(savebtn);
 		panel.add(hPanel);
 		// void onMouseOut(MouseOutEvent event)
-		MouseOutHandler mouseout = new MouseOutHandler() {
+		/*MouseOutHandler mouseout = new MouseOutHandler() {
 
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
@@ -671,7 +671,7 @@ public abstract class AbstractExtendedImageElement extends AbstractExtendedEleme
 
 			}
 
-		};
+		};*/
 
 		return panel;
 

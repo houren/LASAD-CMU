@@ -124,7 +124,7 @@ public class PatternsGrid extends CustomizedGrid {
 		//remove from agent structure
 		agentWindow.getAgentInfo().getConfData().removeAnalysisType(servPatternId);
 		//remove from feedback messages
-		List<ServiceID> dependencyList = new Vector<ServiceID>();
+		//List<ServiceID> dependencyList = new Vector<ServiceID>();
 		Collection<ActionType> fbList = agentWindow.getAgentInfo().getConfData().getActionTypes();
 		for(ActionType fb:fbList){
 			FeedbackActionType newfb = (FeedbackActionType)fb;

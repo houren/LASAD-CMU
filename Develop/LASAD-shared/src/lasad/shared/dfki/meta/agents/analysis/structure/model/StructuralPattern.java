@@ -311,7 +311,7 @@ public class StructuralPattern implements Serializable {
 	public String toPrettyString(String prefix) {
 		StringBuffer buf = new StringBuffer();
 		String prefixL1 = prefix + "...";
-		String prefixL2 = prefixL1 + "...";
+		//String prefixL2 = prefixL1 + "...";
 
 		String subPatternIDSuffix = subID == null ? "" : "/" + subID;
 		buf.append(prefix + "[patternID] " + ID + subPatternIDSuffix + "\n");

@@ -192,7 +192,7 @@ public class MiniMapPanel extends ContentPanel implements LASADEventListenerInte
         if(!boxElements.isEmpty() && boxElements != null) {
         	for (String key : boxElements.keySet()) {
         		//Get and save color of box
-        		ElementInfo boxInfo = boxElements.get(key);
+        		//ElementInfo boxInfo = boxElements.get(key);
         		String stringColor = boxElements.get(key).getUiOption(ParameterTypes.BackgroundColor);
         		// MODIFIED by SN in order to fix mini map (the keys in the hashmap need to be lowercase only!)
         		this.boxColor.put(key.toLowerCase(), getColor(stringColor));        		

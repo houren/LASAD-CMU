@@ -1499,8 +1499,8 @@ public class AgentWindow{
 	        		specificTypesField.setEnabled(false);
 	        		addSpecificTypesButton.setEnabled(false);
 	        		//pattern.getCounterDefinition().getInstanceTypesSpecific().clear();
-	        		List<InstanceTypeSpecific> selectedTypes = pattern.getCounterDefinition().getInstanceTypesSpecific();
-	        		selectedTypes = null;
+	        		/*List<InstanceTypeSpecific> selectedTypes = pattern.getCounterDefinition().getInstanceTypesSpecific();
+	        		selectedTypes = null; */
 	        	}
 	        }
 	    });

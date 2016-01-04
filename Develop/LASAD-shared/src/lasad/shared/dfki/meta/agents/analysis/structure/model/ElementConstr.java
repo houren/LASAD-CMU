@@ -343,7 +343,7 @@ public abstract class ElementConstr implements Serializable {
 		}
 
 		for (String2ConstSetComparison nonMemberCmp : nonMemberCmps) {
-			Set<String> typeSet = new HashSet<String>();
+			//Set<String> typeSet = new HashSet<String>();
 			union.addAll(nonMemberCmp.getRightExpr());
 		}
 		return union;
