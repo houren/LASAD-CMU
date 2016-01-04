@@ -600,12 +600,12 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 								String[] input = be.getValue().split(",");
 								String id = input[0];
 								String attribute = input[1];
-								String value = "";
+								/*String value = "";
 								if (input.length == 3) {
 									value = input[2];
 								}
-								// communicator.sendActionPackage(actionBuilder.editAttribute(GraphMapMenuBar.this.getMyMapSpace().getMyMap().getID(),
-								// id, attribute, value));
+								communicator.sendActionPackage(actionBuilder.editAttribute(GraphMapMenuBar.this.getMyMapSpace().getMyMap().getID(),
+								id, attribute, value)); */
 							}
 						}
 					}

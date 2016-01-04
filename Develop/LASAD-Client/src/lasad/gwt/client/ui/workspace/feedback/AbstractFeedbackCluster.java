@@ -129,7 +129,7 @@ public abstract class AbstractFeedbackCluster extends BoxComponent implements MV
 						MessageBox box = MessageBox.prompt("Detailed feedback", detailedFeedbackMsg+ "<br><br>Please explain your thoughts:", true);   
 				        box.addCallback(new Listener<MessageBoxEvent>() {   
 				          public void handleEvent(MessageBoxEvent be) {   
-				            String v = be.getValue();   
+				            //String v = be.getValue();   
 				            
 					        detailsVisible = false;
 							showHighlights(false);

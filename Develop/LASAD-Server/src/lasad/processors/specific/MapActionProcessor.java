@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
 
 import lasad.controller.ManagementController;
 import lasad.entity.ActionParameter;
@@ -42,24 +43,25 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	private OliDatabaseLogger dsLogger;
 
 	// userName
-	private HashSet<String> harrellClass;
+	private Set<String> harrellClass;
 
 	// user, sessionID
-	private ConcurrentHashMap<String, String> loggedSessions;
+	private java.util.Map<String, Set<String>> loggedSessions;
 
 	// session + user + mapID --> contextMSG
-	private ConcurrentHashMap<String, ContextMessage> loggedContexts;
+	private java.util.Map<String, ContextMessage> loggedContexts;
 
 	// mapID -> doingAutoOrganize
-	private ConcurrentHashMap<Integer, Boolean> autoOrganizeStatuses = new ConcurrentHashMap<Integer, Boolean>();
+	private java.util.Map<Integer, Boolean> autoOrganizeStatuses;
 
 	public MapActionProcessor()
 	{
 		super();
 		dsLogger = OliDatabaseLogger.create("http://pslc-qa.andrew.cmu.edu/log/server", "UTF-8");
 
-		loggedSessions = new ConcurrentHashMap<String, String>();
+		loggedSessions = new ConcurrentHashMap<String, Set<String>>();
 		loggedContexts = new ConcurrentHashMap<String, ContextMessage>();
+		autoOrganizeStatuses = new ConcurrentHashMap<Integer, Boolean>();
 
 		harrellClass = new HashSet<String>();
 		harrellClass.add("t0");
@@ -110,10 +112,17 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 
 	        final String CONTEXT_REF = sessionID + userName + String.valueOf(mapID);
 
-	        if (loggedSessions.get(userName) == null || !loggedSessions.get(userName).equals(sessionID))
+	        if (loggedSessions.get(userName) == null)
 	        {
 	        	dsLogger.logSession(userName, sessionID);
-	        	loggedSessions.put(userName, sessionID);
+	        	Set<String> sessIDs = new HashSet<String>();
+	        	sessIDs.add(sessionID);
+	        	loggedSessions.put(userName, sessIDs);
+	        }
+	        else if (!loggedSessions.get(userName).contains(sessionID))
+	        {
+	        	dsLogger.logSession(userName, sessionID);
+	        	loggedSessions.get(userName).add(sessionID);
 	        }
 
 	        boolean shouldLogContext = false;
@@ -144,7 +153,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			        contextMsg.setSchool(school);
 			        contextMsg.setPeriod(period);
 			        contextMsg.addInstructor(instructorOne);
-			        contextMsg.setDataset(new DatasetElement("Adapterrex-Study-Testing", sectionLevel));
+			        contextMsg.setDataset(new DatasetElement("Jan04-Study-Testing", sectionLevel));
 		        }
 		        else
 		        {
@@ -154,7 +163,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			        contextMsg.setSchool("N/A");
 			        contextMsg.setPeriod("N/A");
 			        contextMsg.addInstructor("N/A");
-			        contextMsg.setDataset(new DatasetElement("Adapterrex-Non-Study-Testing", sectionLevel));
+			        contextMsg.setDataset(new DatasetElement("Jan04-Non-Study-Testing", sectionLevel));
 		        }		        
 			}	
 
@@ -198,11 +207,11 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		        		return;
 		        	}
 	        		break;
-	        	case AutoResizeTextBox:
+	        	/*case AutoResizeTextBox:
 	        		input = "Width: " + a.getParameterValue(ParameterTypes.Width) + "; Height: " + a.getParameterValue(ParameterTypes.Height);
 			        action = "Auto Resize Text Box";
 			        toolMsg.setAsAttempt("");
-	        		break;
+	        		break; */
 	        	case UpdateElement:
 	        		String text = a.getParameterValue(ParameterTypes.Text);
 			        if (text == null)
@@ -217,46 +226,14 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			        		}
 			        		else
 			        		{
-			        			if (eltType == null)
-					        	{
-					        		return;
-					        	}
-					        	else if (eltType.equals("box"))
-					        	{
-					        		action = "Resize Box";
-					        	}
-					        	else if (eltType.equals("relation"))
-					        	{
-					        		action = "Resize Relation";
-					        	}
-					        	else
-					        	{
-					        		return;
-					        	}
-
+			        			action = "Resize Box";
 			        			input = "Width: " + width + "; Height: " + a.getParameterValue(ParameterTypes.Height);
 			        			toolMsg.setAsAttempt("");
 			        		}
 			        	}
 			        	else
 			        	{
-			        		if (eltType == null)
-					        	{
-					        		return;
-					        	}
-					        	else if (eltType.equals("box"))
-					        	{
-					        		action = "Reposition Box";
-					        	}
-					        	else if (eltType.equals("relation"))
-					        	{
-					        		action = "Reposition Relation";
-					        	}
-					        	else
-					        	{
-					        		return;
-					        	}
-
+			        		action = "Reposition Box";
 			        		input = "PosX: " + posX + "; PosY: " + a.getParameterValue(ParameterTypes.PosY);
 			        		toolMsg.setAsAttempt("");
 			        	}

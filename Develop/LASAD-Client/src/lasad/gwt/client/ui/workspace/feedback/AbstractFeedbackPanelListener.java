@@ -58,7 +58,7 @@ public abstract class AbstractFeedbackPanelListener implements EventListener {
 					MessageBox box = MessageBox.prompt("Detailed feedback", myReference.getController().getElement(clusterID).getValue(ParameterTypes.Details) + "<br><br>Please explain your thoughts:", true);
 					box.addCallback(new Listener<MessageBoxEvent>() {
 						public void handleEvent(MessageBoxEvent be) {
-							String v = be.getValue();
+							//String v = be.getValue();
 
 							// detailsVisible = false;
 							Vector<Parameter> param = new Vector<Parameter>();
