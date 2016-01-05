@@ -625,6 +625,9 @@ public class User {
 					doc = builder.build(f);
 					
 					Element root = doc.getRootElement();
+
+					// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+					@SuppressWarnings("unchecked")
 					List<Element> userList = root.getChildren("user");
 					
 					for(Element user : userList) {

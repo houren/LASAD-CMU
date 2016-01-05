@@ -75,10 +75,15 @@ public class Config {
 
 			Element root = doc.getRootElement();
 
+			// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+			@SuppressWarnings("unchecked")
 			List<Element> configurationParameters = root.getChildren();
 
 			for (Element param : configurationParameters) {
+				// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+				@SuppressWarnings("unchecked")
 				List<Element> parameterPair = param.getChildren();
+				
 				String key = parameterPair.get(0).getValue();
 				String value = parameterPair.get(1).getValue();
 				
@@ -274,6 +279,9 @@ public class Config {
 			doc = builder.build(f);
 
 			Element root = doc.getRootElement();
+
+			// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+			@SuppressWarnings("unchecked")
 			List<Element> userList = root.getChildren("user");
 
 			for (Element user : userList) {
@@ -299,12 +307,18 @@ public class Config {
 			doc = builder.build(f);
 
 			Element root = doc.getRootElement();
+
+			// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+			@SuppressWarnings("unchecked")
 			List<Element> mapList = root.getChildren("map");
 
 			for (Element map : mapList) {
 				String name = map.getChild("name").getValue();
 				String template = map.getChild("template").getValue();
 				String creator = map.getChild("creator").getValue();
+
+				// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+				@SuppressWarnings("unchecked")
 				List<Element>  restrictedToUser = map.getChild("restricted-to-user").getChildren(); 
 				Vector<Integer> userList = new Vector<Integer>();
 				if (restrictedToUser.size()>0) 

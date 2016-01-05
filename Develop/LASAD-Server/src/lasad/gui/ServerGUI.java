@@ -18,6 +18,9 @@ import lasad.Server;
  * @author Frank Loll
  *
  */
+
+// serial UID wasn't written, so I'll suppress warning
+@SuppressWarnings("serial")
 public class ServerGUI extends JFrame {
 
 	private Server correspondingServerInstance;

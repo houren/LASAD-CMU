@@ -227,6 +227,8 @@ public class Ontology {
 			Element rootElement = rootdoc.getRootElement();
 			Element elementsElement = rootElement.getChild("elements");
 			
+			// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+			@SuppressWarnings("unchecked")
 			List<Element> boxesAndRelations = elementsElement.getChildren();
 			
 			for(Element boxOrRelation : boxesAndRelations) {
@@ -246,6 +248,9 @@ public class Ontology {
 				}
 	
 				Element childrenElements = boxOrRelation.getChild("childelements");
+
+				// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+				@SuppressWarnings("unchecked")
 				List<Element> children = childrenElements.getChildren("element");
 				
 				for(Element child : children) {

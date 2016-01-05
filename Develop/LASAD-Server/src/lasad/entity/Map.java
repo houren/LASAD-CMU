@@ -214,6 +214,8 @@ public class Map {
 
 				if (elementTemplate != null) {
 
+					// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+					@SuppressWarnings("unchecked")
 					List<org.jdom.Element> elements = elementTemplate.getChildren("element");
 					for (org.jdom.Element e : elements) {
 						Action a = new Action(Commands.CreateElement, Categories.Map);
@@ -224,6 +226,8 @@ public class Map {
 						a.addParameter(ParameterTypes.Type, typeOfE);
 						a.addParameter(ParameterTypes.ElementId, elementIDofE);
 
+						// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+						@SuppressWarnings("unchecked")
 						List<org.jdom.Element> parametersOfE = e.getChildren("parameter");
 						for (org.jdom.Element pOfE : parametersOfE) {
 							a.addParameter(ParameterTypes.fromString(pOfE.getChild("name").getText()), pOfE.getChild("value").getText());
@@ -233,6 +237,9 @@ public class Map {
 
 						// Get information about all sub-elements
 						org.jdom.Element children = e.getChild("children");
+
+						// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+						@SuppressWarnings("unchecked")
 						List<org.jdom.Element> childElements = children.getChildren("element");
 						for (org.jdom.Element c : childElements) {
 							Action b = new Action(Commands.CreateElement, Categories.Map);
@@ -243,6 +250,8 @@ public class Map {
 							b.addParameter(ParameterTypes.Type, typeOfC);
 							b.addParameter(ParameterTypes.ElementId, elementIDofC);
 
+							// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+							@SuppressWarnings("unchecked")
 							List<org.jdom.Element> parametersOfC = c.getChildren("parameter");
 							for (org.jdom.Element pOfC : parametersOfC) {
 								b.addParameter(ParameterTypes.fromString(pOfC.getChild("name").getText()), pOfC.getChild("value").getText());
@@ -906,6 +915,9 @@ public class Map {
 					doc = builder.build(f);
 
 					org.jdom.Element root = doc.getRootElement();
+					
+					// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+					@SuppressWarnings("unchecked")
 					List<org.jdom.Element> mapList = root.getChildren("map");
 
 					for (org.jdom.Element map : mapList) {

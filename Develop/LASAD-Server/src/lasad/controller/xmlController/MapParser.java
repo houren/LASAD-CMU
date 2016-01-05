@@ -62,6 +62,8 @@ public class MapParser {
 		HashMap<String, Integer> rootElementIDToElementID = new HashMap<String, Integer>();
 
 		try {
+			// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+			@SuppressWarnings("unchecked")
 			List<org.jdom.Element> elements = rootElement.getChildren("element");
 			for (org.jdom.Element element : elements) {
 
@@ -128,6 +130,8 @@ public class MapParser {
 		int concreteElementID = MapController.processCreatePreDefinedElement(a, mapID, getUserID(username));
 		rootElementIDToElementID.put(rootElementID, concreteElementID);
 
+		// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+		@SuppressWarnings("unchecked")
 		List<org.jdom.Element> subelements = element.getChildren("sub-element");
 		for (org.jdom.Element subelement : subelements) {
 			// Parse attributes
@@ -140,6 +144,8 @@ public class MapParser {
 			b.addParameter(ParameterTypes.Parent, "LAST-ID");
 
 			// Parse parameters
+			// JDOM 1 returned a raw list (that was ultimately a list of elements), whereas JDOM 2 returns a list of elements
+			@SuppressWarnings("unchecked")
 			List<org.jdom.Element> parameters = subelement.getChildren("parameter");
 			for (org.jdom.Element parameter : parameters) {
 				String name = parameter.getChildText("name");
