@@ -22,7 +22,7 @@ public class FileUploadDialog extends BoxComponent implements FocusableInterface
 	private GraphMap myMap;
 
 	private Vector<Element> actions = null;
-	private GXTFileUploadDialog fileUpload = null;
+	//private GXTFileUploadDialog fileUpload = null;
 
 	public FileUploadDialog(GraphMap targetMap, int left, int top) {
 		actions = new Vector<Element>();

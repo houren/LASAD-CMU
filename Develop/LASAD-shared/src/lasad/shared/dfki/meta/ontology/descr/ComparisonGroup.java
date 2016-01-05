@@ -40,9 +40,9 @@ public enum ComparisonGroup {
 	 */
 	NUMBER("number");
 
-	private final String group;
+	//private final String group;
 
 	ComparisonGroup(String group) {
-		this.group = group;
+		//this.group = group;
 	}
 }

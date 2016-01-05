@@ -39,10 +39,10 @@ public enum ServiceStatus {
 	 */
 	STALE("STALE");
 
-	private final String status;
+	//private final String status;
 
 	ServiceStatus(String status) {
-		this.status = status;
+		//this.status = status;
 	}
 
 	public static boolean isActive(ServiceStatus status) {

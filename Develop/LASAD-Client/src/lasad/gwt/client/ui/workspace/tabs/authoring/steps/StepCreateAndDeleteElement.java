@@ -61,7 +61,7 @@ public class StepCreateAndDeleteElement extends ContentPanel {
 	
 private Radio radioEditable, radiononEditable,r1,r2,r3;
 
-private String viewMode="editable";
+//private String viewMode="editable";
 
 	private void switchToElementDetails(String value) {
 		selection = value;
@@ -217,7 +217,7 @@ private String viewMode="editable";
 			@Override
 			protected void onClick(ComponentEvent be) {
 				super.onClick(be);
-				viewMode = "editable";
+				//viewMode = "editable";
 			}
 		};
 		radioEditable.setBoxLabel(fontStyleStart+"Editable"+fontStyleEnd);
@@ -227,7 +227,7 @@ private String viewMode="editable";
 			@Override
 			protected void onClick(ComponentEvent be) {
 				super.onClick(be);
-				viewMode = "noneditable";
+				//viewMode = "noneditable";
 			}
 		};
 		radiononEditable.setBoxLabel(fontStyleStart+"Non-Editable"+fontStyleEnd);

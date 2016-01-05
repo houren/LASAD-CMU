@@ -6,7 +6,7 @@ import lasad.gwt.client.ui.workspace.tabs.feedbackauthoring.patternarea.manager.
 
 public class UnspecifiedElementModelPattern extends AbstractUnspecifiedElementModel {
 	
-	private PatternController controller;
+	//private PatternController controller;
 
 	public UnspecifiedElementModelPattern(int id, String type, String author) {
 		super(id, type, author);
@@ -18,7 +18,7 @@ public class UnspecifiedElementModelPattern extends AbstractUnspecifiedElementMo
 
 	@Override
 	public void register2MVController(AbstractMVController controller) {
-		this.controller = ((PatternController)controller).addElementModel(this);
+		/*this.controller = */((PatternController)controller).addElementModel(this);
 	}
 
 }

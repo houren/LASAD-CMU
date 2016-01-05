@@ -27,7 +27,7 @@ public class ActionTranslatorHelper {
 	public static final String SEPARATOR = "_";
 	
 	// debugging setting
-	private boolean REQUEST_RAW_RESULTS = false;
+	//private boolean REQUEST_RAW_RESULTS = false;
 
 	private HashMap<String, CFObjectBasicData> objectTracker = new HashMap<String, CFObjectBasicData>();
 

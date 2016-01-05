@@ -61,7 +61,7 @@ public class ConfigWindowPattern implements AbstractConfigWindow{
 	
 	private ElementDescr elemDesc;
 	private String ontologyId = "LARGO";
-	private String nodeId;
+	//private String nodeId;
 	
 	public ConfigWindowPattern(){
 		super();

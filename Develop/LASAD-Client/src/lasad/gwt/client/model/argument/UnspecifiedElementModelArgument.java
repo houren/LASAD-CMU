@@ -6,7 +6,7 @@ import lasad.gwt.client.model.AbstractUnspecifiedElementModel;
 public class UnspecifiedElementModelArgument extends
 		AbstractUnspecifiedElementModel {
 	
-	private MVController controller;
+	//private MVController controller;
 
 	public UnspecifiedElementModelArgument(int id, String type, String author) {
 		super(id, type, author);
@@ -18,7 +18,7 @@ public class UnspecifiedElementModelArgument extends
 
 	@Override
 	public void register2MVController(AbstractMVController controller) {
-		this.controller = ((MVController)controller).addElementModel(this);
+		/*this.controller = */((MVController)controller).addElementModel(this);
 	}
 
 }

@@ -40,7 +40,7 @@ public class DeleteRelationDialog extends Window
 	private SimpleComboBox<String> comboEnd = new SimpleComboBox<String>();
 	private String correspondingMapId;
 	private ArgumentModel argModel;
-	private Set<LinkedBox> boxes;
+	//private Set<LinkedBox> boxes;
 	private final LASADActionSender communicator = LASADActionSender.getInstance();
 	private final ActionFactory actionBuilder = ActionFactory.getInstance();
 	private MVController myController = null;
@@ -54,7 +54,7 @@ public class DeleteRelationDialog extends Window
 	{
 		this.correspondingMapId = mapId;
 		this.argModel = LASAD_Client.getMapTab(mapId).getMyMapSpace().getMyMap().getArgModel();
-		this.boxes = argModel.getBoxes();
+		//this.boxes = argModel.getBoxes();
 		this.allowLinksToLinks = LASAD_Client.getMapTab(mapId).getMyMapSpace().getMyMap().getMyViewSession().getController().getMapInfo().isAllowLinksToLinks();
 		this.comboStart.setTriggerAction(ComboBox.TriggerAction.ALL);
 		this.comboEnd.setTriggerAction(ComboBox.TriggerAction.ALL);

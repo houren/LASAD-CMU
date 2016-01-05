@@ -22,7 +22,7 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.CheckBox;
 import com.extjs.gxt.ui.client.widget.form.FileUploadField;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
-import com.extjs.gxt.ui.client.widget.form.Radio;
+//import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.google.gwt.core.client.GWT;
 
@@ -30,7 +30,7 @@ public class ImportMapFormPanel extends FormPanel {
 
 	private TextField<String> sessionName;
 	private FileUploadField file;
-	private Radio privateMap, publicMap;
+	//private Radio privateMap, publicMap;
 	
 	private CheckBox privateMapChk;
 	

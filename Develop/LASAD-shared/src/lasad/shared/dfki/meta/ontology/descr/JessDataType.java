@@ -28,9 +28,9 @@ public enum JessDataType {
 	 */
 	LIST("LIST");
 
-	private final String type;
+	//private final String type;
 
 	JessDataType(String type) {
-		this.type = type;
+		//this.type = type;
 	}
 }

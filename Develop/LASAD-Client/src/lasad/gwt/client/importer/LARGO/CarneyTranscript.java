@@ -7,15 +7,15 @@ import lasad.gwt.client.logger.Logger;
 public class CarneyTranscript implements LARGOTranscriptMappingInterface {
 
 	private int line = 0;
-	private int charNumber;
+	//private int charNumber;
 	private int point;
-	private boolean start;
+	//private boolean start;
 
 	public void mapChars(int charNumber, boolean start) {
 
 		HashMap<Integer, Integer> c2l = new HashMap<Integer, Integer>();
-		this.charNumber = charNumber;
-		this.start = start;
+		//this.charNumber = charNumber;
+		//this.start = start;
 
 		c2l.put(3, 3);
 		c2l.put(4, 63);

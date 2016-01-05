@@ -42,7 +42,7 @@ public class ActionProcessor extends ActionObservable {
 	private static Server myServer;
 	private static ActionProcessor singletonInstance = null;
 
-	private AuthoringActionProcessor authoringActionProc;
+	/*private AuthoringActionProcessor authoringActionProc;
 	private MapActionProcessor mapActionProc;
 	private ManagementActionProcessor mgmtActionProc;
 	private CommunicationActionProcessor commActionProc;
@@ -51,7 +51,7 @@ public class ActionProcessor extends ActionObservable {
 	private ReplayActionProcessor replayActionProc;
 	private FileActionProcessor fileActionProc;
 	private LoginActionProcessor authActionProc;
-	private FeedbackAuthoringActionProcessor feedAuthActionProc;
+	private FeedbackAuthoringActionProcessor feedAuthActionProc;*/
 
 	/**
 	 * Constructor
@@ -60,18 +60,18 @@ public class ActionProcessor extends ActionObservable {
 		super();
 		singletonInstance = this;
 		myServer = Server.getInstance();
-		this.authoringActionProc = new AuthoringActionProcessor();
+		/*this.authoringActionProc = */new AuthoringActionProcessor();
 		HeartbeatChecker hbc = new HeartbeatChecker();
 		hbc.start();
-		this.mapActionProc = new MapActionProcessor();
-		this.mgmtActionProc = new ManagementActionProcessor();
-		this.commActionProc = new CommunicationActionProcessor();
-		this.feedbackActionProc = new FeedbackActionProcessor();
-		this.questActionProc = new QuestionnaireActionProcessor();
-		this.replayActionProc = new ReplayActionProcessor();
-		this.fileActionProc = new FileActionProcessor();
-		this.authActionProc = new LoginActionProcessor();
-		this.feedAuthActionProc = new FeedbackAuthoringActionProcessor();
+		/*this.mapActionProc = */new MapActionProcessor();
+		/*this.mgmtActionProc = */new ManagementActionProcessor();
+		/*this.commActionProc = */new CommunicationActionProcessor();
+		/*this.feedbackActionProc = */new FeedbackActionProcessor();
+		/*this.questActionProc = */new QuestionnaireActionProcessor();
+		/*this.replayActionProc = */new ReplayActionProcessor();
+		/*this.fileActionProc = */new FileActionProcessor();
+		/*this.authActionProc = */new LoginActionProcessor();
+		/*this.feedAuthActionProc = */new FeedbackAuthoringActionProcessor();
 	}
 
 	/**

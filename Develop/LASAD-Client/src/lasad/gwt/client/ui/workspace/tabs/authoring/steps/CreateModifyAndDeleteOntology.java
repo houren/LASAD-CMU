@@ -71,7 +71,7 @@ public class CreateModifyAndDeleteOntology extends ContentPanel {
 	private ContentPanel step2aInstructionPanel, step2bInstructionPanel, step2aCover, step2bCover, step2aAddDel, step2bEdit;
 	private ContentPanel preview;
 	private static ContentPanel elementActions;
-	private boolean isradiobuttons = false;
+	//private boolean isradiobuttons = false;
 	private SimpleLink link;
 	public static String selectedOntology;
 

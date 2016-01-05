@@ -21,7 +21,7 @@ public class IdGenerator {
 	private static int rootElementIdCounter = 0; //for Types "relation" || "emptyrelation" || "box" || "emptybox" 
 	private static int elementIdCounter = 0; //for all elements
 	private static int paternIdCounter = 0;
-	private static int constraintIdCounter = 0;
+	//private static int constraintIdCounter = 0;
 	
 	private static final int LIMIT = 9999999;
 	

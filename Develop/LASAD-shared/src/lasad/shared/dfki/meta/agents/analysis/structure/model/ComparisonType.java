@@ -16,10 +16,10 @@ public enum ComparisonType {
 
 	INTERNAL("INTERNAL"), EXTERNAL("EXTERNAL"), ALL("ALL");
 
-	private final String selection;
+	//private final String selection;
 
 	ComparisonType(String selection) {
-		this.selection = selection;
+		//this.selection = selection;
 	}
 
 }

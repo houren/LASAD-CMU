@@ -7,13 +7,13 @@ import lasad.gwt.client.logger.Logger;
 public class BurnhamResTranscript implements LARGOTranscriptMappingInterface {
 
 	private int line = 0;
-	private int charNumber;
+	//private int charNumber;
 	private int point;
 
 	public void mapChars(int charNumber, boolean start) {
 
 		HashMap<Integer, Integer> c2l = new HashMap<Integer, Integer>();
-		this.charNumber = charNumber;
+		//this.charNumber = charNumber;
 
 		c2l.put(199, 3);
 		c2l.put(200, 23);

@@ -31,7 +31,7 @@ public class MapParser {
 	StringReader in;
 
 	// TODO Resolve cyclic dependencies
-	private ActionProcessor aproc;
+	//private ActionProcessor aproc;
 
 	/**
 	 * Builds root document from {@xmlText}
@@ -40,7 +40,7 @@ public class MapParser {
 	 * @author MB
 	 */
 	public MapParser(String xmlText, ActionProcessor aproc) {
-		this.aproc = aproc;
+		//this.aproc = aproc;
 		in = new StringReader(xmlText);
 
 		SAXBuilder builder = new SAXBuilder();

@@ -7,14 +7,14 @@ import java.util.Vector;
 import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
 
 public class GenericHighlightHandler {
-	private AbstractGraphMap map;
+	//private AbstractGraphMap map;
 	private Vector<HighlightableElementInterface> highlightedElements = new Vector<HighlightableElementInterface>();
 
 	// Mapped Parent -> Child
 	private Map<HighlightableElementInterface,HighlightableElementInterface> elementParent2ChildRelations = new HashMap<HighlightableElementInterface,HighlightableElementInterface>();
 	
 	public GenericHighlightHandler(AbstractGraphMap abstractGraphMap) {
-		this.map = abstractGraphMap;
+		//this.map = abstractGraphMap;
 	}
 	
 	public void releaseAllHighlights(){

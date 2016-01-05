@@ -31,9 +31,9 @@ public enum ComparisonDataType {
 	 */
 	SET("set");
 
-	private final String dataType;
+	//private final String dataType;
 
 	ComparisonDataType(String dataType) {
-		this.dataType = dataType;
+		//this.dataType = dataType;
 	}
 }
