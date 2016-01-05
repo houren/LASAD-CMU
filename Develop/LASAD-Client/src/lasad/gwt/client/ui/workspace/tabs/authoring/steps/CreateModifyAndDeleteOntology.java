@@ -238,6 +238,7 @@ public class CreateModifyAndDeleteOntology extends ContentPanel {
 		elementStore = new TreeStore<ModelData>();
 		ontologyOverview = new TreePanel<ModelData>(ontologyStore) {
 
+			@SuppressWarnings("rawtypes")
 			@Override
 			protected void onClick(TreePanelEvent tpe) {
 				super.onClick(tpe);
@@ -247,6 +248,7 @@ public class CreateModifyAndDeleteOntology extends ContentPanel {
 				}
 			}
 
+			@SuppressWarnings("rawtypes")
 			@Override
 			protected void onDoubleClick(TreePanelEvent tpe) {
 				super.onDoubleClick(tpe);
@@ -445,6 +447,7 @@ public class CreateModifyAndDeleteOntology extends ContentPanel {
 		elementStore = new TreeStore<ModelData>();
 		elementOverview = new TreePanel<ModelData>(elementStore) {
 
+			@SuppressWarnings("rawtypes")
 			@Override
 			protected void onClick(TreePanelEvent tpe) {
 				super.onClick(tpe);

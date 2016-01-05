@@ -501,7 +501,7 @@ public class InputFieldAndListField<D extends ModelData> extends MultiField<Fiel
 	    }
 	  }
 
-	  @SuppressWarnings({"unchecked", "rawtypes", "deprecation"})
+	  @SuppressWarnings({"unchecked", "rawtypes"})
 	  private void select(final ListField<?> field, final List list) {
 	  	// DeferredCommand is deprecated, use Scheduler once we upgrade GWT
 	    com.google.gwt.user.client.DeferredCommand.addCommand(new Command() {

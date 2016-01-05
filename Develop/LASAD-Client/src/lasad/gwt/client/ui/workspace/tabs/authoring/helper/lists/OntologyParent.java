@@ -4,6 +4,7 @@ import lasad.gwt.client.model.ElementInfo;
 
 import com.extjs.gxt.ui.client.data.BaseTreeModel;
 
+@SuppressWarnings("serial")
 public class OntologyParent extends BaseTreeModel implements Comparable<OntologyParent> {
 
 	private static int ID = 0;

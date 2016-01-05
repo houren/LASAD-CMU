@@ -255,6 +255,7 @@ public class MapLoginTab extends ContentPanel {
 		templateStore = new TreeStore<ModelData>();
 		templateOverview = new TreePanel<ModelData>(templateStore) {
 
+			@SuppressWarnings("rawtypes")
 			@Override
 			protected void onClick(TreePanelEvent tpe) {
 				super.onClick(tpe);
