@@ -27,6 +27,7 @@ public class PushServlet extends HttpServlet {
 	
 	private LASADGWTServiceBroker myBroker = LASADGWTServiceBroker.getInstance();
 	
+	@SuppressWarnings("unchecked")
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Logger.log("PushServlet.doPost", Logger.DEBUG);
 		ObjectInputStream objIn = new ObjectInputStream(request.getInputStream());

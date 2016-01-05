@@ -27,7 +27,6 @@ import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.ListField;
 import com.extjs.gxt.ui.client.widget.form.MultiField;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Element;
 
 /**
@@ -37,7 +36,6 @@ import com.google.gwt.user.client.Element;
  * @param <D> the model type
  */
 @SuppressWarnings("deprecation")
-
 public class CustomDualListField2<D extends ModelData> extends MultiField<Field<?>> {
 
 	  /**
@@ -491,7 +489,8 @@ public class CustomDualListField2<D extends ModelData> extends MultiField<Field<
 
 	  @SuppressWarnings({"unchecked", "rawtypes"})
 	  private void select(final ListField<?> field, final List list) {
-	    DeferredCommand.addCommand(new Command() {
+	    // DeferredCommand is deprecated, use Scheduler once we upgrade GWT
+	    com.google.gwt.user.client.DeferredCommand.addCommand(new Command() {
 	      public void execute() {
 	        field.getListView().getSelectionModel().select(list, false);
 	      }

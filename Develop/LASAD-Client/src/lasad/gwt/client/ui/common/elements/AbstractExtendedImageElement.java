@@ -22,8 +22,12 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
-import com.google.gwt.user.client.ui.DisclosureEvent;
-import com.google.gwt.user.client.ui.DisclosureHandler;
+//import com.google.gwt.user.client.ui.DisclosureEvent;
+//import com.google.gwt.user.client.ui.DisclosureHandler;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.OpenHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
@@ -498,7 +502,7 @@ public abstract class AbstractExtendedImageElement extends AbstractExtendedEleme
 
 	}
 
-	@SuppressWarnings("deprecation")
+	//@SuppressWarnings("deprecation")
 	public DisclosurePanel GenerateSourcePanel() {
 
 		final TextBox urlsource = new TextBox();
@@ -513,7 +517,35 @@ public abstract class AbstractExtendedImageElement extends AbstractExtendedEleme
 		datalbl.setStyleAttribute("color", "black");
 
 		panel.setHeader(datalbl);
-		final DisclosureHandler dh = new DisclosureHandler() {
+		final CloseHandler<DisclosurePanel> ch = new CloseHandler<DisclosurePanel>() {
+			public void onClose(CloseEvent<DisclosurePanel> event)
+			{
+				Label datalbl = new Label("Click to change image");
+				datalbl.setStyleAttribute("fontWeight", "bold");
+				datalbl.setStyleAttribute("color", "black");
+				datalbl.setHeight("10" + "px");
+				panel.setHeader(datalbl);
+
+				if (imagewindow != null)
+					if (imagewindow != null || imagewindow.getHeight() > 60)
+						imagewindow.setHeight(imagewindow.getHeight() - 50 + "px");
+			}
+		};
+
+		final OpenHandler<DisclosurePanel> oh = new OpenHandler<DisclosurePanel>() {
+			public void onOpen(OpenEvent<DisclosurePanel> event)
+			{
+				Label datalbl = new Label("Close");
+				datalbl.setStyleAttribute("fontWeight", "bold");
+				datalbl.setHeight("10" + "px");
+				datalbl.setStyleAttribute("color", "black");
+
+				panel.setHeader(datalbl);
+				if (imagewindow != null || imagewindow.getHeight() > 50)
+					imagewindow.setHeight(imagewindow.getHeight() + 50 + "px");
+			}
+		};
+		/*final DisclosureHandler dh = new DisclosureHandler() {
 
 			public void onClose(DisclosureEvent event) {
 
@@ -538,9 +570,11 @@ public abstract class AbstractExtendedImageElement extends AbstractExtendedEleme
 				if (imagewindow != null || imagewindow.getHeight() > 50)
 					imagewindow.setHeight(imagewindow.getHeight() + 50 + "px");
 			}
-		};
+		};*/
 
-		panel.addEventHandler(dh);
+		panel.addCloseHandler(ch);
+		panel.addOpenHandler(oh);
+		// deprecated: panel.addEventHandler(dh);
 
 		int totalwidth = Integer.parseInt(i_adjusted_width);
 		panel.setWidth(totalwidth + "px");

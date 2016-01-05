@@ -21,7 +21,7 @@ public abstract class AbstractExtendedRadioButtonElement extends AbstractExtende
 
 	
 	private int min_width = 10;
-	private int element_width = 10;
+	//private int element_width = 10;
 	
 	private  String label;
 	private String  background_color="";
@@ -108,7 +108,7 @@ public abstract class AbstractExtendedRadioButtonElement extends AbstractExtende
 			}
 			
 			if (myconfig.getUiOption(ParameterTypes.Width) != null || myconfig.getUiOption(ParameterTypes.Width)=="") {
-				element_width =Integer.parseInt(myconfig.getUiOption(ParameterTypes.Width));
+				//element_width =Integer.parseInt(myconfig.getUiOption(ParameterTypes.Width));
 			}
 			
 		

@@ -28,7 +28,6 @@ import com.extjs.gxt.ui.client.widget.form.ListField;
 import com.extjs.gxt.ui.client.widget.form.MultiField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Element;
 
 /**
@@ -448,6 +447,7 @@ public class InputFieldAndListField<D extends ModelData> extends MultiField<Fiel
 		Map<String, String> tmp = new HashMap<String, String>();
     	tmp.put(GridElementLabel.ID, Integer.toString(getNewId()));
     	tmp.put(GridElementLabel.NAME, value);
+    	@SuppressWarnings("unchecked")
     	D model = (D) new ElementModel(tmp);
     	
 		toField.getStore().add(model);
@@ -501,9 +501,10 @@ public class InputFieldAndListField<D extends ModelData> extends MultiField<Fiel
 	    }
 	  }
 
-	  @SuppressWarnings({"unchecked", "rawtypes"})
+	  @SuppressWarnings({"unchecked", "rawtypes", "deprecation"})
 	  private void select(final ListField<?> field, final List list) {
-	    DeferredCommand.addCommand(new Command() {
+	  	// DeferredCommand is deprecated, use Scheduler once we upgrade GWT
+	    com.google.gwt.user.client.DeferredCommand.addCommand(new Command() {
 	      public void execute() {
 	        field.getListView().getSelectionModel().select(list, false);
 	      }
