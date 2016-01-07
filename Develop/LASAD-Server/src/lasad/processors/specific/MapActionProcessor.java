@@ -1,5 +1,7 @@
 package lasad.processors.specific;
 
+import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashSet;
@@ -54,6 +56,8 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	// mapID -> doingAutoOrganize
 	private java.util.Map<Integer, Boolean> autoOrganizeStatuses;
 
+	private String DATASET;
+
 	public MapActionProcessor()
 	{
 		super();
@@ -66,10 +70,40 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		harrellClass = new HashSet<String>();
 		harrellClass.add("t0");
 
-		for (int i = 1; i <= 30; i++)
+        String rosterFileName = "./class_roster.txt";
+        String line = null;
+
+        try
+        {
+            FileReader fr = new FileReader(rosterFileName);
+            BufferedReader reader = new BufferedReader(fr);
+
+            // first line of file is dataset
+            DATASET = reader.readLine().replaceAll("\\s","");
+
+            //Logger.debugLog("Start of class roster");
+            while((line = reader.readLine()) != null)
+            {
+            	String member = line.replaceAll("\\s","");
+            	//Logger.debugLog(member);
+                harrellClass.add(member);
+            }
+            //Logger.debugLog("End of class roster");   
+            reader.close();         
+        }
+        catch(Exception ex) {
+        	DATASET = "garbage";
+            Logger.debugLog("ERROR: can't read class roster.");
+        	StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			ex.printStackTrace(pw);
+			Logger.debugLog(sw.toString());              
+        }
+
+	/*	for (int i = 1; i <= 30; i++)
 		{
 			harrellClass.add("s" + i);
-		}
+		} */
 		/*
 		harrellClass.add("Mara.Harrell");
 
@@ -101,6 +135,10 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
     	try
     	{
 			String userName = u.getNickname();
+			if (!harrellClass.contains(userName))
+			{
+				return;
+			}
 	        String sessionID = u.getSessionID();
 	        Integer mapID = ActionProcessor.getMapIDFromAction(a);
 
@@ -140,8 +178,8 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 
 				LevelElement sectionLevel;
 
-		        if (harrellClass.contains(userName))
-		        {
+		        //if ()
+		        //{
 		        	sectionLevel = new LevelElement("Section", "01", problem);
 
 			        String className = "MyClass";
@@ -153,8 +191,9 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			        contextMsg.setSchool(school);
 			        contextMsg.setPeriod(period);
 			        contextMsg.addInstructor(instructorOne);
-			        contextMsg.setDataset(new DatasetElement("Jan04-Study-Testing", sectionLevel));
-		        }
+			        contextMsg.setDataset(new DatasetElement(DATASET, sectionLevel));
+		        //}
+		        /*
 		        else
 		        {
 		        	sectionLevel = new LevelElement("Section", "N/A", problem);
@@ -164,7 +203,8 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			        contextMsg.setPeriod("N/A");
 			        contextMsg.addInstructor("N/A");
 			        contextMsg.setDataset(new DatasetElement("Jan04-Non-Study-Testing", sectionLevel));
-		        }		        
+		        }
+		        */		        
 			}	
 
 	        ToolMessage toolMsg = ToolMessage.create(contextMsg);
@@ -232,7 +272,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			        		}
 			        	}
 			        	else
-			        	{
+			        	{	
 			        		action = "Reposition Box";
 			        		input = "PosX: " + posX + "; PosY: " + a.getParameterValue(ParameterTypes.PosY);
 			        		toolMsg.setAsAttempt("");
