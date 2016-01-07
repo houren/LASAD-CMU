@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#TODO You MIGHT need to change the filepath in quotations to the Tomcat directory to be used on your server
+#TODO You need to change the filepath in quotations to the Tomcat directory to be used on your server
 tomcatDir="/Users/kevin/LASAD-CMU/Deploy/apache-tomcat-8.0.23"
 tomcatShutdown="/bin/./shutdown.sh"
 
