@@ -68,7 +68,6 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		autoOrganizeStatuses = new ConcurrentHashMap<Integer, Boolean>();
 
 		harrellClass = new HashSet<String>();
-		harrellClass.add("t0");
 
         String rosterFileName = "./class_roster.txt";
         String line = null;
