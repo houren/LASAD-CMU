@@ -279,8 +279,6 @@ public class Map {
 		ResultSet rs = null;
 		Connection con = null;
 		PreparedStatement mapList = null;
-		PreparedStatement restricted_user_List = null;
-		ResultSet rs1 = null;
 
 		try {
 			con = DatabaseConnectionHandler.getConnection(Map.class);
@@ -290,6 +288,9 @@ public class Map {
 			rs = mapList.executeQuery();
 
 			while (rs.next()) {
+
+				PreparedStatement restricted_user_List = null;
+				ResultSet rs1 = null;
 
 				// resultingMapList.add(new Map(rs.getInt(1),
 				// rs.getString("name"), rs.getInt("template_id"),
@@ -311,6 +312,9 @@ public class Map {
 					e.printStackTrace();
 				} catch (Exception e) {
 					e.printStackTrace();
+				} finally {
+					try{restricted_user_List.close();}catch(Exception e){}
+					try{rs1.close();}catch(Exception e){}
 				}
 
 				resultingMapList.add(new Map(rs.getInt(1), rs.getString("name"), rs.getInt("template_id"), rs.getInt("creator_user_id"),
@@ -323,10 +327,8 @@ public class Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try{rs.close();}catch(Exception e){}
-			try{rs1.close();}catch(Exception e){}
 			try{mapList.close();}catch(Exception e){}
-			try{restricted_user_List.close();}catch(Exception e){}
+			try{rs.close();}catch(Exception e){}
 			if (con != null) {
 				DatabaseConnectionHandler.closeConnection(Map.class, con);
 				// try {
@@ -335,6 +337,7 @@ public class Map {
 				// e.printStackTrace();
 				// }
 			}
+			try{con.close();}catch(Exception e){}
 		}
 		return resultingMapList;
 	}

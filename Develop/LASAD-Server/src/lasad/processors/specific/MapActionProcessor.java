@@ -40,7 +40,7 @@ import edu.cmu.pslc.logging.element.ProblemElement;
  */
 public class MapActionProcessor extends AbstractActionObserver implements ActionObserver {
 
-	private final boolean DS_LOGGING_IS_ON = true;
+	private boolean DS_LOGGING_IS_ON;
 
 	private OliDatabaseLogger dsLogger;
 
@@ -61,23 +61,28 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	public MapActionProcessor()
 	{
 		super();
-		dsLogger = OliDatabaseLogger.create("http://pslc-qa.andrew.cmu.edu/log/server", "UTF-8");
-
-		loggedSessions = new ConcurrentHashMap<String, Set<String>>();
-		loggedContexts = new ConcurrentHashMap<String, ContextMessage>();
-		autoOrganizeStatuses = new ConcurrentHashMap<Integer, Boolean>();
-
-		harrellClass = new HashSet<String>();
 
         String rosterFileName = "./class_roster.txt";
         String line = null;
+        autoOrganizeStatuses = new ConcurrentHashMap<Integer, Boolean>();
 
         try
         {
             FileReader fr = new FileReader(rosterFileName);
             BufferedReader reader = new BufferedReader(fr);
 
-            // first line of file is dataset
+            // first line of file is whether to do DS Logging
+            DS_LOGGING_IS_ON = Boolean.parseBoolean(reader.readLine().replaceAll("\\s",""));
+            if (DS_LOGGING_IS_ON)
+            {
+            	dsLogger = OliDatabaseLogger.create("http://pslc-qa.andrew.cmu.edu/log/server", "UTF-8");
+
+				loggedSessions = new ConcurrentHashMap<String, Set<String>>();
+				loggedContexts = new ConcurrentHashMap<String, ContextMessage>();
+				harrellClass = new HashSet<String>();
+            }
+
+            // second line of file is dataset
             DATASET = reader.readLine().replaceAll("\\s","");
 
             //Logger.debugLog("Start of class roster");
@@ -91,6 +96,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
             reader.close();         
         }
         catch(Exception ex) {
+        	DS_LOGGING_IS_ON = false;
         	DATASET = "garbage";
             Logger.debugLog("ERROR: can't read class roster.");
         	StringWriter sw = new StringWriter();
