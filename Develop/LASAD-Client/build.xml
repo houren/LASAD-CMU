@@ -146,6 +146,8 @@
 		<delete dir="war/lasad_client" />
 		<delete dir="gwt-unitCache" />
 		<delete dir="${TOMCAT}/webapps/lasad" />
+        <delete file="${TOMCAT}/webapps/lasad.war" />
+        <delete file="../../Deploy/lasad-server/LASAD-Server.jar" />
 		<delete file="../../Deploy/lasad-server/server.log" />
 		<delete file="../../Deploy/lasad-server/log/debug.log" />
 		<delete includeEmptyDirs="true">

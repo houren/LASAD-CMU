@@ -20,6 +20,22 @@ public class MapTab extends TabItem {
 		this.addStyleName("pad-text");
 		this.setLayout(new FitLayout());
 		this.setBorders(false);
+		/* Was trying to add ability for links to appear on screen
+		this.addListener(Events.Select, new Listener<ComponentEvent>()
+		{
+			public void handleEvent(ComponentEvent be)
+			{
+				if (myMapSpace != null)
+				{
+					myMapSpace.getMyMap().getFocusHandler().releaseAllFocus();
+					LASADActionSender.getInstance().sendActionPackage(ActionFactory.getInstance().leaveMap(myMapSpace.getMyMap().getID()));
+					LASADActionSender.getInstance().sendActionPackage(ActionFactory.getInstance().joinMap(myMapSpace.getMyMap().getID()));
+					//MapTab.this.close();
+					//LASAD_Client.reopen(MapTab.this());
+				}				
+			}
+		});
+		*/
 	}
 
 	public ArgumentMapSpace getMyMapSpace() {

@@ -4,11 +4,13 @@ import java.util.Vector;
 
 import lasad.Server;
 import lasad.State;
+
 import lasad.entity.Map;
 import lasad.entity.Ontology;
 import lasad.entity.Revision;
 import lasad.entity.Template;
 import lasad.entity.User;
+import lasad.entity.Element;
 import lasad.processors.ActionProcessor;
 import lasad.shared.communication.objects.Action;
 import lasad.shared.communication.objects.ActionPackage;
@@ -355,7 +357,7 @@ public class ActionPackageFactory {
 		a.addParameter(ParameterTypes.MapId, mapID + "");
 		a.addParameter(ParameterTypes.Id, elementID + "");
 		a.addParameter(ParameterTypes.UserName, username);
-
+		a.addParameter(ParameterTypes.Type, Element.getElementType(elementID, mapID));
 		return createActionPackage(a);
 	}
 

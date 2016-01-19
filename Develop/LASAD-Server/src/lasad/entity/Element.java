@@ -656,6 +656,41 @@ public class Element {
 			}
 		}
 	}
+
+	public static String getElementType(int elementID, int mapID)
+	{
+		String eltType = null;
+		Connection con = null;
+		PreparedStatement getEltType = null;
+		ResultSet rs = null;	
+		try{
+			con = DatabaseConnectionHandler.getConnection(Element.class);
+			getEltType = con.prepareStatement("SELECT type FROM "+Config.dbName+".elements WHERE id = ? AND map_id = ?;");
+			getEltType.setInt(1, elementID);
+			getEltType.setInt(2, mapID);
+
+			rs = getEltType.executeQuery();
+			
+			if(rs.next()) {
+				eltType = rs.getString("type");
+			}
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { rs.close(); } catch (Exception e) { /* ignored */ }
+    		try { getEltType.close(); } catch (Exception e) { /* ignored */ }
+			if(con != null) {
+				//close Connection
+				DatabaseConnectionHandler.closeConnection(Element.class, con);
+			}
+		}
+
+		return eltType;
+	}
 	
 	public static long getLastModificationTime(int elementID) {
 		long lastModificationTime = 0;

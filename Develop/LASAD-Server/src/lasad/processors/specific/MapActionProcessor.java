@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Set;
+import java.util.Calendar;
 
 import lasad.controller.ManagementController;
 import lasad.entity.ActionParameter;
@@ -44,9 +45,6 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 
 	private OliDatabaseLogger dsLogger;
 
-	// userName
-	private Set<String> harrellClass;
-
 	// user, sessionID
 	private java.util.Map<String, Set<String>> loggedSessions;
 
@@ -57,94 +55,64 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	private java.util.Map<Integer, Boolean> autoOrganizeStatuses;
 
 	private String DATASET;
+	private String className;
+	private String school;
+	private String period;
+	private String instructor;
 
 	public MapActionProcessor()
 	{
 		super();
 
-        String rosterFileName = "./class_roster.txt";
-        String line = null;
+        String settingsFileName = "./ds_settings.txt";
         autoOrganizeStatuses = new ConcurrentHashMap<Integer, Boolean>();
 
         try
         {
-            FileReader fr = new FileReader(rosterFileName);
+            FileReader fr = new FileReader(settingsFileName);
             BufferedReader reader = new BufferedReader(fr);
 
             // first line of file is whether to do DS Logging
             DS_LOGGING_IS_ON = Boolean.parseBoolean(reader.readLine().replaceAll("\\s",""));
             if (DS_LOGGING_IS_ON)
             {
-            	dsLogger = OliDatabaseLogger.create("http://pslc-qa.andrew.cmu.edu/log/server", "UTF-8");
+            	dsLogger = OliDatabaseLogger.create("http://learnlab.web.cmu.edu/log/server", "UTF-8");
+            	// second line of file is dataset
+            	DATASET = reader.readLine();
+            	className = reader.readLine();
+            	school = reader.readLine();
+            	period = reader.readLine();
+            	instructor = reader.readLine(); 
 
 				loggedSessions = new ConcurrentHashMap<String, Set<String>>();
 				loggedContexts = new ConcurrentHashMap<String, ContextMessage>();
-				harrellClass = new HashSet<String>();
             }
-
-            // second line of file is dataset
-            DATASET = reader.readLine().replaceAll("\\s","");
-
-            //Logger.debugLog("Start of class roster");
-            while((line = reader.readLine()) != null)
-            {
-            	String member = line.replaceAll("\\s","");
-            	//Logger.debugLog(member);
-                harrellClass.add(member);
-            }
-            //Logger.debugLog("End of class roster");   
             reader.close();         
         }
         catch(Exception ex) {
         	DS_LOGGING_IS_ON = false;
         	DATASET = "garbage";
-            Logger.debugLog("ERROR: can't read class roster.");
+        	className = "garbage";
+        	school = "garbage";
+        	period = "garbage";
+        	instructor = "garbage";
+            Logger.debugLog("ERROR: can't read DS settings, DS Logging deactivated.");
         	StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			ex.printStackTrace(pw);
 			Logger.debugLog(sw.toString());              
         }
-
-	/*	for (int i = 1; i <= 30; i++)
-		{
-			harrellClass.add("s" + i);
-		} */
-		/*
-		harrellClass.add("Mara.Harrell");
-
-		harrellClass.add("Sonia.Lee");
-		harrellClass.add("Jeremy.Meola");
-		harrellClass.add("Sascha.Demetris");
-		harrellClass.add("Kajae.Jones");
-		harrellClass.add("Jonathan.Li");
-
-		harrellClass.add("Nicole.Matamala");
-		harrellClass.add("Brad.Edgington");
-		harrellClass.add("Dave.Singh");
-		harrellClass.add("Izzy.Roscoe");
-		harrellClass.add("Simone.Schneeberg");
-
-		harrellClass.add("Natsuha.Omori");
-		harrellClass.add("Bobbie.Chen");
-		harrellClass.add("Brendan.Wixen");
-		harrellClass.add("Oliver.Liburd");
-		harrellClass.add("Kevin.Riordan");
-		*/
 	}
 
 	/**
-     * Logs some random actions.
+     * Logs user map actions to PSLC datashop
      */
-    private void logToDataShop(Action a, User u)
+    private void logToDataShop(Action a, String userName, String sessionID)
     {
     	try
     	{
-			String userName = u.getNickname();
-			if (!harrellClass.contains(userName))
-			{
-				return;
-			}
-	        String sessionID = u.getSessionID();
+			//String userName = u.getNickname();
+	        //String sessionID = u.getSessionID();
 	        Integer mapID = ActionProcessor.getMapIDFromAction(a);
 
 	        // map -> doingAutoOrganize
@@ -172,7 +140,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	        ProblemElement problem = new ProblemElement(Map.getMapName(mapID));
 
 	        String timeString = Long.toString(a.getTimeStamp());
-			String timeZone = "UTC";
+			String timeZone = Calendar.getInstance().getTimeZone().getID();
 		        
 			ContextMessage contextMsg = loggedContexts.get(CONTEXT_REF);
 			if (contextMsg == null)
@@ -182,34 +150,13 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				contextMsg = ContextMessage.createStartProblem(metaElement);
 
 				LevelElement sectionLevel;
+	        	sectionLevel = new LevelElement("Section", "01", problem);
 
-		        //if ()
-		        //{
-		        	sectionLevel = new LevelElement("Section", "01", problem);
-
-			        String className = "MyClass";
-			        String school = "CMU";
-			        String period = "01";
-			        String instructorOne = "Miss Wormwood";
-
-			        contextMsg.setClassName(className);
-			        contextMsg.setSchool(school);
-			        contextMsg.setPeriod(period);
-			        contextMsg.addInstructor(instructorOne);
-			        contextMsg.setDataset(new DatasetElement(DATASET, sectionLevel));
-		        //}
-		        /*
-		        else
-		        {
-		        	sectionLevel = new LevelElement("Section", "N/A", problem);
-
-		        	contextMsg.setClassName("N/A");
-			        contextMsg.setSchool("N/A");
-			        contextMsg.setPeriod("N/A");
-			        contextMsg.addInstructor("N/A");
-			        contextMsg.setDataset(new DatasetElement("Jan04-Non-Study-Testing", sectionLevel));
-		        }
-		        */		        
+		        contextMsg.setClassName(className);
+		        contextMsg.setSchool(school);
+		        contextMsg.setPeriod(period);
+		        contextMsg.addInstructor(instructor);
+		        contextMsg.setDataset(new DatasetElement(DATASET, sectionLevel));	        
 			}	
 
 	        ToolMessage toolMsg = ToolMessage.create(contextMsg);
@@ -701,7 +648,8 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	 * @author ZGE
 	 */
 
-	private void deleteElementAndChildrenStub(int elementID, int revisionID, int mapID, String username, String sessionID) {
+	private void deleteElementAndChildrenStub(int elementID, int revisionID, int mapID, String username, String sessionID)
+	{
 		Element.updateEndRevisionID(elementID, revisionID);
 
 		ActionPackage deleteBoxActionPackage = ActionPackageFactory.deleteElement(mapID, elementID, username);
@@ -719,11 +667,18 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		removeMetaInformation(deleteAllActionPackage);
 		this.aproc.addMetaInformation(deleteAllActionPackage, sessionID);
 		Logger.doCFLogging(deleteAllActionPackage);
+
+
+
 		removeMetaInformation(deleteBoxActionPackage);
 
 		// send out delete of only top-level box, other deletes sent separately
 		ManagementController.addToAllUsersOnMapActionQueue(deleteBoxActionPackage, mapID);
 
+		if (DS_LOGGING_IS_ON)
+		{
+			logToDataShop(deleteBoxActionPackage.getActions().get(0), username, sessionID);
+		}
 	}
 
 	/**
@@ -737,8 +692,15 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	 * @param deleteAllActionPackage an ActionPackage including actions for deleting an element and his chirldren
 	 * @author ZGE
 	 */
-	private void deleteElementAndChildrenRecursive(int elementID, int revisionID, int mapID, String username, String sessionID,
-			ActionPackage deleteAllActionPackage) {
+	private void deleteElementAndChildrenRecursive(int elementID, int revisionID, int mapID, String username, String sessionID, ActionPackage deleteAllActionPackage)
+	{
+		ActionPackage ap = ActionPackageFactory.deleteElement(mapID, elementID, username);
+		Action a = ap.getActions().get(0);
+		if (DS_LOGGING_IS_ON && Element.isElementActive(elementID))
+		{
+			logToDataShop(a, username, sessionID);
+		}
+
 		Element.updateEndRevisionID(elementID, revisionID);
 
 		Vector<Integer> childElements = Element.getChildElementIDs(elementID);
@@ -746,8 +708,6 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		for (Integer i : childElements) {
 			deleteElementAndChildrenRecursive(i, revisionID, mapID, username, sessionID, deleteAllActionPackage);
 		}
-
-		ActionPackage ap = ActionPackageFactory.deleteElement(mapID, elementID, username);
 		deleteAllActionPackage.addAction(ap.getActions().get(0));
 		ManagementController.addToAllUsersOnMapActionQueue(ap, mapID);
 	}
@@ -779,9 +739,13 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	public boolean processAction(Action a, User u, String sessionID) {
 		boolean returnValue = false;
 		if (u != null && a.getCategory().equals(Categories.Map)) {
+
+			boolean actionIsLoggable = true;
+
 			switch (a.getCmd()) {
 			case StartAutoOrganize:
 				autoOrganizeStatuses.put(ActionProcessor.getMapIDFromAction(a), true);
+				actionIsLoggable = false;
 				break;	
 			case ChangeFontSize:
 				processChangeFontSize(a, u);
@@ -803,11 +767,15 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			case DeleteElement:
 				processDeleteElement(a, u);
 				returnValue = true;
+
+				// handled separately
+				actionIsLoggable = false;
 				break;
 			//TODO Zhenyu
 			case BackgroundImage:
 				processBackgroudImage(a, u);
 				returnValue = true;
+				actionIsLoggable = false;
 				break;
 			case FinishAutoOrganize:
 				autoOrganizeStatuses.put(ActionProcessor.getMapIDFromAction(a), false);
@@ -817,24 +785,26 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			default:
 				break;
 			}
+
+			if (DS_LOGGING_IS_ON && actionIsLoggable)
+			{
+				boolean shouldLog;
+				try
+				{
+					shouldLog = !autoOrganizeStatuses.get(ActionProcessor.getMapIDFromAction(a));
+				}
+				catch (Exception e)
+				{
+					shouldLog = true;
+				}
+
+				if (shouldLog)
+				{
+					logToDataShop(a, u.getNickname(), u.getSessionID());
+				}
+			}
 		}
-		if (DS_LOGGING_IS_ON)
-		{
-			boolean shouldLog;
-			try
-			{
-				shouldLog = !autoOrganizeStatuses.get(ActionProcessor.getMapIDFromAction(a));
-			}
-			catch (Exception e)
-			{
-				shouldLog = true;
-			}
-			if (returnValue && shouldLog)
-			{
-				logToDataShop(a, u);
-			}
-		}
-		
+
 		return returnValue;
 	}
 
