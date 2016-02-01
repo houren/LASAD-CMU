@@ -112,7 +112,8 @@ public class LASADActionSender {
 	 */
 	public void sendActionPackage(final ActionPackage actionSet) {
 
-		if(connectEventService()) {
+		if(connectEventService())
+		{
 			LASADStatusBar.getInstance().setConnectionBusy(true);
 
 			actionSet.addParameter(ParameterTypes.SessionId, clientID); //"CLIENT-ID"

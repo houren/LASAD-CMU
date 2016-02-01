@@ -465,6 +465,28 @@ public class LASADActionReceiver {
 				// Check if the feedback is for the current user, if not -->
 				// ignore
 				String elementType = a.getParameterValue(ParameterTypes.Type);
+
+				// Feb 1 bug fix, lnks were being doubled up for clients in cases of groupable boxes, this fixes it
+				if (elementType.equalsIgnoreCase(RELATION))
+				{
+					
+					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
+					int startBoxID = Integer.parseInt(startBoxStringID);
+
+					// For some reason, parent here gives box ID, not root ID, so plan accordingly
+					String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
+					int endBoxID = Integer.parseInt(endBoxStringID);
+
+					LinkedBox startBox = argModel.getBoxByBoxID(startBoxID);
+					LinkedBox endBox = argModel.getBoxByBoxID(endBoxID);
+
+					if (startBox.hasLinkWith(endBox))
+					{
+						Logger.log("Will not create following link for client, already exists " + a.toString(), Logger.DEBUG);	
+						return;
+					}
+				}
+
 				if (elementType.equalsIgnoreCase("FEEDBACK-CLUSTER")) {
 					if (!a.getParameterValue(ParameterTypes.ForUser).equalsIgnoreCase(LASAD_Client.getInstance().getUsername())
 							&& !a.getParameterValue(ParameterTypes.ForUser).equals("")) {
@@ -601,7 +623,7 @@ public class LASADActionReceiver {
 
 				// If it's a relation, add it to the model
 				else if (elementType.equalsIgnoreCase(RELATION))
-				{
+				{	
 					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
 					int startBoxID = Integer.parseInt(startBoxStringID);
 
@@ -858,6 +880,26 @@ public class LASADActionReceiver {
 				// Check if the feedback is for the current user, if not -->
 				// ignore
 				String elementType = a.getParameterValue(ParameterTypes.Type);
+
+				if (elementType.equalsIgnoreCase(RELATION))
+				{
+					
+					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
+					int startBoxID = Integer.parseInt(startBoxStringID);
+
+					// For some reason, parent here gives box ID, not root ID, so plan accordingly
+					String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
+					int endBoxID = Integer.parseInt(endBoxStringID);
+
+					LinkedBox startBox = argModel.getBoxByBoxID(startBoxID);
+					LinkedBox endBox = argModel.getBoxByBoxID(endBoxID);
+
+					if (startBox.hasLinkWith(endBox))
+					{
+						Logger.log("Will not create following link for client, already exists " + a.toString(), Logger.DEBUG);	
+						return;
+					}
+				}
 				if (elementType.equalsIgnoreCase("FEEDBACK-CLUSTER")) {
 					if (!a.getParameterValue(ParameterTypes.UserName).equalsIgnoreCase(LASAD_Client.getInstance().getUsername())
 							&& !a.getParameterValue(ParameterTypes.UserName).equals("")) {

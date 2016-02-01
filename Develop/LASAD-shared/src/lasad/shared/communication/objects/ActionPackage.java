@@ -2,6 +2,7 @@ package lasad.shared.communication.objects;
 
 import java.io.Serializable;
 import java.util.Vector;
+import java.util.Collection;
 
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 
