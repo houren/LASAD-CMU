@@ -76,7 +76,8 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
             DS_LOGGING_IS_ON = Boolean.parseBoolean(reader.readLine().replaceAll("\\s",""));
             if (DS_LOGGING_IS_ON)
             {
-            	dsLogger = OliDatabaseLogger.create("http://learnlab.web.cmu.edu/log/server", "UTF-8");
+            	String url = reader.readLine();
+            	dsLogger = OliDatabaseLogger.create(url, "UTF-8");
             	// second line of file is dataset
             	DATASET = reader.readLine();
             	className = reader.readLine();

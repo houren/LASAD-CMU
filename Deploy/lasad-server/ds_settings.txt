@@ -1,4 +1,5 @@
 true
+https://pslc-qa.andrew.cmu.edu/log/server
 - Study - 2
 6 - Kev Class
 6 - Kev School
