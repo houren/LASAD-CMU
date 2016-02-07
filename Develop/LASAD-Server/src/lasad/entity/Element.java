@@ -190,7 +190,7 @@ public class Element {
 		}
 	}
 
-	public static Vector<Integer> getRelationIDs(int mapID)
+	public static Vector<Integer> getActiveRelationIDs(int mapID)
 	{
 		Vector<Integer> relations = new Vector<Integer>();
 		
@@ -202,7 +202,7 @@ public class Element {
 			con = DatabaseConnectionHandler.getConnection(Element.class);
 //			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
 			
-			relation = con.prepareStatement("SELECT id FROM "+Config.dbName+".elements WHERE map_id = ? AND type = ?;");
+			relation = con.prepareStatement("SELECT id FROM "+Config.dbName+".elements WHERE map_id = ? AND type = ? AND end_revision_id IS NULL;");
 			relation.setInt(1, mapID);
 			relation.setString(2, "relation");
 

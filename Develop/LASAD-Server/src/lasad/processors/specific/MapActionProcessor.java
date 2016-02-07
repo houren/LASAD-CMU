@@ -353,7 +353,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	    		}
 	    	}
 
-    		Vector<Integer> relations = Element.getRelationIDs(mapID);
+    		Vector<Integer> relations = Element.getActiveRelationIDs(mapID);
     		for (int relationID : relations)
     		{
     			Vector<Integer> otherParents = Element.getParentElementIDs(relationID);
