@@ -1,7 +1,7 @@
 true
 https://pslc-qa.andrew.cmu.edu/log/server
-- Study - 2
-6 - Kev Class
-6 - Kev School
-6 - Kev Period
-6 - Kev Instructor
+StudyName
+Class
+School
+Period
+Instructor

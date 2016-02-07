@@ -190,6 +190,50 @@ public class Element {
 		}
 	}
 
+	public static Vector<Integer> getRelationIDs(int mapID)
+	{
+		Vector<Integer> relations = new Vector<Integer>();
+		
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement relation = null;
+		
+		try {
+			con = DatabaseConnectionHandler.getConnection(Element.class);
+//			con = DriverManager.getConnection(Config.connection, Config.dbUser, Config.dbPassword);
+			
+			relation = con.prepareStatement("SELECT id FROM "+Config.dbName+".elements WHERE map_id = ? AND type = ?;");
+			relation.setInt(1, mapID);
+			relation.setString(2, "relation");
+
+			rs = relation.executeQuery();
+			
+			while(rs.next()) {
+				relations.add(rs.getInt(1));
+			}
+			
+		} catch (SQLException e){
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { rs.close(); } catch (Exception e) { /* ignored */ }
+    		try { relation.close(); } catch (Exception e) { /* ignored */ }
+			if(con != null) {
+				//close Connection
+				DatabaseConnectionHandler.closeConnection(Element.class, con);
+//				try {
+//					con.close();
+//				} catch (SQLException e){
+//					e.printStackTrace();
+//				}
+			}
+		}
+		
+		return relations;
+	}
+
 	public static Vector<Integer> getChildElementIDs(int elementID) {
 		Vector<Integer> children = new Vector<Integer>();
 		

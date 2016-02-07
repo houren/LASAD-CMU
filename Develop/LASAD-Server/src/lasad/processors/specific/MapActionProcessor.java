@@ -64,6 +64,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	{
 		super();
 
+		// These settings correspond to whether or not PSLC DataShop Logging will be used
         String settingsFileName = "./ds_settings.txt";
         autoOrganizeStatuses = new ConcurrentHashMap<Integer, Boolean>();
 
@@ -333,14 +334,53 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
         } 	
     }
 
+    // To avoid duplicate links being created
+    private boolean linkExistsBetweenParents(Vector<String> parents, int mapID)
+    {
+    	if (parents != null && parents.size() == 2)
+    	{
+    		Vector<Integer> origParents = new Vector<Integer>();
+	    	for (String parentID : parents)
+	    	{
+	    		// Will throw exception if box and link are created at same time, but we know that a link can't
+	    		// already exist in that case
+	    		try {
+	    			origParents.add(Integer.parseInt(parentID));
+	    		}
+	    		catch (Exception e)
+	    		{
+	    			return false;
+	    		}
+	    	}
+
+    		Vector<Integer> relations = Element.getRelationIDs(mapID);
+    		for (int relationID : relations)
+    		{
+    			Vector<Integer> otherParents = Element.getParentElementIDs(relationID);
+    			if (otherParents.containsAll(origParents))
+    			{
+    				return true;
+    			}
+    		}
+    		return false;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+
+
+
     /**
 	 * create an Element in a map,for Example Box, Link etc. save it in the database
 	 * 
 	 * @param a a specific LASAD action
 	 * @param u the User,who owns this map
 	 * @author ZGE
+	 * Return true if successfully created
 	 */
-	public void processCreateElement(Action a, User u) {
+	public boolean processCreateElement(Action a, User u) {
 		int mapID = ActionProcessor.getMapIDFromAction(a);
 
 		Vector<String> parents = a.getParameterValues(ParameterTypes.Parent);
@@ -350,14 +390,19 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				ActionPackage ap = ActionPackageFactory.error("One of the parents is no longer present on map. Create element failed");
 				Logger.doCFLogging(ap);
 				ManagementController.addToUsersActionQueue(ap, u.getSessionID());
-				return;
+				return false;
+			}
+			else if (linkExistsBetweenParents(parents, mapID))
+			{
+				Logger.log("Link already exists between parents. Create element failed.");
+				return false;
 			}
 		}
 
 		if (u.getSessionID().equals("DFKI") && Map.getMapName(mapID) == null) {
 			Logger.log("[ActionProcessor.processCreateElement] ERROR: No LASAD map for ID submitted from xmpp - " + mapID
 					+ " - Ignoring create action - \n" + a);
-			return;
+			return false;
 		}
 		// Create new revision of the map
 		Revision r = createNewRevision(mapID, u, a);
@@ -379,6 +424,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		ActionPackage ap = ActionPackage.wrapAction(a);
 		Logger.doCFLogging(ap);
 		ManagementController.addToAllUsersOnMapActionQueue(ap, mapID);
+		return true;
 	}
 
 	/**
@@ -523,7 +569,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	 * @param u the current user
 	 * @author ZGE
 	 */
-	public void processUpdateElement(Action a, User u) {
+	public boolean processUpdateElement(Action a, User u) {
 		a.addParameter(ParameterTypes.Received, System.currentTimeMillis() + "");
 
 		int mapID = ActionProcessor.getMapIDFromAction(a);
@@ -533,7 +579,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 
 			// Action is already obsolete
 			if (Element.getLastModificationTime(elementID) > Long.parseLong(a.getParameterValue(ParameterTypes.Received))) {
-				return;
+				return false;
 			}
 
 			if (!Element.isElementActive(elementID)) {
@@ -541,7 +587,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				ActionPackage ap = ActionPackageFactory.error("Element is no longer present on map. Update failed");
 				Logger.doCFLogging(ap);
 				ManagementController.addToUsersActionQueue(ap, u.getSessionID());
-				return;
+				return false;
 			}
 
 			// Create new revision of the map
@@ -552,7 +598,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			if (a.getParameterValue(ParameterTypes.Status) != null) {
 				String lockStatus = Element.getLastValueOfElementParameter(elementID, "STATUS");
 				if (a.getParameterValue(ParameterTypes.Status).equalsIgnoreCase(lockStatus)) {
-					return;
+					return false;
 				}
 			}
 
@@ -576,6 +622,8 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				ManagementController.addToAllUsersOnMapActionQueue(ap, mapID);
 			}
 		}
+
+		return true;
 	}
 
 	/**
@@ -722,7 +770,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		}
 	}
 
-	private void processAutoOrganize(Action a, User u)
+	private boolean processAutoOrganize(Action a, User u)
 	{
 		int mapID = ActionProcessor.getMapIDFromAction(a);
 		
@@ -734,6 +782,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		ActionPackage ap = ActionPackage.wrapAction(a);
 		Logger.doCFLogging(ap);	
 		ManagementController.addToAllUsersOnMapActionQueue(ap, mapID);
+		return true;
 	}
 
 	@Override
@@ -741,7 +790,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		boolean returnValue = false;
 		if (u != null && a.getCategory().equals(Categories.Map)) {
 
-			boolean actionIsLoggable = true;
+			boolean actionIsLoggable;
 
 			switch (a.getCmd()) {
 			case StartAutoOrganize:
@@ -749,20 +798,21 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				actionIsLoggable = false;
 				break;	
 			case ChangeFontSize:
-				processChangeFontSize(a, u);
+				actionIsLoggable = processChangeFontSize(a, u);
 				returnValue = true;
 				break;
 			case CreateElement:// Check
-				processCreateElement(a, u);
+				actionIsLoggable = processCreateElement(a, u);
 				returnValue = true;
 				break;
 			case UpdateElement:
 			case AutoResizeTextBox:
-				processUpdateElement(a, u);
+				actionIsLoggable = processUpdateElement(a, u);
 				returnValue = true;
 				break;
 			case UpdateCursorPosition:
 				processCursorUpdate(a, u);
+				actionIsLoggable = false;
 				returnValue = true;
 				break;
 			case DeleteElement:
@@ -780,10 +830,11 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				break;
 			case FinishAutoOrganize:
 				autoOrganizeStatuses.put(ActionProcessor.getMapIDFromAction(a), false);
-				processAutoOrganize(a, u);
+				actionIsLoggable = processAutoOrganize(a, u);
 				returnValue = true;
 				break;
 			default:
+				actionIsLoggable = false;
 				break;
 			}
 
@@ -809,7 +860,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		return returnValue;
 	}
 
-	private void processChangeFontSize(Action a, User u){
+	private boolean processChangeFontSize(Action a, User u){
 		int mapID = ActionProcessor.getMapIDFromAction(a);
 		
 		Revision r = createNewRevision(mapID, u, a);
@@ -819,6 +870,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		ActionPackage ap = ActionPackage.wrapAction(a);
 		Logger.doCFLogging(ap);	
 		ManagementController.addToAllUsersOnMapActionQueue(ap, mapID);
+		return true;
 	}
 	
 	//TODO Zhenyu
