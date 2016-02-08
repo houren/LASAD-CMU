@@ -1,6 +1,6 @@
-false
+true
 https://pslc-qa.andrew.cmu.edu/log/server
-StudyName
+Last_Testing
 Class
 School
 Period
