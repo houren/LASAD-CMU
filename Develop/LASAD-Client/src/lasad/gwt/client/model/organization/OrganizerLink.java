@@ -4,24 +4,27 @@ package lasad.gwt.client.model.organization;
  * OrganizerLink is, like LinkedBox is to AbstractBox, a way of representing an AbstractLinkPanel (and/or an AbstractLink) that is more
  * friendly to AutoOrganizer.  The important info for updating a link via an Action is contained within an OrganizerLink.
  * @author Kevin Loughlin
- * @since 17 June 2015, Updated 28 August 2015
+ * @since 17 June 2015, Updated 1 April 2016
  */
 public class OrganizerLink
 {
 	// Just for helping assign unique linkIDs, not even sure if this is necessary because LASAD seems to correctly assign link IDs elsewhere
 	private static int lastLinkID = -1;
 
-	private LinkedBox startBox;
-	private LinkedBox endBox;
+	private final LinkedBox startBox;
+	private final LinkedBox endBox;
 
 	// I.e. what kind of relation (perhaps it could be support, refutation, Linked Premises, depending on the ontology and its terminology)
-	private String type;
+	private final String type;
 
 	// Helps with removal of links, otherwise not needed
-	private int linkID;
+	private final int linkID;
 
 	// Whether or not this type of OrganizerLink can group boxes together
-	private boolean connectsGroup;
+	private final boolean connectsGroup;
+
+	// generate from startBox and endBox box ID's, using Cantor's pairing function for a unique number
+	private final int hashCode;
 
 	/**
 	 * Constructor
@@ -34,6 +37,7 @@ public class OrganizerLink
 		this.endBox = endBox;
 		this.type = type;
 		this.connectsGroup = connectsGroup;
+		this.hashCode = cantorPairFunction(this.getStartBox().getBoxID(), this.getEndBox().getBoxID());
 	}
 
 	/**
@@ -47,6 +51,7 @@ public class OrganizerLink
 		this.endBox = endBox;
 		this.type = type;
 		this.connectsGroup = connectsGroup;
+		this.hashCode = cantorPairFunction(this.getStartBox().getBoxID(), this.getEndBox().getBoxID());
 	}
 
 	/* Gets */
@@ -96,27 +101,16 @@ public class OrganizerLink
 		return connectsGroup;
 	}
 
-	/* Sets */
-
-	public void setStartBox(LinkedBox startBox)
-	{
-		this.startBox = startBox;
-	}
-
-	public void setEndBox(LinkedBox endBox)
-	{
-		this.endBox = endBox;
-	}
-
-	public void setType(String type)
-	{
-		this.type = type;
-	}
-
+	// Use Cantor's pairing function to produce unique ID based from box IDs, done in constructor for constant time lookup here
 	@Override
 	public int hashCode()
 	{
-		return ((this.startBox.getBoxID())^3 + (this.endBox.getBoxID()^3));
+		return this.hashCode;
+	}
+	
+	private int cantorPairFunction(final int k1, final int k2)
+	{
+		return ( ( k1 + k2 ) * ( k1 + k2 + 1 ) ) / 2 + k2;  
 	}
 
 	public OrganizerLink clone()

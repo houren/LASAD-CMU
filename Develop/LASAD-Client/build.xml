@@ -151,8 +151,7 @@
 		<delete file="../../Deploy/lasad-server/server.log" />
 		<delete file="../../Deploy/lasad-server/log/debug.log" />
 		<delete includeEmptyDirs="true">
-			<fileset dir="${TOMCAT}/logs" includes="**/*"
-				defaultexcludes="no" />
+			<fileset dir="${TOMCAT}/logs" includes="**/*" excludes="DO_NOT_DELETE.txt"/>
 		</delete>
 	</target>
 	<!-- End of content added by Kevin Loughlin -->
