@@ -1,8 +1,7 @@
 #!/bin/bash
-
-#TODO You need to change the filepath in quotations to the Tomcat directory to be used on your server
-tomcatDir="/Users/kevin/LASAD-CMU/Deploy/apache-tomcat-8.0.23"
-tomcatShutdown="/bin/./shutdown.sh"
+homeDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+tomcatDir=${homeDir}"/apache-tomcat-8.0.23"
+tomcatShutdown="/bin/shutdown.sh"
 
 lasadServerPid=$(ps ax | grep '[L]ASAD-Server.jar' | awk '{print $1}')
 

@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#TODO You need to change the filepath in quotations to the home directory to be used on your server
-homeDir="/Users/kevin/LASAD-CMU/Deploy"
+homeDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 tomcatDir="${homeDir}/apache-tomcat-8.0.23"
 tomcatStartup="/bin/./startup.sh"

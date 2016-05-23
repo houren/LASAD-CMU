@@ -111,7 +111,7 @@ public class LASAD_Client implements EntryPoint {
 	private static Map<String, MVController> mvcControllers = new HashMap<String, MVController>();
 
 	public UrlParameterConfig urlParameterConfig;
-	private boolean showFeedbackAuthoringToolTab = true;
+	private boolean showFeedbackAuthoringToolTab = false;
 
 	private LASAD_Client() {
 		// Initializing console logger
