@@ -51,9 +51,6 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 	// session + user + mapID --> contextMSG
 	private java.util.Map<String, ContextMessage> loggedContexts;
 
-	// mapID -> doingAutoOrganize
-	private java.util.Map<Integer, Boolean> autoOrganizeStatuses;
-
 	private String DATASET;
 	private String className;
 	private String school;
@@ -66,7 +63,6 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 
 		// These settings correspond to whether or not PSLC DataShop Logging will be used
         String settingsFileName = "./ds_settings.txt";
-        autoOrganizeStatuses = new ConcurrentHashMap<Integer, Boolean>();
 
         try
         {
@@ -116,12 +112,6 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			//String userName = u.getNickname();
 	        //String sessionID = u.getSessionID();
 	        Integer mapID = ActionProcessor.getMapIDFromAction(a);
-
-	        // map -> doingAutoOrganize
-			if (autoOrganizeStatuses.get(mapID) == null)
-			{
-				autoOrganizeStatuses.put(mapID, false);
-			}
 
 	        final String CONTEXT_REF = sessionID + userName + String.valueOf(mapID);
 
@@ -292,17 +282,17 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		        	}
 		        	input = "";
 	        		break;
-	        	case FinishAutoOrganize:
+	        	case AutoOrganize:
 	        		toolMsg.setAsAttempt("");
 		        	String orientationBool = a.getParameterValue(ParameterTypes.OrganizerOrientation);
 		        	String orient;
 		        	if (Boolean.parseBoolean(orientationBool))
 		        	{
-		        		orient = "downward";
+		        		orient = "upward";
 		        	}
 		        	else
 		        	{
-		        		orient = "upward";
+		        		orient = "downward";
 		        	}
 		        	String width = a.getParameterValue(ParameterTypes.OrganizerBoxWidth);
 		        	String height = a.getParameterValue(ParameterTypes.OrganizerBoxHeight);
@@ -804,7 +794,8 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		}
 	}
 
-	private boolean processAutoOrganize(Action a, User u)
+	// TODO Judy.  Here is where you can process how to handle auto organization.  My suggestion is you do a sequence of box repositioning commands that you send back to the client.
+	private void processAutoOrganize(Action a, User u)
 	{
 		int mapID = ActionProcessor.getMapIDFromAction(a);
 		
@@ -816,7 +807,6 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 		ActionPackage ap = ActionPackage.wrapAction(a);
 		Logger.doCFLogging(ap);	
 		ManagementController.addToAllUsersOnMapActionQueue(ap, mapID);
-		return true;
 	}
 
 	@Override
@@ -827,10 +817,6 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 			boolean actionIsLoggable;
 
 			switch (a.getCmd()) {
-			case StartAutoOrganize:
-				autoOrganizeStatuses.put(ActionProcessor.getMapIDFromAction(a), true);
-				actionIsLoggable = false;
-				break;	
 			case ChangeFontSize:
 				actionIsLoggable = processChangeFontSize(a, u);
 				returnValue = true;
@@ -862,9 +848,10 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 				returnValue = true;
 				actionIsLoggable = false;
 				break;
-			case FinishAutoOrganize:
-				autoOrganizeStatuses.put(ActionProcessor.getMapIDFromAction(a), false);
-				actionIsLoggable = processAutoOrganize(a, u);
+			case AutoOrganize:
+				// TODO Judy: see processAutoOrganize.  When done, returnValue should be true
+				actionIsLoggable = true;
+				processAutoOrganize(a, u);
 				returnValue = true;
 				break;
 			default:
@@ -874,20 +861,7 @@ public class MapActionProcessor extends AbstractActionObserver implements Action
 
 			if (DS_LOGGING_IS_ON && actionIsLoggable)
 			{
-				boolean shouldLog;
-				try
-				{
-					shouldLog = !autoOrganizeStatuses.get(ActionProcessor.getMapIDFromAction(a));
-				}
-				catch (Exception e)
-				{
-					shouldLog = true;
-				}
-
-				if (shouldLog)
-				{
-					logToDataShop(a, u.getNickname(), u.getSessionID());
-				}
+				logToDataShop(a, u.getNickname(), u.getSessionID());
 			}
 		}
 

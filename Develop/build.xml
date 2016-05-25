@@ -20,8 +20,8 @@
 	<property name="target.java.version" value="1.8" />
 
 	<target name="compile-shared" description="Compiles the shared source">
-		<mkdir dir="LASAD-shared/bin" />
-		<javac destdir="LASAD-shared/bin" srcdir="LASAD-shared/src"
+		<mkdir dir="LASAD-Shared/bin" />
+		<javac destdir="LASAD-Shared/bin" srcdir="LASAD-Shared/src"
 			source="${target.java.version}" target="${target.java.version}"
 			includeantruntime="false">
 			<!-- If you want to see lines causing compiler warnings. The code runs 
@@ -33,7 +33,7 @@
 		depends="compile-shared">
 		<mkdir dir="LASAD-Server/bin" />
 		<javac destdir="LASAD-Server/bin" srcdir="LASAD-Server/src"
-			classpath="LASAD-shared/bin" source="${target.java.version}"
+			classpath="LASAD-Shared/bin" source="${target.java.version}"
 			target="${target.java.version}" includeantruntime="false">
 			<!-- If you want to see lines causing compiler warnings. The code runs 
 				fine though. <compilerarg value="-Xlint:deprecation"/> <compilerarg value="-Xlint:unchecked" 
@@ -50,8 +50,8 @@
 	</target>
 	<path id="client.class.path">
 		<pathelement location="LASAD-Client/src" />
-		<pathelement location="LASAD-shared/src" />
-		<pathelement location="LASAD-shared/bin" />
+		<pathelement location="LASAD-Shared/src" />
+		<pathelement location="LASAD-Shared/bin" />
 		<pathelement location="LASAD-Client/war/WEB-INF/lib/jdom.jar" />
 		<pathelement location="LASAD-Client/war/WEB-INF/lib/commons-fileupload-1.2.1.jar" />
 		<pathelement location="LASAD-Client/war/WEB-INF/lib/eventservice-1.2.1-SNAPSHOT.jar" />
@@ -100,7 +100,7 @@
 			<zipfileset excludes="META-INF/*.SF"
 				src="${DATASHOP}/extlib/commons-lang-2.2.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="${DATASHOP}/extlib/log4j-1.2.13.jar" />
-			<fileset dir="LASAD-shared/bin" />
+			<fileset dir="LASAD-Shared/bin" />
 		</jar>
 	</target>
 	<target name="gwtc" description="GWT compile to JavaScript (production mode)">
@@ -128,7 +128,7 @@
 		<delete dir="${TOMCAT}/webapps/lasad" />
 		<zip destfile="${TOMCAT}/webapps/lasad.war">
 
-			<zipfileset dir="LASAD-shared/bin" prefix="WEB-INF/classes/" />
+			<zipfileset dir="LASAD-Shared/bin" prefix="WEB-INF/classes/" />
 			<zipfileset dir="LASAD-Client/war" />
 			<zipfileset dir="LASAD-Client/src/" includes="eventservice.properties"
 				prefix="WEB-INF/classes/" />
@@ -139,7 +139,7 @@
 	<!-- Added by Kevin Loughlin on 4 June 2015 for permitting easy recompile -->
 	<!-- Remember to enter "ant clean" before attempting to recompile -->
 	<target name="clean">
-		<delete dir="LASAD-shared/bin" />
+		<delete dir="LASAD-Shared/bin" />
 		<delete dir="LASAD-Server/bin" />
 		<delete dir="LASAD-Client/war/WEB-INF/classes" />
 		<delete dir="LASAD-Client/war/WEB-INF/deploy" />

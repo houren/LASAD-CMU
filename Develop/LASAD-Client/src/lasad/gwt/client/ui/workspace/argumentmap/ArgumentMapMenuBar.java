@@ -3,6 +3,7 @@ package lasad.gwt.client.ui.workspace.argumentmap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Vector;
 
 import lasad.gwt.client.LASAD_Client;
 import lasad.gwt.client.communication.LASADActionSender;
@@ -14,8 +15,6 @@ import lasad.gwt.client.model.ElementInfo;
 import lasad.gwt.client.model.GraphMapInfo;
 import lasad.gwt.client.model.argument.MVCViewSession;
 import lasad.gwt.client.model.argument.MVController;
-import lasad.gwt.client.model.organization.AutoOrganizer;
-import lasad.gwt.client.model.organization.EdgeCoords;
 import lasad.gwt.client.settings.DebugSettings;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.link.AbstractLink;
@@ -25,8 +24,6 @@ import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
 import lasad.gwt.client.ui.workspace.graphmap.GraphMapMenuBar;
 import lasad.gwt.client.ui.workspace.graphmap.GraphMapSpace;
 import lasad.gwt.client.ui.workspace.graphmap.elements.AbstractCreateSpecialLinkDialog;
-import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteContributionDialog;
-import lasad.gwt.client.ui.workspace.graphmap.elements.DeleteRelationDialog;
 import lasad.gwt.client.ui.workspace.loaddialogues.ExportScreenShotDialogue;
 import lasad.gwt.client.ui.workspace.tableview.ArgumentEditionStyleEnum;
 import lasad.gwt.client.ui.workspace.tableview.TableZoomEnum;
@@ -297,13 +294,46 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 				final int topBefore = myMapSpace.getMyMap().getBody().getScrollTop();
 
 				ExportScreenShotDialogue.getInstance().showLoadingScreen();
-				EdgeCoords edgeCoords = LASAD_Client.getMapTab(myMapInfo.getMapID()).getMyMapSpace().getMyMap().getArgModel().calcEdgeCoords();
-				final int TOP = edgeCoords.getTop();
-				final int LEFT = edgeCoords.getLeft();
-				final int RIGHT = edgeCoords.getRight();
-				final int BOTTOM = edgeCoords.getBottom();
-				final int WIDTH = RIGHT - LEFT;
-				final int HEIGHT = BOTTOM - TOP;
+				Vector<AbstractBox> boxes = LASAD_Client.getMapTab(myMapInfo.getMapID()).getMyMapSpace().getMyMap().getBoxes();
+
+				int top = Integer.MAX_VALUE;
+				int left = Integer.MAX_VALUE;
+
+				int bottom = Integer.MIN_VALUE;
+				int right = Integer.MIN_VALUE;
+
+				for (AbstractBox box : boxes)
+				{
+					int yTop = box.getPosition(true).y;
+					int yBottom = yTop + box.getHeight();
+
+					int xLeft = box.getPosition(true).x;
+					int xRight = xLeft + box.getWidth();
+
+					if (yTop < top)
+					{
+						top = yTop;
+					}
+
+					if (yBottom > bottom)
+					{
+						bottom = yBottom;
+					}
+
+					if (xLeft < left)
+					{
+						left = xLeft;
+					}
+
+					if (xRight > right)
+					{
+						right = xRight;
+					}
+				}
+				final int LEFT = left;
+				final int TOP = top;
+				final int WIDTH = right - LEFT;
+				final int HEIGHT = bottom - TOP;
 				final int interval_H = myMapSpace.getMyMap().getOffsetHeight();
 				final int interval_W = myMapSpace.getMyMap().getOffsetWidth();
 				
@@ -710,9 +740,6 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 		MenuItem addItem = createAddItem();
 		menu.add(addItem);
 
-		MenuItem deleteItem = createDeleteItem();
-		menu.add(deleteItem);
-
 		MenuItem fontSizeItem = createFontSizeItem();
 		menu.add(fontSizeItem);
 
@@ -845,30 +872,18 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 	protected MenuItem createAddItem()
 	{
 		MenuItem addItem = new MenuItem("Add");
-		addItem.setSubMenu(createBoxLinkMenu(true));
+		addItem.setSubMenu(createBoxLinkMenu());
 		return addItem;
 	}
 
 	/*
-	 *	Subitem of the edit menu that allows an alternative way to clicking for deleting an item from the map
-	 */
-	protected MenuItem createDeleteItem()
-	{
-		MenuItem deleteItem = new MenuItem("Delete");
-		deleteItem.setSubMenu(createBoxLinkMenu(false));
-		return deleteItem;
-	}
-
-	/*
 	 *	Provides "Contribution" and "relation" as options
-	 *	@param useSubList - If true, (the case of add), provides the types of contributions relations as subitems.
-	 *	If false, make contribution and relation respond to clicks to create a dialog to delete items
 	 */
-	protected Menu createBoxLinkMenu(final boolean useSubList)
+	protected Menu createBoxLinkMenu()
 	{
 		Menu boxLinkMenu = new Menu();
-		boxLinkMenu.add(createContributionItem(useSubList));
-		boxLinkMenu.add(createRelationItem(useSubList));
+		boxLinkMenu.add(createContributionItem());
+		boxLinkMenu.add(createRelationItem());
 		return boxLinkMenu;
 	}
 
@@ -913,85 +928,52 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 
 				fontSize.setChecked(true);
 				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getArgModel().setFontSize(i, true);
+				communicator.sendActionPackage(actionBuilder.changeFontSize(ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getID(), i));
 			}
 		});
 		return fontSize;
 	}
 
 	/*
-	 *	Create the item listed as contribution for the add and delete subitems.
-	 *	@param useSubList - if true, add the types of contributions as subitems.  If false, make the contribution button clickable.
+	 *	Create the item listed as contribution for the add subitem.
 	 */
-	protected MenuItem createContributionItem(final boolean useSubList)
+	protected MenuItem createContributionItem()
 	{
 		final MenuItem boxMenu = new MenuItem(myConstants.ContributionMenuItem());
-		if (useSubList)
-		{
-			Menu subBoxes = new Menu();
+		Menu subBoxes = new Menu();
 
-			// Collect box types
-			
-			Map<String, ElementInfo> boxes = myMapInfo.getElementsByType("box");
-			if(boxes != null) {
-				for (ElementInfo info : boxes.values()) {
-					subBoxes.add(createNewBoxItem(info));
-				}
+		// Collect box types
+		
+		Map<String, ElementInfo> boxes = myMapInfo.getElementsByType("box");
+		if(boxes != null) {
+			for (ElementInfo info : boxes.values()) {
+				subBoxes.add(createNewBoxItem(info));
 			}
+		}
 
-			boxMenu.setSubMenu(subBoxes);
-		}
-		else
-		{
-			boxMenu.addSelectionListener(new SelectionListener<MenuEvent>()
-			{
-				@Override
-				public void componentSelected(MenuEvent me)
-				{
-					ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-					DeleteContributionDialog boxDialog = new DeleteContributionDialog(getMyMapSpace().getMyMap().getID());
-					boxDialog.show();
-				}
-			});
-		}
+		boxMenu.setSubMenu(subBoxes);
 		return boxMenu;
 	}
 
 	/*
-	 *	Create the item listed as relation for the add and delete subitems.
-	 *	@param useSubList - if true, add the types of relations as subitems.  If false, make the relation button clickable.
+	 *	Create the item listed as relation for the add subitem.
 	 */
-	protected MenuItem createRelationItem(final boolean useSubList)
+	protected MenuItem createRelationItem()
 	{
 		// Creates the sub menu for link types
 		final MenuItem linkMenu = new MenuItem(myConstants.RelationMenuItem());
-		if (useSubList)
-		{
-			Menu subLinks = new Menu();
+		Menu subLinks = new Menu();
 
-			// Collect link types
-			Map<String, ElementInfo> relations = myMapInfo.getElementsByType("relation");
-			if(relations != null) {
-				for (ElementInfo info : relations.values()) {
-					subLinks.add(createNewLinkItem(info));
-				}
+		// Collect link types
+		Map<String, ElementInfo> relations = myMapInfo.getElementsByType("relation");
+		if(relations != null) {
+			for (ElementInfo info : relations.values()) {
+				subLinks.add(createNewLinkItem(info));
 			}
-			
-			linkMenu.setSubMenu(subLinks);
 		}
-		else
-		{
-			linkMenu.addSelectionListener(new SelectionListener<MenuEvent>()
-			{
-				@Override
-				public void componentSelected(MenuEvent me)
-				{
-					ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-					DeleteRelationDialog linkDialog = new DeleteRelationDialog(getMyMapSpace().getMyMap().getID());
-					linkDialog.show();
-				}
-			});
-		}
+		
+		linkMenu.setSubMenu(subLinks);
+		
 		return linkMenu;
 	}
 
@@ -1021,9 +1003,9 @@ public class ArgumentMapMenuBar extends GraphMapMenuBar {
 			@Override
 			public void componentSelected(MenuEvent ce)
 			{
-				AutoOrganizer myOrganizer = ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getAutoOrganizer();
-				ArgumentMapMenuBar.this.getMyMapSpace().getMyMap().getFocusHandler().releaseAllFocus();
-				myOrganizer.organizeMap();
+				AbstractGraphMap myMap = ArgumentMapMenuBar.this.getMyMapSpace().getMyMap();
+				myMap.getFocusHandler().releaseAllFocus();
+				communicator.sendActionPackage(actionBuilder.autoOrganize(myMap.getID(), myMap.getOrgOrientation(), myMap.getOrgBoxWidth(), myMap.getOrgBoxHeight()));
 			}
 		});
 		return runOrganizer;

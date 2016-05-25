@@ -3,10 +3,7 @@ package lasad.gwt.client.ui.workspace.graphmap.elements;
 import java.util.Collection;
 
 import lasad.gwt.client.model.ElementInfo;
-import lasad.gwt.client.model.organization.ArgumentModel;
-import lasad.gwt.client.model.organization.LinkedBox;
 import lasad.gwt.client.ui.box.AbstractBox;
-import lasad.gwt.client.ui.workspace.LASADInfo;
 import lasad.gwt.client.ui.workspace.graphmap.GraphMap;
 import lasad.shared.communication.objects.parameters.ParameterTypes;
 
@@ -23,8 +20,6 @@ public abstract class AbstractCreateBoxLinkDialogListener implements EventListen
 
 //	private final LASADActionSender communicator = LASADActionSender.getInstance();
 //	private final ActionFactory actionBuilder = ActionFactory.getInstance();
-
-	protected final int MAX_SIBLINGS = 2;
 
 	protected GraphMap myMap;
 	private AbstractCreateBoxLinkDialog myDialog;
@@ -65,47 +60,9 @@ public abstract class AbstractCreateBoxLinkDialogListener implements EventListen
 			for (ElementInfo info : getElementsByType("relation")) {
 				if (((Element) be.getEventTarget().cast()).getInnerText().equals(info.getElementOption(ParameterTypes.Heading))) {
 					// Send Action --> Server
-					String connectsGroupString = info.getElementOption(ParameterTypes.ConnectsGroup);
-					boolean connectsGroup;
-					if (connectsGroupString == null)
-					{
-						connectsGroup = false;
-					}
-					else
-					{
-						connectsGroup = Boolean.parseBoolean(connectsGroupString);
-					}	
-					if (connectsGroup)
-					{
-						ArgumentModel argModel = myMap.getArgModel();
-						LinkedBox alpha = argModel.getBoxByBoxID(myDialog.getStartBox().getConnectedModel().getId());
-						if (alpha.getCanBeGrouped())
-						{
-							if (alpha.getNumSiblings() < MAX_SIBLINGS)
-							{
-								if (alpha.getType().equalsIgnoreCase(myDialog.getBoxConfig().getElementID()))
-								{
-									onClickSendUpdateToServer(myDialog.getBoxConfig(), info, myMap.getID(), myDialog.getPosition(true).x, myDialog.getPosition(true).y, String.valueOf(myDialog.getStartBox().getConnectedModel().getId()), "LAST-ID");
-								}
-								else
-								{
-									LASADInfo.display("Error", "Group links can only be created between boxes of the same type. Box and link not created.");
-								}
-							}
-							else
-							{
-								LASADInfo.display("Error", "Exceeds limit of two group links from each box. Box and link not created.");// 1 or more already have 2 siblings, can't create link
-							}
-						}
-						else
-						{
-							LASADInfo.display("Error", "Cannot group this box type. Box and link not created.");
-						}
-					}
-					else
-					{
-						onClickSendUpdateToServer(myDialog.getBoxConfig(), info, myMap.getID(), myDialog.getPosition(true).x, myDialog.getPosition(true).y, String.valueOf(myDialog.getStartBox().getConnectedModel().getId()), "LAST-ID");
-					}
+					
+					onClickSendUpdateToServer(myDialog.getBoxConfig(), info, myMap.getID(), myDialog.getPosition(true).x, myDialog.getPosition(true).y, String.valueOf(myDialog.getStartBox().getConnectedModel().getId()), "LAST-ID");
+				}
 
 					//communicator.sendActionPackage(actionBuilder.createBoxAndLink(myDialog.getBoxConfig(), info, myMap.getID(), myDialog.getPosition(true).x, myDialog.getPosition(true).y, String.valueOf(myDialog.getStartBox().getConnectedModel().getId()), "LAST-ID"));
 					
@@ -124,10 +81,7 @@ public abstract class AbstractCreateBoxLinkDialogListener implements EventListen
 					// actionSet.addAction(action);
 					// }
 					//					
-					// LASAD_Client.larb.sendActionSet(actionSet);
 
-					
-				}
 			}
 		}
 		myDialog.removeFromParent();

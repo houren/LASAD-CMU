@@ -15,18 +15,11 @@ import lasad.gwt.client.importer.ARGUNAUT.ArgunautParser;
 import lasad.gwt.client.importer.LARGO.LARGOParser;
 import lasad.gwt.client.logger.Logger;
 import lasad.gwt.client.model.AbstractUnspecifiedElementModel;
-import lasad.gwt.client.model.ElementInfo;
 import lasad.gwt.client.model.argument.MVCViewSession;
 import lasad.gwt.client.model.argument.MVController;
 import lasad.gwt.client.model.argument.MapInfo;
 import lasad.gwt.client.model.argument.UnspecifiedElementModelArgument;
 import lasad.gwt.client.model.events.LasadEvent;
-import lasad.gwt.client.model.organization.ArgumentModel;
-import lasad.gwt.client.model.organization.ArgumentThread;
-// Added for autoOrganizer support by Kevin Loughlin
-import lasad.gwt.client.model.organization.AutoOrganizer;
-import lasad.gwt.client.model.organization.LinkedBox;
-import lasad.gwt.client.model.organization.OrganizerLink;
 import lasad.gwt.client.ui.LASADStatusBar;
 import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.replay.ReplayInitializer;
@@ -79,10 +72,6 @@ import com.google.gwt.xml.client.impl.DOMParseException;
  * Refactoring Step 1 by Sabine Niebuhr
  */
 public class LASADActionReceiver {
-	
-	private final String BOX = "box";
-	private final String RELATION = "relation";
-	private final int DEFAULT_HEIGHT = 107;
 
 	lasad_clientConstants myConstants = GWT.create(lasad_clientConstants.class);
 	private static LASADActionReceiver myInstance = null;
@@ -92,8 +81,6 @@ public class LASADActionReceiver {
 	private TreeMap<String, List<Integer>> treeUserReplay;
 	private List<Integer> elementReplay;
 	private ReplayInitializer init;
-
-	private static int counterID = -1;
 
 	// David Drexler Edit-END
 
@@ -426,11 +413,7 @@ public class LASADActionReceiver {
 
 	private void processMapAction(MVController controller, Action a)
 	{
-		ArgumentModel argModel = LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().getArgModel();
-
 		Logger.log("[lasad.gwt.client.communication.LASADActionReceiver][processMapAction] Processing map action...", Logger.DEBUG);
-
-		AutoOrganizer autoOrganizer = LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().getAutoOrganizer();
 
 		Logger.log("[Details] " + a.toString(), Logger.DEBUG_DETAILS);
 
@@ -452,7 +435,7 @@ public class LASADActionReceiver {
 		if (a.getCmd().equals(Commands.ChangeFontSize)){
 			Logger.log("Changing font size on ActionReceiver: "+a.getParameterValue(ParameterTypes.FontSize), Logger.DEBUG);
 			if (a.getParameterValue(ParameterTypes.FontSize) != null){
-				argModel.setFontSize(Integer.parseInt(a.getParameterValue(ParameterTypes.FontSize)), false);
+				LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap().setFontSize(Integer.parseInt(a.getParameterValue(ParameterTypes.FontSize)));
 				((ArgumentMapMenuBar)LASAD_Client.getMapTab(a.getParameterValue(ParameterTypes.MapId)).getMyMapSpace().getMenuBar()).setFontSizeSelection(Integer.parseInt(a.getParameterValue(ParameterTypes.FontSize)));
 			}
 		}
@@ -465,27 +448,6 @@ public class LASADActionReceiver {
 				// Check if the feedback is for the current user, if not -->
 				// ignore
 				String elementType = a.getParameterValue(ParameterTypes.Type);
-
-				// Feb 1 bug fix, lnks were being doubled up for clients in cases of groupable boxes, this fixes it
-				if (elementType.equalsIgnoreCase(RELATION))
-				{
-					
-					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
-					int startBoxID = Integer.parseInt(startBoxStringID);
-
-					// For some reason, parent here gives box ID, not root ID, so plan accordingly
-					String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
-					int endBoxID = Integer.parseInt(endBoxStringID);
-
-					LinkedBox startBox = argModel.getBoxByBoxID(startBoxID);
-					LinkedBox endBox = argModel.getBoxByBoxID(endBoxID);
-
-					if (startBox.hasLinkWith(endBox))
-					{
-						Logger.log("Will not create following link for client, already exists " + a.toString(), Logger.DEBUG);	
-						return;
-					}
-				}
 
 				if (elementType.equalsIgnoreCase("FEEDBACK-CLUSTER")) {
 					if (!a.getParameterValue(ParameterTypes.ForUser).equalsIgnoreCase(LASAD_Client.getInstance().getUsername())
@@ -502,14 +464,10 @@ public class LASADActionReceiver {
 
 				String elementIDString = a.getParameterValue(ParameterTypes.Id);
 
-				int elementID = counterID;
+				int elementID = -1;
 
 				if (elementIDString != null) {
 					elementID = Integer.parseInt(elementIDString);
-				}
-				else
-				{
-					counterID--;
 				}
 
 				String username = a.getParameterValue(ParameterTypes.UserName);
@@ -546,147 +504,6 @@ public class LASADActionReceiver {
 				// Now Register new Element to the Model
 				controller.addElementModel(elementModel);
 
-				// Begin Kevin Loughlin code
-
-				// Since we're creating a new element, we need to add it to the autoOrganize model and update the siblingLinks on the map
-				String elementSubType = a.getParameterValue(ParameterTypes.ElementId);
-
-				String rootIDString = a.getParameterValue(ParameterTypes.RootElementId);
-
-				int rootID = -1;
-
-				if (rootIDString != null)
-				{
-					rootID = Integer.parseInt(rootIDString);
-				}
-
-				// If it's a box, add it to the model
-				if (elementType.equalsIgnoreCase(BOX))
-				{
-					String xLeftString = a.getParameterValue(ParameterTypes.PosX);
-					double xLeft;
-					if (xLeftString != null)
-					{
-						xLeft = Double.parseDouble(xLeftString);
-					}
-					else
-					{
-						Logger.log("Null xLeftString", Logger.DEBUG);
-						return;
-					}
-
-					String yTopString = a.getParameterValue(ParameterTypes.PosY);
-					double yTop;
-					if (yTopString != null)
-					{
-						yTop = Double.parseDouble(yTopString);
-					}
-					else
-					{
-						Logger.log("Null yTopString", Logger.DEBUG);
-						return;
-					}
-
-					ElementInfo newBoxInfo = controller.getMapInfo().getElementsByType(BOX).get(elementModel.getValue(ParameterTypes.ElementId));
-					if (newBoxInfo == null)
-					{
-						Logger.log("newBoxDimenions are null", Logger.DEBUG);
-					}
-
-					String widthString = newBoxInfo.getUiOption(ParameterTypes.Width);
-
-					// The default height is set incorrectly, don't know how, but it's always 107 yet comes out as 200.
-					//String heightString = newBoxInfo.getUiOption(ParameterTypes.Height);
-					String canBeGroupedString = newBoxInfo.getElementOption(ParameterTypes.CanBeGrouped);
-					boolean canBeGrouped;
-					if (canBeGroupedString == null)
-					{
-						canBeGrouped = false;
-					}
-					else
-					{
-						canBeGrouped = Boolean.parseBoolean(canBeGroupedString);
-					}
-
-					if (widthString == null)
-					{
-						Logger.log("width string is null", Logger.DEBUG);
-					}
-
-					int width = Integer.parseInt(widthString);
-
-					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, DEFAULT_HEIGHT, canBeGrouped)));
-					
-					//Added by DSF, run setFontSize so new boxes get the right font size
-					argModel.setFontSize(argModel.getFontSize(), false);
-				}
-
-				// If it's a relation, add it to the model
-				else if (elementType.equalsIgnoreCase(RELATION))
-				{	
-					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
-					int startBoxID = Integer.parseInt(startBoxStringID);
-
-					// For some reason, parent here gives box ID, not root ID, so plan accordingly
-					String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
-					int endBoxID = Integer.parseInt(endBoxStringID);
-
-					LinkedBox startBox = argModel.getBoxByBoxID(startBoxID);
-					LinkedBox endBox = argModel.getBoxByBoxID(endBoxID);
-
-					if (startBox == null || endBox == null)
-					{
-						Logger.log("Error: sibling links could not be updated: null box", Logger.DEBUG);
-						return;
-					}
-
-					ElementInfo newLinkInfo = controller.getMapInfo().getElementsByType(RELATION).get(elementModel.getValue(ParameterTypes.ElementId));
-					String connectsGroupString = newLinkInfo.getElementOption(ParameterTypes.ConnectsGroup);
-					boolean connectsGroup;
-					if (connectsGroupString == null)
-					{
-						connectsGroup = false;
-					}
-					else
-					{
-						connectsGroup = Boolean.parseBoolean(connectsGroupString);
-					}	
-
-					OrganizerLink link = new OrganizerLink(elementID, startBox, endBox, elementSubType, connectsGroup);
-					if (link.getConnectsGroup())
-					{
-						startBox.addSiblingLink(link);
-						endBox.addSiblingLink(link);
-					}
-					else
-					{
-						startBox.addChildLink(link);
-						endBox.addParentLink(link);
-					}
-
-					ArgumentThread startBoxThread = argModel.getBoxThread(startBox);
-
-					ArgumentThread endBoxThread = argModel.getBoxThread(endBox);
-
-					if (!startBoxThread.equals(endBoxThread))
-					{
-						startBoxThread.addBoxes(endBoxThread.getBoxes());
-						argModel.removeArgThread(endBoxThread);
-					}
-
-					String siblingsAlreadyUpdated = a.getParameterValue(ParameterTypes.SiblingsAlreadyUpdated);
-
-					if (siblingsAlreadyUpdated != null)
-					{
-						if (!Boolean.parseBoolean(siblingsAlreadyUpdated))
-						{
-							autoOrganizer.updateSiblingLinks(link);
-						}
-					}
-				}
-
-				// End Kevin Loughlin
-
 				if (elementType.equalsIgnoreCase("FEEDBACK-CLUSTER")) {
 					FeedbackPanelArgument feedbackPanel = LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getFeedbackPanel();
 					if (feedbackPanel == null) {
@@ -714,6 +531,10 @@ public class LASADActionReceiver {
 						Logger.log("WARNING: There is no highlight for this feedback", Logger.DEBUG);
 					}
 				}
+
+				//makes sure any newly created boxes have correct font size
+				AbstractGraphMap myMap = LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getMyMap();
+				myMap.setFontSize(myMap.getFontSize());
 			}
 			else if (a.getCmd().equals(Commands.UpdateElement)) {
 
@@ -724,39 +545,9 @@ public class LASADActionReceiver {
 						&& a.getParameterValue(ParameterTypes.Status) != null && a.getParameterValue(ParameterTypes.Text) == null) {
 					Action.removeParameter(a, ParameterTypes.Status);
 				} else {
-
-					String elementIDString = a.getParameterValue(ParameterTypes.Id);
-					int elementID = Integer.parseInt(elementIDString);
-					LinkedBox boxToUpdate = argModel.getBoxByBoxID(elementID);
-
-					if (boxToUpdate != null)
-					{
-						String newWidthString = a.getParameterValue(ParameterTypes.Width);
-						String newXLeftString = a.getParameterValue(ParameterTypes.PosX);
-
-						if (newWidthString != null)
-						{
-							boxToUpdate.setWidth(Integer.parseInt(newWidthString));
-							boxToUpdate.setHeight(Integer.parseInt(a.getParameterValue(ParameterTypes.Height)));
-						}
-						if (newXLeftString != null)
-						{
-							boxToUpdate.setXLeft(Double.parseDouble(newXLeftString));
-							boxToUpdate.setYTop(Double.parseDouble(a.getParameterValue(ParameterTypes.PosY)));
-						}
-					}
 					
 					controller.updateElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)), a.getParameters());
 				}
-			}
-			else if (a.getCmd().equals(Commands.FinishAutoOrganize))
-			{
-				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] FINISHING AUTO-ORGANIZE", Logger.DEBUG);
-				this.handleAutoOrganization(a);
-			}
-			else if (a.getCmd().equals(Commands.StartAutoOrganize))
-			{
-				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] STARTING AUTO-ORGANIZE", Logger.DEBUG);
 			}
 			else if (a.getCmd().equals(Commands.UpdateCursorPosition)) {
 
@@ -770,7 +561,6 @@ public class LASADActionReceiver {
 				int elementID = Integer.parseInt(a.getParameterValue(ParameterTypes.Id));
 				
 				if (controller.getElement(elementID) != null) {
-					String elementType = controller.getElement(elementID).getType();
 					if (controller.getElement(elementID).getType().equalsIgnoreCase("FEEDBACK-AGENT")) {
 						processRemoveFeedbackAgent(controller, a);
 					}
@@ -781,46 +571,19 @@ public class LASADActionReceiver {
 						e.printStackTrace();
 						Logger.log("Can not delete element, because ID is not int!", Logger.DEBUG_ERRORS);
 					}
-
-					// Kevin Loughlin
-					// Keep in mind that relations are removed before boxes
-					if (elementType.equalsIgnoreCase(RELATION))
-					{
-						OrganizerLink removedLink = argModel.removeLinkByLinkID(elementID);
-						if (removedLink != null)
-						{
-							argModel.createNewThreadIfNecessary(removedLink);
-
-							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)) 
-								&& Integer.parseInt(a.getParameterValue(ParameterTypes.NumActions)) == 1)
-							{
-								autoOrganizer.determineLinksToRemove(removedLink);
-							}
-						}
-						else
-						{
-							Logger.log("ERROR: Removed link is null", Logger.DEBUG);
-						}
-					}
-					else if (elementType.equalsIgnoreCase(BOX))
-					{
-						LinkedBox removedBox = argModel.removeBoxByBoxID(elementID);
-						if (removedBox != null)
-						{
-							argModel.removeLinksTo(removedBox);
-						}
-						else
-						{
-							Logger.log("ERROR: Removed box is null", Logger.DEBUG);
-						}
-					}
-					// End Kevin Loughlin
-
 				} else {
 					// This occurs when another user deletes his/her feedback
 					Logger.log("Cannot delete, because element ID is unknown.", Logger.DEBUG_ERRORS);
 				}
-			} else if (a.getCmd().equals(Commands.ListMap)) {
+			}
+			else if (a.getCmd().equals(Commands.AutoOrganize))
+			{
+				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] AUTO-ORGANIZE", Logger.DEBUG);
+				LASAD_Client.getMapTab(a.getParameterValue(ParameterTypes.MapId)).getMyMapSpace().getMyMap().setOrgBoxWidth(Integer.parseInt(a.getParameterValue(ParameterTypes.OrganizerBoxWidth)));
+				LASAD_Client.getMapTab(a.getParameterValue(ParameterTypes.MapId)).getMyMapSpace().getMyMap().setOrgBoxHeight(Integer.parseInt(a.getParameterValue(ParameterTypes.OrganizerBoxHeight)));
+				LASAD_Client.getMapTab(a.getParameterValue(ParameterTypes.MapId)).getMyMapSpace().getMyMap().setOrgOrientation(Boolean.parseBoolean(a.getParameterValue(ParameterTypes.OrganizerOrientation)));
+			}
+			else if (a.getCmd().equals(Commands.ListMap)) {
 				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] LISTMAP", Logger.DEBUG);
 				MapLoginTab.getInstance().addListOfMaps(a, true);
 			} else if (a.getCategory().equals(Commands.Error)) {
@@ -881,25 +644,6 @@ public class LASADActionReceiver {
 				// ignore
 				String elementType = a.getParameterValue(ParameterTypes.Type);
 
-				if (elementType.equalsIgnoreCase(RELATION))
-				{
-					
-					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
-					int startBoxID = Integer.parseInt(startBoxStringID);
-
-					// For some reason, parent here gives box ID, not root ID, so plan accordingly
-					String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
-					int endBoxID = Integer.parseInt(endBoxStringID);
-
-					LinkedBox startBox = argModel.getBoxByBoxID(startBoxID);
-					LinkedBox endBox = argModel.getBoxByBoxID(endBoxID);
-
-					if (startBox.hasLinkWith(endBox))
-					{
-						Logger.log("Will not create following link for client, already exists " + a.toString(), Logger.DEBUG);	
-						return;
-					}
-				}
 				if (elementType.equalsIgnoreCase("FEEDBACK-CLUSTER")) {
 					if (!a.getParameterValue(ParameterTypes.UserName).equalsIgnoreCase(LASAD_Client.getInstance().getUsername())
 							&& !a.getParameterValue(ParameterTypes.UserName).equals("")) {
@@ -954,147 +698,6 @@ public class LASADActionReceiver {
 
 				// Now Register new Element to the Model
 				controller.addElementModel(elementModel);
-				
-				// Begin Kevin Loughlin code
-
-				// Since we're creating a new element, we need to add it to the autoOrganize model and update the siblingLinks on the map
-				String elementSubType = a.getParameterValue(ParameterTypes.ElementId);
-
-				String rootIDString = a.getParameterValue(ParameterTypes.RootElementId);
-
-				int rootID = -1;
-
-				if (rootIDString != null)
-				{
-					rootID = Integer.parseInt(rootIDString);
-				}
-
-				// If it's a box, add it to the model
-				if (elementType.equalsIgnoreCase(BOX))
-				{
-					String xLeftString = a.getParameterValue(ParameterTypes.PosX);
-					double xLeft;
-					if (xLeftString != null)
-					{
-						xLeft = Double.parseDouble(xLeftString);
-					}
-					else
-					{
-						Logger.log("Null xLeftString", Logger.DEBUG);
-						return;
-					}
-
-					String yTopString = a.getParameterValue(ParameterTypes.PosY);
-					double yTop;
-					if (yTopString != null)
-					{
-						yTop = Double.parseDouble(yTopString);
-					}
-					else
-					{
-						Logger.log("Null yTopString", Logger.DEBUG);
-						return;
-					}
-
-					ElementInfo newBoxInfo = controller.getMapInfo().getElementsByType(BOX).get(elementModel.getValue(ParameterTypes.ElementId));
-					if (newBoxInfo == null)
-					{
-						Logger.log("newBoxDimenions are null", Logger.DEBUG);
-					}
-
-					String widthString = newBoxInfo.getUiOption(ParameterTypes.Width);
-
-					// The default height is set incorrectly, don't know how, but it's always 107 yet comes out as 200.
-					//String heightString = newBoxInfo.getUiOption(ParameterTypes.Height);
-					String canBeGroupedString = newBoxInfo.getElementOption(ParameterTypes.CanBeGrouped);
-					boolean canBeGrouped;
-					if (canBeGroupedString == null)
-					{
-						canBeGrouped = false;
-					}
-					else
-					{
-						canBeGrouped = Boolean.parseBoolean(canBeGroupedString);
-					}
-
-					if (widthString == null)
-					{
-						Logger.log("width string is null", Logger.DEBUG);
-					}
-
-					int width = Integer.parseInt(widthString);
-
-					argModel.addArgThread(new ArgumentThread(new LinkedBox(elementID, rootID, elementSubType, xLeft, yTop, width, DEFAULT_HEIGHT, canBeGrouped)));
-					
-					//Added by DSF, run setFontSize so new boxes get the right font size
-					argModel.setFontSize(argModel.getFontSize(), false);
-				}
-
-				// If it's a relation, add it to the model
-				else if (elementType.equalsIgnoreCase(RELATION))
-				{
-					String startBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(0);
-					int startBoxID = Integer.parseInt(startBoxStringID);
-
-					// For some reason, parent here gives box ID, not root ID, so plan accordingly
-					String endBoxStringID = a.getParameterValues(ParameterTypes.Parent).get(1);
-					int endBoxID = Integer.parseInt(endBoxStringID);
-
-					LinkedBox startBox = argModel.getBoxByBoxID(startBoxID);
-					LinkedBox endBox = argModel.getBoxByBoxID(endBoxID);
-
-					if (startBox == null || endBox == null)
-					{
-						Logger.log("Error: sibling links could not be updated: null box", Logger.DEBUG);
-						return;
-					}
-
-					ElementInfo newLinkInfo = controller.getMapInfo().getElementsByType(RELATION).get(elementModel.getValue(ParameterTypes.ElementId));
-					String connectsGroupString = newLinkInfo.getElementOption(ParameterTypes.ConnectsGroup);
-					boolean connectsGroup;
-					if (connectsGroupString == null)
-					{
-						connectsGroup = false;
-					}
-					else
-					{
-						connectsGroup = Boolean.parseBoolean(connectsGroupString);
-					}	
-
-					OrganizerLink link = new OrganizerLink(elementID, startBox, endBox, elementSubType, connectsGroup);
-					if (link.getConnectsGroup())
-					{
-						startBox.addSiblingLink(link);
-						endBox.addSiblingLink(link);
-					}
-					else
-					{
-						startBox.addChildLink(link);
-						endBox.addParentLink(link);
-					}
-
-					ArgumentThread startBoxThread = argModel.getBoxThread(startBox);
-
-					ArgumentThread endBoxThread = argModel.getBoxThread(endBox);
-
-					if (!startBoxThread.equals(endBoxThread))
-					{
-						startBoxThread.addBoxes(endBoxThread.getBoxes());
-						argModel.removeArgThread(endBoxThread);
-					}
-
-					String siblingsAlreadyUpdated = a.getParameterValue(ParameterTypes.SiblingsAlreadyUpdated);
-
-					if (siblingsAlreadyUpdated != null)
-					{
-						if (!Boolean.parseBoolean(siblingsAlreadyUpdated))
-						{
-							autoOrganizer.updateSiblingLinks(link);
-						}
-					}
-				}
-
-				// End Kevin Loughlin
 
 				if (elementType.equalsIgnoreCase("FEEDBACK-CLUSTER")) {
 					FeedbackPanelArgument feedbackPanel = LASAD_Client.getMapTab(controller.getMapID()).getMyMapSpace().getFeedbackPanel();
@@ -1116,40 +719,9 @@ public class LASADActionReceiver {
 						&& a.getParameterValue(ParameterTypes.Status) != null && a.getParameterValue(ParameterTypes.Text) == null) {
 					Action.removeParameter(a, ParameterTypes.Status);
 				} else {
-
-					String elementIDString = a.getParameterValue(ParameterTypes.Id);
-					int elementID = Integer.parseInt(elementIDString);
-					LinkedBox boxToUpdate = argModel.getBoxByBoxID(elementID);
-
-					if (boxToUpdate != null)
-					{
-						String newWidthString = a.getParameterValue(ParameterTypes.Width);
-						String newXLeftString = a.getParameterValue(ParameterTypes.PosX);
-
-						if (newWidthString != null)
-						{
-							boxToUpdate.setWidth(Integer.parseInt(newWidthString));
-							boxToUpdate.setHeight(Integer.parseInt(a.getParameterValue(ParameterTypes.Height)));
-						}
-						if (newXLeftString != null)
-						{
-							boxToUpdate.setXLeft(Double.parseDouble(newXLeftString));
-							boxToUpdate.setYTop(Double.parseDouble(a.getParameterValue(ParameterTypes.PosY)));
-						}
-					}
-					
 					controller.updateElement(Integer.parseInt(a.getParameterValue(ParameterTypes.Id)), a.getParameters());
 				}
 
-			}
-			else if (a.getCmd().equals(Commands.StartAutoOrganize))
-			{
-				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] STARTING AUTO-ORGANIZE", Logger.DEBUG);
-			}
-			else if (a.getCmd().equals(Commands.FinishAutoOrganize))
-			{
-				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] FINISHING AUTO-ORGANIZE", Logger.DEBUG);
-				this.handleAutoOrganization(a);
 			}
 			else if (a.getCmd().equals(Commands.UpdateCursorPosition)) {
 
@@ -1164,7 +736,6 @@ public class LASADActionReceiver {
 				int elementID = Integer.parseInt(a.getParameterValue(ParameterTypes.Id));
 				
 				if (controller.getElement(elementID) != null) {
-					String elementType = controller.getElement(elementID).getType();
 					if (controller.getElement(elementID).getType().equalsIgnoreCase("FEEDBACK-AGENT")) {
 						processRemoveFeedbackAgent(controller, a);
 					}
@@ -1176,44 +747,17 @@ public class LASADActionReceiver {
 						Logger.log("Can not delete element, because ID is not int!", Logger.DEBUG_ERRORS);
 					}
 
-					// Kevin Loughlin
-					// Keep in mind that relations are removed before boxes
-					if (elementType.equalsIgnoreCase(RELATION))
-					{
-						OrganizerLink removedLink = argModel.removeLinkByLinkID(elementID);
-						if (removedLink != null)
-						{
-							argModel.createNewThreadIfNecessary(removedLink);
-
-							if (!Boolean.parseBoolean(a.getParameterValue(ParameterTypes.LinksAlreadyRemoved)) 
-								&& Integer.parseInt(a.getParameterValue(ParameterTypes.NumActions)) == 1)
-							{
-								autoOrganizer.determineLinksToRemove(removedLink);
-							}
-						}
-						else
-						{
-							Logger.log("ERROR: Removed link is null", Logger.DEBUG);
-						}
-					}
-					else if (elementType.equalsIgnoreCase(BOX))
-					{
-						LinkedBox removedBox = argModel.removeBoxByBoxID(elementID);
-						if (removedBox != null)
-						{
-							argModel.removeLinksTo(removedBox);
-						}
-						else
-						{
-							Logger.log("ERROR: Removed box is null", Logger.DEBUG);
-						}
-					}
-					// End Kevin Loughlin
-
 				} else {
 					// This occurs when another user deletes his/her feedback
 					Logger.log("Cannot delete, because element ID is unknown.", Logger.DEBUG_ERRORS);
 				}
+			}
+			else if (a.getCmd().equals(Commands.AutoOrganize))
+			{
+				Logger.log("[lasad.gwt.client.communication.LASADActionReceiver.processMapAction] AUTO-ORGANIZE", Logger.DEBUG);
+				LASAD_Client.getMapTab(a.getParameterValue(ParameterTypes.MapId)).getMyMapSpace().getMyMap().setOrgBoxWidth(Integer.parseInt(a.getParameterValue(ParameterTypes.OrganizerBoxWidth)));
+				LASAD_Client.getMapTab(a.getParameterValue(ParameterTypes.MapId)).getMyMapSpace().getMyMap().setOrgBoxHeight(Integer.parseInt(a.getParameterValue(ParameterTypes.OrganizerBoxHeight)));
+				LASAD_Client.getMapTab(a.getParameterValue(ParameterTypes.MapId)).getMyMapSpace().getMyMap().setOrgOrientation(Boolean.parseBoolean(a.getParameterValue(ParameterTypes.OrganizerOrientation)));
 			} 
 			else if (a.getCategory().equals(Categories.Error)) {
 				LASADInfo.display("Error", a.getParameterValue(ParameterTypes.Message));
@@ -1336,8 +880,6 @@ public class LASADActionReceiver {
 		case UpdateElement:
 		case DeleteElement:
 		case ChangeFontSize:
-		case StartAutoOrganize:
-		case FinishAutoOrganize:
 		case ChatMsg:
 			init.createAllReplayActions(a);
 			break;
@@ -1452,28 +994,6 @@ public class LASADActionReceiver {
 			map.getLayoutTarget().dom.setScrollLeft(map.getMapDimensionSize().width / 2 - map.getInnerWidth() / 2);
 			map.getLayoutTarget().dom.setScrollTop(map.getMapDimensionSize().height / 2 - map.getInnerHeight() / 2);
 		}
-	}
-
-	private void handleAutoOrganization(Action a)
-	{
-		final String MAP_ID = a.getParameterValue(ParameterTypes.MapId);
-		final boolean IS_DOWNWARD = Boolean.parseBoolean(a.getParameterValue(ParameterTypes.OrganizerOrientation));
-		AutoOrganizer organizer = LASAD_Client.getMapTab(MAP_ID).getMyMapSpace().getMyMap().getAutoOrganizer();
-		organizer.setOrientation(IS_DOWNWARD);
-		organizer.setBoxWidth(Integer.parseInt(a.getParameterValue(ParameterTypes.OrganizerBoxWidth)));
-		organizer.setMinBoxHeight(Integer.parseInt(a.getParameterValue(ParameterTypes.OrganizerBoxHeight)));
-		AbstractGraphMap map = LASAD_Client.getMapTab(MAP_ID).getMyMapSpace().getMyMap();
-		double edgeCoordY = Double.parseDouble(a.getParameterValue(ParameterTypes.ScrollEdgeY));
-		double edgeCoordX = Double.parseDouble(a.getParameterValue(ParameterTypes.ScrollEdgeX));
-		if (IS_DOWNWARD)
-		{
-			map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) + 10 - map.getInnerHeight());
-		}
-		else
-		{
-			map.getLayoutTarget().dom.setScrollTop((int) Math.round(edgeCoordY) - 10);
-		}
-		map.getLayoutTarget().dom.setScrollLeft((int) Math.round(edgeCoordX - map.getInnerWidth() / 2.0));
 	}
 
 	private void processAuthoringAction(final Action a) {

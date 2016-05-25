@@ -2,20 +2,23 @@ package lasad.gwt.client.ui.workspace.graphmap;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
+import java.util.List;
 
 import lasad.gwt.client.helper.connector.Direction;
 import lasad.gwt.client.model.AbstractMVCViewSession;
-// Kevin Loughlin
-import lasad.gwt.client.model.organization.ArgumentModel;
-import lasad.gwt.client.model.organization.AutoOrganizer;
+import lasad.gwt.client.ui.box.AbstractBox;
 import lasad.gwt.client.ui.common.FocusableInterface;
 import lasad.gwt.client.ui.common.GenericFocusHandler;
 import lasad.gwt.client.ui.common.GenericSelectionHandler;
 import lasad.gwt.client.ui.common.fade.GenericFadeableElementHandler;
 import lasad.gwt.client.ui.common.highlight.GenericHighlightHandler;
 import lasad.gwt.client.ui.common.highlight.HighlightableElementInterface;
+import lasad.gwt.client.ui.common.AbstractExtendedElement;
+import lasad.gwt.client.ui.common.elements.AbstractExtendedTextElement;
 
 import com.extjs.gxt.ui.client.util.Size;
+import com.extjs.gxt.ui.client.widget.Component;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.google.gwt.user.client.Timer;
 
@@ -33,6 +36,12 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 
 	protected GraphMapSpace myArgumentMapSpace;
 
+	// for auto organization
+	protected int orgBoxWidth = 200;
+	protected int orgBoxHeight = 107;
+
+	protected int fontSize = 10;
+
 //	protected MVCViewSession myViewSession;
 
 //	lasad_clientConstants myConstants = GWT.create(lasad_clientConstants.class);
@@ -40,6 +49,10 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 	protected Map<Direction, Integer> mapDimensions = new HashMap<Direction, Integer>();
 
 	protected String ID;
+
+	// the orientation for auto organization (i.e. should links point up or down); the options are upward (true) or downward (false)
+	protected boolean orgOrientation;
+
 	protected boolean deleteElementsWithoutConfirmation;
 
 	protected GenericFocusHandler focusHandler;
@@ -63,9 +76,6 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 	protected int numberOfCursorRecords = 0;
 	protected Timer t = null;
 
-	protected ArgumentModel argModel;
-	protected AutoOrganizer autoOrganizer;
-
 	public AbstractGraphMap(GraphMapSpace parentElement) {
 		this.myArgumentMapSpace = parentElement;
 		//this.myViewSession = myArgumentMapSpace.getSession();
@@ -73,8 +83,77 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 		init();
 		focusHandler = new GenericFocusHandler(this);
 		highlightHandler = new GenericHighlightHandler(this);
-		argModel = new ArgumentModel(this.getID());
-		autoOrganizer = new AutoOrganizer(this);
+		orgOrientation = true;
+	}
+
+
+	public void setOrgBoxWidth(int width)
+	{
+		this.orgBoxWidth = width;
+	}
+
+	public void setOrgBoxHeight(int minBoxHeight)
+	{
+		this.orgBoxHeight = minBoxHeight;
+	}
+
+	public int getOrgBoxWidth()
+	{
+		return orgBoxWidth;
+	}
+
+	public int getOrgBoxHeight()
+	{
+		return orgBoxHeight;
+	}
+
+	public Vector<AbstractBox> getBoxes()
+	{
+		Vector<AbstractBox> boxes = new Vector<AbstractBox>();
+		List<Component> mapComponents = this.getItems();
+		for(Component mapComponent : mapComponents){
+			boxes.add((AbstractBox) mapComponent);
+		}
+		return boxes;
+	}
+
+	// By Darlan Santana Farias
+	public void setFontSize(int fontSize)
+	{
+		this.fontSize = fontSize;
+
+		List<Component> mapComponents = this.getItems();
+		for(Component mapComponent : mapComponents){
+			if(mapComponent instanceof AbstractBox){
+				AbstractBox box = (AbstractBox) mapComponent;
+				if(box.getHeaderFontSize() != fontSize){
+					box.setHeaderFontSize(fontSize);
+					box.setSize(box.getWidth(), 100);
+					for(AbstractExtendedElement element : box.getExtendedElements()){
+						if(element instanceof AbstractExtendedTextElement){
+							AbstractExtendedTextElement textEl = (AbstractExtendedTextElement)element;
+							textEl.setFontSize(fontSize);
+							box.textAreaCallNewHeightgrow(textEl.determineBoxHeightChange());
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public int getFontSize(){
+		return this.fontSize;
+	}
+
+	public boolean getOrgOrientation()
+	{
+		return orgOrientation;
+	}
+
+	public void setOrgOrientation(boolean isUpward)
+	{
+		orgOrientation = isUpward;
 	}
 
 	/*
@@ -100,21 +179,6 @@ public abstract class AbstractGraphMap extends ContentPanel implements Focusable
 //	}
 
 	public void enableCursorTracking() {}
-
-	public AutoOrganizer getAutoOrganizer()
-	{
-		return this.autoOrganizer;
-	}
-
-	public ArgumentModel getArgModel()
-	{
-		return argModel;
-	}
-
-	public void setArgModel(ArgumentModel model)
-	{
-		argModel = model;
-	}
 
 	public GenericFadeableElementHandler getFadeHandler() {
 		return fadeHandler;

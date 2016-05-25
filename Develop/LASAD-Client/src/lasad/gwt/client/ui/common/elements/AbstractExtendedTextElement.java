@@ -257,7 +257,7 @@ public abstract class AbstractExtendedTextElement extends AbstractExtendedElemen
 		
 		if(this.getContainer().getMVCViewSession() != null){
 			mapID = this.getContainer().getMVCViewSession().getController().getMapID();
-			fontSize = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getArgModel().getFontSize();
+			fontSize = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getFontSize();
 		}
 		
 		if (textFrameDiv != null) {

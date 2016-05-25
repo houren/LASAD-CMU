@@ -1,7 +1,9 @@
 package lasad.gwt.client.ui.workspace.argumentmap;
 
 import lasad.gwt.client.LASAD_Client;
-import lasad.gwt.client.model.organization.AutoOrganizer;
+import lasad.gwt.client.ui.workspace.graphmap.AbstractGraphMap;
+import lasad.gwt.client.communication.LASADActionSender;
+import lasad.gwt.client.communication.helper.ActionFactory;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -20,13 +22,16 @@ import com.google.gwt.user.client.ui.CheckBox;
 
 /**
  *	Creates the preferences menu that appears when selected from the LASAD menu, found in ArgumentMapMenuBar.
- *	The preferences menu allows the user to select the font size for LASAD, as well as the default box width and size for autoOrganizer.
+ *	The preferences menu allows the user to select the font size for LASAD, as well as the default box width and size for auto organization.
  *	@author Kevin Loughlin
  *	@since 31 July 2015, Last Updated 11 August 2015
  */
 public class CreatePreferencesDialog extends Window
 {
 	private String mapID;
+
+	private final LASADActionSender communicator = LASADActionSender.getInstance();
+	private final ActionFactory actionBuilder = ActionFactory.getInstance();
 
 	private Slider widthSlider;
 	private Slider heightSlider;
@@ -61,8 +66,8 @@ public class CreatePreferencesDialog extends Window
 	private void createForm()
 	{
 		// Save these values for cancel button, which will revert to original values
-		final int ORIG_BOX_WIDTH = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getAutoOrganizer().getBoxWidth();
-		final int ORIG_MIN_BOX_HEIGHT = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getAutoOrganizer().getMinBoxHeight();
+		final int ORIG_BOX_WIDTH = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getOrgBoxWidth();
+		final int ORIG_MIN_BOX_HEIGHT = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getOrgBoxHeight();
 
 		FormPanel thisForm = new FormPanel();
 		thisForm.setFrame(true);
@@ -78,7 +83,7 @@ public class CreatePreferencesDialog extends Window
 		//orientDownward.setBoxLabel("Orient Downward");
 			
 
-		final boolean IS_DOWNWARD = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getAutoOrganizer().getOrientation();
+		final boolean IS_DOWNWARD = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getOrgOrientation();
 		if (IS_DOWNWARD)
 		{
 			orientDownward.setValue(true);
@@ -172,22 +177,24 @@ public class CreatePreferencesDialog extends Window
 			@Override
 			public void componentSelected(ButtonEvent ce)
 			{
-				AutoOrganizer myOrganizer = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap().getAutoOrganizer();
-
-				myOrganizer.setBoxWidth(widthSlider.getValue());
-				myOrganizer.setMinBoxHeight(heightSlider.getValue());
-				final boolean DOWNWARD;
+				AbstractGraphMap myMap = LASAD_Client.getMapTab(mapID).getMyMapSpace().getMyMap();
+				myMap.setOrgBoxWidth(widthSlider.getValue());
+				myMap.setOrgBoxHeight(heightSlider.getValue());
+				
+				final boolean ORIENTATION;
 				if (orientUpward.getValue())
 				{
-					DOWNWARD = false;
+					ORIENTATION = true;
 				}
 				else
 				{
-					DOWNWARD = true;
+					ORIENTATION = false;
 				}
-				myOrganizer.setOrientation(DOWNWARD);
 				CreatePreferencesDialog.this.hide();
-				myOrganizer.organizeMap();
+				
+				myMap.setOrgOrientation(ORIENTATION);
+				myMap.getFocusHandler().releaseAllFocus();
+				communicator.sendActionPackage(actionBuilder.autoOrganize(myMap.getID(), myMap.getOrgOrientation(), myMap.getOrgBoxWidth(), myMap.getOrgBoxHeight()));
 			}
 		});
 		thisForm.addButton(btnOkay);
